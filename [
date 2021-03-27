@@ -1,0 +1,11 @@
+
+                                                                 
+  Command "event:g'App\Events\studentCreated'=" is not defined.  
+                                                                 
+  Did you mean one of these?                                     
+      event:cache                                                
+      event:clear                                                
+      event:generate                                             
+      event:list                                                 
+                                                                 
+

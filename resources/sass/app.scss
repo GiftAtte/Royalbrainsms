@@ -1,0 +1,127 @@
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+//@import url('https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.css');
+
+// Variables
+@import 'variables';
+@import 'summernote/summernote';
+
+$fa-font-path: "../webfonts";
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import '~admin-lte/dist/css/adminlte.css';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
+@import '~@fortawesome/fontawesome-free/scss/brands.scss';
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~video.js/dist/video-js.css';
+@import '~vue-loading-overlay/dist/vue-loading.css';
+@import '~vue2-timepicker/dist/VueTimepicker.css';
+@import '~vue-datetime/dist/vue-datetime.css';
+
+@import '~codemirror/lib/codemirror.css';
+@import '~@toast-ui/editor/dist/toastui-editor.css';
+
+@import '~vue-pdf-reader/dist/vue-pdf-reader.min.css';
+@import "~material-design-icons-iconfont/dist/material-design-icons";
+
+.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+.router-link-exact-active{
+    background-color: #0b2ce9ea;
+    color:#fff !important;
+}
+.modify{
+padding: 5px;
+}
+.btn-group-xs > .btn, .btn-xs {
+    padding: .25rem .4rem;
+    font-size: .875rem;
+    line-height: .5;
+    border-radius: .2rem;
+    color: white;
+  }
+  th.rotate {
+    /* Something you can count on */
+    height: 150px;
+    white-space: nowrap;
+    align-content:space-between;
+  }
+
+  th.rotate > div {
+    transform:
+      /* Magic Numbers */
+      translate(25px, 51px)
+      /* 45 is really 360 - 45 */
+      rotate(-90deg);
+    width: 20px;
+
+  }
+  th.rotate > div > span {
+
+    padding: 0px 10px 0 0px;
+
+  }
+   .myTable tr{
+    font-size: 12px;
+    font: weight 10;
+
+
+  }
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #section-to-print, #section-to-print *{
+    visibility: visible;
+    margin: 0 0 0 0;
+
+    width: auto;
+
+  }
+  #section-to-print {
+    position: auto;
+    left: 0;
+    top: 0;
+    margin-top: 0;
+
+  }
+  #section-to-print .img-result{
+    width: 150px;
+    height: 120px;
+
+  }
+  #section-to-print .result-logo{
+    width: 150px;
+    height: 120px;
+  }
+  #section-to-print .table{
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+   font-weight: normal;
+    font-size: 14px;
+  }
+
+  #section-to-print .table-responsive{
+    visibility: hidden;
+
+  }
+  #section-to-print .action{
+    visibility: hidden;
+
+  }
+  #section-to-print .table{
+    border-color: black;
+     color: black;
+  }
+   
+}
+
+@page {
+    margin: 0;
+}
