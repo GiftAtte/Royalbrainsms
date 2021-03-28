@@ -46,9 +46,9 @@
                   </select>
                      &nbsp; &nbsp;
                     </div>
-                    
+
                     <div v-show="hasArm" class=" col-md-2">
-                        
+
                              <select
                     name="arm_id"
                     id="arm_id"
@@ -65,7 +65,17 @@
                     >{{arm.name}}</option>
                   </select>
                         <has-error :form="form" field="arm_id"></has-error>
+
                     </div>
+<div v-show="hasArm">
+     <export-excel
+       class="btn btn-primary"
+
+       :data="student_login">
+       Download Data
+       <i class="fa fa-download"></i>
+     </export-excel>
+</div>
                   </div>
                 <div class="row float-right">
                <div class="card-title ">
@@ -273,7 +283,7 @@ import DataTable from "vue-materialize-datatable";
                 studentIds: [],
                 isChecked:false,
                 isStudentId:false,
-
+               student_login:'',
                 importFile:'api/importUser',
                 form: new Form({
                     id:'',
@@ -441,6 +451,7 @@ import DataTable from "vue-materialize-datatable";
                 if(this.$gate.isAdminOrTutor()){
                     axios.get("/api/students/"+this.level_id+'/'+this.arm_id).then(({ data }) => (this.tableRows= data.data));
                 }
+                this.downloadLogin();
             },
 
             createStudent(){
@@ -504,7 +515,7 @@ import DataTable from "vue-materialize-datatable";
               axios.get(`api/check_arm/${id}`).then(res=>{
                   if(res.data>0){
                     this.hasArm=true;
-                    console.log(res.data)
+                //  this.downloadLogin();
                   }else{
                      this.hasArm=false;
                   }
@@ -616,6 +627,13 @@ else{
                     })
              },
 
+              downloadLogin(){
+                axios.get(`/api/login_export/${this.level_id}/${this.arm_id}`)
+                .then((res)=>{
+                   this.student_login=res.data.student_login
+                }
+                )
+                }
 
 
         },
@@ -637,7 +655,7 @@ else{
                this.loadStudents();
 
            });
-        //    setInterval(() => this.loadUsers(), 3000);
+           //setInterval(() => this.loadUsers(), 3000);
         }
 
     }
