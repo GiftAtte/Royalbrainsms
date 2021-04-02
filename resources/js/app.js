@@ -166,7 +166,7 @@ Vue.component(
 );
 Vue.component(
     'chats',
-    require('./components/chats/chats.vue').default
+    require('./components/messaging/Chats.vue').default
 );
 
 
@@ -238,7 +238,7 @@ const app = new Vue({
     computed: mapState([ 'school' ]),
 
 
- 
+
     methods: {
         searchit: _.debounce(() => {
             Fire.$emit('searching');

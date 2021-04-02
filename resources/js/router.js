@@ -9,7 +9,7 @@ export default new Router({
   routes: [
 
     // loads Home component
-    { path: '/', component: require('./components/Dashboard.vue').default },
+    { path: '/ ', component: require('./components/Dashboard.vue').default },
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/developer', component: require('./components/Developer.vue').default },
     { path: '/users', component: require('./components/Users.vue').default },
@@ -65,8 +65,8 @@ export default new Router({
     { path: '/pdfviewer/:id', component: require('./components/assignments/PDFviewer.vue').default },
     { path: '/noteviewer/:id', component: require('./components/assignments/NoteToPDF.vue').default },
     { path: '/getstudents/:id', component: require('./components/assignments/StudentList.vue').default },
-    { path: '/chats', component: require('./components/chats/Chats.vue').default },
-    { path: '/level_chats', component: require('./components/chats/LevelChats.vue').default },
+    { path: '/chats', component: require('./components/messaging/Chats.vue').default },
+    { path: '/level_chats', component: require('./components/messaging/LevelChats.vue').default },
     { path: '/import_history', component: require('./components/students/ImportHistory.vue').default },
     { path: '/history_results', component: require('./components/students/HistoryScores.vue').default },
     { path: '/cbt_review/:exam_id/:student_id?', component: require('./components/cbt/CbtReview.vue').default },
@@ -78,8 +78,8 @@ export default new Router({
     { path: '/fee_list/:feegroup_id', component: require('./components/fees/Feelist.vue').default },
     { path: '/paystack_key', component: require('./components/fees/Paystack.vue').default },
     { path: '/subject_teacher', component: require('./components/subject/SubjectTeacher.vue').default },
-      
-    { path: '/chats', component: require('./components/chats/chats.vue').default },
+
+    //{ path: '/chats', component: require('./components/chat/Chats.vue').default },
     { path: '/not-found', component: require('./components/NotFound.vue').default }
 
 
