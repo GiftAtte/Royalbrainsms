@@ -126,7 +126,7 @@ Vue.component(
 );
 Vue.component(
     'profile',
-    require('./components/profile.vue').default
+    require('./components/Profile.vue').default
 );
 Vue.component(
     'assignment',
