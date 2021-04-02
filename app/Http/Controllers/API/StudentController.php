@@ -34,20 +34,24 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id=null)
-    {     $user=auth('api')->user();
+   public function index($level_id=null,$arm_id=null)
+    {    $user=auth('api')->user();
+        if(!empty($level_id)&&!empty($arm_id)){
+            return Student::with(['levels','arm'])->where([['class_id',$level_id],['arm_id',$arm_id]])->latest()->paginate(500);
+        }
+         
+    $historyLevel=Level::where('is_history',1)->pluck('id');
         if($user->type==='tutor'){
-          $arm=Has_arm::where('staff_id',$user->staff_id)->first();
+          $arm=Has_arm::where('staff_id',$user->staff_id)->whereNotIn('level_id',$historyLevel)->first();
             return Student::with(['levels','arm'])->where([['school_id',$user->school_id],['class_id',$arm->level_id],['arm_id',$arm->arms_id]])->orderby('surname')->paginate(500);
         }
-        if($user->type==='admin'){
+        if($user->type==='admin'||$user->type==='superadmin'){
             return Student::with(['levels','arm'])->where('school_id',auth('api')->user()->school_id)->latest()->paginate(500);
         }
 else{
     return[];
 }
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -128,6 +132,12 @@ else{
         $student=Student::findOrFail($id);
         $student->update($request->all());
 
+             $student=LoginDetail::where('student_id',$id)->first();
+
+                 $student->update([
+                          'name'=>$request->surname." ".$request->first_name.' '.$request->middle_name,
+                          'level_id'=>$request->class_id,
+                  ]);
 
     }
 
