@@ -174,7 +174,7 @@ class ScoreController extends Controller
 
 public function import(Request $request)
 {
-  
+
   $students=$request->csv;
 
         $subject_id=null;
@@ -535,13 +535,13 @@ foreach($students as $student){
   $avgScores=DB::table('marks')->whereNotIn('total',[0])
   -> where([['student_id',$student->id],['type','Academic'],
   ['report_id',$report_id]
-  
+
   ])
   ->select(DB::raw('avg(total) as Total'),'student_id')
-  
+
    ->groupBy('student_id')
   ->get();
-  
+
 foreach($avgScores as $avgScore){
 array_push($studentArr,$avgScore);
    rsort($studentArr);
@@ -612,54 +612,55 @@ public function score_template($report_id,$subject_id){
 
 
 
+
 public function studenResult( $report_id, $student_id=null)
 {
  // return Mark:: where([['subject_id',98],['level_id',28]])->whereNotIn('report_id',[140,141,22])->get();
     $principal_sign=User::where([['type','principal'],['school_id',auth('api')->user()->school_id]])->select('photo')->first();
       if($student_id===null){
-          $student_id=auth('api')->user()->student_id;
+           $student_id=auth('api')->user()->student_id;
       }
 
         $student=Student::findOrFail($student_id);
         $comment=Result_activation::where([['report_id',$report_id],['student_id',$student_id]])->first();
-      $report=Report::with(['levels','sessions','terms'])->where('id',$report_id)->first();
-       
-      $pastTotal=Mark::select('total','subject_id','term_id')
+       $report=Report::with(['levels','sessions','terms'])->where('id',$report_id)->first();
+
+       $pastTotal=Mark::select('total','subject_id','term_id')
          ->where([['student_id',$student_id],['level_id',$report->level_id]
          ])->distinct('term_id')->get();
-         
-          $pastTotalarray=[];
-          foreach ($pastTotal as $total ) {
-               
-              array_push($pastTotalarray,['subject_id'=>$total->subject_id,'term_id'=>$total->term_id,'total'=>$total->total]);
-              # code...
-          }
+
+           $pastTotalarray=[];
+           foreach ($pastTotal as $total ) {
+
+               array_push($pastTotalarray,['subject_id'=>$total->subject_id,'term_id'=>$total->term_id,'total'=>$total->total]);
+               # code...
+           }
 
 if($report->term_id===3){
-  // return    Mark::where('level_id',28)->whereNotIn('report_id',[22,141,140])->get();
+   // return    Mark::where('level_id',28)->whereNotIn('report_id',[22,141,140])->get();
              $subjects=Mark::where([['student_id',$student_id],['level_id',$report->level_id]])->distinct('subject_id')->pluck('subject_id');
-            
+
             for($i=0;$i<count($subjects);++$i){
-              $marks=Mark::where([['report_id',$report_id],['student_id',$student_id],['subject_id',$subjects[$i]]])->first();
-              if($marks && $marks->average>0){
-                  $gradding=$this->grade($marks->average,$report->gradinggroup_id);  
+               $marks=Mark::where([['report_id',$report_id],['student_id',$student_id],['subject_id',$subjects[$i]]])->first();
+               if($marks && $marks->average>0){
+                   $gradding=$this->grade($marks->average,$report->gradinggroup_id);
             $marks->update([
-              'cummulative_grade'=>$gradding['grade'],
-              'cummulative_narration'=>$gradding['narration']
+               'cummulative_grade'=>$gradding['grade'],
+               'cummulative_narration'=>$gradding['narration']
             ]);
-              }
-          
+               }
+
           }
         }
 
 
 
      $arm=Arm::findOrFail($student->arm_id);
-    // $this->resultSummary($report_id, $student_id,$student->arm_id);
+     $this->resultSummary($report_id, $student_id,$student->arm_id);
     $user=User::with(['students','school'])->where('student_id',$student_id)->first();
     $grading=Grading::whereIn('group_id',[$report->gradinggroup_id])->where('school_id',$user->school_id)->get();
     $summary=Result::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
-   $scores=Mark::whereNotIn('total',[0])->with('subjects')->where([['report_id',$report_id],
+    $scores=Mark::whereNotIn('grand_total',[0])->with('subjects')->where([['report_id',$report_id],
     ['student_id',$student_id],['type','Academic']])->get();
     $noneAcademic=Mark::whereNotIn('total',[0])->whereNotIn('class_avg_score',[0])->with('subjects')->where([['report_id',$report_id],
     ['student_id',$student_id],['type','None Academic']])->get();

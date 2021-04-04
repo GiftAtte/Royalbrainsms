@@ -7,7 +7,7 @@ use App\LoginDetail;
 use Illuminate\Support\Facades\Hash;
 use App\School;
 use App\User;
-class StudentObserver
+class StudentObserver 
 {
     /**
      * Handle the student "created" event.
