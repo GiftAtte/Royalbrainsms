@@ -68,6 +68,7 @@ class ScoreController extends Controller
 
     public function store(Request $request)
     {
+        ini_set('max_execution_time', '720');
     $Nstudents= $request->number_of_students;
     $students=$request->student_id;
 
@@ -174,6 +175,7 @@ class ScoreController extends Controller
 
 public function import(Request $request)
 {
+    ini_set('max_execution_time', '720');
 
   $students=$request->csv;
 
