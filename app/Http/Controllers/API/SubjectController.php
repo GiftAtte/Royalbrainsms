@@ -10,7 +10,6 @@ use App\Level_sub;
 use App\Has_arm;
 use App\Student;
 use App\Report;
-use App\Teachersubject;
 use Dotenv\Result\Success;
 
 class SubjectController extends Controller
@@ -83,21 +82,15 @@ class SubjectController extends Controller
      public function loadSubjects($id=null)
 
     {
-        $user=auth('api')->user();
-        if($user->type='subjectTeacher' && !empty($id)){
-         
-            $report=Report::find($id);
-            $subjects=  Teachersubject::where([['level_id',$report->level_id],['staff_id',$user->staff_id]])->pluck('subject_id');
-            return Level_sub::with('subjects')->where('level_id',$report->level_id)->whereIn('subject_id',$subjects)->get();  
-        }
+
         if(!empty($id)){
             $report=Report::find($id);
             if($report){
-                return Level_sub::with('subjects')->where('level_id',$report->level_id)->get();  
+                return Level_sub::with('subjects')->where('level_id',$report->level_id)->get();
             }else{
-                return Level_sub::with('subjects')->where('level_id',$id)->get();    
+                return Level_sub::with('subjects')->where('level_id',$id)->get();
             }
-              
+
           }
         return Subject::where('school_id',auth('api')->user()->school_id)->get();
 
@@ -107,7 +100,7 @@ class SubjectController extends Controller
 
     {   $user = auth('api')->user();
          $level_id=null;
-         if($user->type==='admin'){
+         if($user->type==='admin'||$user->type==='superadmin'){
              $level_id=$request->level_id;
          }
          else{
@@ -120,15 +113,15 @@ class SubjectController extends Controller
            // $has_arm=Has_arm::where('staff_id',$user->staff_id)->first();
           if( count($subject)===0){
 
-              try{
+             
             return Level_sub::create([
                 'level_id'=>$level_id,
                 'subject_id'=>$request->subject_id,
                 'type'      =>$request->type
             ]);
-          }catch(Exception $e){
-           return $e;
-          }
+
+
+
         }
         return ['message'=>'subject exist'];
     }
