@@ -656,7 +656,7 @@ if($report->term_id===3){
 
 
      $arm=Arm::findOrFail($student->arm_id);
-     $this->resultSummary($report_id, $student_id,$student->arm_id);
+    // $this->resultSummary($report_id, $student_id,$student->arm_id);
     $user=User::with(['students','school'])->where('student_id',$student_id)->first();
     $grading=Grading::whereIn('group_id',[$report->gradinggroup_id])->where('school_id',$user->school_id)->get();
     $summary=Result::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
