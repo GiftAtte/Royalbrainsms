@@ -19,13 +19,17 @@
     </div>
     <div class="content col-12">
 <div class="card">
-    <div class="card-header">
-
-    <h4 v-show="!isSession" class=" text-danger"><router-link :to="`/import_scores`"  tag="a" exact >Import scores {{'(cvs)'}} </router-link>&nbsp;/Select Report Set  </h4>
+    <div class="card-header row">
+        <div class="col-md-6">
+<h4 v-show="!isSession" class=" text-danger"><router-link :to="`/import_scores`"  tag="a" exact >Import scores {{'(cvs)'}} </router-link>&nbsp;/Select Report Set  </h4>
     <h4 v-show="isSession" class="card-heading text-primary">Select Subject</h4>
     <button v-show="isSession" @click="resetSession" class="btn btn-success float-right" ><i class="fa fa-plus"></i>Load Session</button>
 
+        </div>
 
+<div class="col-md-6" >
+<input type="file"  ref="file" @change="setFile" ><button  @click="importExcel" class="btn btn-success pull-right">import(cvs)</button>
+ </div>
 </div>
 <form  @submit.prevent="createScore" >
 
@@ -154,6 +158,7 @@ import Loading from 'vue-loading-overlay';
         data(){
 
             return{
+                file:'',
                 isSession:false,
                 isSubject:false,
                 reports:{},
@@ -242,9 +247,44 @@ number_of_students:0
            this.isArm=true
        })
 
-
-
        },
+
+setFile () {
+                this.file=this.$refs.file.files[0];
+                console.log(this.file);
+          },
+
+
+           importExcel(){
+              // this.isLoading=true;
+           const formData=new FormData();
+           formData.append('file',this.file);
+          axios.post('/api/importExcel',formData)
+           .then(res=>{
+
+               toast.fire({
+                        type: 'success',
+                        title: 'Assignment successfully uploaded'
+                        })
+                         console.log(res.data)
+                    this.$Progress.finish();
+               this.isLoading=false;
+                    Fire.$emit('AfterCreate');
+
+           })
+           .catch(err=>{
+               this.$Progress.fail();
+              toast.fire({
+                        type: 'failure',
+                        title: 'there was error uploading the file'+err
+                        })
+                         console.log(err)
+           })
+
+
+            },
+
+
             createScore(){
             this.isLoading=true
             this.form.student_id=[];

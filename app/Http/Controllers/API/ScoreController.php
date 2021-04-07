@@ -24,7 +24,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Level_history;
 use App\Markcheck;
-
+use App\Imports\MarksImport;
+use Maatwebsite\Excel\Facades\Excel;
 ini_set('max_execution_time', '720');
 class ScoreController extends Controller
 {
@@ -68,7 +69,6 @@ class ScoreController extends Controller
 
     public function store(Request $request)
     {
-        ini_set('max_execution_time', '720');
     $Nstudents= $request->number_of_students;
     $students=$request->student_id;
 
@@ -88,7 +88,7 @@ class ScoreController extends Controller
 
             // return $gradding;
 
-
+  // return $this->studentPosition($request->student_id[$i],$request->report_id,false,0);
  Mark::where([['report_id',$request->report_id], ['student_id', $request->student_id[$i]],['subject_id',$request->subject_id]])->delete();
          Mark::updateOrInsert(
           ['report_id' => $request->report_id, 'student_id' => $request->student_id[$i],'subject_id'=>$request->subject_id],
@@ -113,13 +113,18 @@ class ScoreController extends Controller
 
 
           }
-       // updating the marks table with subject positioning
+
+    //   $students_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$request->report_id],['subject_id',$request->subject_id]])->select('total')->groupBy('total')->get()->toArray();
+    //   return    $subject_positions=$this->getSubjectRank(94,$students_score);
+    //   // updating the marks table with subject positioning
        Markcheck::create(['report_id'=>$request->report_id,'subject_id'=>$request->subject_id],[
         'report_id'=>$request->report_id,
         'subject_id'=>$request->subject_id,
         'is_history'=>0
     ]);
-
+//  $collection=collect(Mark::where([['report_id',$request->report_id], ['subject_id',$request->subject_id]])->select('total','id')->get());
+//   $c=$collection->groupBy('total')->all();
+//   return $c;
     CheckResult::create([
      'report_id'=>$request->report_id,
        'is_history'=>0
@@ -175,7 +180,6 @@ class ScoreController extends Controller
 
 public function import(Request $request)
 {
-    ini_set('max_execution_time', '720');
 
   $students=$request->csv;
 
@@ -424,34 +428,39 @@ return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
 
 
 
-    public function getSubjectRank($student_id,$report_id,$subject_id,$arm_id=null){
+    public function getRank($score,$scores=[]){
+                $collection=collect($scores)->sortByDesc('total');
+        $position=$collection->where('total',$score)->keys();
+           if(!empty($position[0])){
+         return $this->ordinal($position[0]+1);
+}
 
-      $rank=1;
-      $rankArr=array();
-       $positions=null;
-                      if($arm_id){
-                        $positions = DB::table('marks')
-                  ->where( [
-                     ['subject_id',$subject_id],
-                     ['report_id',$report_id],
-                     ['arm_id',$arm_id]
-                     ])->select('student_id','subject_id',"total")->orderBy("total",'desc')
-                  ->get();
-                      }else{
-                 $positions = DB::table('marks')
-                  ->where( [
-                     ['subject_id',$subject_id],
-                     ['report_id',$report_id]
-                     ])->select('student_id','subject_id',"total")->orderBy("total",'desc')
-                  ->get();
-                      }
-               //   return  $this-> Rank($positions,$student_id) ;
-        array_push($rankArr,$this->Rank($positions,$student_id));
+    //   $rank=1;
+    //   $rankArr=array();
+    //   $positions=null;
+    //                   if($arm_id){
+    //                     $positions = DB::table('marks')
+    //               ->where( [
+    //                  ['subject_id',$subject_id],
+    //                  ['report_id',$report_id],
+    //                  ['arm_id',$arm_id]
+    //                  ])->select('student_id','subject_id',"total")->orderBy("total",'desc')
+    //               ->get();
+    //                   }else{
+    //              $positions = DB::table('marks')
+    //               ->where( [
+    //                  ['subject_id',$subject_id],
+    //                  ['report_id',$report_id]
+    //                  ])->select('student_id','subject_id',"total")->orderBy("total",'desc')
+    //               ->get();
+    //                   }
+    //           //   return  $this-> Rank($positions,$student_id) ;
+    //     array_push($rankArr,$this->Rank($positions,$student_id));
 
 
 
 
- return $this->Rank($positions,$student_id);
+ return '';
 }
 
 
@@ -534,24 +543,31 @@ $students=Student::select('id')->where('class_id',$report->level_id)->get();
 $studentArr=array();
 $studentPosition=array();
 foreach($students as $student){
-  $avgScores=DB::table('marks')->whereNotIn('total',[0])
-  -> where([['student_id',$student->id],['type','Academic'],
-  ['report_id',$report_id]
+$avgScores=DB::table('marks')->whereNotIn('total',[0])
+-> where([['student_id',$student->id],['type','Academic'],
+['report_id',$report_id]
 
-  ])
-  ->select(DB::raw('avg(total) as Total'),'student_id')
+])
+->select(DB::raw('avg(total) as Total'))
+->first();
 
-   ->groupBy('student_id')
-  ->get();
 
-foreach($avgScores as $avgScore){
-array_push($studentArr,$avgScore);
-   rsort($studentArr);
-}}
+
+array_push($studentArr,$avgScores);
+
+}
+$score=DB::table('marks')->whereNotIn('total',[0])
+-> where([['student_id',$id],['type','Academic'],
+['report_id',$report_id]
+
+])
+->avg('total');
+//rsort($studentArr);
 // foreach($students as $student){
 //   array_push($studentPosition,  $this->Rank3($studentArr,$id));
 // }
-return $this->Rank3($studentArr,$id);
+ //return collect($studentArr)->where('Total',158.666666666666657192763523198664188385009765625)->keys();
+return $this->getRank($score,$studentArr);
 }
 
 // class positionioning/arm positioning Ranking
@@ -614,56 +630,56 @@ public function score_template($report_id,$subject_id){
 
 
 
-
 public function studenResult( $report_id, $student_id=null)
 {
  // return Mark:: where([['subject_id',98],['level_id',28]])->whereNotIn('report_id',[140,141,22])->get();
     $principal_sign=User::where([['type','principal'],['school_id',auth('api')->user()->school_id]])->select('photo')->first();
       if($student_id===null){
-           $student_id=auth('api')->user()->student_id;
+          $student_id=auth('api')->user()->student_id;
       }
 
         $student=Student::findOrFail($student_id);
         $comment=Result_activation::where([['report_id',$report_id],['student_id',$student_id]])->first();
-       $report=Report::with(['levels','sessions','terms'])->where('id',$report_id)->first();
+      $report=Report::with(['levels','sessions','terms'])->where('id',$report_id)->first();
 
-       $pastTotal=Mark::select('total','subject_id','term_id')
+      $pastTotal=Mark::select('total','subject_id','term_id')
          ->where([['student_id',$student_id],['level_id',$report->level_id]
          ])->distinct('term_id')->get();
 
-           $pastTotalarray=[];
-           foreach ($pastTotal as $total ) {
+          $pastTotalarray=[];
+          foreach ($pastTotal as $total ) {
 
-               array_push($pastTotalarray,['subject_id'=>$total->subject_id,'term_id'=>$total->term_id,'total'=>$total->total]);
-               # code...
-           }
+              array_push($pastTotalarray,['subject_id'=>$total->subject_id,'term_id'=>$total->term_id,'total'=>$total->total]);
+              # code...
+          }
 
 if($report->term_id===3){
-   // return    Mark::where('level_id',28)->whereNotIn('report_id',[22,141,140])->get();
+  // return    Mark::where('level_id',28)->whereNotIn('report_id',[22,141,140])->get();
              $subjects=Mark::where([['student_id',$student_id],['level_id',$report->level_id]])->distinct('subject_id')->pluck('subject_id');
 
             for($i=0;$i<count($subjects);++$i){
-               $marks=Mark::where([['report_id',$report_id],['student_id',$student_id],['subject_id',$subjects[$i]]])->first();
-               if($marks && $marks->average>0){
-                   $gradding=$this->grade($marks->average,$report->gradinggroup_id);
+              $marks=Mark::where([['report_id',$report_id],['student_id',$student_id],['subject_id',$subjects[$i]]])->first();
+              if($marks && $marks->average>0){
+                  $gradding=$this->grade($marks->average,$report->gradinggroup_id);
             $marks->update([
-               'cummulative_grade'=>$gradding['grade'],
-               'cummulative_narration'=>$gradding['narration']
+              'cummulative_grade'=>$gradding['grade'],
+              'cummulative_narration'=>$gradding['narration']
             ]);
-               }
+              }
 
           }
         }
 
-
+  $level_sub=Level_sub::where('level_id',$report->level_id)->pluck('subject_id');
+      Mark::where('report_id',$report_id)->whereNotIn('subject_id',$level_sub)->distinct('subject_id')->delete();
 
      $arm=Arm::findOrFail($student->arm_id);
     // $this->resultSummary($report_id, $student_id,$student->arm_id);
     $user=User::with(['students','school'])->where('student_id',$student_id)->first();
     $grading=Grading::whereIn('group_id',[$report->gradinggroup_id])->where('school_id',$user->school_id)->get();
     $summary=Result::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
-    $scores=Mark::whereNotIn('grand_total',[0])->with('subjects')->where([['report_id',$report_id],
-    ['student_id',$student_id],['type','Academic']])->get();
+   $scores=Mark::whereNotIn('total',[0])->with('subjects')->where([['report_id',$report_id],
+    ['student_id',$student_id],['type','Academic']])->distinct('subject_id')->get();
     $noneAcademic=Mark::whereNotIn('total',[0])->whereNotIn('class_avg_score',[0])->with('subjects')->where([['report_id',$report_id],
     ['student_id',$student_id],['type','None Academic']])->get();
 
@@ -712,16 +728,13 @@ public function principalComment($average){
             return Assessment::with('Ldomain')->where([['report_id',$report_id],['student_id',$student_id]])->get();
         }
 
+public function importExcel( Request $request){
+     return $request->file('file');
+    Excel::import(new MarksImport, $request->file('file'));
+}
 
 
 
-        public function getRanking($id,$scores){
-          //$collection = collect(User::orderBy('wins', 'DESC')->get());
-          $collection = collect($scores);
-          $data       = $collection->where('student_id', $id);
-          $value      = $data->keys()->first() + 1;
-          return $this->ordinal($value);
-       }
 
 
 }

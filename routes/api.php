@@ -84,6 +84,7 @@ Route::get('teacher_subjects/{id}', 'API\TeachersController@loadSubjects');
  // Scores Routes
  Route::apiResources(['scores' => 'API\ScoreController']);
  Route::post('import_scores','API\ScoreController@import');
+ Route::post('importExcel','API\ScoreController@importExcel');
  Route::post('load_students', 'API\ScoreController@loadStudents');
  Route::get('load_report', 'API\ScoreController@index');
  Route::get('score_template/{report_id}/{subject_id}','API\ScoreController@score_template');
@@ -180,6 +181,7 @@ Route::post('assign_arm','API\HistoryController@assignArm');
 Route::post('import_students_history','API\HistoryController@importHistoryLevel');
 Route::post('import_history_scores','API\HistoryController@importHistoryScores');
 Route::get('promoted_arms/{level_id}/{arm_id}/','API\HistoryController@promotedArm');
+
 // Chat Routes
 Route::get('messages','API\ChatsController@fetchMessages');
 Route::post('messages','API\ChatsController@sendMessages');

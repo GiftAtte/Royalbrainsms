@@ -122,10 +122,10 @@
             <th>Text Fields</th>
             <th>Select Columns To Match</th>
 
- 
+
    </tr>
 <rotate-square2 v-show="isloading"   id="loader"></rotate-square2>
-     
+
     </template>
 
     <template slot="next" slot-scope="{load}">
