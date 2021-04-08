@@ -730,7 +730,8 @@ public function principalComment($average){
 
 public function importExcel( Request $request){
 
-  return  Excel::import(new MarksImport, $request->file('file'));
+   Excel::import(new MarksImport, $request->file('file'));
+   return 'done';
 }
 
 
