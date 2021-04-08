@@ -731,6 +731,20 @@ public function principalComment($average){
 public function importExcel( Request $request){
 
    Excel::import(new MarksImport, $request->file('file'));
+
+   // updating the marks table with subject positioning
+  $mark=Mark::latest()->first();
+   Markcheck::create([
+    'report_id'=>$mark->report_id,
+    'subject_id'=>$mark->subject_id,
+
+]);
+
+// CheckResult::create([
+//  'report_id'=>$report_id,
+//  'is_history'=>$is_history
+
+// ]);
    return 'done';
 }
 
