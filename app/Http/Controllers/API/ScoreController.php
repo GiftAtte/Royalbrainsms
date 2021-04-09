@@ -322,7 +322,7 @@ return ['message'=>'success'];
 
     public function resultSummary($report_id,$student_id,$arm_id,$school_id)
     {
-        Result::where('report_id',$report_id)->delete();
+        Result::where([['report_id',$report_id],['student_id',$student_id]])->delete();
       $report=Report::findOrFail($report_id);
 
       $students=Mark::whereNotIn('total',[0])->where([['report_id',$report_id],['arm_id',$arm_id]])->select('student_id')->distinct('student_id')->get();
