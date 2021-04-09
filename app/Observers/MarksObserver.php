@@ -34,7 +34,7 @@ class MarksObserver implements ShouldQueue
        // positioning
       // $class_sub_position='';
      foreach($students as $student){
-          $score=Mark::where([['student_id',$student['student_id']],['report_id',$student->report_id],['subject_id',$student->subject_id]])->select('total')->first();
+          $score=Mark::where([['student_id',$student->student_id],['report_id',$student->report_id],['subject_id',$student->subject_id]])->select('total')->first();
           $arm_scores=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id],['arm_id',$student->arm_id]])->select('total')->get()->toArray();
 
     $cummulative_avg=DB::table('marks')->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->avg('total');
