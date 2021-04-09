@@ -370,9 +370,10 @@ return ['message'=>'success'];
 
 public function grade($score,$gradinggroup_id)
 {
+    $user_school=auth('api')->user()->school_id;
     if(is_numeric($score)){
         $score=round($score,2);
-    $grading=Grading::whereIn('group_id',[$gradinggroup_id])->where([['lower_bound','<=',$score],['upper_bound','>=',$score],['school_id',auth('api')->user()->school_id]])->first();
+    $grading=Grading::whereIn('group_id',[$gradinggroup_id])->where([['lower_bound','<=',$score],['upper_bound','>=',$score],['school_id',$user_school]])->first();
     if($grading){
    $Grade=$grading->grade;
    $credite_point=$grading->credit_point;
