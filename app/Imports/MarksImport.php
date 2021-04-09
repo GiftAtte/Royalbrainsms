@@ -22,7 +22,7 @@ class MarksImport implements ToModel, WithHeadingRow
            $scoreController =new ScoreController();
            $report=Report::findOrFail($row['report_id']);
         $total=$scoreController->sum($row['ca1'],$row['ca2'],['ca3'],$row['exams']);
-        $gradding=$scoreController->grade($total,$report->gradinggroup_id);
+        $gradding=$scoreController->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
         $subject_type=Level_sub::where([['level_id',$row['level_id']],['subject_id',$row['subject_id']]])->first();
         return new Mark([
 
