@@ -34,13 +34,13 @@ class MarksObserver implements ShouldQueue
        // positioning
       // $class_sub_position='';
      foreach($students as $student){
-          $score=Mark::where([['student_id',$student['student_id']],['report_id',$student['report_id']],['subject_id',$student['subject_id']]])->select('total')->first();
-          $arm_scores=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id],['arm_id',$student['arm_id']]])->select('total')->get()->toArray();
+          $score=Mark::where([['student_id',$student['student_id']],['report_id',$student->report_id],['subject_id',$student->subject_id]])->select('total')->first();
+          $arm_scores=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id],['arm_id',$student->arm_id]])->select('total')->get()->toArray();
 
     $cummulative_avg=DB::table('marks')->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->avg('total');
     $grand_total=DB::table('marks')->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->sum('total');
-    $subject_positions=$scoreController->getRank($score,$class_scores);
-    $subject_position_arm=$scoreController->getRank($score,$arm_scores);
+    $subject_positions=$scoreController->getRank($score->total,$class_scores);
+    $subject_position_arm=$scoreController->getRank($score->total,$arm_scores);
     $arm_max_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->max('total');
     $arm_min_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->min('total');
     $arm_avg_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->avg('total');
