@@ -733,7 +733,7 @@ public function principalComment($average){
         }
 
 public function importExcel( Request $request){
-return auth('api')->user()->school_id;
+//return auth('api')->user()->school_id;
    Excel::import(new MarksImport, $request->file('file'));
 
    // updating the marks table with subject positioning
