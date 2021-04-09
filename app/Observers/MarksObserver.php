@@ -53,7 +53,7 @@ class MarksObserver implements ShouldQueue
          ['report_id' => $markcheck->report_id, 'student_id' => $student->student_id],
          ['class_avg_score' =>round($class_avg_score,2),
                    'class_subj_position'=> $subject_positions,
-                   'arm_subj_position'=>$$subject_position_arm,
+                   'arm_subj_position'=>$subject_position_arm,
                    'max_class_score'=>$max_score,
                    'min_class_score'=>$min_score,
                             'average'=>round($cummulative_avg,2),
