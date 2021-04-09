@@ -248,12 +248,15 @@ public function import(Request $request)
    Markcheck::create([
        'report_id'=>$report_id,
        'subject_id'=>$subject_id,
+       'school_id'=>auth('api')->user()->school_id
+
 
    ]);
 
    CheckResult::create([
     'report_id'=>$report_id,
-    'is_history'=>$is_history
+    'is_history'=>$is_history,
+      'school_id'=>auth('api')->user()->school_id
 
 ]);
 
@@ -317,7 +320,7 @@ return ['message'=>'success'];
 
     // results summary
 
-    public function resultSummary($report_id,$student_id,$arm_id)
+    public function resultSummary($report_id,$student_id,$arm_id,$school_id)
     {
         Result::where('report_id',$report_id)->delete();
       $report=Report::findOrFail($report_id);
@@ -336,7 +339,7 @@ return ['message'=>'success'];
         $average=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$report_id],['student_id',$student_id],['type','Academic']])->avg('total');
                  $total_scores=DB::table('marks')->where([['report_id',$report_id],['student_id',$student_id],['type','Academic']])->sum('total');
                      // $gradding = new Gradding();
-                 $student_grade = $this->grade($average,$report->gradinggroup_id);
+                 $student_grade = $this->grade($average,$report->gradinggroup_id,$school_id);
                          $grade = $student_grade['grade'];
                     $narration = $student_grade['narration'];
 
@@ -368,12 +371,12 @@ return ['message'=>'success'];
 
 
 
-public function grade($score,$gradinggroup_id)
+public function grade($score,$gradinggroup_id,$school_id)
 {
-    $user_school=auth('api')->user()->school_id;
+   // $user_school=auth('api')->user()->school_id;
     if(is_numeric($score)){
         $score=round($score,2);
-    $grading=Grading::whereIn('group_id',[$gradinggroup_id])->where([['lower_bound','<=',$score],['upper_bound','>=',$score],['school_id',$user_school]])->first();
+    $grading=Grading::whereIn('group_id',[$gradinggroup_id])->where([['lower_bound','<=',$score],['upper_bound','>=',$score],['school_id',$school_id]])->first();
     if($grading){
    $Grade=$grading->grade;
    $credite_point=$grading->credit_point;
@@ -730,7 +733,7 @@ public function principalComment($average){
         }
 
 public function importExcel( Request $request){
-
+return auth('api')->user()->school_id;
    Excel::import(new MarksImport, $request->file('file'));
 
    // updating the marks table with subject positioning

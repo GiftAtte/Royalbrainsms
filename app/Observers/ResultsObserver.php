@@ -20,7 +20,7 @@ class ResultsObserver implements ShouldQueue
     {             $scoreController=new ScoreController();
                $students=Mark::whereNotIn('total',[0])->where('report_id',$checkreport->report_id)->select('student_id','arm_id')->distinct('student_id')->get();
                   foreach($students as $student){
-                    $scoreController->resultSummary($checkreport->report_id,$student->student_id,$student->arm_id);
+                    $scoreController->resultSummary($checkreport->report_id,$student->student_id,$student->arm_id,$checkreport->school_id);
                   }
                // $this->resultSummary($checkreport->report_id,$checkreport->is_history);
     }
