@@ -319,7 +319,7 @@ return ['message'=>'success'];
 
     public function resultSummary($report_id,$student_id,$arm_id)
     {
-      // $scores=Mark::where('report_id',$id)->get();
+        Result::where('report_id',$report_id)->delete();
       $report=Report::findOrFail($report_id);
 
       $students=Mark::whereNotIn('total',[0])->where([['report_id',$report_id],['arm_id',$arm_id]])->select('student_id')->distinct('student_id')->get();
@@ -353,7 +353,7 @@ return ['message'=>'success'];
                                 'narration'=>$narration,
                                 'total_students'=>$total_student,
                                 'cummulative_average'=>round($cummulative_avg,2),
-                             //   'class_position'=>$this->studentPosition($student_id,$report_id),
+                                'class_position'=>$this->studentPosition($student_id,$report_id),
                                 'arm_position'=>$this->studentPosition($student_id,$report_id,true),
                        ]
                     );
@@ -740,11 +740,11 @@ public function importExcel( Request $request){
 
 ]);
 
-// CheckResult::create([
-//  'report_id'=>$report_id,
-//  'is_history'=>$is_history
+CheckResult::create([
+ 'report_id'=>$mark->report_id,
+ 'is_history'=>0
 
-// ]);
+]);
    return 'done';
 }
 

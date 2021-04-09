@@ -9,6 +9,7 @@ use App\Student;
 use App\Result;
 use App\Report;
 use App\Grading;
+use App\Http\Controllers\API\ScoreController;
 use App\Level_history;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -16,9 +17,12 @@ class ResultsObserver implements ShouldQueue
 {
 
     public function created(CheckResult $checkreport)
-    {
-
-       $this->resultSummary($checkreport->report_id,$checkreport->is_history);
+    {             $scoreController=new ScoreController();
+               $students=Mark::whereNotIn('total',[0])->where('report_id',$checkreport->report_id)->select('student_id','arm_id')->distinct('student_id')->get();
+                  foreach($students as $student){
+                    $scoreController->resultSummary($checkreport->report_id,$student->student_id,$student->arm_id);
+                  }
+               // $this->resultSummary($checkreport->report_id,$checkreport->is_history);
     }
 
     /**
