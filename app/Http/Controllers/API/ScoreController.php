@@ -433,8 +433,8 @@ return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
 
 
     public function getRank($score,$scores=[]){
-                $collection=collect($scores)->groupBy('total');
-              //  $collection=$collection->groupBy('total')
+                $collection=collect($scores)->sortByDesc('total');
+                $collection=$collection->groupBy('total');
         $position=$collection->where('total',$score)->keys();
            if(!empty($position[0])){
          return $this->ordinal($position[0]+1);
@@ -558,7 +558,7 @@ $avgScores=DB::table('marks')->whereNotIn('total',[0])
 
 
 
-array_push($studentArr,$avgScores->total);
+array_push($studentArr,$avgScores);
 
 }
 $score=DB::table('marks')->whereNotIn('total',[0])
