@@ -557,7 +557,7 @@ $avgScores=DB::table('marks')->whereNotIn('total',[0])
 
 
 
-array_push($studentArr,$avgScores);
+array_push($studentArr,$avgScores->total);
 
 }
 $score=DB::table('marks')->whereNotIn('total',[0])
@@ -664,7 +664,7 @@ if($report->term_id===3){
             for($i=0;$i<count($subjects);++$i){
               $marks=Mark::where([['report_id',$report_id],['student_id',$student_id],['subject_id',$subjects[$i]]])->first();
               if($marks && $marks->average>0){
-                  $gradding=$this->grade($marks->average,$report->gradinggroup_id);
+                  $gradding=$this->grade($marks->average,$report->gradinggroup_id,auth('api')->user()->school_id);
             $marks->update([
               'cummulative_grade'=>$gradding['grade'],
               'cummulative_narration'=>$gradding['narration']
