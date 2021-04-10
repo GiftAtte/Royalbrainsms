@@ -552,7 +552,7 @@ $avgScores=DB::table('marks')->whereNotIn('total',[0])
 ['report_id',$report_id]
 
 ])
-->select(DB::raw('avg(total) as Total'))
+->select(DB::raw('avg(total) as total'))
 ->first();
 
 
