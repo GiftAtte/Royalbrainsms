@@ -27,7 +27,7 @@ class MarksObserver implements ShouldQueue
        $scoreController=new ScoreController();
        $max_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->max('total');
        $min_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->min('total');
-       $class_scores=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->select('total')->get();
+       $class_scores=(DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->select('total')->groupBy('total')->get())->toArray();
 
        $class_avg_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->avg('total');
 
@@ -35,7 +35,7 @@ class MarksObserver implements ShouldQueue
       // $class_sub_position='';
      foreach($students as $student){
           $score=Mark::where([['student_id',$student->student_id],['report_id',$student->report_id],['subject_id',$student->subject_id]])->first();
-          $arm_scores=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id],['arm_id',$student->arm_id]])->select('total')->get();
+          $arm_scores=(DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id],['arm_id',$student->arm_id]])->select('total')->groupBy('total')->get())->toArray();
 
     $cummulative_avg=DB::table('marks')->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->avg('total');
     $grand_total=DB::table('marks')->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->sum('total');
@@ -80,52 +80,52 @@ class MarksObserver implements ShouldQueue
      * @param  \App\Mark  $mark
      * @return void
      */
-    public function updated(Markcheck $markcheck)
-    {
-       $students=Mark::whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->select('student_id','level_id','arm_id')->get();
-       $scoreController=new ScoreController();
-       $max_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->max('total');
-       $min_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->min('total');
+//     public function updated(Markcheck $markcheck)
+//     {
+//        $students=Mark::whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->select('student_id','level_id','arm_id')->get();
+//        $scoreController=new ScoreController();
+//        $max_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->max('total');
+//        $min_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->min('total');
 
 
-       $class_avg_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->avg('total');
+//        $class_avg_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->avg('total');
 
-       // positioning
-       $class_sub_position='';
-     foreach($students as $student){
-    $grand_total=DB::table('marks')->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->sum('total');
-    $subject_positions=$scoreController->getRank($student['student_id'],$markcheck->report_id,$markcheck->subject_id);
-    $subject_position_arm=$scoreController->getRank($student['student_id'],$markcheck->report_id,$markcheck->subject_id,$student['arm_id']);
-    $arm_max_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->max('total');
-    $arm_min_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->min('total');
-    $arm_avg_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->avg('total');
-       $class_sub_position=$subject_positions['position'];
-       $arm_sub_position= $subject_position_arm['position'];
+//        // positioning
+//        $class_sub_position='';
+//      foreach($students as $student){
+//     $grand_total=DB::table('marks')->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->sum('total');
+//     $subject_positions=$scoreController->getRank($student['student_id'],$markcheck->report_id,$markcheck->subject_id);
+//     $subject_position_arm=$scoreController->getRank($student['student_id'],$markcheck->report_id,$markcheck->subject_id,$student['arm_id']);
+//     $arm_max_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->max('total');
+//     $arm_min_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->min('total');
+//     $arm_avg_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->avg('total');
+//        $class_sub_position=$subject_positions['position'];
+//        $arm_sub_position= $subject_position_arm['position'];
 
-       DB::table('marks')
-       ->where([['report_id', $markcheck->report_id],['student_id',$student->student_id],['subject_id',$markcheck->subject_id]])
-       ->updateOrInsert(
-         ['report_id' => $markcheck->report_id, 'student_id' => $student->student_id],
-         ['class_avg_score' =>round($class_avg_score,2),
-                   'class_subj_position'=>$class_sub_position,
-                   'arm_subj_position'=>$arm_sub_position,
-                   'max_class_score'=>$max_score,
-                   'min_class_score'=>$min_score,
-                            'average'=>round($cummulative_avg,2),
-                            'grand_total'=>round($grand_total,2),
-                            'arm_avg_score'=>round($arm_avg_score,2),
-                            'arm_min_score'=>round($arm_min_score,2),
-                            'arm_max_score'=>round($arm_max_score,2)
+//        DB::table('marks')
+//        ->where([['report_id', $markcheck->report_id],['student_id',$student->student_id],['subject_id',$markcheck->subject_id]])
+//        ->updateOrInsert(
+//          ['report_id' => $markcheck->report_id, 'student_id' => $student->student_id],
+//          ['class_avg_score' =>round($class_avg_score,2),
+//                    'class_subj_position'=>$class_sub_position,
+//                    'arm_subj_position'=>$arm_sub_position,
+//                    'max_class_score'=>$max_score,
+//                    'min_class_score'=>$min_score,
+//                             'average'=>round($cummulative_avg,2),
+//                             'grand_total'=>round($grand_total,2),
+//                             'arm_avg_score'=>round($arm_avg_score,2),
+//                             'arm_min_score'=>round($arm_min_score,2),
+//                             'arm_max_score'=>round($arm_max_score,2)
 
 
-       ]
-     );
+//        ]
+//      );
 
-    //  $mark=Mark::where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['student_id',$student->student_id]])->first();
-    //  $mark->arm_subj_position=$arm_sub_position;
-    //  $mark->save();
-   }
-    }
+//     //  $mark=Mark::where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['student_id',$student->student_id]])->first();
+//     //  $mark->arm_subj_position=$arm_sub_position;
+//     //  $mark->save();
+//    }
+//     }
 
     /**
      * Handle the mark "deleted" event.

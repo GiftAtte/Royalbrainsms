@@ -84,7 +84,7 @@ class ScoreController extends Controller
 
             // computing sum and grading
              $total=$this->sum($request->test1[$i],$request->test2[$i],$request->test3[$i],$request->exams[$i]);
-            $gradding= $this->grade($total,$report->gradinggroup_id);
+            $gradding= $this->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
 
             // return $gradding;
 
@@ -205,7 +205,7 @@ public function import(Request $request)
         // computing sum and grading
       //return[$student['test1'],$student['test2'],$student['exams']];
         $total=$this->sum($student['test1'],$student['test2'],['test3'],$student['exams']);
-         $gradding=$this->grade($total,$report->gradinggroup_id);
+         $gradding=$this->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
 
             return $gradding;
                 $student_arm=null;
