@@ -432,8 +432,8 @@ return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
 
 
 
-    public function getRank($score,$scores=[]){
-                $collection=collect($scores)->groupBy('total');
+    public function getRank($score,$scores){
+                $collection=$scores->groupBy('total');
               //  $collection=$collection->groupBy('total');
         $position=$collection->where('total',$score)->keys();
            if(!empty($position[0])){
