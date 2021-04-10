@@ -545,7 +545,7 @@ else{
 $students=Student::select('id')->where('class_id',$report->level_id)->get();
 }
 $studentArr=array();
-$studentPosition=array();
+//$studentPosition=array();
 foreach($students as $student){
 $avgScores=DB::table('marks')->whereNotIn('total',[0])
 -> where([['student_id',$student->id],['type','Academic'],

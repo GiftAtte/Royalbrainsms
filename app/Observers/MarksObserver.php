@@ -82,7 +82,7 @@ class MarksObserver implements ShouldQueue
      */
     public function updated(Markcheck $markcheck)
     {
-        $students=Mark::whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->select('student_id','level_id','arm_id')->get();
+       $students=Mark::whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->select('student_id','level_id','arm_id')->get();
        $scoreController=new ScoreController();
        $max_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->max('total');
        $min_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->min('total');
@@ -93,8 +93,6 @@ class MarksObserver implements ShouldQueue
        // positioning
        $class_sub_position='';
      foreach($students as $student){
-
-    $cummulative_avg=DB::table('marks')->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->avg('total');
     $grand_total=DB::table('marks')->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->sum('total');
     $subject_positions=$scoreController->getRank($student['student_id'],$markcheck->report_id,$markcheck->subject_id);
     $subject_position_arm=$scoreController->getRank($student['student_id'],$markcheck->report_id,$markcheck->subject_id,$student['arm_id']);
