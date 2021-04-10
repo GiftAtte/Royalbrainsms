@@ -433,9 +433,9 @@ return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
 
 
     public function getRank($score,$scores){
-                $collection=collect($scores);//->groupBy('total');
-                $collection=$collection->groupBy('total');
-        $position=$collection->where('total',$score)->keys();
+                $position=collect($scores)->where('total',$score)->keys();;
+               // $collection=$collection->groupBy('total');
+        //$position=$collection->where('total',$score)->keys();
            if(!empty($position[0])){
          return $this->ordinal($position[0]+1);
 }
@@ -571,7 +571,7 @@ $score=DB::table('marks')->whereNotIn('total',[0])
 // foreach($students as $student){
 //   array_push($studentPosition,  $this->Rank3($studentArr,$id));
 // }
- //return collect($studentArr)->where('Total',158.666666666666657192763523198664188385009765625)->keys();
+ collect($studentArr)->groupBy('total')->toArray();
 return $this->getRank($score,$studentArr);
 }
 
