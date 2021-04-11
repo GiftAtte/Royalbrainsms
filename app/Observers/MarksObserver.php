@@ -44,16 +44,16 @@ class MarksObserver implements ShouldQueue
     $arm_max_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->max('total');
     $arm_min_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->min('total');
     $arm_avg_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->avg('total');
-      //  $class_sub_position=$subject_positions['position'];
-      //  $arm_sub_position= $subject_position_arm['position'];
+       $class_sub_position=$subject_positions['position'];
+       $arm_sub_position= $subject_position_arm['position'];
 
        DB::table('marks')
        ->where([['report_id', $markcheck->report_id],['student_id',$student->student_id],['subject_id',$markcheck->subject_id]])
        ->updateOrInsert(
          ['report_id' => $markcheck->report_id, 'student_id' => $student->student_id],
          ['class_avg_score' =>round($class_avg_score,2),
-                   'class_subj_position'=> $subject_positions,
-                   'arm_subj_position'=>$subject_position_arm,
+                   'class_subj_position'=> $class_sub_position,
+                   'arm_subj_position'=>$arm_sub_position,
                    'max_class_score'=>$max_score,
                    'min_class_score'=>$min_score,
                             'average'=>round($cummulative_avg,2),
