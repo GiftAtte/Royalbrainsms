@@ -435,7 +435,7 @@ return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
     public function getRank($score,$scores){
         //$collection=collect($score)->sortDesc();
         rsort($scores);
-    return $collection=collect($scores)->sortDesc()->sortBy('total');
+     $collection=collect($scores)->sortDesc()->sortBy('total');
     $position=$collection->where('total',$score)->keys();
            if(!empty($position[0])){
          return $this->ordinal($position[0]+1);
