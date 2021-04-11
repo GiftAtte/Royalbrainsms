@@ -592,6 +592,17 @@ return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
 
     }
 
+    public function ordinal($number)
+    {
+        $ends = array('th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th');
+        if ((($number % 100) >= 11) && (($number % 100) <= 13)) {
+            return $number . 'th';
+        } else {
+            return $number . $ends[$number % 10];
+        }
+    }
+
+
 public function score_template($report_id,$subject_id){
     $subject=Subject::findOrFail($subject_id);
 
