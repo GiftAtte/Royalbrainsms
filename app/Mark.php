@@ -8,7 +8,7 @@ class Mark extends Model
 {
     //
     protected $table="marks";
-    protected $fillable=['id','report_id','student_id','subject_id',
+    protected $fillable=['report_id','student_id','subject_id',
     'test1','test2','test3','exams','total','grade','narration','level_id','term_id','cummulative_narration','cummulative_grade',
     'grand_total','arm_id','credit_point','arm_max_score','arm_min_score','arm_avg_score','type'];
           public function subjects()
