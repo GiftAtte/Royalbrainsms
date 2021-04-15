@@ -223,7 +223,7 @@ form:new Form({
                       this.subjects = res.data;
                          this.report_id=this.form.report_id
                            console.log(this.report_id)
-                            this.$Progress.finish();
+                               this.$Progress.finish();
                           }
                       );
                 }

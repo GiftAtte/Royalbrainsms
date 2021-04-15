@@ -5,7 +5,7 @@
       <div class="container-fluid navy" >
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Report</h1>
+            <h1 class="m-0 text-dark">Reports</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
 
@@ -43,7 +43,7 @@
                         <th>Title</th>
 
                         <th ><div><span>Class/Level </span></div></th>
-                        
+
                         <th>Action</th>
                         <th v-show="$gate.isAdminOrTutor()">Status</th>
                   </tr>
@@ -412,7 +412,7 @@ v-show="$gate.isAdminOrTutor()"
           activateReport(id){
               axios.post('/api/activate_report/'+id)
               .then(()=>{
-              
+
                     toast.fire({
                         type: 'success',
                         title: 'Report activated successfully'
@@ -478,7 +478,7 @@ v-show="$gate.isAdminOrTutor()"
                     axios.get("api/report").then( response  => {
 
                       this.reports = response.data
-                       
+
                       });
 
                 }
