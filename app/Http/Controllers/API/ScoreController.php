@@ -734,7 +734,7 @@ public function importExcel( Request $request){
 
 CheckResult::create([
  'report_id'=>$mark->report_id,
- 'is_history'=>0,
+ 'is_history'=>$mark->is_history,
    'school_id'=>auth('api')->user()->school_id
 ]);
    return 'done';

@@ -28,7 +28,7 @@
         </div>
 
 <div class="col-md-6" >
-<input type="file"  ref="file" @change="setFile" ><button  @click="importExcel" class="btn btn-success pull-right">import(cvs)</button>
+<input type="file"  ref="file" @change="setFile" ><button  @click="importExcel" class="btn btn-success pull-right m-2">import(cvs)</button>
  </div>
 </div>
 <form  @submit.prevent="createScore" >
