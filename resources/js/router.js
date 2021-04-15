@@ -10,7 +10,7 @@ export default new Router({
 
     // loads Home component
     { path: '/ ', component: require('./components/Dashboard.vue').default },
-    { path: ' ', component: require('./components/Dashboard.vue').default },
+    { path: ' /home', component: require('./components/Dashboard.vue').default },
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/developer', component: require('./components/Developer.vue').default },
     { path: '/users', component: require('./components/Users.vue').default },
