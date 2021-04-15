@@ -264,7 +264,7 @@ setFile () {
 
                toast.fire({
                         type: 'success',
-                        title: 'Assignment successfully uploaded'
+                        title: 'Scores successfully uploaded'
                         })
                          console.log(res.data)
                     this.$Progress.finish();
