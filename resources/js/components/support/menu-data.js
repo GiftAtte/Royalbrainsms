@@ -6,7 +6,7 @@ export default {
       type: 'title',
       txt: 'Home',
       icon: 'fa fa-tag context-menu__title-icon',
-      link: '/dashboard',
+     // link: '/dashboard',
     },
     {
     type: 'link',
@@ -66,7 +66,7 @@ export default {
       txt: 'Subject Teacher',
       link: '/subject_teacher',
     },
-    
+
     {
         type: 'link',
         txt: 'Email',
@@ -127,7 +127,7 @@ export default {
             txt: 'Videos',
             link: '/video_list',
           },
-        
+
 
 
 
@@ -195,7 +195,7 @@ export default {
       txt: 'Settings',
       icon: 'fa fa-key blue context-menu__title-icon',
     },
-   
+
     {
       type: 'link',
       txt: 'Academic Sessions',
@@ -257,7 +257,7 @@ export default {
         link: '/learning_domain',
       },
 
-      
+
   ],
 //superadmin
  superadmin: [
@@ -273,14 +273,14 @@ export default {
       link: '/school',
 
     },
-    
+
     {
       type: 'link',
       txt: 'Activation Keys',
       link: '/activation_keys',
 
     },
-    
+
       {
         type: 'link',
         txt: 'Manage Paystack',
@@ -467,16 +467,16 @@ export default {
       txt: 'Fee Management',
       icon: 'fa fa-pencil context-menu__title-icon',
     },
-  
-   
+
+
       {
         type: 'link',
         txt: 'Fee Group',
         link: '/feegroup',
       },
 
-      
-    
+
+
 
   ]
 
