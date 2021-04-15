@@ -30,7 +30,7 @@
         </li>
       <li>
         <a
-        href="#"
+        href="/dashboard"
         @click.prevent="updateMenu('home')"
         :class="highlightSection('home')"
         >

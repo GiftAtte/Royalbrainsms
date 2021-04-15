@@ -6,7 +6,7 @@ export default {
       type: 'title',
       txt: 'Home',
       icon: 'fa fa-tag context-menu__title-icon',
-     // link: '/dashboard',
+      link: '/dashboard',
     },
     {
     type: 'link',
