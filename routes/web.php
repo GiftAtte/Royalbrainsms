@@ -28,7 +28,7 @@ Route::resource('/posts', 'PostController');
 Auth::routes();
 
 Route::get('/dashboard', 'HomeController@index')->name('dashboard');
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('invoice', function(){
     return view('invoice');
