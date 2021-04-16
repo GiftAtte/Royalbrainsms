@@ -170,12 +170,12 @@
                     >
 
                  </div>
-                 
+
                   <div class="form-group">
                       <label> PAYMENT GATE WAY</label>
                    <input type="text"  class="form-control"  v-model="form.gateway_pk"
                    placeholder="payment gateway public key">
-                    
+
                  </div>
 
 
@@ -358,7 +358,7 @@
                         })
                     this.$Progress.finish();
                     this.$store.dispatch('loadSchool')
-                      window.location.replace("/");
+                      window.location.replace("/dashboard");
         })
         },
         isActive(id){
