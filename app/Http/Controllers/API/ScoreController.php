@@ -676,7 +676,7 @@ if($report->term_id===3){
     ['student_id',$student_id],['type','None Academic']])->get();
 
     if(count($scores)>0){
-        $principal_comment=$this->principalComment($summary->average_scores);
+        $principal_comment=$this->principalComment($summary->average_scores?$summary->average_scores:0);
         $staff_comment=$this->staffComment($summary->average_scores,$summary->student->class_id,$summary->student->arm_id);
         $LDomain=$this->learningDomain($student_id,$report_id);
 
