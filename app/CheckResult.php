@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class CheckResult extends Model
 {
     protected $fillable=[
-        'report_id','school_id','is_history'
+        'report_id','school_id','is_history','compute_summary'
     ];
 }
