@@ -26,7 +26,7 @@ use App\Level_history;
 use App\Markcheck;
 use App\Imports\MarksImport;
 use Maatwebsite\Excel\Facades\Excel;
-ini_set('max_execution_time', '720');
+ini_set('max_execution_time', '1000');
 class ScoreController extends Controller
 {
    public function __construct()
@@ -645,22 +645,22 @@ public function studenResult( $report_id, $student_id=null)
               # code...
           }
 
-if($report->term_id===3){
-  // return    Mark::where('level_id',28)->whereNotIn('report_id',[22,141,140])->get();
-             $subjects=Mark::where([['student_id',$student_id],['level_id',$report->level_id]])->distinct('subject_id')->pluck('subject_id');
+// if($report->term_id===3){
+//   // return    Mark::where('level_id',28)->whereNotIn('report_id',[22,141,140])->get();
+//              $subjects=Mark::where([['student_id',$student_id],['level_id',$report->level_id]])->distinct('subject_id')->pluck('subject_id');
 
-            for($i=0;$i<count($subjects);++$i){
-              $marks=Mark::where([['report_id',$report_id],['student_id',$student_id],['subject_id',$subjects[$i]]])->first();
-              if($marks && $marks->average>0){
-                  $gradding=$this->grade($marks->average,$report->gradinggroup_id,auth('api')->user()->school_id);
-            $marks->update([
-              'cummulative_grade'=>$gradding['grade'],
-              'cummulative_narration'=>$gradding['narration']
-            ]);
-              }
+//             for($i=0;$i<count($subjects);++$i){
+//               $marks=Mark::where([['report_id',$report_id],['student_id',$student_id],['subject_id',$subjects[$i]]])->first();
+//               if($marks && $marks->average>0){
+//                   $gradding=$this->grade($marks->average,$report->gradinggroup_id,auth('api')->user()->school_id);
+//             $marks->update([
+//               'cummulative_grade'=>$gradding['grade'],
+//               'cummulative_narration'=>$gradding['narration']
+//             ]);
+//               }
 
-          }
-        }
+//           }
+//         }
 
   $level_sub=Level_sub::where('level_id',$report->level_id)->pluck('subject_id');
       Mark::where('report_id',$report_id)->whereNotIn('subject_id',$level_sub)->distinct('subject_id')->delete();

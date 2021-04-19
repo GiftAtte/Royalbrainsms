@@ -12,13 +12,13 @@ use App\Grading;
 use App\Http\Controllers\API\ScoreController;
 use App\Level_history;
 use Illuminate\Contracts\Queue\ShouldQueue;
-
+ini_set('max_execution_time', '1000');
 class ResultsObserver implements ShouldQueue
 {
 
     public function created(CheckResult $checkreport)
     {             $scoreController=new ScoreController();
-        
+
                $students=Mark::whereNotIn('total',[0])->where('report_id',$checkreport->report_id)->select('student_id','arm_id')->distinct('student_id')->get();
                   foreach($students as $student){
                     $scoreController->resultSummary($checkreport->report_id,$student->student_id,$student->arm_id,$checkreport->school_id);

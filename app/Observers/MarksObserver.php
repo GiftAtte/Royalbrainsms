@@ -11,6 +11,7 @@ use App\Result;
 use App\Report;
 use App\Grading;
 use Illuminate\Contracts\Queue\ShouldQueue;
+ini_set('max_execution_time', '1000');
 class MarksObserver implements ShouldQueue
 {
     /**
@@ -22,7 +23,7 @@ class MarksObserver implements ShouldQueue
     public function created(Markcheck $markcheck)
     {
 
-        //$report=Report::findOrFail($markcheck->report_id);
+        $report=Report::findOrFail($markcheck->report_id);
         $students=Mark::whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->get();
        $scoreController=new ScoreController();
        $max_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->max('total');
@@ -44,9 +45,11 @@ class MarksObserver implements ShouldQueue
     $arm_max_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->max('total');
     $arm_min_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->min('total');
     $arm_avg_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->avg('total');
-       $class_sub_position=$subject_positions['position'];
+     $class_sub_position=$subject_positions['position'];
        $arm_sub_position= $subject_position_arm['position'];
+              $cGradding=$scoreController->grade($cummulative_avg,$report->graddinggroup_id,$markcheck->school_id);
 
+if($cummulative_avg){
        DB::table('marks')
        ->where([['report_id', $markcheck->report_id],['student_id',$student->student_id],['subject_id',$markcheck->subject_id]])
        ->updateOrInsert(
@@ -60,8 +63,9 @@ class MarksObserver implements ShouldQueue
                             'grand_total'=>round($grand_total,2),
                             'arm_avg_score'=>round($arm_avg_score,2),
                             'arm_min_score'=>round($arm_min_score,2),
-                            'arm_max_score'=>round($arm_max_score,2)
-
+                            'arm_max_score'=>round($arm_max_score,2),
+                            'cummulative_grade'=>$cGradding['grade'],
+                            'cummulative_narration'=>$cGradding['narration']
 
        ]
      );
@@ -69,7 +73,7 @@ class MarksObserver implements ShouldQueue
     //  $mark=Mark::where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['student_id',$student->student_id]])->first();
     //  $mark->arm_subj_position=$arm_sub_position;
     //  $mark->save();
-   }
+   }}
    }
 
 
