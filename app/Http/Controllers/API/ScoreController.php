@@ -613,7 +613,7 @@ public function score_template($report_id,$subject_id){
        ->select(DB::raw('CONCAT(students.surname," ", students.first_name)as name,students.id as student_id,
           students.class_id as level_id, arms.name as arms,students.arm_id as arm_id,reports.id as report_id,
           subjects.id as subjects_id,subjects.exams as exams,subjects.ca1 as ca1 ,subjects.ca2 as ca2,
-           subjects.ca3 as ca3,subjects.is_history as is_history,compute_summary as compute_summary'))
+           subjects.ca3 as ca3,subjects.is_history as is_history,marks.compute_summary as compute_summary'))
           ->orderBy('arms')->orderBy('name')
      ->get();
      return response()->json(['score_template'=>$score_template,'subject'=>$subject->name]);
