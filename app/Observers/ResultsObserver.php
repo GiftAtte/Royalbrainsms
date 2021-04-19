@@ -110,7 +110,8 @@ class ResultsObserver implements ShouldQueue
                                 'narration'=>$narration,
                                 'total_students'=>$total_student,
                                 'cummulative_average'=>round($cummulative_avg,2),
-                                'class_position'=>$this->studentPosition($student->student_id,$report_id,false,$is_history),
+                                'class_position'=>'-',
+                                //'class_position'=>$this->studentPosition($student->student_id,$report_id,false,$is_history),
                                 'arm_position'=>$this->studentPosition($student->student_id,$report_id,true,$is_history),
                        ]
                     );

@@ -681,7 +681,9 @@ public function studenResult( $report_id, $student_id=null)
         $LDomain=$this->learningDomain($student_id,$report_id);
 
         return response()->json(['scores'=>$scores,'summary'=>$summary,'user'=>$user,'pastTotal'=>$pastTotalarray,
-    'comment'=>$comment,'principal_comment'=>$principal_comment,'signature'=>$principal_sign, 'staff_comment'=>$staff_comment,
+    'comment'=>$comment,'principa
+
+    l_comment'=>$principal_comment,'signature'=>$principal_sign, 'staff_comment'=>$staff_comment,
      'report'=>$report,'arm'=>$arm,'gradings'=>$grading,'noneAcademic'=>$noneAcademic,'LDomain'=>$LDomain]);
     }else{
         return ['Not_found'=>'No reusult found'];
