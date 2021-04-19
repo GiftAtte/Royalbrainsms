@@ -20,11 +20,16 @@ class ResultsObserver implements ShouldQueue
     {             $scoreController=new ScoreController();
 
                $students=Mark::whereNotIn('total',[0])->where('report_id',$checkreport->report_id)->select('student_id','arm_id')->distinct('student_id')->get();
-                  foreach($students as $student){
+                 if($checkreport->compute>0){
+
+
+               foreach($students as $student){
                     $scoreController->resultSummary($checkreport->report_id,$student->student_id,$student->arm_id,$checkreport->school_id);
                   }
                // $this->resultSummary($checkreport->report_id,$checkreport->is_history);
     }
+    return 'done';
+}
 
     /**
      * Handle the mark "updated" event.
@@ -34,7 +39,7 @@ class ResultsObserver implements ShouldQueue
      */
     public function updated(CheckResult $checkreport)
     {
-        $this->resultSummary($checkreport->report_id,$checkreport->is_history);
+      //  $this->resultSummary($checkreport->report_id,$checkreport->is_history);
     }
 
     /**
