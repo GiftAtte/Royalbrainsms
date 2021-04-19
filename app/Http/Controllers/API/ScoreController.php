@@ -675,7 +675,7 @@ public function studenResult( $report_id, $student_id=null)
     $noneAcademic=Mark::whereNotIn('total',[0])->whereNotIn('class_avg_score',[0])->with('subjects')->where([['report_id',$report_id],
     ['student_id',$student_id],['type','None Academic']])->get();
 
-    if(count($summary)>0){
+    if($summary){
         $principal_comment=$this->principalComment($summary?$summary->average_scores:0);
         $staff_comment=$this->staffComment($summary->average_scores,$summary->student->class_id,$summary->student->arm_id);
         $LDomain=$this->learningDomain($student_id,$report_id);
