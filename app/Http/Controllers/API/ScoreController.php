@@ -356,7 +356,7 @@ return ['message'=>'success'];
                                 'narration'=>$narration,
                                 'total_students'=>$total_student,
                                 'cummulative_average'=>round($cummulative_avg,2),
-                                'class_position'=>$this->studentPosition($student_id,$report_id),
+                                'class_position'=>'-',
                                 'arm_position'=>$this->studentPosition($student_id,$report_id,true),
                        ]
                     );
