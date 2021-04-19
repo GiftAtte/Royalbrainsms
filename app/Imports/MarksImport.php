@@ -43,6 +43,7 @@ class MarksImport implements ToModel, WithHeadingRow
                   'arm_id'=>$row['arm_id'],
                   'type'=>$subject_type->type,
                   'is_history'=>$row['is_history'],
+                  'compute_summary'=>$row['compute_summary'],
 
             //
         ]);
