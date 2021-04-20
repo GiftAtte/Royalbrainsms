@@ -10,7 +10,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>RB</title>
+  <title>TSA</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="{{ asset('css/app.css') }}">
