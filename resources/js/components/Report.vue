@@ -54,8 +54,8 @@
                     <td>{{report.id}}</td>
                     <td>{{report.title}}</td>
                     <td>{{report.levels?report.levels.level_name:''}} </td>
-                     <td v-show="$gate.isAdminOrTutor()">
-                         <router-link  :to="`result_list/${report.id}`" title="view report list" tag="a" exact><i class="fa fa-eye blue"></i></router-link>
+                     <td >
+                         <router-link v-show="$gate.isAdmin()"  :to="`result_list/${report.id}`" title="view report list" tag="a" exact><i class="fa fa-eye blue"></i></router-link>
                        <a href="#" @click="editModal(report)" v-show="$gate.isAdmin()" class="pl-2">
                             <i class="fa fa-edit blue"></i>
                         </a>
@@ -67,9 +67,10 @@
 
                      </td>
 
-<td>
+<td v-show="$gate.isAdmin()" >
+    <button v-show="$gate.isAdminOrTutor()" type="btn" class="btn btn-success btn-sm mr-2" @click="computeSummary(report.id)">compute summary</button>
 <toggle-button @change="activateReport(report.id)"
-v-show="$gate.isAdminOrTutor()"
+v-show="$gate.isAdmin()"
                          :label="true"
                          :labels="{checked: 'ON', unchecked: 'OFF'}"
 
@@ -108,6 +109,11 @@ v-show="$gate.isAdminOrTutor()"
             <not-found></not-found>
         </div>
 <!-- Arms Modal -->
+<loading :active.sync="isLoading"
+        :can-cancel="false"
+        :on-cancel="onCancel"
+        color="blue"
+        :is-full-page="fullPage"></loading>
        <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -314,10 +320,14 @@ v-show="$gate.isAdminOrTutor()"
 </template>
 
 <script>
+  import Loading from 'vue-loading-overlay';
     export default {
-
+         components: { Loading },
         data() {
+
             return {
+                 isLoading:false,
+                fullPage: true,
                 editmode: false,
                 levels : {},
                 sessions:{},
@@ -537,8 +547,51 @@ v-show="$gate.isAdminOrTutor()"
       getGradinggroup(){
                 axios.get('api/gradinggroup')
                 .then(res=>this.gradinggroup=res.data)
-        }
+        },
+             computeSummary(reportId){
+                 this.setLoading();
+axios.post('api/computeSummary/'+reportId)
+                .then(res=>{
+           if(res.data.message==='sucsess'){
+             swal.fire(
+                        'success',
+                        'Summary computed successfully',
+                        'success'
+                        )
 
+          this.resetLoading()
+         }
+
+           else if(res.data.message==='no record'){
+               swal.fire(
+                        'error',
+                        'No results found',
+                        'error'
+                        )
+                        $("#activationModal").modal('hide')
+                        Fire.$emit('AfterCreate')
+                        this.resetLoading()
+           }
+       })
+.catch(err=>{
+      swal.fire(
+                        'fail!',
+                        'server errors',
+                        'failure'
+                        )
+
+
+})
+
+     //  this.resetLoading()
+             },
+
+              setLoading(){
+             this.isLoading=true
+           },
+           resetLoading(){
+             this.isLoading=false
+           }
         },
         created() {
              this.getGradinggroup();
@@ -553,6 +606,7 @@ v-show="$gate.isAdminOrTutor()"
 
                 })
             })
+
            this.loadReports();
            Fire.$on('AfterCreate',() => {
                this.loadReports();

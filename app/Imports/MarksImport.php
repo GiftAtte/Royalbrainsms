@@ -20,8 +20,8 @@ class MarksImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         Mark::where([['subject_id',$row['subjects_id']],['report_id',$row['report_id']],['student_id',$row['student_id']]])->delete();
-           $scoreController =new ScoreController();
-           $report=Report::findOrFail($row['report_id']);
+        $scoreController =new ScoreController();
+       $report=Report::findOrFail($row['report_id']);
         $total=$scoreController->sum($row['ca1'],$row['ca2'],['ca3'],$row['exams']);
         $gradding=$scoreController->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
 
@@ -43,9 +43,9 @@ class MarksImport implements ToModel, WithHeadingRow
                   'arm_id'=>$row['arm_id'],
                   'type'=>$subject_type->type,
                   'is_history'=>$row['is_history'],
-                  'compute_summary'=>$row['compute_summary'],
+                  'compute_summary'=>0,
 
-            //
+
         ]);
     }
 }

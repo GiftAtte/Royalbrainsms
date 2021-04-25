@@ -362,8 +362,8 @@
 </template>
 
 <script >
-    import jspdf from "jspdf";
-    import html2canvas from "html2canvas";
+   // import jspdf from "jspdf";
+   // import html2canvas from "html2canvas";
     import {mapState} from "vuex";
     export default {
       computed: mapState(['school']),

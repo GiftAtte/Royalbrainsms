@@ -63,7 +63,7 @@ Route::get('staff_profile/{id?}', 'API\EmployeeController@profile');
 Route::apiResources(['subjects' => 'API\SubjectController']);
 Route::post('level_subjects', 'API\SubjectController@level_subjects');
 Route::get('load_subjects/{level_id?}', 'API\SubjectController@loadListView');
-Route::get('load_list/{id?}', 'API\SubjectController@loadSubjects');
+Route::get('load_list/{id?}/{is_score?}', 'API\SubjectController@loadSubjects');
 Route::delete('delete_list/{id}', 'API\SubjectController@delete_list');
 
 Route::get('teacher_subjects', 'API\TeachersController@index');
@@ -89,7 +89,11 @@ Route::get('teacher_subjects/{id}', 'API\TeachersController@loadSubjects');
  Route::post('load_students', 'API\ScoreController@loadStudents');
  Route::get('load_report', 'API\ScoreController@index');
  Route::get('score_template/{report_id}/{subject_id}','API\ScoreController@score_template');
-//Chart Rooutes
+ Route::get('backup/{report_id}/{subject_id}','API\ScoreController@score_backup');
+ Route::post('computeSummary/{report_id}','API\ScoreController@computeSummary');
+
+
+ //Chart Rooutes
 Route::get('chart', 'API\ChartController@index');
 Route::get('load_students/{id}','API\ChartController@load_students');
 Route::post('load_chart','API\ChartController@load_chart');

@@ -226,7 +226,7 @@ number_of_students:0
                 if(this.$gate.isAdminOrSubjectTutor()){
                   this.isSession=true;
                    this.$Progress.start();
-                    axios.get("api/load_list/"+this.form.report_id)
+                    axios.get("api/load_list/"+this.form.report_id+'/'+1)
                     .then( res  => {
                       this.subjects = res.data;
                          this.report_id=this.form.report_id
@@ -256,7 +256,7 @@ setFile () {
 
 
            importExcel(){
-              // this.isLoading=true;
+               this.isLoading=true;
            const formData=new FormData();
            formData.append('file',this.file);
           axios.post('/api/importExcel',formData)

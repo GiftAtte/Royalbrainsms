@@ -25,6 +25,7 @@ use App\Http\Controllers\Controller;
 use App\Level_history;
 use App\Markcheck;
 use App\Imports\MarksImport;
+use App\Teachersubject;
 use Maatwebsite\Excel\Facades\Excel;
 ini_set('max_execution_time', '1000');
 class ScoreController extends Controller
@@ -106,7 +107,8 @@ class ScoreController extends Controller
                       'narration'=>$gradding['narration'],
                       'term_id'=>$term_id,
                       'arm_id'=>$student_arm->arm_id,
-                      'type'=>$subject_type->type
+                      'type'=>$subject_type->type,
+                      'is_history'=>0
             ]
            );
          //   Mark::insert($scores);
@@ -117,17 +119,18 @@ class ScoreController extends Controller
     //   $students_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$request->report_id],['subject_id',$request->subject_id]])->select('total')->groupBy('total')->get()->toArray();
     //   return    $subject_positions=$this->getSubjectRank(94,$students_score);
     //   // updating the marks table with subject positioning
-       Markcheck::create(['report_id'=>$request->report_id,'subject_id'=>$request->subject_id],[
-        'report_id'=>$request->report_id,
-        'subject_id'=>$request->subject_id,
-        'is_history'=>0
-    ]);
-//  $collection=collect(Mark::where([['report_id',$request->report_id], ['subject_id',$request->subject_id]])->select('total','id')->get());
-//   $c=$collection->groupBy('total')->all();
-//   return $c;
-    CheckResult::create([
+  //  $mark=Mark::latest()->first();
+    Markcheck::create([
      'report_id'=>$request->report_id,
-       'is_history'=>0
+     'subject_id'=>$request->subject_id,
+     'school_id'=>auth('api')->user()->school_id,
+ ]);
+
+ CheckResult::create([
+  'report_id'=>$request->report_id,
+  'is_history'=>0,
+    'school_id'=>auth('api')->user()->school_id,
+    'compute_summary'=>1
  ]);
       // event(new MarksCreated($request->report_id,$students,$request->level_id,$request->subject_id));
     //     $max_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$request->report_id],['subject_id',$request->subject_id]])->max('total');
@@ -316,6 +319,63 @@ return ['message'=>'success'];
 
 
 
+public function resultSummary2($report_id)
+{
+
+    $aStudents=null;
+  $report=Report::findOrFail($report_id);
+ $is_history=Level::findOrFail($report->level_id)->is_history;
+ if($is_history===0){
+    $aStudents=Student::where('class_id',$report->level_id)->pluck('id');
+ }else{
+    $aStudents=Level_history::where('level_id',$report->level_id)->pluck('student_id');
+ }
+ // $aStudents=Student::where('class_id',$report->level_id)->pluck('id');
+ $students=Mark::whereNotIn('average',[0])->where('report_id',$report_id)->whereIn('student_id',$aStudents)->select('student_id','arm_id')->distinct('student_id')->get();
+  //$students=Mark::whereNotIn('total',[0])->where([['report_id',$report_id]])->select('student_id','arm_id','level_id')->distinct('student_id')->get();
+  if(count($students)>0){
+  foreach($students as $student){
+    Result::where([['report_id',$report_id],['student_id',$student->student_id]])->delete();
+  $students_arm=Mark::where([['report_id',$report_id],['arm_id',$student->arm_id]])->whereNotIn('total',[0])
+                   ->select('student_id')->distinct('student_id')->get();
+
+  //$student_by_arm=Student::where
+  $level_id=$student->level_id;
+  $total_student=count($students_arm);
+// return $level_id;
+
+    $cummulative_avg=Mark::whereNotIn('total',[0])->where([['level_id',$level_id],['student_id',$student->student_id],['type','Academic']])->avg('total');
+
+    $average=Mark::whereNotIn('total',[0])->where([['report_id',$report_id],['student_id',$student->student_id],['type','Academic']])->avg('total');
+             $total_scores=Mark::where([['report_id',$report_id],['student_id',$student->student_id],['type','Academic']])->sum('total');
+                 // $gradding = new Gradding();
+             $student_grade = $this->grade($average,$report->gradinggroup_id,$student->school_id);
+                     $grade = $student_grade['grade'];
+                $narration = $student_grade['narration'];
+
+                Result::where([['report_id',$report_id],['student_id',$student->student_id]])->delete();
+          Result::create([
+                      'student_id'=>$student->student_id,
+                      'report_id'=>$report_id,
+                      'level_id'=>$level_id,
+                      'total_scores'=>round($total_scores,2),
+                            'grade'=>$grade,
+                            'average_scores'=>round($average,2),
+                            'narration'=>$narration,
+                            'total_students'=>$total_student,
+                            'cummulative_average'=>round($cummulative_avg,2),
+                            'class_position'=>'-',
+                            //'class_position'=>$this->studentPosition($student->student_id,$report_id,false,$is_history),
+                            'arm_position'=>$this->studentPosition($student->student_id,$report_id,true,$is_history),
+                   ]
+                );
+}
+return ['message'=>'success'];
+}else{
+  return ['message'=>'no record'];
+}
+
+}
 
 
     // results summary
@@ -621,6 +681,43 @@ public function score_template($report_id,$subject_id){
 
 
 
+public function score_backup($report_id,$subject_id){
+    $isPermitted=false;
+    $user=auth('api')->user();
+
+    $subject=Subject::findOrFail($subject_id);
+       $report=Report::findOrFail($report_id);
+       if($user->type=='subjectTeacher'){
+           $subjects=Teachersubject::where([['level_id',$report->level_id],['subject_id',$report_id],['staff_id',$user->staff_id]])->first();
+             if($subjects){
+                $isPermitted=true;
+             }
+
+
+       }
+       if($user->type==='admin'|| $user->type==='tutor' ||$user->type==='superadmin'){
+        $isPermitted=true;
+     }
+       if($isPermitted){
+    $score_template= DB::table('marks')->where([['marks.report_id',$report_id],['marks.subject_id',$subject_id]])
+       ->join('students','marks.student_id','=','students.id')
+       ->crossJoin('levels','marks.level_id','=','levels.id')//->where('levels.id','marks.level_id')
+       ->crossJoin('arms','marks.arm_id','=','arms.id')
+       ->select(DB::raw('CONCAT(students.surname," ", students.first_name)as name,students.id as student_id,
+         levels.level_name as level, students.class_id as level_id, arms.name as arms,students.arm_id as arm_id,marks.report_id as report_id,
+          marks.subject_id as subjects_id,marks.exams as exams,marks.test1 as ca1 ,marks.test2 as ca2,
+           marks.test3 as ca3,marks.is_history as is_history'))
+          ->orderBy('arms')->orderBy('name')
+     ->get();
+     return response()->json(['score_template'=>$score_template,'subject'=>$subject->name]);
+}
+else{
+return 'Not permitted';
+}
+
+}
+
+
 
 public function studenResult( $report_id, $student_id=null)
 {
@@ -745,6 +842,28 @@ CheckResult::create([
 
 
 
+public function computeSummary($report_id){
+     // $school_id=auth('api')->user()->school_id;
+      $report=Report::findOrFail($report_id);
+   // $aStudents=Student::where('class_id',$report->level_id)->pluck('id');
+    $is_history=Level::findOrFail($report->level_id)->is_history;
+    $students=Mark::whereNotIn('average',[0])->where('report_id',$report_id)->get();
+if(count($students)>0){
+    CheckResult::create([
+        'report_id'=>$report_id,
+        'is_history'=> $is_history,
+          'school_id'=>auth('api')->user()->school_id,
+          'compute_summary'=>1
+       ]);
+       return ['message'=>'success'];
+    }else
 
+
+    // foreach($students as $student){
+    //  $this->resultSummary($report_id,$student->student_id,$student->arm_id,$school_id);
+    //   }
+   return ['message'=>'no record'];
+
+    }
 
 }
