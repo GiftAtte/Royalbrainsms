@@ -552,10 +552,10 @@ v-show="$gate.isAdmin()"
                  this.setLoading();
 axios.post('api/computeSummary/'+reportId)
                 .then(res=>{
-           if(res.data.message==='sucsess'){
+           if(res.data.message==='success'){
              swal.fire(
                         'success',
-                        'Summary computed successfully',
+                        'Summary in progress, check results in a min',
                         'success'
                         )
 
@@ -580,7 +580,7 @@ axios.post('api/computeSummary/'+reportId)
                         'failure'
                         )
 
-
+this.resetLoading()
 })
 
      //  this.resetLoading()
