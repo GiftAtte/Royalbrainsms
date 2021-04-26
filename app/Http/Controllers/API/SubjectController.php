@@ -10,6 +10,7 @@ use App\Level_sub;
 use App\Has_arm;
 use App\Student;
 use App\Report;
+use App\Teachersubject;
 use Dotenv\Result\Success;
 
 class SubjectController extends Controller
@@ -79,12 +80,27 @@ class SubjectController extends Controller
         return ['message' => 'subject Deleted'];
     }
 
-     public function loadSubjects($id=null)
+     public function loadSubjects($id=null,$is_scores=false)
 
-    {
+    {      // $permitted=false;
+        $report=Report::find($id);
+        $user=auth('api')->user();
+            if(($is_scores>0) && ($user->type==='subjectTeacher')){
+
+                    $subjects=Teachersubject::where([['level_id',$report->level_id],['staff_id',$user->staff_id]])->pluck('subject_id');
+                      if($subjects){
+                        return Level_sub::with('subjects')->where('level_id',$report->level_id)->whereIn('subject_id',$subjects)->get();
+                      }
+             else{
+                 return '';
+             }
+
+                }
+
+
 
         if(!empty($id)){
-            $report=Report::find($id);
+
             if($report){
                 return Level_sub::with('subjects')->where('level_id',$report->level_id)->get();
             }else{
@@ -113,7 +129,7 @@ class SubjectController extends Controller
            // $has_arm=Has_arm::where('staff_id',$user->staff_id)->first();
           if( count($subject)===0){
 
-             
+
             return Level_sub::create([
                 'level_id'=>$level_id,
                 'subject_id'=>$request->subject_id,
