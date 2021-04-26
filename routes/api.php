@@ -37,6 +37,7 @@ Route::put('student_update/{id}', 'API\StudentController@update');
 Route::put('updateStudent/{id?}', 'API\StudentController@updateStudent');
 Route::post('import_students',    'API\StudentController@import');
 Route::get('login_export','API\StudentController@exportLogin');
+Route::get('login_export/{level_id}/{arm_id}','API\StudentController@exportLogins');
 Route::post('update_password','API\StudentController@updatePassword');
 // Levels routs
 Route::apiResources(['level' => 'API\LevelController']);
