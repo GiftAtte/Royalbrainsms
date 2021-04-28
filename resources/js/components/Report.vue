@@ -63,7 +63,7 @@
                         <a href="#" @click="deleteReport(report.id)" v-show="$gate.isAdmin()" class="pl-2">
                             <i class="fa fa-trash red"></i>
                         </a>
-                         <router-link   :to="`master/${report.id}`" title="view report list" tag="a" exact>master sheet</router-link>
+                         <router-link v-show="$gate.isAdminOrTutor()"   :to="`master/${report.id}`" title="view report list" tag="a" exact>master sheet</router-link>
 
                      </td>
 
