@@ -591,9 +591,16 @@ return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
   public function studentPosition($id,$report_id,$arm=false){
   $report=Report::findOrFail($report_id);
   $student=Student::findOrFail($id);
+  $is_history=Level::findOrFail($report_id)->is_history;
   $students=null;
   if($arm){
-    $students=Student::select('id')->where([['class_id',$report->level_id],['arm_id',$student->arm_id]])->get();
+      if($is_history>0){
+        $students=Level_history::where([['level_id',$report->level_id],['arm_id',$student->arm_id]])->get();
+    }else{
+        $students=Student::select('id')->where([['class_id',$report->level_id],['arm_id',$student->arm_id]])->get();
+    }
+
+
   }
   else{
   $students=Student::select('id')->where('class_id',$report->level_id)->get();
