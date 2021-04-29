@@ -10,6 +10,7 @@ use App\Result;
 use App\Report;
 use App\Grading;
 use App\Http\Controllers\API\ScoreController;
+use App\Level;
 use App\Level_history;
 use Illuminate\Contracts\Queue\ShouldQueue;
 ini_set('max_execution_time', '1000');
@@ -18,8 +19,17 @@ class ResultsObserver implements ShouldQueue
 
     public function created(CheckResult $checkreport)
     {             $scoreController=new ScoreController();
-
-               $students=Mark::whereNotIn('total',[0])->where('report_id',$checkreport->report_id)->select('student_id','arm_id')->distinct('student_id')->get();
+        $aStudents=null;
+        $report=Report::findOrFail($checkreport->report_id);
+       $is_history=Level::findOrFail($report->level_id)->is_history;
+       if($is_history===0){
+          $aStudents=Student::where('class_id',$report->level_id)->pluck('id');
+       }else{
+          $aStudents=Level_history::where('level_id',$report->level_id)->pluck('student_id');
+       }
+               $students=Mark::whereNotIn('total',[0])->where('report_id',$checkreport->report_id)
+               ->whereIn('student_id',$aStudents)
+               ->select('student_id','arm_id')->distinct('student_id')->get();
                  if($checkreport->compute_summary>0){
 
 
