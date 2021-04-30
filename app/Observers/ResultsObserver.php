@@ -22,10 +22,11 @@ class ResultsObserver implements ShouldQueue
         $aStudents=null;
         $report=Report::findOrFail($checkreport->report_id);
        $is_history=Level::findOrFail($report->level_id)->is_history;
-       if($is_history===0){
-          $aStudents=Student::where('class_id',$report->level_id)->pluck('id');
+       if($is_history>0){
+        $aStudents=Level_history::where('level_id',$report->level_id)->pluck('student_id');
+          
        }else{
-          $aStudents=Level_history::where('level_id',$report->level_id)->pluck('student_id');
+        $aStudents=Student::where('class_id',$report->level_id)->pluck('id');
        }
                $students=Mark::whereNotIn('total',[0])->where('report_id',$checkreport->report_id)
                ->whereIn('student_id',$aStudents)

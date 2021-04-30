@@ -404,8 +404,7 @@ return ['message'=>'success'];
                     $narration = $student_grade['narration'];
 
 
-                    Result::updateOrInsert(
-                        ['report_id' => $report_id, 'student_id' => $student_id],
+                    Result::create(
                         [
                           'student_id'=>$student_id,
                           'report_id'=>$report_id,
