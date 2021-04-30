@@ -591,7 +591,7 @@ return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
   public function studentPosition($id,$report_id,$arm=false){
   $report=Report::findOrFail($report_id);
   $student=Student::findOrFail($id);
-  $is_history=Level::findOrFail($report_id)->is_history;
+  $is_history=Level::findOrFail($report->level_id)->is_history;
   $students=null;
   if($arm){
       if($is_history>0){
