@@ -18,14 +18,23 @@ class TeachersController extends Controller
      */
 
 
-    public function index()
+    public function index($id=null)
     {
+        if($id){
+            return Teachersubject::with(['levels','subjects'])->where('staff_id',$id)->get();
+        }else{
         return Teachersubject::with(['levels','subjects'])->where('staff_id',auth('api')->user()->staff_id)->get();
-    }
+    }}
 
     public function store(Request $request)
 
     {   $user = auth('api')->user();
+        $staff_id=null;
+        if($user->type==='admin'||$user->type==='superadmin'){
+            $staff_id=$request->staff_id;
+        }else{
+            $staff_id=$user->staff_id;
+        }
 
 
  //return $request->all();
@@ -38,7 +47,7 @@ class TeachersController extends Controller
             return Teachersubject::create([
                 'level_id'=>$request->level_id,
                 'subject_id'=>$request->subject_id,
-                'staff_id'      =>$user->staff_id,
+                'staff_id'      =>$staff_id,
                 'school_id'      =>$user->school_id,
             ]);
           }catch(Exception $e){

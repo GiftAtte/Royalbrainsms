@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
-     return redirect('dashboard');
+     return redirect()->to('/dashboard');
 });
 Route::get('/email', function () {
     return new SendResults() ;
@@ -28,7 +28,6 @@ Route::resource('/posts', 'PostController');
 Auth::routes();
 
 Route::get('/dashboard', 'HomeController@index')->name('dashboard');
-Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('invoice', function(){
     return view('invoice');

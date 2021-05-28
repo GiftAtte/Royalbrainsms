@@ -85,7 +85,7 @@ class SubjectController extends Controller
     {      // $permitted=false;
         $report=Report::find($id);
         $user=auth('api')->user();
-            if(($is_scores>0) && ($user->type==='subjectTeacher')){
+            if(($is_scores>0) && ($user->type==='subjectTeacher'||$user->type==='tutor')){
 
                     $subjects=Teachersubject::where([['level_id',$report->level_id],['staff_id',$user->staff_id]])->pluck('subject_id');
                       if($subjects){
@@ -116,7 +116,7 @@ class SubjectController extends Controller
 
     {   $user = auth('api')->user();
          $level_id=null;
-         if($user->type==='admin'||$user->type==='superadmin'){
+         if($user->type==='admin'||$user->type==='superadmin'||$user->type==='tutor'){
              $level_id=$request->level_id;
          }
          else{

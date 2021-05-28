@@ -140,6 +140,35 @@ Vue.component(
     'first-second-term',
     require('./components/results/First_second_term.vue').default
 );
+
+Vue.component(
+    'annual',
+    require('./components/results/Annual_Result.vue').default
+);
+Vue.component(
+    'midterm',
+    require('./components/results/Mid_term.vue').default
+);
+Vue.component(
+    'mock',
+    require('./components/results/Mock_Result.vue').default
+);
+Vue.component(
+    'terminal',
+    require('./components/results/Terminal_Results.vue').default
+);
+Vue.component(
+    'primary-terminal',
+    require('./components/results/PrimaryTerminal.vue').default
+);
+Vue.component(
+    'primary-midterm',
+    require('./components/results/PrimaryMidterm.vue').default
+);
+Vue.component(
+    'general-results',
+    require('./components/results/General_Results.vue').default
+);
 Vue.component(
     'grading',
     require('./components/results/Grading.vue').default

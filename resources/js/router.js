@@ -9,7 +9,7 @@ export default new Router({
   routes: [
 
     // loads Home component
-    { path: '/ ', component: require('./components/Dashboard.vue').default },
+    { path: '/', component: require('./components/Dashboard.vue').default },
     { path: ' /home', component: require('./components/Dashboard.vue').default },
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/developer', component: require('./components/Developer.vue').default },
@@ -24,7 +24,7 @@ export default new Router({
     { path: '/level_subjects', component: require('./components/subject/Level_subjects.vue').default },
     { path: '/student_profile/:id?', component: require('./components/students/Student_profile.vue').default },
     { path: '/result_list/:id', component: require('./components/results/Result_list.vue').default },
-    { path: '/result/:report_id/:student_id?', component: require('./components/results/Result.vue').default },
+    { path: '/result/:report_id/:student_id?/:annual?', component: require('./components/results/Result.vue').default },
     { path: '/configs', component: require('./components/results/Config.vue').default },
     { path: '*', component: require('./components/NotFound.vue').default },
     { path: '/chart', component: require('./components/students/Chart.vue').default },

@@ -36,7 +36,7 @@ class UserController extends Controller
         if (\Gate::allows('isAdmin') || \Gate::allows('isUser')) {
 
 
-                return User::whereNotIn('type',['admin'])->where('school_id',auth('api')->user()->school_id)->latest()->paginate(70);
+                return User::whereNotIn('type',['superadmin'])->where('school_id',auth('api')->user()->school_id)->latest()->paginate(70);
 
 
        }
@@ -79,7 +79,7 @@ class UserController extends Controller
 
         $this->validate($request,[
             'name' => 'required|string|max:191',
-           // 'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
+            'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
             'password' => 'sometimes|required|min:6'
         ]);
 
@@ -90,13 +90,18 @@ class UserController extends Controller
         if($request->photo != $currentPhoto){
            // $name = time().'.' . explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
             $name=$user->portal_id.'.'.'png';
-            \Image::make($request->photo)->save(public_path('img/profile/').$name);
-            $request->merge(['photo' => $name]);
 
-            $userPhoto = public_path('img/profile/').$currentPhoto;
+               $userPhoto = public_path('img/profile/').$currentPhoto;
             if(file_exists($userPhoto)){
                 @unlink($userPhoto);
             }
+            \Image::make($request->photo)->save(public_path('img/profile/').$name);
+            $request->merge(['photo' => $name]);
+
+            // $userPhoto = public_path('img/profile/').$currentPhoto;
+            // if(file_exists($userPhoto)){
+            //     @unlink($userPhoto);
+            // }
 
         }
 

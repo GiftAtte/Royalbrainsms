@@ -6,7 +6,7 @@ export default {
         type: 'title',
         txt: 'Home',
         icon: 'fa fa-tag context-menu__title-icon',
-        link: '/dashboard',
+
       },
       {
       type: 'link',
@@ -341,12 +341,7 @@ export default {
         link: '/logout',
       },
 
-      {
-          type: 'link',
-          txt: 'Upload  Zipe Images',
-          link: '/photos',
-
-        },
+      
 
     ],
 

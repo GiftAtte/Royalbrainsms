@@ -42,6 +42,7 @@
 <td>{{student.arm?student.arm.name:''}}</td>
  <td class="row">
 <router-link v-if="$gate.isTutorOrAdmin()"     :to="`/result/${report}/${student.id}`"  tag="a" exact class="pr-2">view report card</router-link>
+<router-link v-if="$gate.isTutorOrAdmin()"     :to="`/result/${report}/${student.id}/annual`"  tag="a" exact class="pr-2">view Annual Report</router-link>
 
 <router-link :to="`/transcript/${student.id}`"  tag="a" exact>view transcript</router-link>
 

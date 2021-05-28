@@ -59858,6 +59858,10 @@ th.rotate > div > span {
     width: auto;
   }
 
+  #profile {
+    display: none;
+  }
+
   #section-to-print {
     position: auto;
     left: 0;

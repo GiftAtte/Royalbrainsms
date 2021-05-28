@@ -17,7 +17,7 @@
              //window.location.replace("/dashboard");
         },
         created(){
-              window.location.replace("/dashboard");
+             // window.location.replace("/dashboard");
         }
     }
 </script>

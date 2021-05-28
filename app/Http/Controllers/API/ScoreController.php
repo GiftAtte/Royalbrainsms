@@ -38,62 +38,93 @@ class ScoreController extends Controller
 
     public function index()
     {  $user=auth('api')->user();
-        if($user->type==='tutor'){
-              $historyLevel=Level::where('is_history',1)->pluck('id');
-              // $arm=Has_arm::where(['staff_id',$user->staff_id])->whereNotIn('level_id',$historyLevel)->first();
-            $arm=Has_arm::where('staff_id',$user->staff_id)->whereNotIn('level_id',$historyLevel)->first();
-            return Report::where([['school_id',$user->school_id],['level_id',$arm->level_id]])->latest()->get();
-        }
+        // if($user->type==='tutor'){
+        //       $historyLevel=Level::where('is_history',1)->pluck('id');
+        //       // $arm=Has_arm::where(['staff_id',$user->staff_id])->whereNotIn('level_id',$historyLevel)->first();
+        //     $arm=Has_arm::where('staff_id',$user->staff_id)->whereNotIn('level_id',$historyLevel)->first();
+        //     return Report::where([['school_id',$user->school_id],['level_id',$arm->level_id]])->latest()->get();
+        // }
        return Report::where('school_id',auth('api')->user()->school_id)->latest()->get();
     }
 
+     public function convertedScore($total,$type){
+           if($type==='mid_term'){
+               return round((($total/25)*100),2);
+           }
+           else{
+               return $total;
+           }
+     }
+    //weightrd Scores
+     public function weightScore($t1,$t2,$t3,$note){
 
-    public function sum($t1,$t2,$t3,$exams){
-        $sum=0;
-        if(is_numeric($t1)){
-          $sum=  $sum+ $t1;
-        }
-         if(is_numeric($t2)){
-            $sum=  $sum+$t2;
-        }
-         if(is_numeric($t3)){
-            $sum=  $sum+$t3;
+
+        return round((($t1+$t2+$t3+$note)*0.5),2);
+     }
+     //Sum
+
+    public function sum($weight_score,$exams,$midterm_score=0){
+
+           $sum=0;
+        if(is_numeric($weight_score)){
+          $sum=  $sum+ $weight_score;
         }
          if(is_numeric($exams)){
-           $sum=  $sum+ $exams;
+            $sum=  $sum+$exams;
         }
-
-
+        if(is_numeric($midterm_score)){
+            $sum=  $sum+$midterm_score;
+        }
         return round($sum,2);
     }
+
+public function AnnualScore($score,$term_id){
+
+    if($term_id<3){
+        return round((($score/100)*30),2);
+    }
+    else{
+        return round((($score/100)*40),2);
+    }
+
+
+}
 
 
     public function store(Request $request)
     {
-    $Nstudents= $request->number_of_students;
-    $students=$request->student_id;
+        $report=Report::findOrFail($request->report_id);
+        if($report->type==='default-result'){
+           return $this->default_store($request);
+        }
+       $Nstudents= $request->number_of_students;
+       //$students=$request->all();
+         $weighted_score=null;
 
 
 
-            $report=Report::findOrFail($request->report_id);
+
             $subject_type=Level_sub::where([['level_id',$report->level_id],['subject_id',$request->subject_id]])->first();
             $term_id=$report->term_id;
 
             //return  $student_id;
             for($i=0;$i<$Nstudents; ++$i){
-          $student_arm=Student::findOrFail($request->student_id[$i]);
+     Mark::where([['report_id',$request->report_id], ['student_id', $request->student_id[$i]],['subject_id',$request->subject_id]])->delete();
+         // $student_arm=Student::findOrFail($request->student_id[$i]);
 
+          $weighted_score=$this->weightScore($request->test1[$i],$request->test2[$i],$request->test3[$i],$request->note[$i]);
+          $midterm_score=Mark::where([['student_id',$request->student_id[$i]],['subject_id',$request->subject_id],['term_id',$report->term_id],['session_id',$report->session_id],['report_type','mid_term']])->first();
             // computing sum and grading
-             $total=$this->sum($request->test1[$i],$request->test2[$i],$request->test3[$i],$request->exams[$i]);
-            $gradding= $this->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
-
+                $total=$this->sum($weighted_score,$request->exams[$i],$midterm_score?$midterm_score->total:0);
+               $annual_score= $this->AnnualScore($total,$term_id);
+              $convertedScore=$this->convertedScore($total,$report->type);
+                $gradding= $this->grade($convertedScore,$report->gradinggroup_id,auth('api')->user()->school_id);
+                //$annual_gradding= $this->grade($annual_score,$report->gradinggroup_id,auth('api')->user()->school_id);
             // return $gradding;
 
   // return $this->studentPosition($request->student_id[$i+2],$request->report_id,false);
- Mark::where([['report_id',$request->report_id], ['student_id', $request->student_id[$i]],['subject_id',$request->subject_id]])->delete();
-         Mark::updateOrInsert(
-          ['report_id' => $request->report_id, 'student_id' => $request->student_id[$i],'subject_id'=>$request->subject_id],
 
+         Mark::create(
                [ 'student_id'=>$request->student_id[$i],
                 'report_id'=>$request->report_id,
                 'level_id'=>$report->level_id,
@@ -101,13 +132,19 @@ class ScoreController extends Controller
                       'test1'=>$request->test1[$i],
                       'test2'=>$request->test2[$i],
                       'test3'=>$request->test3[$i],
+                      'note'=>$request->note[$i],
+                      'weighted_score'=>$weighted_score,
                       'exams'=>$request->exams[$i],
                       'total'=>$total,
                       'grade'=>$gradding['grade'],
                       'narration'=>$gradding['narration'],
                       'term_id'=>$term_id,
-                      'arm_id'=>$student_arm->arm_id,
+                      'arm_id'=>$request->arm_id[$i],
                       'type'=>$subject_type->type,
+                      'annual_score'=>$this->AnnualScore($total,$term_id),
+                      'report_type'=>$report->type,
+                      'mid_term'=>$midterm_score?$midterm_score->total:0,
+                      'session_id'=>$report->session_id,
                       'is_history'=>0
             ]
            );
@@ -116,10 +153,6 @@ class ScoreController extends Controller
 
           }
 
-    //   $students_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$request->report_id],['subject_id',$request->subject_id]])->select('total')->groupBy('total')->get()->toArray();
-    //   return    $subject_positions=$this->getSubjectRank(94,$students_score);
-    //   // updating the marks table with subject positioning
-  //  $mark=Mark::latest()->first();
     Markcheck::create([
      'report_id'=>$request->report_id,
      'subject_id'=>$request->subject_id,
@@ -132,49 +165,6 @@ class ScoreController extends Controller
     'school_id'=>auth('api')->user()->school_id,
     'compute_summary'=>1
  ]);
-      // event(new MarksCreated($request->report_id,$students,$request->level_id,$request->subject_id));
-    //     $max_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$request->report_id],['subject_id',$request->subject_id]])->max('total');
-    //     $min_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$request->report_id],['subject_id',$request->subject_id]])->min('total');
-    //     $class_avg_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$request->report_id],['subject_id',$request->subject_id]])->whereNotIn('total',[0])->avg('total');
-
-    //     // positioning
-    //     $class_sub_position='';
-    //     for($i=0;$i<$students; ++$i){
-    //  $student_arm=Student::findOrFail($request->student_id[$i]);
-    //  $grand_total=DB::table('marks')->where([['report_id',$request->report_id],['subject_id',$request->subject_id],['student_id',$request->student_id[$i]]])->sum('total');
-    //  $subject_positions=$this->getSubjectRank($request->student_id[$i],$request->report_id,$request->subject_id);
-    //   $cummulative_avg=DB::table('marks')->whereNotIn('total',[0])->where([['level_id',$report->level_id],['subject_id',$request->subject_id],['student_id',$request->student_id[$i]]])->whereNotIn('total',[0])->avg('total');
-    //  //  foreach($subject_positions as $subject_position){
-    // //    //
-    //     $class_sub_position=$subject_positions['position'];
-    //     $subject_arms_positions=$this->getSubjectRank($request->student_id[$i],$request->report_id,$request->subject_id,$student_arm->arm_id);
-    //     $arm_sub_position=$subject_arms_positions['position'];
-    //     /// arm calculations
-    //     $arm_max_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$request->subject_id],['report_id',$request->report_id],['arm_id',$student_arm->arm_id]])->max('total');
-    //     $arm_min_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$request->subject_id],['report_id',$request->report_id],['arm_id',$student_arm->arm_id]])->min('total');
-    //     $arm_avg_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$request->subject_id],['report_id',$request->report_id],['arm_id',$student_arm->arm_id]])->whereNotIn('total',[0])->avg('total');
-    //     DB::table('marks')
-    //     ->where([['report_id', $request->report_id],['student_id',$request->student_id[$i]],['subject_id',$request->subject_id]])
-    //     ->update(['class_avg_score' => round($class_avg_score,2),
-    //                 'class_subj_position'=>$class_sub_position,
-    //                 'max_class_score'=>$max_score,
-    //                 'min_class_score'=>$min_score,
-    //                 'average'=>round($cummulative_avg,2),
-    //                 'arm_subj_position'=>$arm_sub_position,
-    //                 'grand_total'=>round($grand_total,2),
-    //                 'arm_avg_score'=>round($arm_avg_score,2),
-    //                 'arm_min_score'=>round($arm_min_score,2),
-    //                 'arm_max_score'=>round($arm_max_score,2)
-
-
-
-    //     ]
-    //   );
-
-
-
-
-    // }
 
     return ['message'=>'success'];
     }
@@ -221,8 +211,8 @@ public function import(Request $request)
                 }
                        Mark::where([['report_id',$report_id], ['student_id', $student['student_id']],['subject_id',$subject_id]])->delete();
 
-         Mark::updateOrCreate(
-            ['report_id' => $report_id, 'student_id' => $student['student_id'],'subject_id'=>$subject_id],[
+         Mark::create(
+            [
 
 
             'student_id'=>$student['student_id'],
@@ -457,19 +447,19 @@ return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
         $report_id=$request->report_id;
         $subject_id=$request->subject_id;
         $report=Report::findOrFail($request->report_id);
-          if(auth('api')->user()->type==='tutor'){
-      return  DB::table('students')->where([['class_id',$report->level_id],['students.arm_id',$arm->arms_id]])
-        ->leftJoin('marks', function($join) use($report_id,$subject_id)
-        {
-            $join->on('marks.student_id', '=', 'students.id')
-            ->where([['marks.report_id',$report_id],
-                     ['marks.subject_id',$subject_id]]);
-        })->select(DB::raw('CONCAT(students.surname," ", students.first_name)as name,students.arm_id as arm_id,
-         students.id as student_id,marks.test1 as test1,marks.test2 as test2, marks.test3 as test3,
-         marks.exams as exams,marks.subject_id as subject_id'))->orderBy('name')
-        ->get();
+    //       if(auth('api')->user()->type==='tutor'){
+    //   return  DB::table('students')->where([['class_id',$report->level_id],['students.arm_id',$arm->arms_id]])
+    //     ->leftJoin('marks', function($join) use($report_id,$subject_id)
+    //     {
+    //         $join->on('marks.student_id', '=', 'students.id')
+    //         ->where([['marks.report_id',$report_id],
+    //                  ['marks.subject_id',$subject_id]]);
+    //     })->select(DB::raw('CONCAT(students.surname," ", students.first_name)as name,students.arm_id as arm_id,
+    //      students.id as student_id,marks.test1 as test1,marks.test2 as test2, marks.test3 as test3,
+    //      marks.exams as exams,marks.subject_id as subject_id'))->orderBy('name')
+    //     ->get();
 
-    }else{
+    // }else{
         return  DB::table('students')->where([['class_id',$report->level_id],['students.arm_id',$request->arm_id]])
         ->leftJoin('marks', function($join) use($report_id,$subject_id)
         {
@@ -480,7 +470,7 @@ return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
          students.id as student_id,marks.test1 as test1,marks.test2 as test2, marks.test3 as test3,
          marks.exams as exams,marks.subject_id as subject_id'))->orderBy('name')
         ->get();
-    }
+
 
     }
 
@@ -521,6 +511,35 @@ return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
   }
 
 
+  public function getSubjectAnnualRank($student_id,$report_id,$subject_id,$arm_id=null){
+
+    $rank=1;
+    $rankArr=array();
+     $positions=null;
+                    if($arm_id){
+                      $positions = DB::table('marks')
+                ->where( [
+                   ['subject_id',$subject_id],
+                   ['report_id',$report_id],
+                   ['arm_id',$arm_id]
+                   ])->select('student_id','subject_id',"annual_total as total")->orderBy("total",'desc')
+                ->get();
+                    }else{
+               $positions = DB::table('marks')
+                ->where( [
+                   ['subject_id',$subject_id],
+                   ['report_id',$report_id]
+                   ])->select('student_id','subject_id',"annual_total as total")->orderBy("total",'desc')
+                ->get();
+                    }
+             //   return  $this-> Rank($positions,$student_id) ;
+               array_push($rankArr,$this->Rank($positions,$student_id));
+
+
+
+
+return $this->Rank($positions,$student_id);
+}
 
   public function Rank($positions=array() ,$student_id){
                       $rank=1;
@@ -737,17 +756,17 @@ public function studenResult( $report_id, $student_id=null)
         $comment=Result_activation::where([['report_id',$report_id],['student_id',$student_id]])->first();
       $report=Report::with(['levels','sessions','terms'])->where('id',$report_id)->first();
 
-      $pastTotal=Mark::select('total','subject_id','term_id')
+    $pastTotal=Mark::select('annual_score','subject_id','term_id')
          ->where([['student_id',$student_id],['level_id',$report->level_id]
-         ])->distinct('term_id')->get();
+         ])->whereNotIn('report_type',['mid_term'])->distinct('term_id')->get();
 
           $pastTotalarray=[];
           foreach ($pastTotal as $total ) {
 
-              array_push($pastTotalarray,['subject_id'=>$total->subject_id,'term_id'=>$total->term_id,'total'=>$total->total]);
+              array_push($pastTotalarray,['subject_id'=>$total->subject_id,'term_id'=>$total->term_id,'total'=>$total->annual_score]);
               # code...
           }
-
+          // return $pastTotalarray;
 // if($report->term_id===3){
 //   // return    Mark::where('level_id',28)->whereNotIn('report_id',[22,141,140])->get();
 //              $subjects=Mark::where([['student_id',$student_id],['level_id',$report->level_id]])->distinct('subject_id')->pluck('subject_id');
@@ -871,5 +890,99 @@ if(count($students)>0){
    return ['message'=>'no record'];
 
     }
+
+
+
+    public function default_store(Request $request)
+    {
+    $Nstudents= $request->number_of_students;
+    $students=$request->student_id;
+
+
+
+            $report=Report::findOrFail($request->report_id);
+            $subject_type=Level_sub::where([['level_id',$report->level_id],['subject_id',$request->subject_id]])->first();
+            $term_id=$report->term_id;
+
+            //return  $student_id;
+            for($i=0;$i<$Nstudents; ++$i){
+          $student_arm=Student::findOrFail($request->student_id[$i]);
+
+            // computing sum and grading
+             $total=$this->default_sum($request->test1[$i],$request->test2[$i],$request->test3[$i],$request->exams[$i]);
+            $gradding= $this->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
+
+            // return $gradding;
+
+  // return $this->studentPosition($request->student_id[$i+2],$request->report_id,false);
+ Mark::where([['report_id',$request->report_id], ['student_id', $request->student_id[$i]],['subject_id',$request->subject_id]])->delete();
+         Mark::updateOrInsert(
+          ['report_id' => $request->report_id, 'student_id' => $request->student_id[$i],'subject_id'=>$request->subject_id],
+
+               [ 'student_id'=>$request->student_id[$i],
+                'report_id'=>$request->report_id,
+                'level_id'=>$report->level_id,
+                'subject_id'=>$request->subject_id,
+                      'test1'=>$request->test1[$i],
+                      'test2'=>$request->test2[$i],
+                      'test3'=>$request->test3[$i],
+                      'exams'=>$request->exams[$i],
+                      'total'=>$total,
+                      'grade'=>$gradding['grade'],
+                      'narration'=>$gradding['narration'],
+                      'term_id'=>$term_id,
+                      'arm_id'=>$student_arm->arm_id,
+                      'type'=>$subject_type->type,
+                      'report_type'=>$report->type,
+                      'is_history'=>0
+            ]
+           );
+         //   Mark::insert($scores);
+
+
+          }
+
+    //   $students_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$request->report_id],['subject_id',$request->subject_id]])->select('total')->groupBy('total')->get()->toArray();
+    //   return    $subject_positions=$this->getSubjectRank(94,$students_score);
+    //   // updating the marks table with subject positioning
+  //  $mark=Mark::latest()->first();
+    Markcheck::create([
+     'report_id'=>$request->report_id,
+     'subject_id'=>$request->subject_id,
+     'school_id'=>auth('api')->user()->school_id,
+ ]);
+
+ CheckResult::create([
+  'report_id'=>$request->report_id,
+  'is_history'=>0,
+    'school_id'=>auth('api')->user()->school_id,
+    'compute_summary'=>1
+ ]);
+ return ['message'=>'success'];
+}
+
+
+
+
+
+public function default_sum($t1,$t2,$t3,$exams){
+    $sum=0;
+    if(is_numeric($t1)){
+      $sum=  $sum+ $t1;
+    }
+     if(is_numeric($t2)){
+        $sum=  $sum+$t2;
+    }
+     if(is_numeric($t3)){
+        $sum=  $sum+$t3;
+    }
+     if(is_numeric($exams)){
+       $sum=  $sum+ $exams;
+    }
+
+
+    return round($sum,2);
+}
+
 
 }

@@ -67,7 +67,7 @@ Route::get('load_subjects/{level_id?}', 'API\SubjectController@loadListView');
 Route::get('load_list/{id?}/{is_score?}', 'API\SubjectController@loadSubjects');
 Route::delete('delete_list/{id}', 'API\SubjectController@delete_list');
 
-Route::get('teacher_subjects', 'API\TeachersController@index');
+Route::get('teacher_subjects/{staff_id?}', 'API\TeachersController@index');
 Route::delete('teacher_subjects/{id}', 'API\TeachersController@delete_list');
 Route::post('teacher_subjects', 'API\TeachersController@store');
 Route::get('teacher_subjects/{id}', 'API\TeachersController@loadSubjects');
@@ -80,12 +80,14 @@ Route::get('teacher_subjects/{id}', 'API\TeachersController@loadSubjects');
  Route::get('result/{report_id}/{student_id?}','API\ScoreController@studenResult');
  Route::get('pdf_download/{report_id}/{student_id?}', 'API\ReportController@pdfDownload');
  Route::put('report','API\ReportController@update');
+ Route::get('checkreport/{id}','API\ReportController@checkReport');
  Route::get('getArms/{report_id}','API\ReportController@getArms');
  Route::get('loadArms/{level_id}','API\LevelController@loadArms');
  Route::get('master/{report_id}','API\ReportController@masterCard');
  // Scores Routes
  Route::apiResources(['scores' => 'API\ScoreController']);
  Route::post('import_scores','API\ScoreController@import');
+ Route::post('primary_scores','API\PrimaryController@store');
  Route::post('importExcel','API\ScoreController@importExcel');
  Route::post('load_students', 'API\ScoreController@loadStudents');
  Route::get('load_report', 'API\ScoreController@index');
@@ -200,6 +202,7 @@ Route::get('export_master/{report_id}','API\ReportController@export_master');
 // Fees
 
 Route::apiResources(['fees' => 'API\FeesController']);
+Route::get('fee/{id}', 'API\FeesController@index');
 Route::delete('fees/{id}','API\FeesController@destroy');
 Route::put('fees/{id}','API\FeesController@update');
 Route::post('fee_description','API\FeesController@newDescription');

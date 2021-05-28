@@ -129,7 +129,7 @@
 </tr>
 </thead>
 <tbody>
-<tr v-for="(activation,index) in Activation_status">
+<tr v-for="(activation,index) in Activation_status" :key="index">
 
 <td><div class="icheck-primary">
 <input :id="`student${index}`" type="checkbox"  @click="select(activation.student_id)" :checked="isChecked">
@@ -166,7 +166,7 @@
 import { VueCsvImport } from 'vue-csv-import';
   import Loading from 'vue-loading-overlay';
 
-     
+
     export default {
 components: { VueCsvImport,Loading },
 
@@ -233,7 +233,7 @@ form:new Form({
            resetLoading(){
              this.isLoading=false
            },
-    
+
 
 
 
@@ -323,7 +323,7 @@ form:new Form({
                     this.checkStudentId()
                     this.allSelected=true
                 }
-                console.log(this.studentIds)
+               // console.log(this.studentIds)
                 this.checkStudentId()
             }
         },
@@ -356,7 +356,7 @@ else{
             }
 
                this.checkStudentId()
-         console.log(this.studentIds)
+       //  console.log(this.studentIds)
         },
         checkStudentId(){
             let studentLength=this.studentIds.length

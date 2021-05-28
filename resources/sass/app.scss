@@ -83,7 +83,12 @@ padding: 5px;
     width: auto;
 
   }
+
+  #profile {
+      display: none;
+  }
   #section-to-print {
+
     position: auto;
     left: 0;
     top: 0;
@@ -119,7 +124,7 @@ padding: 5px;
     border-color: black;
      color: black;
   }
-   
+
 }
 
 @page {

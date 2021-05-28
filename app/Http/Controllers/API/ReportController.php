@@ -45,7 +45,7 @@ class ReportController extends Controller
                       ->where([['result_activations.student_id',$user->student_id]]);
                   })
 
-                  ->select(DB::raw('reports.*, result_activations.activation_status as activation_status'))
+         ->select(DB::raw('reports.*, result_activations.activation_status as activation_status'))
          ->distinct('reports.id')  ->orderby('id','desc')->paginate(10);
 
         }
@@ -202,12 +202,12 @@ public function staffComment($average){
 
 
 
- public function getArms($id)
-{     if(auth('api')->user()->type==='tutor'){
-      $historyLevel=Level::where('is_history',1)->pluck('id');
-    return Has_arm::with('arms')->where([['staff_id',auth('api')->user()->staff_id]])->whereNotIn('level_id',$historyLevel)->get();
+ public function getArms($id) {
+     //if(auth('api')->user()->type==='tutor'){
+//       $historyLevel=Level::where('is_history',1)->pluck('id');
+//     return Has_arm::with('arms')->where([['staff_id',auth('api')->user()->staff_id]])->whereNotIn('level_id',$historyLevel)->get();
 
-}
+//}
     $report=Report::findOrFail($id);
     return Has_arm::with('arms')->where([['level_id',$report->level_id]])->get();
 
@@ -329,7 +329,7 @@ public function transcript($student_id=null)
                    $name=$student->surname.' '.$student->first_name.' '.$student->middle_name;
                    $collect=collect(['STUDENT ID'=>$student->id,'NAMES'=>$name]);
                     foreach($subjects as $subject){
-                        
+
                         foreach($scores as $score){
                                if($score->subject_id===$subject->subject_id){
                                 $collect=  $collect->put(strval($subject->subjects->name),round($score->total,2));
@@ -340,21 +340,21 @@ public function transcript($student_id=null)
                     $arms=Arm::findOrFail($arm);
                     $collect= $collect->put('TOTAL',round($total,2));
                     $collect= $collect->put('CLASS ARM',$arms->name);
-                   
-                   
-                   
-                   
+
+
+
+
                     array_push($masterSheet, $collect->all());
                     //array_push($masterSheet,...$sc);
                    }  // $subject->subjects->name=>$subject_ScoreArr
 
-               
+
                  return ['mastersheet'=>$masterSheet];
              }
 
 
 
-             
+
              function transposeData($data)
 {
   $retData = array();
@@ -366,7 +366,7 @@ public function transcript($student_id=null)
     }
   return $retData;
 }
-    
+
 
 public function activate_report( $id )
 {
@@ -378,14 +378,16 @@ public function activate_report( $id )
     $report->is_ready=0;
    }
 
-   
+
    $report->save();
 }
 
 
 
 
-
+public function checkReport($id){
+    return Report::findOrFail($id);
+}
 
 
 

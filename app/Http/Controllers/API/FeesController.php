@@ -17,27 +17,33 @@ class FeesController extends Controller
         $this->middleware('auth:api');
     }
 
-    
-    public function index()
-    {  
+
+    public function index($student_id=null)
+    {
         $user=auth('api')->user();
-        
-        if($user->type==='student'){
-          $current_level=Student::findOrFail($user->student_id);
+
+        if($user->type==='student'||!empty($student_id)){
+            $current_level=null;
+            if(!empty($student_id)){
+                $current_level=Student::findOrFail($student_id);
+            }else{
+                $current_level=Student::findOrFail($user->student_id);
+            }
+
           $history_level=Level_history::where('student_id',$current_level->id)
                            ->pluck('level_id')->toArray();
                            array_push($history_level,$current_level->class_id);
 
-    
+
        return Fee_group::with(['levels','terms','paystacks'])->whereIn('level_id',$history_level)
                  ->latest()->paginate(20);
 
-                  
+
         }
         return Fee_group::with(['levels','terms','paystacks'])->where('school_id',auth('api')->user()->school_id)->latest()->paginate(20);
     }
 
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -73,7 +79,7 @@ class FeesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function feeDescriptions($feegroup_id,$student_id=null)
-    
+
     {  $partial=null;
         if(empty($student_id) &&!empty(auth('api')->user()->student_id)){
           $student_id=auth('api')->user()->student_id;
@@ -111,8 +117,8 @@ class FeesController extends Controller
             'description' => 'required',
             'feegroup_id' => 'required|integer',
             'amount' => 'required',
-           
-           
+
+
 
         ]);
        return Fee_description::create([
@@ -132,32 +138,32 @@ class FeesController extends Controller
     public function update(Request $request)
     {
         //
-      
+
         $this->validate($request,[
             'tittle' => 'required|string|max:191',
             'level_id' => 'required|integer',
             'term_id' => 'required|integer',
             'session_id' => 'required|integer',
             'paystack_key' => 'required',
-           
+
 
         ]);
         $report=Fee_group::findOrFail($request->id);
         $report->update($request->all());
         return ['message'=>'report updated successfully'];
     }
-   
+
 
     public function updateDescription(Request $request)
     {
         //
-      
+
         $this->validate($request,[
             'description' => 'required',
             'feegroup_id' => 'required|integer',
             'amount' => 'required',
-           
-           
+
+
 
         ]);
         $report=Fee_description::findOrFail($request->id);
@@ -178,7 +184,7 @@ class FeesController extends Controller
         return 'success';
     }
 
-  
+
     public function deleteDescription($id)
     {
         Fee_description::findOrFail($id)->delete();
@@ -187,7 +193,7 @@ class FeesController extends Controller
 
     public function paystack()
     {
-        
+
         return Paystack::where('school_id',auth('api')->user()->school_id)->latest()->get();
     }
 
@@ -196,17 +202,17 @@ class FeesController extends Controller
         $this->validate($request,[
             'paystack_key' => 'required',
             'bank' => 'required',
-            
-           
-           
-           
+
+
+
+
 
         ]);
        return Paystack::create([
            'paystack_key'=>$request->paystack_key,
            'bank'=>$request->bank,
            'school_id'=>auth('api')->user()->school_id,
-           
+
        ]);
     }
 
@@ -220,13 +226,13 @@ class FeesController extends Controller
     public function updatePaystack(Request $request)
     {
         //
-      
+
         $this->validate($request,[
-            
+
             'paystack_key' => 'required|string',
             'bank' => 'required',
-           
-           
+
+
 
         ]);
         $report=Paystack::findOrFail($request->id);

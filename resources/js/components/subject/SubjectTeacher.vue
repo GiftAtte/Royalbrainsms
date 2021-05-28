@@ -26,6 +26,25 @@
             <div class="card card-navy card-outline col-12">
               <div class="card-header ">
                 <div class="row col-12">
+             <div v-show="$gate.isAdmin()" class="form-group col-md-10" >
+                     <select
+                    name="class_id"
+                    id="class_id"
+                    :class="{'is-invalid':form.errors.has('class_id')}"
+                    class="form-control"
+                    v-model="form.staff_id"
+                    @change="loadSubjects_list"
+                  >
+                    <option value selected>Select Class Teacher</option>
+                    <option
+                      v-for="staff in Staff"
+                      :key="staff.id"
+                      :value="staff.id"
+
+                    >{{staff.name}}</option>
+                  </select>
+                        <has-error :form="form" field="staff_id"></has-error>
+                 </div>
 
                 <div v-show="$gate.isAdminOrTutor()" class="form-group col-10">
                              <select
@@ -48,7 +67,7 @@
                     </div>
                        <div class="card-tools float-right col-md-2">
                            <button class="btn btn-success btn-sm float-right m-2" @click="set_AddToList">Add Subjects  <i class="fas fa-user-plus fa-fw"></i></button></div>
-                      
+
                 <div class="form-group col-md-10" v-show="addToList">
                              <select
                     name="subject_id"
@@ -176,12 +195,14 @@
                 subjects_list:'',
                 selected_file:'',
                 counter:0,
+                Staff:'',
 
                   form: new Form({
-                      
+
                     id : '',
                     level_id:'',
-                    subject_id:''
+                    subject_id:'',
+                    staff_id:''
 
                 }),
 
@@ -192,6 +213,14 @@
         .then(res=>{this.levels=res.data});
 
          // this.loadSubjects_list();
+
+
+         axios.get('/api/employees')
+                .then(res=>{
+                    this.Staff=res.data;
+                    })
+                .catch(err=>{})
+
       },
         methods: {
 
@@ -239,7 +268,7 @@
                 this.form.post('api/teacher_subjects')
                 .then(()=>{
                     Fire.$emit('AfterCreate');
-                    $('#addNew').modal('hide')
+                   // $('#addNew').modal('hide')
 
                     toast.fire({
                         type: 'success',
@@ -255,6 +284,9 @@
                 }
             },
             deleteSubject_list(id){
+
+
+ if(!this.$gate.isAdmin()){
                 swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -279,7 +311,21 @@
                                     swal.fire("Failed!", "There was something wronge.", "warning");
                                 });
                          }
+                    })}
+else{
+
+  swal.fire({
+                    title: 'Are you sure?',
+                    text: "Please contact admin to remove this subject from your list!",
+                    type: 'info',
+
                     })
+
+
+
+}
+
+
             },
             loadSubjects(){
 
@@ -298,7 +344,7 @@
                if(this.$gate.isAdmin()){
                 // console.log(this.$gate.isAdmin());
 
-                 axios.get(`/api/teacher_subjects`)
+                 axios.get(`/api/teacher_subjects/${this.form.staff_id?this.form.staff_id:''}`)
                  .then(res=>{
                this.subjects_list=res.data
 
@@ -332,6 +378,15 @@
              this.loadSubjects_list();
            });
         //    setInterval(() => this.loadUsers(), 3000);
+
+axios.get('/api/employees')
+                .then(res=>{
+                    this.Staff=res.data;
+                    })
+                .catch(err=>{})
+
+             // this.loadLevels();
+
 
         }
 

@@ -114,24 +114,74 @@
 
 <div v-show="isSubject" class="card-body table-responsive col-md-12">
   <div class="table-responsive ">
-<table class="table table-hover table-sm ">
+        <!-- scondary Section -->
+<table v-if="report==='primary-midterm'||report==='primary-terminal'" class="table table-hover table-sm ">
 <thead>
 
 <tr>
-<th>S/N</th><th>Name</th><th>CA1</th><th>CA2</th><th>CA3</th><th>Exams</th>
+<th>S/N</th><th>Name</th><th>First Test[10%]</th><th>Second Test[10%]</th><th>Exams/Mid-term[40%]</th>
 </tr>
 </thead>
 <tbody>
-<tr v-for="(score,index) in Scores">
+<tr v-for="(score,index) in Scores" :key="index">
 <td>{{index+1}}</td>
 <td>{{score.name}}
  <input type="hidden" :id="`student_id${index}`" :value="score.student_id">
  <input type="hidden" :id="`arm_id${index}`" :value="score.arm_id">
  </td>
-<td><input :id="`test1${index}`" :value="score.test1" type="number"  placeholder="Enter CA1 " max="100" min="0" step="0.01"></td>
-<td><input :id="`test2${index}`" :value="score.test2" type="number"  placeholder="Enter CA2 " max="100" min="0" step="0.01"></td>
-<td><input :id="`test3${index}`" :value="score.test3" type="number" placeholder="Enter CA3 " max="100" min="0" step="0.01"></td>
-<td><input :id="`exams${index}`" :value="score.exams" type="number"   placeholder="Enter Exam (Mid-Term Test)" max="100" min="0" step="0.01"></td>
+<td><input :id="`test1${index}`" :value="score.test1" type="number"  placeholder="Class Work" max="100" min="0" step="0.01"></td>
+<td><input :id="`test2${index}`" :value="score.test2" type="number"  placeholder="Assignment " max="100" min="0" step="0.01">
+<!-- <input type="hidden" :id="`test3${index}`" :value="score.test3"  placeholder="Class Test " max="100" min="0" step="0.01">
+<input :id="`note${index}`" :value="score.note" type="hidden" placeholder="Notes " max="100" min="0" step="0.01"></td> -->
+<td><input :id="`exams${index}`" :value="score.exams" type="number"   placeholder="Mid-Term Test/Exams" max="100" min="0" step="0.01"></td>
+</tr>
+
+</tbody>
+</table>
+<table v-if="report==='default-result'" class="table table-hover table-sm ">
+<thead>
+
+<tr>
+<th>S/N</th><th>Name</th><th>CA1</th><th>CA2</th><th>CA3</th><th>Exams/Mid-term[40%]</th>
+</tr>
+</thead>
+<tbody>
+<tr v-for="(score,index) in Scores" :key="index">
+<td>{{index+1}}</td>
+<td>{{score.name}}
+ <input type="hidden" :id="`student_id${index}`" :value="score.student_id">
+ <input type="hidden" :id="`arm_id${index}`" :value="score.arm_id">
+ </td>
+<td><input :id="`test1${index}`" :value="score.test1" type="number"  placeholder="Class Work" max="100" min="0" step="0.01"></td>
+<td><input :id="`test2${index}`" :value="score.test2" type="number"  placeholder="Assignment " max="100" min="0" step="0.01"></td>
+<td><input type="number" :id="`test3${index}`" :value="score.test3"  placeholder="Class Test " max="100" min="0" step="0.01"></td>
+<td style="display:none"><input :id="`note${index}`" :value="score.note" type="hidden" placeholder="Notes " max="100" min="0" step="0.01"></td>
+<td><input :id="`exams${index}`" :value="score.exams" type="number"   placeholder="Mid-Term Test/Exams" max="100" min="0" step="0.01"></td>
+</tr>
+
+</tbody>
+</table>
+
+   <!-- primary Section -->
+<table v-else class="table table-hover table-sm ">
+<thead>
+
+<tr>
+<th>S/N</th><th>Name</th><th>Class work[2]</th><th>Assignment[2]</th><th>Class Test[5]</th> <th>Notes[1]</th><th>Exams[20/70]</th>
+</tr>
+</thead>
+<tbody>
+<tr v-for="(score,index) in Scores" :key="index">
+<td>{{index+1}}</td>
+<td>{{score.name}}
+ <input  type="hidden" :id="`student_id${index}`" :value="score.student_id">
+ <input  type="hidden" :id="`arm_id${index}`" :value="score.arm_id">
+ </td>
+<td><input :id="`test1${index}`" :value="score.test1" type="number"  placeholder="Class Work" max="100" min="0" step="0.01"></td>
+<td><input :id="`test2${index}`" :value="score.test2" type="number"  placeholder="Assignment " max="100" min="0" step="0.01"></td>
+<td><input :id="`test3${index}`" :value="score.test3" type="number" placeholder="Class Test " max="100" min="0" step="0.01"></td>
+<td><input :id="`note${index}`" :value="score.note" type="number" placeholder="Notes " max="100" min="0" step="0.01"></td>
+<td><input :id="`exams${index}`" :value="score.exams" type="number"   placeholder="Mid-Term Test/Exams" max="100" min="0" step="0.01"></td>
 </tr>
 
 </tbody>
@@ -159,6 +209,7 @@ import Loading from 'vue-loading-overlay';
 
             return{
                 file:'',
+                report:'',
                 isSession:false,
                 isSubject:false,
                 reports:{},
@@ -166,8 +217,9 @@ import Loading from 'vue-loading-overlay';
                 isArm:false,
                 Scores:[],
                 report_id:'',
-                $id:'',
-                $arms:{},
+                id:'',
+                note:'',
+                arms:{},
                 report:{
                     type:'mid_term'
                 },
@@ -192,7 +244,7 @@ number_of_students:0
         mounted(){
             axios.get('api/load_report')
             .then(result => {
-               console.log(result.data);
+             //  console.log(result.data);
                 this.reports=result.data;
             }).catch((err) => {
 
@@ -208,11 +260,12 @@ number_of_students:0
             },
            loadStudents(){
                 this.$Progress.start();
+               this.checkReport(this.form.report_id);
          this.form.post(`api/load_students`)
           .then((result) => {
              this.Scores=result.data;
 
-              console.log(this.Scores);
+               console.log(this.report)
              this.$Progress.finish();
               this.isSubject=true
 
@@ -221,6 +274,19 @@ number_of_students:0
           });
            },
 
+
+
+          checkReport(id){
+
+               axios.get("/api/checkreport/"+id).then( response  => {
+
+                      this.report= response.data.type
+
+
+               // console.log(this.report_id)
+                      });
+
+        },
         loadSubjects(){
                 //this.isSession=false;
                 if(this.$gate.isAdminOrSubjectTutor()){
@@ -292,6 +358,7 @@ setFile () {
             this.form.test2=[];
              this.form.test3=[];
             this.form.exams=[];
+             this.form.note=[];
             this.form.arm_id=[];
             this.form.number_of_students=0;
          for (let index = 0; index < this.Scores.length; index++) {
@@ -300,19 +367,27 @@ setFile () {
            var test1=document.querySelector(`#test1${index}`).value
            var test2=document.querySelector(`#test2${index}`).value
            var exams=document.querySelector(`#exams${index}`).value
-            var test3=document.querySelector(`#test3${index}`).value
            var arm_id=document.querySelector(`#arm_id${index}`).value
+
             this.form.student_id.push(student_id)
             this.form.test1.push(test1)
             this.form.test2.push(test2)
+               if(this.report!='primary-midterm'&&this.report!='primary-terminal'){
+              var test3=document.querySelector(`#test3${index}`).value
+               var note=document.querySelector(`#note${index}`).value
             this.form.test3.push(test3)
+             this.form.note.push(note)
+               }
             this.form.exams.push(exams)
             this.form.arm_id.push(arm_id)
 
+
             this.form.number_of_students=++this.form.number_of_students;
          }
-            console.log(this.form.arm_id)
-            this.form.post('api/scores')
+            console.log('Running Herae')
+            if(this.report==='primary-midterm'||this.report==='primary-terminal'){
+              //   console.log('Running Herae')
+              this.form.post('/api/primary_scores')
 
             .then(res=>{
 
@@ -331,7 +406,29 @@ setFile () {
                         this.isLoading=false
               });
 
-            }
+
+
+            }else{
+            this.form.post('/api/scores')
+
+            .then(res=>{
+
+              toast.fire({
+                        type: 'success',
+                        title: 'marks added successfully'
+                        })
+                       this.isSubject=false;
+             this.isLoading=false
+
+              }).catch(err=>{
+                toast.fire({
+                        type: 'danger',
+                        title: 'there was error uploading the file'+err
+                        })
+                        this.isLoading=false
+              });
+
+            }}
     },
     created() {
 

@@ -68,7 +68,7 @@
                      </td>
 
 <td v-show="$gate.isAdmin()" >
-    <button v-show="$gate.isAdminOrTutor()" type="btn" class="btn btn-success btn-sm mr-2" @click="computeSummary(report.id)">compute summary</button>
+    <button v-show="$gate.isAdminOrTutor()" type="btn" class="btn btn-success btn-sm mr-2" @click="computeSummary(report.id)">Compute Summary</button>
 <toggle-button @change="activateReport(report.id)"
 v-show="$gate.isAdmin()"
                          :label="true"
@@ -140,7 +140,7 @@ v-show="$gate.isAdmin()"
                     id="level_id"
                     class="form-control"
                     v-model="form.level_id"
-                    @change="loadArms"
+
                   >
                     <option value selected>Select Level</option>
                     <option
@@ -153,24 +153,7 @@ v-show="$gate.isAdmin()"
                  </div>
 
 
-                     <div class="form-group">
 
-                     <select
-                    name="level_id"
-                    id="level_id"
-                    class="form-control"
-                    v-model="form.arm_id"
-
-                  >
-                    <option value='' selected>Select Arm</option>
-                    <option
-                      v-for="arm in arms"
-                      :key="arm.id"
-                      :value="arm.arms.id"
-                    >{{arm.arms.name}}</option>
-                  </select>
-
-                 </div>
 
 
                   <div class="form-group">
@@ -222,8 +205,14 @@ v-show="$gate.isAdmin()"
                         <select v-model="form.type"  name="type" id="term_end"
                         class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
                         <option value="" selected>Select Report Type</option>
+                        <option value="default-result">Default </option>
                         <option value="mid_term" selected>Mid-Term Report</option>
-                        <option value="terminal" selected>Terminal Report</option>
+                        <option value="terminal">Terminal Report</option>
+                        <option value="mock">Mock Exam Report</option>
+                        <option value="annual">Annual Report</option>
+                        <option value="primary-midterm">Primary Mid-Term</option>
+                        <option value="primary-terminal">Primary Terminal</option>
+
                         </select>
 
                         <has-error :form="form" field="term_end"></has-error>

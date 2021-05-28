@@ -72,7 +72,7 @@
        class="btn btn-primary"
 
        :data="student_login">
-       Download Data
+       Download student Logins
        <i class="fa fa-download"></i>
      </export-excel>
 </div>
@@ -92,40 +92,56 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive ">
-<datatable
-	title="Students List"
-	:columns="tableColumns"
-	:rows="tableRows"
-	locale="en"
-    :perPage="[25, 50, 100]"
->
 
-<th slot="thead-tr">
-		Pics
-	</th>
-<th slot="thead-tr">
-		Actions
-	</th>
-	<th slot="thead-tr">Select All&nbsp;<input type="checkbox" @click="selectAll" v-model="allSelected" :checked="isSelectAll"></th>
+                <table class="table table-hover ">
+                  <tbody>
+                    <tr>
+                        <th>Select All&nbsp;<input type="checkbox" @click="selectAll" v-model="allSelected" :checked="isSelectAll"></th>
+                        <th>S/ID</th>
+                        <th colspan="2">Student Names</th>
 
-	<template slot="tbody-tr" slot-scope="props">
-        <td><img  :src="'/img/profile/stud'+props.row.id+'.png'" alt="no pics" width="35" height="35" class=" img-thumbnail img-circle "> </td>
-			<td>
-<router-link :to="`student_profile/${props.row.id}`"  tag="a" exact class="btn btn-sm btn-primary"><i class="fa fa-eye text-white"></i></router-link>
-            <button class="btn btn-success btn-sm"
-				@click="editModal(props.row)">
-				<i class="fa fa-edit "></i>
-			</button>
+                        <th>Course</th>
+                        <th>Arm</th>
+                        <th>Gender</th>
+                        <th>Photo</th>
+                        <th>Modify</th>
+                  </tr>
 
 
-		</td>
-
-        <td>
-            <input :id="`student${props.row.id}`" type="checkbox"  @click="select(props.row.id)" :checked="isChecked" >
+                  <tr v-for="student in students.data" :key="student.id">
+                    <td width="20" >
+            <input :id="`student${student.id}`" type="checkbox"  @click="select(student.id)" :checked="isChecked" >
         </td>
+                    <td>{{student.id}}</td>
 
-    </template>
-</datatable>
+                    <td colspan="2">
+                        <router-link :to="`student_profile/${student.id}`"  tag="a" exact>
+                        {{student.surname}}, &nbsp;{{student.first_name}} &nbsp;{{student.first_name?student.first_name:''}}
+                        </router-link> </td>
+                    <td>{{student.levels?student.levels.level_name:''}}</td>
+                     <td>{{student.arm?student.arm.name:''}}</td>
+                    <td>{{student.gender|upText}}</td>
+                        <td><img  :src="'/img/profile/stud'+student.id+'.png'" alt="no pics" width="35" height="35" class="  img-circle "> </td>
+			<td>
+                    <td>
+
+
+                        <a href="#" @click="editModal(student)">
+                            <i class="fa fa-edit blue"></i>
+                        </a>
+                        /
+                        <a href="#" @click="deleteStudent(student.id)">
+                            <i class="fa fa-trash red"></i>
+                        </a>
+
+                    </td>
+                  </tr>
+                </tbody></table>
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer">
+                   <pagination :data="students" @pagination-change-page="getResults"></pagination>
+              </div>
 
 
               </div>
@@ -136,7 +152,7 @@
             </div>
             <!-- /.card -->
 
-        </div>
+
 
         <div v-if="!$gate.isAdminOrTutor()">
             <not-found></not-found>
@@ -369,7 +385,7 @@ import DataTable from "vue-materialize-datatable";
             getResults(page = 1) {
                         axios.get('api/student?page=' + page)
                             .then(response => {
-                                this.tableRows = response.data.data;
+                                this.students = response.data;
                             });
                 },
             updateStudent(){
@@ -449,7 +465,7 @@ import DataTable from "vue-materialize-datatable";
             loadStudents(){
 
                 if(this.$gate.isAdminOrTutor()){
-                    axios.get("/api/students/"+this.level_id+'/'+this.arm_id).then(({ data }) => (this.tableRows= data.data));
+                    axios.get("/api/students/"+this.level_id+'/'+this.arm_id).then(({ data }) => (this.students= data));
                 }
                 this.downloadLogin();
             },
@@ -643,6 +659,7 @@ else{
                 axios.get('api/findStudent?q=' + query)
                 .then((data) => {
                     this.students = data.data
+                    console.log(this.students)
                 })
                 .catch(() => {
 

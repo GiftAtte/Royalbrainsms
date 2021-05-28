@@ -103,8 +103,8 @@
                    class="form-control" :class="{ 'is-invalid': form.errors.has('type') }"
                    v-model="form.type" >
                    <option value selected> Select Learning Domain</option>
-                   <option value="Behavioural"> Behavioural Domain</option>
-                   <option value="Skill"> Skilful Domain</option>
+                   <option value="Behavioural"> AFFECTIVE</option>
+                   <option value="Skill">PSYCHOMOTOR </option>
                 </select>
                 <has-error :form="form" field="typ"></has-error>
                 </div>
@@ -217,6 +217,7 @@
                         })
                     this.$Progress.finish();
                      $('#addNew').modal('hide');
+                     this.form.reset()
                       Fire.$emit('AfterCreate');
                 })
                 .catch(()=>{

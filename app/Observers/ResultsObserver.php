@@ -24,7 +24,7 @@ class ResultsObserver implements ShouldQueue
        $is_history=Level::findOrFail($report->level_id)->is_history;
        if($is_history>0){
         $aStudents=Level_history::where('level_id',$report->level_id)->pluck('student_id');
-          
+
        }else{
         $aStudents=Student::where('class_id',$report->level_id)->pluck('id');
        }

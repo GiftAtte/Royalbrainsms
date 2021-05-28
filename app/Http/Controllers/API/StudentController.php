@@ -37,16 +37,16 @@ class StudentController extends Controller
    public function index($level_id=null,$arm_id=null)
     {    $user=auth('api')->user();
         if(!empty($level_id)&&!empty($arm_id)){
-            return Student::with(['levels','arm'])->where([['class_id',$level_id],['arm_id',$arm_id]])->latest()->paginate(500);
+            return Student::with(['levels','arm'])->where([['class_id',$level_id],['arm_id',$arm_id]])->latest()->paginate(50);
         }
 
     $historyLevel=Level::where('is_history',1)->pluck('id');
         if($user->type==='tutor'){
           $arm=Has_arm::where('staff_id',$user->staff_id)->whereNotIn('level_id',$historyLevel)->first();
-            return Student::with(['levels','arm'])->where([['school_id',$user->school_id],['class_id',$arm->level_id],['arm_id',$arm->arms_id]])->orderby('surname')->paginate(500);
+            return Student::with(['levels','arm'])->where([['school_id',$user->school_id],['class_id',$arm->level_id],['arm_id',$arm->arms_id]])->orderby('surname')->paginate(50);
         }
         if($user->type==='admin'||$user->type==='superadmin'){
-            return Student::with(['levels','arm'])->where('school_id',auth('api')->user()->school_id)->latest()->paginate(500);
+            return Student::with(['levels','arm'])->where('school_id',auth('api')->user()->school_id)->latest()->paginate(50);
         }
 else{
     return[];

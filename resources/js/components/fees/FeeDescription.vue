@@ -30,7 +30,7 @@
 
 
                 <div class="card-tools">
-                  
+
                <button v-show="$gate.isAdmin()" class="btn btn-success btn-sm float-right m-2" @click="newModal">Add New Detail <i class="fas fa-user-plus fa-fw"></i></button>
                 </div>
                  </div>
@@ -73,7 +73,7 @@
 </div><b><br><hr class="mt-0"></b>
 
 
-</div> <div class="container  table-reponsive" >
+</div> <div class="container  " >
 
   <center>
                 <table class="  table table-bordered pt-10 " id="data_tb">
@@ -93,7 +93,7 @@
                     <td>{{report.description}}</td>
                     <td >{{report.amount}} </td>
                      <td class="action" v-show="$gate.isAdminOrTutor()">
-                       
+
                        <a href="#" @click="editModal(report)" v-show="$gate.isAdmin()" class="pl-2 action">
                             <i class="fa fa-edit blue action"></i>
                         </a>
@@ -101,27 +101,27 @@
                         <a href="#" @click="deleteDescription(report.id)" v-show="$gate.isAdmin()" class="pl-2  action">
                             <i class="fa fa-trash red action"></i>
                         </a>
-                         
-                   
+
+
                      </td>
 
 
-                   
+
                   </tr>
-                  
+
                 </tbody>
                 <tfoot><tr><th>Total</th><th>-------</th><th>N{{total}}</th></tr>
                 <tr><th>Dicount</th><th>-------</th><th>{{levels?levels.discount:''}}%<b v-if="levels.discount>0">({{levels.discount/100*total}})</b></th></tr>
                 <tr ><th> <b v-if="discounted_amount>0">Partial Payment</b><b v-else >Full Payment</b>
                 </th><th>-------</th><th>N{{amount_paid?amount_paid.amount:'0.00'}}</th></tr>
-                
+
                 <tr><th>Balance</th><th>-------</th><th>N{{discounted_amount}}</th><th v-show="isStudent">
 
                   Status:<span v-show="isPaid"  class="text-success text-uppercase"> Paid</span>
                   <span v-show="!isPaid" class="text-danger text-uppercase"> Unpaid</span>
                    <br>  Transaction ID: <span v-show="isPaid" class="text-danger text-uppercase"> {{payment_details?payment_details.transaction_id:''}}</span>
-                  <div class="action" v-show="!isPaid">  
-        <paystack class="btn btn-success" 
+                  <div class="action" v-show="!isPaid">
+        <paystack class="btn btn-success"
         v-show="!isPaid"
         :amount="round(PayForm.amount*100)"
         :email="student?student.users.email:email"
@@ -143,7 +143,7 @@
                 </div>
               </div>
               <!-- /.card-body -->
-             
+
             </div>
             <!-- /.card -->
           </div>
@@ -153,7 +153,7 @@
             <not-found></not-found>
         </div>
 <!-- Arms Modal -->
-      
+
 
 <!-- DetailsModal -->
 
@@ -181,10 +181,10 @@
                       v-model="DetailsForm.amount"
                     >
                       <has-error :form="DetailsForm" field="amount"></has-error>
-               
-               
+
+
                </div>
-                
+
 
 
 
@@ -217,9 +217,9 @@
         paystack
     },
      computed: mapState(['school']),
-      
-      
-   
+
+
+
         data() {
             return {
                 editmode: false,
@@ -243,7 +243,7 @@
                     level_id : '',
                     term_id: '',
                     session_id:'',
-                  
+
 
 
                 }),
@@ -252,8 +252,8 @@
                    description:'',
                    feegroup_id:'',
                    amount:'',
-                   
-                   
+
+
                 }),
                 PayForm:new Form({
     feegroup_id:'',
@@ -264,14 +264,14 @@
     reference_id:'',
     transaction_id:'',
     message:'',
-    
+
 })
 
         }},
-       
+
 
         methods: {
-          
+
             updateReport(id){
                 this.$Progress.start();
 
@@ -303,7 +303,7 @@
                 this.DetailsForm.reset();
                 $('#detailsModal').modal('show');
                 this.DetailsForm.feegroup_id=this.$route.params.feegroup_id;
-                
+
             },
 
             CreateReport(){
@@ -385,7 +385,7 @@
            AddDetails(id){
             $('#detailsModal').modal('show')
             this.DetailsForm.feegroup_id=id;
-            
+
            },
 
 
@@ -435,7 +435,7 @@ round(num){
 return Math.round((num + Number.EPSILON) * 100) / 100
 },
  callback: function(response){
-                   
+
           this.PayForm.reference_id=response.reference;
           this.PayForm.transaction_id=response.transaction;
           this.PayForm.message=response.message;
@@ -443,8 +443,8 @@ return Math.round((num + Number.EPSILON) * 100) / 100
           //this.PayForm.amount=response.amount
            this.PayForm.fee=this.discounted_amount
           this.PayForm.student_id=this.student.id
-          
-    
+
+
         this.PayForm.post('/api/fee_pay')
                 .then((res)=>{
                     //$('#detailsModal').modal('hide')
@@ -454,7 +454,7 @@ console.log(res)
                         title: 'Fee paid successfully'
                         })
                     this.$Progress.finish();
-                    
+
                       Fire.$emit('AfterCreate');
                 })
                 .catch(()=>{
@@ -466,7 +466,7 @@ console.log(res)
       close: function(){
           console.log("Payment closed")
       }
-    
+
 
         },
         created() {
@@ -482,10 +482,10 @@ console.log(res)
                this.loadFeeDescription();
            });
         //    setInterval(() => this.loadUsers(), 3000);
-     
+
        //console.log(window.user)
-        
-        
+
+
         }
 
     }

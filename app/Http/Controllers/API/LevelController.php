@@ -64,11 +64,11 @@ class LevelController extends Controller
     {
         $historyLevel=Level::where('is_history',1)->pluck('id');
          $user=auth('api')->user();
-        if($user->type==='tutor'){
-           $arm=Has_arm::where(['staff_id',$user->staff_id])->whereNotIn('level_id',$historyLevel)->first();
-            return Has_arm::with('arms')->whereNotIn('level_id',$historyLevel)->where([['school_id',$user->school_id],['staff_id',$user->staff_id],
-            ['level_id',$arm->level_id]])->get();
-        }
+        // if($user->type==='tutor'){
+        //    $arm=Has_arm::where(['staff_id',$user->staff_id])->whereNotIn('level_id',$historyLevel)->first();
+        //     return Has_arm::with('arms')->whereNotIn('level_id',$historyLevel)->where([['school_id',$user->school_id],['staff_id',$user->staff_id],
+        //     ['level_id',$arm->level_id]])->get();
+        // }
         return Has_arm::with('arms')->where('level_id',$id)->get();
     }
 public function level_arms()
@@ -131,11 +131,11 @@ public function level_arms()
         return ['message' => 'arm Deleted'];
     }
     public function getLevels(){
-        $user=auth('api')->user();
-        if($user->type==='tutor'){
-            $arm=Has_arm::where('staff_id',$user->staff_id)->pluck('level_id');
-            return Level::where('school_id',$user->school_id)->whereIn('id',$arm)->get();
-        }
+        // $user=auth('api')->user();
+        // if($user->type==='tutor'){
+        //     $arm=Has_arm::where('staff_id',$user->staff_id)->pluck('level_id');
+        //     return Level::where('school_id',$user->school_id)->whereIn('id',$arm)->get();
+        // }
         return Level::where('school_id',auth('api')->user()->school_id)->get();
     }
 
@@ -155,7 +155,7 @@ public function level_arms()
         $hasArm->staff_id=null;
          $hasArm->save();
         }
-       
+
         $item = Has_arm::findOrFail($id);
         $item->arms_id=$request->arms_id;
         $item->staff_id=$request->staff_id;

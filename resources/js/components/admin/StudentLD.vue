@@ -113,30 +113,27 @@
 <td  >
 
 <div class="icheck-success icheck-inline">
-    <input type="radio" :id="`grade1${index}`"   value="A" :name="`grade${index}`" :checked="assessment.grade==='A'?true:false">
+    <input type="radio" :id="`grade1${index}`"   value="5" :name="`grade${index}`" :checked="assessment.grade==='A'?true:false">
 
-    <label :for="`grade1${index}`">A</label>
+    <label :for="`grade1${index}`">5</label>
 </div>
 <div class="icheck-success icheck-inline pl-2">
-    <input type="radio" :id="`grade2${index}`"   value="B" :name="`grade${index}`"  :checked="assessment.grade==='B'?true:false">
-    <label :for="`grade2${index}`">B</label>
+    <input type="radio" :id="`grade2${index}`"   value="4" :name="`grade${index}`"  :checked="assessment.grade==='B'?true:false">
+    <label :for="`grade2${index}`">4</label>
 </div>
 <div class=" icheck-success icheck-inline ">
-    <input type="radio" :id="`grade3${index}`"  value="C" :name="`grade${index}`" :checked="assessment.grade==='C'?true:false">
-    <label :for="`grade3${index}`">C</label>
+    <input type="radio" :id="`grade3${index}`"  value="3" :name="`grade${index}`" :checked="assessment.grade==='C'?true:false">
+    <label :for="`grade3${index}`">3</label>
 </div>
 <div class="icheck-warning icheck-inline ">
-    <input type="radio" :id="`grade4${index}`"  value="D" :name="`grade${index}`" :checked="assessment.grade==='D'?true:false">
-    <label :for="`grade4${index}`">D</label>
+    <input type="radio" :id="`grade4${index}`"  value="2" :name="`grade${index}`" :checked="assessment.grade==='D'?true:false">
+    <label :for="`grade4${index}`">2</label>
 </div>
 <div class="icheck-danger icheck-inline ">
-    <input type="radio" :id="`grade5${index}`"   value="E" :name="`grade${index}`" :checked="assessment.grade==='E'?true:false">
-    <label :for="`grade5${index}`">E</label>
+    <input type="radio" :id="`grade5${index}`"   value="1" :name="`grade${index}`" :checked="assessment.grade==='E'?true:false">
+    <label :for="`grade5${index}`">1</label>
 </div>
- <div class="icheck-danger icheck-inline ">
-    <input type="radio" :id="`grade6${index}`"  value="F" :name="`grade${index}`" :checked="assessment.grade==='F'?true:false">
-    <label :for="`grade6${index}`">F</label>
-</div>
+
 </td>
 
 </tr>
