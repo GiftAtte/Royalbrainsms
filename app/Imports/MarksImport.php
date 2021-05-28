@@ -18,7 +18,7 @@ class MarksImport implements ToModel, WithHeadingRow
     * @return \Illuminate\Database\Eloquent\Model|null
     */
     public function model(array $row)
-    {
+    {//
         Mark::where([['subject_id',$row['subjects_id']],['report_id',$row['report_id']],['student_id',$row['student_id']]])->delete();
         $scoreController =new ScoreController();
        $report=Report::findOrFail($row['report_id']);
