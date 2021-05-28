@@ -457,7 +457,7 @@ import DataTable from "vue-materialize-datatable";
                 if(this.$gate.isAdminOrTutor()){
                     axios.get("api/get_levels").then(({ data }) => {
                         this.levels = data
-                        console.log(this.levels);
+                       // console.log(this.levels);
                         });
 
                 }
@@ -482,7 +482,7 @@ import DataTable from "vue-materialize-datatable";
                         type: 'success',
                         title: 'Student Created in successfully'
                         })
-                        console.log(res)
+                        //console.log(res)
                     this.$Progress.finish();
 
                 })
@@ -509,7 +509,7 @@ import DataTable from "vue-materialize-datatable";
                         type: 'success',
                         title: 'Students successfully imported'
                         })
-                         console.log(res.data)
+                       //  console.log(res.data)
                     this.$Progress.finish();
                     Fire.$emit('AfterCreate');
 
@@ -559,7 +559,7 @@ import DataTable from "vue-materialize-datatable";
                     this.checkStudentId()
                     this.allSelected=true
                 }
-                console.log(this.studentIds)
+              //  console.log(this.studentIds)
                 this.checkStudentId()
             }
         },
@@ -659,7 +659,7 @@ else{
                 axios.get('api/findStudent?q=' + query)
                 .then((data) => {
                     this.students = data.data
-                    console.log(this.students)
+                  //  console.log(this.students)
                 })
                 .catch(() => {
 
