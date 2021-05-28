@@ -116,7 +116,7 @@
 
                     <td colspan="2">
                         <router-link :to="`student_profile/${student.id}`"  tag="a" exact>
-                        {{student.surname}}, &nbsp;{{student.first_name}} &nbsp;{{student.first_name?student.first_name:''}}
+                        {{student.surname}}, &nbsp;{{student.first_name}} &nbsp;{{student.middle_name?student.middle_name:''}}
                         </router-link> </td>
                     <td>{{student.levels?student.levels.level_name:''}}</td>
                      <td>{{student.arm?student.arm.name:''}}</td>
