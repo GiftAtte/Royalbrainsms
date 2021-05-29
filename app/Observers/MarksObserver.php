@@ -49,7 +49,7 @@ class MarksObserver implements ShouldQueue
      $annual_total=DB::table('marks')->whereNotIn('annual_score',[0])->where([['subject_id',$markcheck->subject_id],['session_id',$report->session_id],['student_id',$student->student_id]])->sum('annual_score');
      //$annual_average=DB::table('mark')->whereNotIn('annual_score',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->sum('annual_score');
 
-     $annual_grade=$scoreController->grade($annual_total,$report->gradinggroup_id,$markcheck->school_id);
+     $annual_grade=$this->grade($annual_total,$report->gradinggroup_id,$markcheck->school_id);
 
      //$class_sub_position=$subject_positions['position'];
        $arm_sub_position= $subject_position_arm['position'];
@@ -187,7 +187,7 @@ public function grade($score,$gradinggroup_id,$school_id)
 {
     if(is_numeric($score)){
         $score=round($score,2);
-    $grading=Grading::whereIn('group_id',[$gradinggroup_id])->where([['lower_bound','<=',$score],['upper_bound','>=',$score],['school_id',auth('api')->user()->school_id]])->first();
+    $grading=Grading::whereIn('group_id',[$gradinggroup_id])->where([['lower_bound','<=',$score],['upper_bound','>=',$score],['school_id',$school_id]])->first();
     if($grading){
    $Grade=$grading->grade;
    $credite_point=$grading->credit_point;
