@@ -212,13 +212,13 @@
 
               <ul class="list-group list-group-unbordered mb-3 text-uppercase ">
                   <li class="list-group-item">
-                    <b>Admission Date</b> <a class="float-right">{{form.surname}} </a>
+                    <b>Admission Date</b> <a class="float-right">{{form.admission_date}} </a>
                   </li>
                   <li class="list-group-item">
-                    <b>Class Of Admission</b> <a class="float-right">{{form.first_name}} </a>
+                    <b>Class Of Admission</b> <a class="float-right">{{form.admission_level}} </a>
                   </li>
                   <li class="list-group-item">
-                    <b>Current Class</b> <a class="float-right">{{form.middle_name?form.middle_name:'-----'}} </a>
+                    <b>Current Class</b> <a class="float-right">{{form.levels?form.levels.level_name:'-----'}} </a>
                   </li>
 
 
@@ -552,7 +552,7 @@
 
                                 <div class="form-group row">
                                     <div class="col-sm-offset-2 col-sm-12">
-                                    <button v-show="$gate.isAdminOrTutor()" @click.prevent="updateInfo" type="submit" class="btn btn-danger">Update</button>
+                                    <button  @click.prevent="updateInfo" type="submit" class="btn btn-danger">Update</button>
                                     </div>
                                 </div>
 
