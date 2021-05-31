@@ -212,7 +212,7 @@
 
               <ul class="list-group list-group-unbordered mb-3 text-uppercase ">
                   <li class="list-group-item">
-                    <b>Admission Date</b> <a class="float-right">{{form.admission_date}} </a>
+                    <b>Admission Date</b> <a class="float-right">{{form.admission_date|myDate}} </a>
                   </li>
                   <li class="list-group-item">
                     <b>Class Of Admission</b> <a class="float-right">{{form.admission_level}} </a>
