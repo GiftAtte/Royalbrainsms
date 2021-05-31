@@ -171,7 +171,7 @@
 
               <ul class="list-group list-group-unbordered mb-3 text-uppercase ">
                   <li class="list-group-item">
-                    <b>State Of Resident</b> <a class="float-right">{{form.contact_adress}} </a>
+                    <b>State Of Resident</b> <a class="float-right">{{form.state_of_resident}} </a>
                   </li>
                   <li class="list-group-item">
                     <b>LGA Of Resident</b> <a class="float-right">{{form.lga_of_resident}} </a>
@@ -190,14 +190,14 @@
 
               <ul class="list-group list-group-unbordered mb-3 text-uppercase ml-2">
                   <li class="list-group-item">
-                    <b>Nearest Bus Stop</b> <a class="float-right">{{form.dob}}</a>
+                    <b>Nearest Bus Stop</b> <a class="float-right">{{form.bustop}}</a>
                   </li>
                   <li class="list-group-item">
 
                     <b>Email Address</b> <a class="float-right text-lowercase">{{form.users.email}}</a>
                   </li>
                   <li class="list-group-item">
-                    <b>Contact Phone Number</b> <a class="float-right">{{form.lga}} </a>
+                    <b>Contact Phone Number</b> <a class="float-right">{{form.phone}} </a>
                   </li>
 
 
