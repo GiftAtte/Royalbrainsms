@@ -124,7 +124,7 @@
                     <b>Other Name(s)</b> <a class="float-right">{{form.middle_name?form.middle_name:'-----'}} </a>
                   </li>
                   <li class="list-group-item">
-                    <b>Date Of Birth</b> <a class="float-right">{{form.dob}}</a>
+                    <b>Date Of Birth</b> <a class="float-right">{{form.dob|myDate}}</a>
                   </li>
 
                   <li class="list-group-item">
