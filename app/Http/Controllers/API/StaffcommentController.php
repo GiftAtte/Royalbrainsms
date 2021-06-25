@@ -4,6 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Has_arm;
 use App\Staff_comment;
+use App\TeachersComment;
+use App\Report;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -27,24 +30,27 @@ class StaffcommentController extends Controller
        ->latest()->paginate(10);
    }
 
+
+   public function getComments()
+   {
+       return Staff_comment::where('school_id',auth('api')->user()->school_id)->get();
+
+   }
+
    public function store(Request $request)
    {
 
 
        $this->validate($request,[
-           'lower_bound' => 'required',
-           'upper_bound' => 'required',
 
            'comment' => 'required',
 
        ]);
        $level=Has_arm::where('staff_id',auth('api')->user()->staff_id)->first();
        return Staff_comment::create([
-           'lower_bound' => $request->lower_bound,
-           'upper_bound' => $request->upper_bound,
+
            'comment' => $request->comment,
-            'level_id'=>$level->level_id,
-            'arm_id'=>$level->arms_id,
+
            'school_id' => auth('api')->user()->school_id,
        ]);
    }
@@ -52,8 +58,7 @@ class StaffcommentController extends Controller
    public function update(Request $request)
    {
        $this->validate($request,[
-           'lower_bound' => 'required',
-           'upper_bound' => 'required',
+
             'comment' => 'required',
 
 
@@ -68,4 +73,37 @@ class StaffcommentController extends Controller
       $grading=Staff_comment::findOrFail($id);
       $grading->delete();
    }
+
+
+   public function loadComments(Request $request){
+   //return $request->all();
+    $report=Report::findOrFail($request->report_id);
+    $report_id=$request->report_id;
+    return  DB::table('students')->where([['students.class_id',$report->level_id],['students.arm_id',$request->arm_id]])
+
+      ->leftJoin('teachers_comments', function($join) use($report_id)
+      {
+          $join->on('teachers_comments.student_id', '=', 'students.id')
+          ->where('teachers_comments.report_id',$report_id);
+      })->select(DB::raw('CONCAT(students.surname," ", students.first_name)as name,
+       students.id as student_id, teachers_comments.comment_id as comment_id
+
+       '))->distinct('students.id')->distinct('report.id')
+      ->get();
+    }
+    public function assignComment(Request $request){
+        $students=$request->number_of_students;
+        $report=Report::findOrFail($request->report_id);
+       for ($i=0;$i<$students;++$i){
+           TeachersComment::where([['report_id',$report->id],['student_id',$request->student_id[$i]]])->delete();
+           TeachersComment::create(
+
+           [
+           'student_id'=>$request->student_id[$i],
+           'report_id'=>$request->report_id,
+           'comment_id'=>$request->comment_id[$i],
+           'level_id'=>$report->level_id,
+           'arm_id'=>$request->arm_id
+           ]);}
+}
 }

@@ -120,7 +120,7 @@
                         </router-link> </td>
                     <td>{{student.levels?student.levels.level_name:''}}</td>
                      <td>{{student.arm?student.arm.name:''}}</td>
-                    <td>{{student.gender|upText}}</td>
+                    <td>{{student.gender?student.gender:''}}</td>
                         <td><img  :src="'/img/profile/stud'+student.id+'.png'" alt="no pics" width="35" height="35" class="  img-circle "> </td>
 			<td>
                     <td>

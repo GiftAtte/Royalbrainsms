@@ -29,14 +29,17 @@ Auth::routes();
 
 Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 
-Route::get('invoice', function(){
-    return view('invoice');
-});
+Route::get('download_page/{id?}', 'HomeController@download');
+Route::get('pdfdownload/{id?}/{report_id}', 'HomeController@pdfdownload')->name('pdfdownload');
 Auth::routes();
 Route::get('/messages','ChatsController@fetchMessages');
 Route::post('/messages','ChatsController@sendMessages');
 
 Route::get('pdf_download/{report_id}/{student_id?}', 'API\ReportController@pdfDownload');
 Route::get('/dashboard', 'HomeController@index')->name('home');
+Route::post('/downloads/{id}',function(){
+    return view('welcome');
+});
 Route::get('{path}','HomeController@index')->where( 'path', '.*' );
+
 

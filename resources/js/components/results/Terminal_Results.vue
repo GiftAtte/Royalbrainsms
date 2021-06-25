@@ -50,8 +50,9 @@
 <h5><b>Name:</b>&nbsp; {{summary.student.surname}}&nbsp; {{summary.student.first_name}} &nbsp; {{summary.student.middle_name?summary.student.middle_name:''}}</h5>
 <h5><b>class:&nbsp;</b> {{report.levels.level_name}}&nbsp;{{arm.name}}</h5>
 <h5><b>Gender:&nbsp;</b> {{summary.student.gender?summary.student.gender:'-----------'}} </h5>
-<h5 ><b>Dob:</b>&nbsp; {{summary.student.dob?summary.student.dob:'-----------'}}</h5>
-<h5 ><b>Portal ID:</b>&nbsp; {{user.portal_id}}</h5>
+<h5 ><b class="text-primary">Position In Class:</b>&nbsp; {{summary.arm_position?summary.arm_position:'-----------'}} Out Of {{summary.total_students}}</h5>
+<hr>
+<!-- <h5 ><b>Portal ID:</b>&nbsp; {{user.portal_id}}</h5> -->
 </div>
 <div class="col-md-6">
 <h4 class="text-primary text-uppercase  "><b>&nbsp;</b> {{report.header?report.header:''}}</h4>
@@ -66,32 +67,32 @@
 
 </div>
 <div class="  table-responsive py-2"  >
-<table class="table table-bordered text-capitalize   text-nowrap">
+<table class="table table-bordered  table-sm text-capitalize   text-nowrap">
 <thead>
 <tr class="text-center">
 <th>S/N</th>
-<th>Part A:Cognitive<br>Subject</th>
-<th>Class Work<br> [2%]</th>
-<th>Assignment<br> [2%]</th>
-<th>Class <br> Test [5%]</th>
-<th>Notes <br> [1%]</th>
-<th>Weighted <br>Score [5%]</th>
-<th>Mid-Term<br> [25%]</th>
-<th>Exams<br> [70%]</th>
-<th>Total<br> [100%]</th>
+<th>Subject</th>
+<th>Class <br>Work[2%]</th>
+<th>Assignment<br>[2%]</th>
+<th>Class<br>Test[5%]</th>
+<th>Notes<br>[1%]</th>
+<th>Weighted<br>Score[5%]</th>
+<th>Mid-Term<br>[25%]</th>
+<th>Exams<br>[70%]</th>
+<th>Total<br>[100%]</th>
 <th class="text-center"> Average <br>Score</th>
 <th class="text-center">Position</th>
-<th>Grade</th>
-<th>Narration</th>
-<th class="text-center " v-show="isAHScore"><div><span>HIGHEST<br> SCORE</span></div></th>
-<th class="text-center" v-show="isASLScore"><div><span>LOWEST <br> SCORE</span></div></th>
+<th>Teacher's<br>Comment</th>
+<!-- <th>Narration</th> -->
+<!-- <th class="text-center " v-show="isAHScore"><div><span>HIGHEST<br> SCORE</span></div></th>
+<th class="text-center" v-show="isASLScore"><div><span>LOWEST <br> SCORE</span></div></th> -->
 
 
 </tr>
 </thead>
 
-<tbody>
-<tr v-for="(score,index) in scores" :key="index">
+<tbody class="text-bold text-uppercase">
+<tr v-for="(score,index) in scores" :key="index" class="text-bold text-uppercase">
 <td>{{index+1}}</td>
 <td>{{score.subjects?score.subjects.name:''}}</td>
 <td>{{score.test1}}</td>
@@ -105,10 +106,10 @@
 <td>{{score.arm_avg_score}}</td>
 <td>{{score.arm_subj_position}}</td>
 <td>{{score.grade}}</td>
-<td>{{score.narration}}</td>
+<!-- <td>{{score.narration}}</td> -->
 
-<td v-show="isAHScore">{{score.arm_max_score}}</td>
-<td v-show="isASLScore">{{score.arm_min_score}}</td>
+<!-- <td v-show="isAHScore">{{score.arm_max_score}}</td>
+<td v-show="isASLScore">{{score.arm_min_score}}</td> -->
 
 
 
@@ -124,11 +125,11 @@
 <div class="text-center text-bold text-primary container"> RESULTS SUMMARY</div>
 <hr class="text-bold">
 <div class="row col-md-12 py-3  bg-primary">
- <div class="col-md-2"><b>Total score:</b>&nbsp;&nbsp;{{summary.total_scores}}</div>
- <div class="col-md-2"><b>Average score:</b>&nbsp;&nbsp;{{summary.average_scores	}}</div>
- <div class="col-md-3"><b>Cummulative Avg score:</b>&nbsp;&nbsp;{{summary.cummulative_average}}</div>
- <div class="col-md-2"><b>Grade:</b>&nbsp;&nbsp;{{summary.grade}}</div>
-  <div class="col-md-2"><b>Narration:</b>&nbsp;&nbsp;{{summary.narration}}</div>
+ <div class="col-md-4 text-uppercase"><b>Total score:</b>&nbsp;&nbsp;{{summary.total_scores}}</div>
+ <div class="col-md-4 text-uppercase" ><b>Average score:</b>&nbsp;&nbsp;{{summary.average_scores	}}</div>
+
+ <div class="col-md-4 text-uppercase"><b>Grade:</b>&nbsp;&nbsp;{{summary.grade}}</div>
+
   </div>
   <hr  class="text-bold">
 </div>
@@ -165,20 +166,23 @@
 <div class="  col-md-3  " v-show="isGFormula">
 <table class=" table table-bordered table-sm  text-uppercase myTable table-striped" width="100%">
 <tr>
-<th colspan="3" class="text-center text-primary" >Grading Key</th>
+<th colspan="3" class="text-center text-primary" >Score</th>
 </tr>
 
 <tbody>
 <tr v-for="grade in grades" :Key="grade.id">
-<td>{{grade.lower_bound}} - {{grade.upper_bound}}</td><td>{{grade.grade}}</td><td>{{grade.narration}}</td>
+<td>{{grade.lower_bound}} - {{grade.upper_bound}}</td>
+<td>{{grade.grade}}</td>
+<!-- <td>{{grade.narration}}</td> -->
 </tr>
 </tbody>
 </table>
 </div>
 <div class="  col-md-3  " v-show="isGFormula">
-<table class=" table table-bordered table-sm  text-uppercase myTable table-striped" width="100%">
+<table class=" table table-bordered   table-sm  text-uppercase table-striped" width="100%">
 <tr>
-<th colspan="2" class="text-center text-primary" >Grading Key</th>
+<th colspan="2" class="text-center text-primary" >Psychomotor/Affective Rating</th>
+
 
 </tr>
 <tr><th>GRADE</th><th>DEGREE</th></tr>
@@ -261,8 +265,8 @@
 </div>
 </div> -->
 <div class="  card-body row ">
-<div v-show="isPComment" class=" row col-6"><span><b>Head Teacher's Comment:&nbsp;</b>{{principal_comment?principal_comment:summary.narration |upText}}</span></div>
-<div v-show="isTComment" class=" row col-6 "><span><b>Teacher's Comment:&nbsp;</b >{{staff_comment?staff_comment:summary.narration |upText}}</span></div>
+<div v-show="isPComment" class=" row col-6"><span><b>Principal's Comment:&nbsp;</b>{{principal_comment?principal_comment:''}}</span></div>
+<div v-show="isTComment" class=" row col-6 "><span><b>Form Tutor's Comment:&nbsp;</b >{{staff_comment?staff_comment:''}}</span></div>
 
 </div>
 <center>
@@ -524,6 +528,7 @@ axios.get('/api/result_config')
                  this.arm=result.data.arm
                  this.grades=result.data.gradings
                  this.principal_comment=result.data.principal_comment
+                 console.log(this.principal_comment)
                  this.staff_comment=result.data.staff_comment
                  if(this.report.term_id===3){
                      this.isThird_term=true

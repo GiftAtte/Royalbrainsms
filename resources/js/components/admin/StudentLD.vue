@@ -93,6 +93,7 @@
                     </div>
 
 <div v-show="isResults" class="card-body">
+    <div class="container"><button v-show="isEntered" @click="removeAssesment" type="button"  class="btn btn-flat btn-danger float-right">Assessment Already Entered. Click To Remove</button></div>
 <table class="table  table-sm table-striped ">
 <thead>
 <tr>
@@ -159,7 +160,7 @@
         data(){
 
             return{
-
+                isEntered:false,
                 Assessments:{},
                 reports:{},
                 LDomain:{},
@@ -196,7 +197,17 @@ form:new Form({
           axios.get(`/api/load_assessment/${this.form.arm_id}/${this.form.report_id}/${this.form.learning_domain_id}`)
           .then((result) => {
              this.Assessments=result.data;
-
+             let counter=0;
+              this.Assessments.map(el=>{
+                    if(el.grade){
+                        ++counter
+                    }
+              })
+              if(counter>0){
+                  this.isEntered=true
+              }else{
+                  this.isEntered=false
+              }
 
              this.$Progress.finish();
 
@@ -265,10 +276,25 @@ form:new Form({
 
 
     },
+    removeAssesment(){
+          this.form.post('/api/delete_ssessment')
+          .then(res=>{
+              toast.fire({
+                        type: 'success',
+                        title: 'Assessment removed successfully'
+                        });
+                       // this.Assessments={};
+                        this.loadAssessment();
+                       
+
+          })
+
+    },
 loadDomain(){
     axios.get('api/get_domain')
     .then(res=>{
         this.LDomain=res.data
+
     })
 }
 

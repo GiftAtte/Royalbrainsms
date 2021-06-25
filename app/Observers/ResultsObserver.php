@@ -96,8 +96,8 @@ class ResultsObserver implements ShouldQueue
       $students=Mark::whereNotIn('total',[0])->where([['report_id',$report_id]])->select('student_id','arm_id','level_id')->distinct('student_id')->get();
       foreach($students as $student){
 
-      $students_arm=Mark::where([['report_id',$report_id],['arm_id',$student->arm_id]])->whereNotIn('total',[0])
-                       ->select('student_id')->distinct('student_id')->get();
+      $students_arm=Student::where([['class_id',$student->level_id],['arm_id',$student->arm_id]])
+                       ->select('id')->get();
 
       //$student_by_arm=Student::where
       $level_id=$student->level_id;

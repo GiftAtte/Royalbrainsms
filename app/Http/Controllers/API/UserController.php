@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Student;
+use App\LoginDetail;
 use App\Staff;
 use App\Level;
 use App\Imports\UsersImport;
@@ -107,7 +108,26 @@ class UserController extends Controller
 
 
         if(!empty($request->password)){
+            if(!empty($request->student_id)){
+              $student=  LoginDetail::where('student_id',$request->student_id)->first();
+              $student->password=$request->password;
+              $student->email=$request->email;
+              $student->save();
+              // return LoginDetail::where('student_id',$request->student_id)->first();
+            }
+            else{
+             $employee=  LoginDetail::where('staff_id',$request->staff_id)->first();
+              $employee->password=$request->password;
+              $employee->email=$request->email;
+              $employee->save();
+             //return LoginDetail::where('staff_id',$request->staff_id)->first();
+            }
+
             $request->merge(['password' => Hash::make($request['password'])]);
+
+
+
+
         }
         if(!empty($request->photo)){
             $user->photo=strval($name);

@@ -1,7 +1,7 @@
 <template>
   <div class="menu-container font-weight-light sidebar-dark-primary elevation-4">
     <!-- root level itens -->
-    <ul class="menu">
+    <ul class="menu py-5">
 
       <li class=" brand-link">
         <a href="/dashboard" class="menu__logo">
@@ -14,15 +14,16 @@
 
         <li>
 
-         <div class="user-panel mt-2 pb-2  d-flex">
+         <div class="user-panel mt-3 text-center  d-flex">
           <div class="image">
-            <img :src="`/img/profile/${user_image}`" class="img-circle elevation-2" alt="User Image">
+
+          <a href="#" class="d-block text-white text-uppercase">
+              {{name}}
+              <p> ==={{type}}===</p>
+            </a>
           </div>
          <div class="info ">
-            <a href="#" class="d-block text-white">
-              {{name}}
-              <p>{{type}}</p>
-            </a>
+
 
           </div>
         </div>

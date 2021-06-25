@@ -17,6 +17,7 @@ use App\Level;
 use App\Assessment;
 use App\CheckResult;
 use App\Staff_comment;
+use App\TeachersComment;
 use App\Result_activation;
 use App\Events\MarksCreated;
 use Illuminate\Http\Request;
@@ -117,8 +118,8 @@ public function AnnualScore($score,$term_id){
             // computing sum and grading
                 $total=$this->sum($weighted_score,$request->exams[$i],$midterm_score?$midterm_score->total:0);
                $annual_score= $this->AnnualScore($total,$term_id);
-              $convertedScore=$this->convertedScore($total,$report->type);
-                $gradding= $this->grade($convertedScore,$report->gradinggroup_id,auth('api')->user()->school_id);
+             // $convertedScore=$this->convertedScore($total,$report->type);
+                $gradding= $this->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
                 //$annual_gradding= $this->grade($annual_score,$report->gradinggroup_id,auth('api')->user()->school_id);
             // return $gradding;
 
@@ -375,13 +376,13 @@ return ['message'=>'success'];
         Result::where([['report_id',$report_id],['student_id',$student_id]])->delete();
       $report=Report::findOrFail($report_id);
 
-      $students=Mark::whereNotIn('total',[0])->where([['report_id',$report_id],['arm_id',$arm_id]])->select('student_id')->distinct('student_id')->get();
+      $total_student=Student::where([['class_id',$report->level_id],['arm_id',$arm_id]])->count();
     //    $students=Mark::where('report_id',$report_id)->whereNotIn('total',[0])
     //                   ->select('student_id')->distinct('student_id')->get();
 
       //$student_by_arm=Student::where
       $level_id=$report->level_id;
-      $total_student=count($students);
+    //  $total_student=count($students);
     // return $level_id;
 
         $cummulative_avg=DB::table('marks')->whereNotIn('total',[0])->where([['level_id',$level_id],['student_id',$student_id],['type','Academic']])->avg('total');
@@ -468,7 +469,7 @@ return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
                      ['marks.subject_id',$subject_id]]);
         })->select(DB::raw('CONCAT(students.surname," ", students.first_name)as name,students.arm_id as arm_id,
          students.id as student_id,marks.test1 as test1,marks.test2 as test2, marks.test3 as test3,
-         marks.exams as exams,marks.subject_id as subject_id'))->orderBy('name')
+         marks.exams as exams,marks.subject_id as subject_id, marks.note as note'))->orderBy('name')
         ->get();
 
 
@@ -791,21 +792,19 @@ public function studenResult( $report_id, $student_id=null)
     // $this->resultSummary($report_id, $student_id,$student->arm_id);
     $user=User::with(['students','school'])->where('student_id',$student_id)->first();
     $grading=Grading::whereIn('group_id',[$report->gradinggroup_id])->where('school_id',$user->school_id)->get();
-    $summary=Result::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
+   $summary=Result::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
    $scores=Mark::whereNotIn('total',[0])->with('subjects')->where([['report_id',$report_id],
     ['student_id',$student_id],['type','Academic']])->distinct('subject_id')->get();
     $noneAcademic=Mark::whereNotIn('total',[0])->whereNotIn('class_avg_score',[0])->with('subjects')->where([['report_id',$report_id],
     ['student_id',$student_id],['type','None Academic']])->get();
 
     if($summary){
-        $principal_comment=$this->principalComment($summary?$summary->average_scores:0);
-        $staff_comment=$this->staffComment($summary->average_scores,$summary->student->class_id,$summary->student->arm_id);
+      $principal_comment=$this->principalComment($summary?$summary->average_scores:0);
+       $staff_comment=$this->staffComment($student_id,$report_id);
         $LDomain=$this->learningDomain($student_id,$report_id);
 
-        return response()->json(['scores'=>$scores,'summary'=>$summary,'user'=>$user,'pastTotal'=>$pastTotalarray,
-    'comment'=>$comment,'principa
-
-    l_comment'=>$principal_comment,'signature'=>$principal_sign, 'staff_comment'=>$staff_comment,
+        return response()->json(['principal_comment'=>$principal_comment,'scores'=>$scores,'summary'=>$summary,'user'=>$user,'pastTotal'=>$pastTotalarray,
+    'comment'=>$comment,'signature'=>$principal_sign, 'staff_comment'=>$staff_comment,
      'report'=>$report,'arm'=>$arm,'gradings'=>$grading,'noneAcademic'=>$noneAcademic,'LDomain'=>$LDomain]);
     }else{
         return ['Not_found'=>'No reusult found'];
@@ -818,22 +817,23 @@ public function studenResult( $report_id, $student_id=null)
 public function principalComment($average){
     $comment=Comment::where([['lower_bound','<=',$average],['upper_bound','>=',$average],['school_id',auth('api')->user()->school_id]])->first();
      if($comment){
+
     return $comment->comment;
      }
      else {
-         return '';
+         return 'principal';
      }
     }
 
 
 
 
-    public function staffComment($average,$level_id,$arm_id){
+    public function staffComment($student_id,$report_id){
 
-        $comment=Staff_comment::where([['lower_bound','<=',$average],['upper_bound','>=',$average],['school_id',auth('api')->user()->school_id]])
-        ->where([['level_id',$level_id],['arm_id',$arm_id]])->first();
-         if($comment){
-        return $comment->comment;
+        $comment=TeachersComment::with('comments')->where([['student_id',$student_id],['report_id',$report_id]])
+        ->first();
+         if($comment&&$comment->comments){
+        return $comment->comments->comment;
          }
          else {
              return '';

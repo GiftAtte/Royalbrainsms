@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 use App\Learning_domain;
+use App\Assessment;
 use App\Report;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -107,6 +108,18 @@ class LDomainController extends Controller
   }
   return  ["success"=>"Assessment created success"];
 }
+
+   public function removeAssement(Request $request){
+                if($request->has('learning_domain_id')){
+                    Assessment::where([
+                        ['report_id',$request->report_id],
+                        ['arm_id',$request->arm_id],
+                        ['learning_domain_id',$request->learning_domain_id]
+                    ])->delete();
+                }
+   }
+
+
 
      }
 

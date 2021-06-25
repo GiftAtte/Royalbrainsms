@@ -15,31 +15,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-  
+
   <!-- Theme style -->
   /
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-mini">
-<div class="wrapper" id="app">
+<div class="wrapper" >
 
-  
+
 
   <!-- Main Sidebar Container -->
- 
+
   <!-- Content Wrapper. Contains page content -->
-  
+
   <div class="content-wrapper ">
     <!-- Content Header (Page header) -->
-    
+
     <!-- /.content-header -->
 
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
          @yield('content')
-     
+
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
@@ -49,7 +49,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
   <!-- Main Footer -->
- 
+
 <!-- ./wrapper -->
 
 <!-- REQUIRED SCRIPTS -->
@@ -64,6 +64,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset('js/app.js') }}"></script>
 
 /
-  
+
 </body>
 </html>

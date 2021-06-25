@@ -50,8 +50,9 @@
 <h5><b>Name:</b>&nbsp; {{summary.student.surname}}&nbsp; {{summary.student.first_name}} &nbsp; {{summary.student.middle_name?summary.student.middle_name:''}}</h5>
 <h5><b>class:&nbsp;</b> {{report.levels.level_name}}&nbsp;{{arm.name}}</h5>
 <h5><b>Gender:&nbsp;</b> {{summary.student.gender?summary.student.gender:'-----------'}} </h5>
-<h5 ><b>Dob:</b>&nbsp; {{summary.student.dob?summary.student.dob:'-----------'}}</h5>
-<h5 ><b>Portal ID:</b>&nbsp; {{user.portal_id}}</h5>
+<h5 ><b class="text-primary">Position In Class:</b>&nbsp; {{summary.arm_position?summary.arm_position:'-----------'}} Out Of {{summary.total_students}}</h5>
+<hr>
+<!-- <h5 ><b>Portal ID:</b>&nbsp; {{user.portal_id}}</h5> -->
 </div>
 <div class="col-md-6">
 <h4 class="text-primary text-uppercase  "><b>&nbsp;</b> {{report.header?report.header:''}}</h4>
@@ -66,48 +67,48 @@
 
 </div>
 <div class="  table-responsive py-2"  >
-<table class="table table-bordered text-capitalize   text-nowrap">
+<table class="table table-bordered  table-striped table-sm ">
 <thead>
-<tr class="text-center text-uppercase">
+<tr class="text-center" table-stripedstyle="font-size:14; padding:0.2; margin:0">
 <th>S/N</th>
-<th>Part A:Cognitive<br>Subject</th>
-<th>Class Work<br> [2]</th>
-<th>Assignment<br> [2]</th>
-<th>Class <br> Test [5]</th>
-<th>Notes <br> [1]</th>
+<th>A:Cognitive<br>Subject</th>
+<th>Class<br> Work[2]</th>
+<th>Assignment<br>[2]</th>
+<th>Class<br>Test[5]</th>
+<th>Notes<br>[1]</th>
 <th>Weighted <br>Score [5]</th>
-<th>Exams<br> [20]</th>
-<th>Total<br> [25]</th>
-<th>Grade</th>
-<th>Narration</th>
+<th>Exams<br>[20]</th>
+<th>Total<br>[25]</th>
+
+<!-- <th>Comments</th> -->
 <th class="text-center" ><div><span>Average<br> Score</span></div></th>
 <th class="text-center" ><div><span>Position</span></div></th>
+<th>Teacher's<br>Comments</th>
 
-
-<th class="text-center" v-show="isAHScore"><div><span>ASH <br> Score</span></div></th>
-<th class="text-center" v-show="isASLScore"><div><span>ASL <br> Score</span></div></th>
+<!-- <th class="text-center" v-show="isAHScore"><div><span>ASH <br> Score</span></div></th> -->
+<!-- <th class="text-center" v-show="isASLScore"><div><span>ASL <br> Score</span></div></th> -->
 
 </tr>
 </thead>
 
-<tbody>
-<tr v-for="(score,index) in scores" :key="index">
+<tbody >
+<tr v-for="(score,index) in scores" :key="index" class="text-bold" >
 <td>{{index+1}}</td>
-<td>{{score.subjects?score.subjects.name:''}}</td>
-<td>{{score.test1}}</td>
+<td>{{score.subjects.name|upText}}</td>
+<td >{{score.test1}}</td>
 <td>{{score.test2}}</td>
 <td>{{score.test3}}</td>
 <td>{{score.note}}</td>
 <td>{{score.weighted_score}}</td>
 <td>{{score.exams}}</td>
 <td>{{score.total}}</td>
-<td>{{score.grade}}</td>
-<td>{{score.narration}}</td>
+
+<!-- <td>{{score.narration}}</td> -->
 <td >{{score.arm_avg_score}}</td>
 <td >{{score.arm_subj_position}}</td>
-
-<td v-show="isAHScore">{{score.arm_max_score}}</td>
-<td v-show="isASLScore">{{score.arm_min_score}}</td>
+<td>{{score.grade}}</td>
+<!-- <td v-show="isAHScore">{{score.arm_max_score}}</td>
+<td v-show="isASLScore">{{score.arm_min_score}}</td> -->
 
 
 
@@ -124,12 +125,12 @@
 
 <div class="text-center text-bold text-primary container"> RESULTS SUMMARY</div>
 <hr class="text-bold">
-<div class="row col-md-12 py-3 text-uppercase">
- <div class="col-md-2"><b>Total score:</b>&nbsp;&nbsp;{{summary.total_scores}}</div>
- <div class="col-md-2"><b>Average score:</b>&nbsp;&nbsp;{{summary.average_scores	}}</div>
- <div class="col-md-3"><b>Cummulative Avg score:</b>&nbsp;&nbsp;{{summary.cummulative_average}}</div>
- <div class="col-md-2"><b>Grade:</b>&nbsp;&nbsp;{{summary.grade}}</div>
-  <div class="col-md-2"><b>Narration:</b>&nbsp;&nbsp;{{summary.narration}}</div>
+<div class="row col-md-12 py-3 text-uppercase bg-primary">
+ <div class="col-md-4 text-uppercase"><b>Total score:</b>&nbsp;&nbsp;{{summary.total_scores}}</div>
+ <div class="col-md-4 text-uppercase" ><b>Average score:</b>&nbsp;&nbsp;{{summary.average_scores	}}</div>
+
+ <div class="col-md-4 text-uppercase"><b>Grade:</b>&nbsp;&nbsp;{{summary.grade}}</div>
+
   </div>
   <hr  class="text-bold">
 </div>
@@ -164,22 +165,23 @@
 </div>
 
 <div class="  col-md-3  " v-show="isGFormula">
-<table class=" table table-bordered table-sm  text-uppercase myTable table-striped" width="100%">
+<table class=" table table-bordered table-sm  text-uppercase  table-striped" width="100%">
 <tr>
-<th colspan="3" class="text-center text-primary" >Grading Key</th>
+<th colspan="2" class="text-center text-primary" >Score Rating</th>
 </tr>
 
 <tbody>
 <tr v-for="grade in grades" :Key="grade.id">
-<td>{{grade.lower_bound}} - {{grade.upper_bound}}</td><td>{{grade.grade}}</td><td>{{grade.narration}}</td>
+<td>{{grade.lower_bound}} - {{grade.upper_bound}}</td><td>{{grade.grade}}</td>
+<!-- <td>{{grade.narration}}</td> -->
 </tr>
 </tbody>
 </table>
 </div>
 <div class="  col-md-3  " v-show="isGFormula">
-<table class=" table table-bordered table-sm  text-uppercase myTable table-striped" width="100%">
+<table class=" table table-bordered table-sm  text-uppercase  table-striped" width="100%">
 <tr>
-<th colspan="2" class="text-center text-primary" >Grading Key</th>
+<th colspan="2" class="text-center text-primary" >Psychomotor/Affective Rating</th>
 
 </tr>
 <tr><th>GRADE</th><th>DEGREE</th></tr>
@@ -203,8 +205,8 @@
 
 
 <div class="  card-body row ">
-<div v-show="isPComment" class=" row col-6"><span><b>Head Teacher's Comment:&nbsp;</b>{{principal_comment?principal_comment:summary.narration |upText}}</span></div>
-<div v-show="isTComment" class=" row col-6 "><span><b>Teacher's Comment:&nbsp;</b >{{staff_comment?staff_comment:summary.narration |upText}}</span></div>
+<div v-show="isPComment" class=" row col-6"><span><b>Principal's Comment:&nbsp;</b>{{principal_comment?principal_comment:summary.narration |upText}}</span></div>
+<div v-show="isTComment" class=" row col-6 "><span><b>Form Tutor's Comment:&nbsp;</b >{{staff_comment?staff_comment:''}}</span></div>
 
 </div>
 <center>

@@ -79,6 +79,7 @@ export default new Router({
     { path: '/fee_list/:feegroup_id', component: require('./components/fees/Feelist.vue').default },
     { path: '/paystack_key', component: require('./components/fees/Paystack.vue').default },
     { path: '/subject_teacher', component: require('./components/subject/SubjectTeacher.vue').default },
+    { path: '/tutor_comments', component: require('./components/staff/TutorsComment.vue').default },
 
     { path: '/backup', component: require('./components/results/Backup.vue').default },
     { path: '/not-found', component: require('./components/NotFound.vue').default }

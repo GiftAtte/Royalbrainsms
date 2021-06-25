@@ -66,9 +66,11 @@ padding: 5px;
     padding: 0px 10px 0 0px;
 
   }
-   .myTable tr{
+   .myTable tr td{
     font-size: 12px;
-    font: weight 10;
+    font-weight: 14;
+    padding: auto;
+
 
 
   }
@@ -127,6 +129,61 @@ padding: 5px;
 
 }
 
+#print{
+    body * {
+      visibility: hidden;
+    }
+    #section-to-print, #section-to-print *{
+      visibility: visible;
+      margin: 0 0 0 0;
+
+      width: auto;
+
+    }
+
+    #profile {
+        display: none;
+    }
+    #section-to-print {
+
+      position: auto;
+      left: 0;
+      top: 0;
+      margin-top: 0;
+
+    }
+    #section-to-print .img-result{
+      width: 150px;
+      height: 120px;
+
+    }
+    #section-to-print .result-logo{
+      width: 150px;
+      height: 120px;
+    }
+    #section-to-print .table .table{
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+     font-weight: normal;
+      font-size: 16px !important;
+      padding: 0.5 !important;
+    }
+
+    #section-to-print .table-responsive{
+      visibility: hidden;
+
+    }
+    #section-to-print .action{
+      visibility: hidden;
+
+    }
+    #section-to-print .table{
+      border-color: black;
+       color: black;
+    }
+
+  }
 @page {
     margin: 0;
 }

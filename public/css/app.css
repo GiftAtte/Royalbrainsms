@@ -59841,9 +59841,10 @@ th.rotate > div > span {
   padding: 0px 10px 0 0px;
 }
 
-.myTable tr {
+.myTable tr td {
   font-size: 12px;
-  font: weight 10;
+  font-weight: 14;
+  padding: auto;
 }
 
 @media print {
@@ -59899,6 +59900,60 @@ th.rotate > div > span {
     border-color: black;
     color: black;
   }
+}
+
+#print body * {
+  visibility: hidden;
+}
+
+#print #section-to-print,
+#print #section-to-print * {
+  visibility: visible;
+  margin: 0 0 0 0;
+  width: auto;
+}
+
+#print #profile {
+  display: none;
+}
+
+#print #section-to-print {
+  position: auto;
+  left: 0;
+  top: 0;
+  margin-top: 0;
+}
+
+#print #section-to-print .img-result {
+  width: 150px;
+  height: 120px;
+}
+
+#print #section-to-print .result-logo {
+  width: 150px;
+  height: 120px;
+}
+
+#print #section-to-print .table .table {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  font-weight: normal;
+  font-size: 16px !important;
+  padding: 0.5 !important;
+}
+
+#print #section-to-print .table-responsive {
+  visibility: hidden;
+}
+
+#print #section-to-print .action {
+  visibility: hidden;
+}
+
+#print #section-to-print .table {
+  border-color: black;
+  color: black;
 }
 
 @page {

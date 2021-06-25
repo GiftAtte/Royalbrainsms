@@ -66,7 +66,7 @@
 
 </div>
 <div class="  table-responsive py-3"  >
-<table class="table table-bordered text-capitalize  font-weight-bold  text-nowrap">
+<table class="table table-bordered table-sm font-weight-bold  text-nowrap">
 <thead>
 <tr>
 <th>S/N</th>

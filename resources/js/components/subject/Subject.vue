@@ -160,7 +160,7 @@
             updateSubject(){
                 this.$Progress.start();
                 // console.log('Editing data');
-                this.form.put('api/subjects/'+this.form.id)
+                this.form.put('/api/subjects/'+this.form.id)
                 .then(() => {
                     // success
                     $('#addNew').modal('hide');

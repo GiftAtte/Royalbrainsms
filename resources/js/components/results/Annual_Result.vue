@@ -83,13 +83,13 @@
 <th>Narration</th>
 <th>Position</th>
 
-<th class="text-center " v-show="isAHScore"><div><span>HIGHEST<br> SCORE</span></div></th>
-<th class="text-center" v-show="isASLScore"><div><span>LOWEST <br> SCORE</span></div></th>
+<!-- <th class="text-center " v-show="isAHScore"><div><span>HIGHEST<br> SCORE</span></div></th>
+<th class="text-center" v-show="isASLScore"><div><span>LOWEST <br> SCORE</span></div></th> -->
 
 </tr>
 </thead>
 
-<tbody>
+<tbody class="text-bold text-uppercase">
 <tr v-for="(score,index) in scores" :key="index">
 <td>{{index+1}}</td>
 <td>{{score.subjects?score.subjects.name:''}}</td>
@@ -107,8 +107,8 @@
 <td>{{score.arm_subj_position}}</td>
 
 
-<td v-show="isAHScore">{{score.arm_max_score}}</td>
-<td v-show="isASLScore">{{score.arm_min_score}}</td>
+<!-- <td v-show="isAHScore">{{score.arm_max_score}}</td>
+<td v-show="isASLScore">{{score.arm_min_score}}</td> -->
 
 
 
@@ -124,11 +124,11 @@
 <div class="text-center text-bold text-primary container"> RESULTS SUMMARY</div>
 <hr class="text-bold">
 <div class="row col-md-12 py-3  bg-primary">
- <div class="col-md-2"><b>Total score:</b>&nbsp;&nbsp;{{summary.total_scores}}</div>
- <div class="col-md-2"><b>Average score:</b>&nbsp;&nbsp;{{summary.average_scores	}}</div>
+ <div class="col-md-3"><b>Total score:</b>&nbsp;&nbsp;{{summary.total_scores}}</div>
+ <div class="col-md-3"><b>Average score:</b>&nbsp;&nbsp;{{summary.average_scores	}}</div>
  <div class="col-md-3"><b>Cummulative Avg score:</b>&nbsp;&nbsp;{{summary.cummulative_average}}</div>
- <div class="col-md-2"><b>Grade:</b>&nbsp;&nbsp;{{summary.grade}}</div>
-  <div class="col-md-2"><b>Narration:</b>&nbsp;&nbsp;{{summary.narration}}</div>
+ <div class="col-md-3"><b>Grade:</b>&nbsp;&nbsp;{{summary.grade}}</div>
+
   </div>
   <hr  class="text-bold">
 </div>
@@ -165,7 +165,7 @@
 <div class="  col-md-3  " v-show="isGFormula">
 <table class=" table table-bordered table-sm  text-uppercase myTable table-striped" width="100%">
 <tr>
-<th colspan="3" class="text-center text-primary" >Grading Key</th>
+<th colspan="3" class="text-center text-primary" >Score Rating</th>
 </tr>
 
 <tbody>
@@ -178,7 +178,7 @@
 <div class="  col-md-3  " v-show="isGFormula">
 <table class=" table table-bordered table-sm  text-uppercase myTable table-striped" width="100%">
 <tr>
-<th colspan="2" class="text-center text-primary" >Grading Key</th>
+<th colspan="2" class="text-center text-primary" >Sychomotor/Affective Rating</th>
 
 </tr>
 <tr><th>GRADE</th><th>DEGREE</th></tr>
@@ -202,8 +202,8 @@
 
 
 <div class="  card-body row ">
-<div v-show="isPComment" class=" row col-6"><span><b>Head Teacher's Comment:&nbsp;</b>{{principal_comment?principal_comment:summary.narration |upText}}</span></div>
-<div v-show="isTComment" class=" row col-6 "><span><b>Teacher's Comment:&nbsp;</b >{{staff_comment?staff_comment:summary.narration |upText}}</span></div>
+<div v-show="isPComment" class=" row col-6"><span><b>Principal's Comment:&nbsp;</b>{{principal_comment?principal_comment:summary.narration |upText}}</span></div>
+<div v-show="isTComment" class=" row col-6 "><span><b>Form Tutor's Comment:&nbsp;</b >{{staff_comment?staff_comment:''}}</span></div>
 
 </div>
 <center>

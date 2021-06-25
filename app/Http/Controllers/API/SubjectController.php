@@ -62,8 +62,8 @@ class SubjectController extends Controller
     $this->validate($request,[
         'name' => 'required|string|max:191',
     ]);
-    $subject->save($request->all());
-        //
+    $subject->update($request->all());
+        return $request->all();
     }
 
 

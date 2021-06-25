@@ -232,8 +232,14 @@ export default {
 
       },
       {
+        type: 'link',
+        txt: 'Teacher'+"'s Comments",
+        link: '/tutor_comments',
+
+      },
+      {
           type: 'link',
-          txt: 'Teacher'+"'s Comments",
+          txt: 'Comment Bank',
           link: '/teachers_comment',
 
         },
@@ -341,7 +347,7 @@ export default {
         link: '/logout',
       },
 
-      
+
 
     ],
 
@@ -429,10 +435,16 @@ export default {
           txt: 'Backup Scores',
           link: '/backup',
         },
+        {
+            type: 'link',
+            txt: "Comment Bank",
+            link:  '/teachers_comment',
+
+          },
       {
           type: 'link',
           txt: 'Teacher'+"'s Comments",
-          link: '/teachers_comment',
+          link: '/tutor_comments',
 
         },
 

@@ -40,7 +40,7 @@
                   <tbody>
                     <tr>
                         <th>C/ID</th>
-                        <th>Average Range</th>
+               
                         <th>Comment</th>
 
                         <th>Modify</th>
@@ -50,7 +50,7 @@
                   <tr v-for="comment in comments.data" :key="comment.id">
 
                     <td>{{comment.id}}</td>
-                    <td>{{comment.lower_bound}} - {{comment.upper_bound}} </td>
+
                     <td>{{comment.comment}}</td>
 
 
@@ -96,27 +96,16 @@
        <form @submit.prevent="editmode ? updateComment() : createComment()">
       <div class="modal-body">
 
-                <div class="form-group">
-                 <label>Lower Bound</label>
-                <input type="number" name="lower_bound" placeholder="Enter From" id="lower_bound" step="0.01"
-                   class="form-control" :class="{ 'is-invalid': form.errors.has('lower_bound') }"
-                   v-model="form.lower_bound" >
-                <has-error :form="form" field="lower_bound"></has-error>
-                 </div>
-                 <div class="form-group">
-                  <label>Upper Bound</label>
-                <input type="number" name="upper_bound" placeholder="Enter To" id="upper_bound" step="0.01"
-                   class="form-control" :class="{ 'is-invalid': form.errors.has('upper_bound') }"
-                   v-model="form.upper_bound" >
-                <has-error :form="form" field="upper_bound"></has-error>
-                 </div>
-
                  <div class="form-group">
                  <label>Comment</label>
-                <input type="text" name="comment" placeholder="Enter comment" id="comment"
-                   class="form-control" :class="{ 'is-invalid': form.errors.has('comment') }"
-                   v-model="form.comment" >
-                <has-error :form="form" field="grade"></has-error>
+                 <textarea v-model="form.comment"
+                  placeholder="Enter comment" id="comment"
+                  class="form-control" :class="{ 'is-invalid': form.errors.has('comment') }"
+                  >
+                  Enter comment
+                  </textarea>
+
+
                  </div>
 
 

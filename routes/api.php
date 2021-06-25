@@ -59,7 +59,13 @@ Route::get('findEmployee', 'API\EmployeeController@search');
 Route::get('employees', 'API\EmployeeController@getEmployee');
 Route::delete('delete_emp/{id}', 'API\EmployeeController@destroy');
 Route::get('staff_profile/{id?}', 'API\EmployeeController@profile');
+
+//tutorsComment
+Route::post('tutorsComment', 'API\StaffcommentController@assignComment');
+Route::get('tutorsComment', 'API\StaffcommentController@getComments');
+Route::post('load_comments', 'API\StaffcommentController@loadComments');
 // Subject Routes
+
 
 Route::apiResources(['subjects' => 'API\SubjectController']);
 Route::post('level_subjects', 'API\SubjectController@level_subjects');
@@ -160,6 +166,8 @@ Route::put('learning_domain','API\LDomainController@update');
 Route::get('load_assessment/{arm_id}/{report_id}/{ld_id}','API\LDomainController@loadAssessment');
 Route::get('get_domain','API\LDomainController@getDomain');
 Route::post('assessment','API\LDomainController@insertAssessment');
+Route::post('delete_ssessment','API\LDomainController@removeAssement');
+
 
 // cbt
 Route::apiResources(['exams' => "API\ExamController"]);
