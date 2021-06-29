@@ -4,6 +4,7 @@ use App\Events\DemoEvent;
 use App\Mail\SendResults;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,7 @@ Route::get('/dashboard', 'HomeController@index')->name('home');
 Route::post('/downloads/{id}',function(){
     return view('welcome');
 });
-Route::get('{path}','HomeController@index')->where( 'path', '.*' );
+//Route::get('/users',[UserController::class,'index']);
+Route::get('{path}',[UserController::class,'index'])->where( 'path', '.*' );
 
 

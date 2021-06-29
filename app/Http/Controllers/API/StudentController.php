@@ -36,7 +36,21 @@ class StudentController extends Controller
      */
    public function index($level_id=null,$arm_id=null)
     {    $user=auth('api')->user();
+
+
+        //   $students=User::where([['school_id',$user->school_id],['type','student']])->get();
+        //   User::where([['school_id',$user->school_id],['type','student']])->update([
+        //       'password'=>Hash::make('654321')
+        //     ]);
+        //   foreach($students as $student){
+        //       LoginDetail::where('student_id',$student->student_id)->update([
+        //           'email'=>$student->email,
+        //           'password'=>'654321'
+        //       ]);
+        //   }
+
         if(!empty($level_id)&&!empty($arm_id)){
+
             return Student::with(['levels','arm'])->where([['class_id',$level_id],['arm_id',$arm_id]])->latest()->paginate(50);
         }
 

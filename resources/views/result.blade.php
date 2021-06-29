@@ -14,12 +14,84 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <title>NNSS</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
 
   <!-- Theme style -->
 
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+<style>
+
+
+body {
+  margin: 0;
+
+}
+  .flex-container{
+    display: flex;
+    flex-direction:row ;
+
+
+
+
+
+
+}
+
+.text-primary{
+    color: rgb(23, 23, 107)
+}
+.text-danger{
+    color: rgb(197, 49, 5)
+}
+.text-primary{
+    color: rgb(23, 23, 107)
+}
+
+table, td, th {
+  border: 0.5px solid black;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.col-sm-2{
+    flex: 2;
+    flex-direction: row;
+
+    padding: 12.5%;
+
+}
+.col-sm-8{
+    flex: 8;
+    width: 80%;
+
+}
+.col-sm-12{
+
+    width: 100%;
+    float: left;
+
+}
+.col-sm-3{
+    float: left;
+  width: 25%;
+}
+.col-sm-4{
+    float: left;
+  width: 25%;
+
+    padding: 2px;
+}
+.col-sm-10{
+    flex: 75;
+
+    padding: 2px;
+}
+</style>
+
 </head>
 <body>
 
@@ -27,45 +99,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
 
-    <div class="content" id="app">
-      <div class="container-fluid">
-          <div class="container" id="print">
-            <div class="card-body pt-0" id="section-to-print"  ref="generatePDF" :style="`background-image: linear-gradient(to bottom, rgba(255,255,255,0.98) 100%,rgba(255,255,255,0.98) 100%), url(/img/schools/${school.logo}) ;background-repeat: no-repeat; background-position: center;background-size: 80%;`">
-                <div class="card-body row col-md-12 col-sm-12 pt-1 mt-0">
-                <div class="col-md-2 col-sm-2"><img :src="`/img/schools/{{$school->logo}}`" class="img-thumbnail  result-logo" alt="logo" width="100" height="100"></div>
-                <div class="col-md-8 col-sm-12">
+    <div class="flex-container" >
+
+
+
+                <div class="  col-sm-12">
+                <div class="col-sm-2"><img src="img/school/{{ $school->logo }}" class="img-thumbnail  result-logo" alt="logo" width="100" height="100"></div>
+                <div class=" col-sm-8">
                 <h3 class="text-primary text-uppercase">{{$school->name}},
                 </h3>
                 <h5>{{$school->contact_address}},&nbsp; {{$school->state}}</h5>
                 <h5>P:&nbsp; {{$school->phone}}. &nbsp; E: {{$school->email}}</h5>
-                <h5 class="text-red">URL:&nbsp; {{$school->website}}.</h5>
+                <h5 class="text-danger">URL:&nbsp; {{$school->website}}.</h5>
 
                 </div>
-                <div class="col-md-2 col-sm-2">
-                <h5 class="pt-2 text-danger">Results Sheet</h5>
+                <div class="col-sm-2">
+                <h5 class="pt-2 text-danger" style="align-self: flex-end">Results Sheet</h5>
                 </div>
                 </div>
                 <div>
-                <div class=" col col-md-2 float-right" >
-                <center>
-                    <image-loader
-                        src="`/img/profile/{{$user->photo}}`"
 
-                        placeholder="/img/profile.png"
-                         width="100px" height="100px"
-                         class="img-thumbnail img-result "
-                         />
+                <div class="col-sm-12 ">
 
-
-
-
-                </center>
-                </div>
-                </div>
-                <div class="col col-12 py-2 ">
-
-                <div class="row col-md-10">
-                <div class="col-md-6 py-2">
+                <div class="row col-sm-10">
+                <div class="col-sm-6 py-2">
                 <h5><b>Name:</b>&nbsp; {{$summary->student->surname}}&nbsp; {{$summary->student->first_name}} &nbsp; {{$summary->student->middle_name?$summary->student->middle_name:''}}</h5>
                 <h5><b>class:&nbsp;</b> {{$report->levels->level_name}}&nbsp;{{$arm->name}}</h5>
                 <h5><b>Gender:&nbsp;</b> {{$summary->student->gender?$summary->student->gender:'-----------'}} </h5>
@@ -73,7 +130,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <hr>
                 <!-- <h5 ><b>Portal ID:</b>&nbsp; </h5> -->
                 </div>
-                <div class="col-md-6">
+                <div class="col-sm-6">
                 <h4 class="text-primary text-uppercase  "><b>&nbsp;</b> {{$report->header?$report->header:''}}</h4>
                 <hr class="text-danger mb-1">
                 <h5 ><b>Term:&nbsp;</b> {{$report->terms->name}}</h5>
@@ -85,23 +142,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
 
                 </div>
-                <div class="  table-responsive py-2"  >
-                <table class="table table-bordered text-capitalize   text-nowrap">
+                <div style="width: 100%">
+                <table >
                 <thead>
-                <tr class="text-center">
-                <th>S/N</th>
-                <th>Subject</th>
-                <th>Class <br>Work[2%]</th>
-                <th>Assignment<br>[2%]</th>
-                <th>Class<br>Test[5%]</th>
-                <th>Notes<br>[1%]</th>
-                <th>Weighted<br>Score[5%]</th>
-                <th>Mid-Term<br>[25%]</th>
-                <th>Exams<br>[70%]</th>
-                <th>Total<br>[100%]</th>
-                <th class="text-center"> Average <br>Score</th>
-                <th class="text-center">Position</th>
-                <th>Teacher's<br>Comment</th>
+                <tr>
+                <td>S/N</td>
+                <td>Subject</td>
+                <td>Class <br>Work[2%]</td>
+                <td>Assignment<br>[2%]</td>
+                <td>Class<br>Test[5%]</td>
+                <td>Notes<br>[1%]</td>
+                <td>Weighted<br>Score[5%]</td>
+                <td>Mid-Term<br>[25%]</td>
+                <td>Exams<br>[70%]</td>
+                <td>Total<br>[100%]</td>
+                <td > Average <br>Score</td>
+                <td >Position</td>
+                <td>Teacher's<br>Comment</td>
                 <!-- <th>Narration</th> -->
                 <!-- <th class="text-center " v-show="isAHScore"><div><span>HIGHEST<br> SCORE</span></div></th>
                 <th class="text-center" v-show="isASLScore"><div><span>LOWEST <br> SCORE</span></div></th> -->
@@ -124,9 +181,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <td>{{$score->mid_term}}</td>
                 <td>{{$score->exams}}</td>
                 <td>{{$score->total}}</td>
-                <td>{{$score->arm_avg_score}}</td>
-                <td>{{$score->arm_subj_position}}</td>
-                <td>{{$score->grade}}</td>
+                <td>{{$score->arm_avg_score?$score->arm_avg_score:'-'}}</td>
+                <td>{{$score->arm_subj_position?$score->arm_subj_position:'-'}}</td>
+                <td>{{$score->grade?$score->grade:'-'}}</td>
 
 
 
@@ -237,8 +294,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
         <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
+    <!-- /.container-fluid -->
+
     <!-- /.content -->
 
   <!-- Main Footer -->

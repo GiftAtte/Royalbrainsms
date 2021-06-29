@@ -76,12 +76,12 @@
 <th>S/N</th>
 <th>Subject</th>
 <th>TOTAL</th>
-<th>AVERAGE<br>SCORE</th>
+<th> CLASS AVERAGE<br>SCORE</th>
 <th>GRADE</th>
 <!-- <th>NARRATION</th> -->
 <th>POSITION</th>
-<th class="text-center " v-show="isAHScore"><div><span>HIGHEST<br> SCORE</span></div></th>
-<th class="text-center" v-show="isASLScore"><div><span>LOWEST <br> SCORE</span></div></th>
+<!-- <th class="text-center " v-show="isAHScore"><div><span>HIGHEST<br> SCORE</span></div></th>
+<th class="text-center" v-show="isASLScore"><div><span>LOWEST <br> SCORE</span></div></th> -->
 
 </tr>
 </thead>
@@ -95,8 +95,8 @@
 <td>{{score.grade}}</td>
 <!-- <td>{{score.narration}}</td> -->
 <td>{{score.arm_subj_position}}</td>
-<td v-show="isAHScore">{{score.arm_max_score}}</td>
-<td v-show="isASLScore">{{score.arm_min_score}}</td>
+<!-- <td v-show="isAHScore">{{score.arm_max_score}}</td>
+<td v-show="isASLScore">{{score.arm_min_score}}</td> -->
 </tr>
 
 

@@ -872,7 +872,7 @@ public function computeSummary($report_id){
       $report=Report::findOrFail($report_id);
    // $aStudents=Student::where('class_id',$report->level_id)->pluck('id');
     $is_history=Level::findOrFail($report->level_id)->is_history;
-    $students=Mark::whereNotIn('average',[0])->where('report_id',$report_id)->get();
+    $students=Mark::whereNotIn('total',[0])->where('report_id',$report_id)->get();
 if(count($students)>0){
     CheckResult::create([
         'report_id'=>$report_id,
