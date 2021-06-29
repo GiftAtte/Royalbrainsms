@@ -11,7 +11,7 @@ use App\Staff;
 use App\Level;
 use App\Imports\UsersImport;
 use Illuminate\Support\Facades\Hash;
-use Excel;
+//use Excel;
 
 class UserController extends Controller
 {
@@ -249,7 +249,7 @@ class UserController extends Controller
 
 
 
-   return response()->json( Excel::import(new UsersImport, $request->file('selected_file')));
+  // return response()->json( Excel::import(new UsersImport, $request->file('selected_file')));
 
 }
 }
