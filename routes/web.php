@@ -42,6 +42,6 @@ Route::post('/downloads/{id}',function(){
     return view('welcome');
 });
 //Route::get('/users',[UserController::class,'index']);
-Route::get('{path}',[UserController::class,'index'])->where( 'path', '.*' );
+Route::get('{path}','HomeController@index')->where( 'path', '.*' );
 
 
