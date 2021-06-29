@@ -4,7 +4,7 @@ use App\Events\DemoEvent;
 use App\Mail\SendResults;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
