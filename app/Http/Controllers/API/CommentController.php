@@ -16,7 +16,7 @@ class CommentController extends Controller
     public function index()
     {
 
-        return Comment::where('school_id',auth('api')->user()->school_id)
+        return Comment::with('gradinggroup')->where('school_id',auth('api')->user()->school_id)
         ->latest()->paginate(10);
     }
 
@@ -34,6 +34,7 @@ class CommentController extends Controller
             'upper_bound' => $request->upper_bound,
             'upper_bound' => $request->lower_bound,
             'comment' => $request->comment,
+            'group_id' => $request->group_id,
 
             'school_id' => auth('api')->user()->school_id,
         ]);

@@ -799,7 +799,7 @@ public function studenResult( $report_id, $student_id=null)
     ['student_id',$student_id],['type','None Academic']])->get();
 
     if($summary){
-      $principal_comment=$this->principalComment($summary?$summary->average_scores:0);
+      $principal_comment=$this->principalComment($summary?$summary->average_scores:0,$report->gradinggroup_id);
        $staff_comment=$this->staffComment($student_id,$report_id);
         $LDomain=$this->learningDomain($student_id,$report_id);
 
@@ -814,8 +814,8 @@ public function studenResult( $report_id, $student_id=null)
 
 
 
-public function principalComment($average){
-    $comment=Comment::where([['lower_bound','<=',$average],['upper_bound','>=',$average],['school_id',auth('api')->user()->school_id]])->first();
+public function principalComment($average,$gradinggroup_id){
+    $comment=Comment::where([['lower_bound','<=',$average],['upper_bound','>=',$average],['school_id',auth('api')->user()->school_id]],['group_id',$gradinggroup_id])->first();
      if($comment){
 
     return $comment->comment;

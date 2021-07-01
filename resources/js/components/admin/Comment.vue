@@ -40,6 +40,7 @@
                   <tbody>
                     <tr>
                         <th>C/ID</th>
+                         <th>Grading Group</th>
                         <th>Average Range</th>
                         <th>Comment</th>
 
@@ -50,6 +51,7 @@
                   <tr v-for="comment in comments.data" :key="comment.id">
 
                     <td>{{comment.id}}</td>
+                    <td>{{comment.gradinggroup?comment.gradinggroup.group_name:'-'}}</td>
                     <td>{{comment.lower_bound}} - {{comment.upper_bound}} </td>
                     <td>{{comment.comment}}</td>
 
@@ -97,7 +99,25 @@
                 </div>
        <form @submit.prevent="editmode ? updateComment() : createComment()">
       <div class="modal-body">
+                    <div class="form-group">
 
+                     <select
+                    name="group_id"
+                    id="group_id"
+                    class="form-control"
+                    v-model="form.group_id"
+                    :class="{ 'is-invalid': form.errors.has('group_id')}"
+
+                  >
+                    <option value selected>Select Grading Group</option>
+                    <option
+                      v-for="group in gradinggroup"
+                      :key="group.id"
+                      :value="group.id"
+                    >{{group.group_name}}</option>
+                  </select>
+             <has-error :form="form" field="group_id"></has-error>
+                 </div>
                 <div class="form-group">
                  <label>Lower Bound</label>
                 <input type="number" name="lower_bound" placeholder="Enter From" id="lower_bound" step="0.01"
@@ -155,12 +175,14 @@
                 editmode: false,
 
                 grades:{},
+                gradinggroup:{},
                 comments:{},
                   activate:false,
                   form: new Form({
                     id : '',
                     lower_bound:'',
                     upper_bound:'',
+                     group_id:'',
                   comment:''
 
 
@@ -265,7 +287,10 @@
 
 
         },
-
+getGradinggroup(){
+                axios.get('api/gradinggroup')
+                .then(res=>this.gradinggroup=res.data)
+        },
         isActive(id){
             if(id===window.user.school_id)
             {
@@ -294,7 +319,7 @@
                this.loadComment();
            });
         //    setInterval(() => this.loadUsers(), 3000);
-
+ this.getGradinggroup()
         }
 
     }

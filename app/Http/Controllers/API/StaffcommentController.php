@@ -21,11 +21,11 @@ class StaffcommentController extends Controller
    public function index()
    {
            $user=auth('api')->user();
-           if($user->type==='tutor'){
-               $level=Has_arm::where('staff_id',$user->staff_id)->first();
-            return Staff_comment::where([['school_id',$user->school_id],['level_id',$level->level_id],['arm_id',$level->arms_id]])
-            ->latest()->paginate(10);
-           }
+        //    if($user->type==='tutor'){
+        //        $level=Has_arm::where('staff_id',$user->staff_id)->first();
+        //     return Staff_comment::where([['school_id',$user->school_id],['level_id',$level->level_id],['arm_id',$level->arms_id]])
+        //     ->latest()->paginate(10);
+        //    }
        return Staff_comment::where('school_id',auth('api')->user()->school_id)
        ->latest()->paginate(10);
    }
