@@ -32,7 +32,7 @@ class CommentController extends Controller
         ]);
         return Comment::create([
             'upper_bound' => $request->upper_bound,
-            'upper_bound' => $request->lower_bound,
+            'lower_bound' => $request->lower_bound,
             'comment' => $request->comment,
             'group_id' => $request->group_id,
 
