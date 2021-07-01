@@ -252,7 +252,7 @@
  </table>
 </div>
 <div class="  col-md-4  " v-show="isGFormula">
-<table class=" table table-bordered table-sm  font-weight-bold text-uppercase myTable table-striped" width="100%">
+<table class=" table table-bordered table-sm   table-striped" width="100%">
 <tr>
 <th colspan="3" class="text-center text-primary" >Grading Key</th>
 </tr>

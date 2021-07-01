@@ -286,7 +286,7 @@
             deleteSubject_list(id){
 
 
- if(!this.$gate.isAdmin()){
+ if(this.$gate.isAdmin()){
                 swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
