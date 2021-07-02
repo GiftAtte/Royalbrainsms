@@ -328,10 +328,11 @@ setFile () {
           axios.post('/api/importExcel',formData)
            .then(res=>{
 
-               toast.fire({
-                        type: 'success',
-                        title: 'Scores successfully uploaded'
-                        })
+               swal.fire(
+                        'success',
+                        'Uploaded Successfully.',
+                        'success'
+                        )
                          console.log(res.data)
                     this.$Progress.finish();
                this.isLoading=false;
