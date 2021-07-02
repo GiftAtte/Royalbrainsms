@@ -4,8 +4,6 @@ namespace App\Imports;
 
 use App\Mark;
 use App\Report;
-use App\CheckResult;
-use App\Markcheck;
 use App\Level_sub;
 use App\Http\Controllers\API\ScoreController;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -28,23 +26,6 @@ class MarksImport implements ToModel, WithHeadingRow
         $gradding=$scoreController->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
 
         $subject_type=Level_sub::where([['level_id',$row['level_id']],['subject_id',$row['subjects_id']]])->first();
-
-
-
-        //$mark=Mark::latest()->first();
-        Markcheck::create([
-         'report_id'=>$row['report_id'],
-         'subject_id'=>$row['subjects_id'],
-         'school_id'=>auth('api')->user()->school_id,
-     ]);
-
-     CheckResult::create([
-      'report_id'=>$row['report_id'],
-      'is_history'=>$row['is_history'],
-        'school_id'=>auth('api')->user()->school_id,
-        'compute_summary'=>0
-     ]);
-
         return new Mark([
 
              'student_id'=>$row['student_id'],
