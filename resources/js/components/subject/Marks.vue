@@ -341,11 +341,12 @@ setFile () {
            })
            .catch(err=>{
                this.$Progress.fail();
-              toast.fire({
-                        type: 'failure',
-                        title: 'there was error uploading the file'+err
-                        })
-                         console.log(err)
+              swal.fire(
+                        'error',
+                        'Errors uploadind.'+err,
+                        'error'
+                        )
+                         this.isLoading=false;
            })
 
 

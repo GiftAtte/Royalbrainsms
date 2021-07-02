@@ -27,11 +27,11 @@ class MarksObserver implements ShouldQueue
         $report=Report::findOrFail($markcheck->report_id);
         $students=Mark::whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->get();
        $scoreController=new ScoreController();
-       $max_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->max('total');
-       $min_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->min('total');
+       //$max_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->max('total');
+       //$min_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->min('total');
        //$class_scores=(DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->select('total')->groupBy('total')->get())->toArray();
 
-       $class_avg_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->avg('total');
+      // $class_avg_score=DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id]])->avg('total');
 
        // positioning
       // $class_sub_position='';
@@ -46,10 +46,10 @@ class MarksObserver implements ShouldQueue
     $arm_max_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->max('total');
    $arm_min_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->min('total');
     $arm_avg_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->avg('total');
-     $annual_total=DB::table('marks')->whereNotIn('annual_score',[0])->where([['subject_id',$markcheck->subject_id],['session_id',$report->session_id],['student_id',$student->student_id]])->sum('annual_score');
+     //$annual_total=DB::table('marks')->whereNotIn('annual_score',[0])->where([['subject_id',$markcheck->subject_id],['session_id',$report->session_id],['student_id',$student->student_id]])->sum('annual_score');
      //$annual_average=DB::table('mark')->whereNotIn('annual_score',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->sum('annual_score');
 
-     $annual_grade=$this->grade($annual_total,$report->gradinggroup_id,$markcheck->school_id);
+    // $annual_grade=$this->grade($annual_total,$report->gradinggroup_id,$markcheck->school_id);
 
      //$class_sub_position=$subject_positions['position'];
        $arm_sub_position= $subject_position_arm['position'];
@@ -72,23 +72,23 @@ if($cummulative_avg){
                             'arm_max_score'=>round($arm_max_score,2),
                             'cummulative_grade'=>$cGradding['grade'],
                             'cummulative_narration'=>$cGradding['narration'],
-                            'annual_total'=>round($annual_total,2),
-                            'annual_grade'=>$annual_grade['grade'],
-                            'annual_narration'=>$annual_grade['narration'],
+                          //  'annual_total'=>round($annual_total,2),
+                           // 'annual_grade'=>$annual_grade['grade'],
+                           // 'annual_narration'=>$annual_grade['narration'],
                            // 'annual_position'=>$annual_position['position'],
 
        ]
      );
 
-      $mark=Mark::where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['student_id',$student->student_id]])->first();
-      $annual_total=DB::table('marks')->whereNotIn('annual_score',[0])->where([['subject_id',$markcheck->subject_id],['session_id',$report->session_id],['student_id',$student->student_id]])->avg('annual_total');
-     // $annual_position=DB::table('marks')->whereNotIn('annual_score',[0])->where([['subject_id',$markcheck->subject_id],['session_id',$report->session_id],['student_id',$student->student_id]])->avg('annual_total');
-      $annual_position=$scoreController->getSubjectAnnualRank($student->student_id,$student->report_id,$markcheck->subject_id,$student->arm_id);
+    //   $mark=Mark::where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['student_id',$student->student_id]])->first();
+    //   $annual_total=DB::table('marks')->whereNotIn('annual_score',[0])->where([['subject_id',$markcheck->subject_id],['session_id',$report->session_id],['student_id',$student->student_id]])->avg('annual_total');
+    //  // $annual_position=DB::table('marks')->whereNotIn('annual_score',[0])->where([['subject_id',$markcheck->subject_id],['session_id',$report->session_id],['student_id',$student->student_id]])->avg('annual_total');
+    //   $annual_position=$scoreController->getSubjectAnnualRank($student->student_id,$student->report_id,$markcheck->subject_id,$student->arm_id);
 
-       $mark->annual_position=$annual_position['position'];
-       $mark->annual_total=$annual_total;
+    //    $mark->annual_position=$annual_position['position'];
+    //    $mark->annual_total=$annual_total;
 
-     $mark->save();
+    //  $mark->save();
    }}
    }
 
