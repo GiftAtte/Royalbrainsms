@@ -60,7 +60,8 @@ if($cummulative_avg){
        ->where([['report_id', $markcheck->report_id],['student_id',$student->student_id],['subject_id',$markcheck->subject_id]])
        ->updateOrInsert(
          ['report_id' => $markcheck->report_id, 'student_id' => $student->student_id],
-         ['class_avg_score' =>round($class_avg_score,2),
+         [
+             //'class_avg_score' =>round($class_avg_score,2),
                    'class_subj_position'=> '-',
                    'arm_subj_position'=>$arm_sub_position,
                  'max_class_score'=>$max_score,

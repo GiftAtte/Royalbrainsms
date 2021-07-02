@@ -26,6 +26,8 @@ class MarksImport implements ToModel, WithHeadingRow
         $gradding=$scoreController->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
 
         $subject_type=Level_sub::where([['level_id',$row['level_id']],['subject_id',$row['subjects_id']]])->first();
+
+
         return new Mark([
 
              'student_id'=>$row['student_id'],
