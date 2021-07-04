@@ -14,7 +14,7 @@ use App\Level;
 use App\Level_history;
 use Illuminate\Contracts\Queue\ShouldQueue;
 ini_set('max_execution_time', '1000');
-class ResultsObserver implements ShouldQueue
+class ResultsObserver //implements ShouldQueue
 {
 
     public function created(CheckResult $checkreport)

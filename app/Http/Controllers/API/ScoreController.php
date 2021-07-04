@@ -856,12 +856,12 @@ public function importExcel( Request $request){
     'school_id'=>auth('api')->user()->school_id,
 ]);
 
-CheckResult::create([
- 'report_id'=>$mark->report_id,
- 'is_history'=>$mark->is_history,
-   'school_id'=>auth('api')->user()->school_id,
-   'compute_summary'=>$mark->compute_summary
-]);
+// CheckResult::create([
+//  'report_id'=>$mark->report_id,
+//  'is_history'=>$mark->is_history,
+//    'school_id'=>auth('api')->user()->school_id,
+//    'compute_summary'=>$mark->compute_summary
+// ]);
    return 'done';
 }
 
