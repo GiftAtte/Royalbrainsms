@@ -12,7 +12,7 @@ use App\Report;
 use App\Grading;
 use Illuminate\Contracts\Queue\ShouldQueue;
 ini_set('max_execution_time', '1000');
-class MarksObserver implements ShouldQueue
+class MarksObserver //implements ShouldQueue
 
 {
     /**
