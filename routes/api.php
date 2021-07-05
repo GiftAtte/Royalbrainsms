@@ -99,7 +99,7 @@ Route::get('teacher_subjects/{id}', 'API\TeachersController@loadSubjects');
  Route::get('load_report', 'API\ScoreController@index');
  Route::get('score_template/{report_id}/{subject_id}','API\ScoreController@score_template');
  Route::get('backup/{report_id}/{subject_id}','API\ScoreController@score_backup');
- Route::post('computeSummary/{report_id}','API\ScoreController@computeSummary');
+ Route::post('computeSummary/{report_id}/{arm_id}','API\ScoreController@computeSummary');
 
 
  //Chart Rooutes

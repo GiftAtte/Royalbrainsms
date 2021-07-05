@@ -69,7 +69,7 @@
                      </td>
 
 <td v-show="$gate.isAdmin()" >
-    <button v-show="$gate.isAdminOrTutor()" type="btn" class="btn btn-success btn-sm mr-2" @click="computeSummary(report.id)">Compute Summary</button>
+    <button v-show="$gate.isAdminOrTutor()" type="btn" class="btn btn-success btn-sm mr-2" @click="loadArms(report.id)">Compute Summary</button>
 <toggle-button @change="activateReport(report.id)"
 v-show="$gate.isAdmin()"
                          :label="true"
@@ -265,25 +265,37 @@ v-show="$gate.isAdmin()"
 
 
 
-<div class="modal fade" id="activationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="summaryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="example">Activate Result</h5>
+        <h5 class="modal-title" id="example">computeSummary</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-       <form @submit.prevent="getActivated()">
+       <form @submit.prevent="computeSummary">
       <div class="modal-body">
 
-                <div class="form-group">
-                    <input class="form-control" type="text" placeholder="Enter Activation Key"
-                     :class="{'is-invalid':activationForm.errors.has('activation_key')}"
-                      v-model="activationForm.activation_key"
-                    >
-                      <has-error :form="activationForm" field="activation_key"></has-error>
-                </div>
+
+             <div class="form-group">
+
+                     <select
+                    name="level_id"
+                    id="level_id"
+                    class="form-control"
+                    v-model="computeForm.arm_id"
+
+                  >
+                    <option value selected>Select Level</option>
+                    <option
+                      v-for="arm in arms"
+                      :key="arm.arms.id"
+                      :value="arm.arms.id"
+                    >{{arm.arms.name}}</option>
+                  </select>
+
+                 </div>
 
 
 
@@ -291,7 +303,7 @@ v-show="$gate.isAdmin()"
 
         <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button  class="btn btn-primary">Save changes</button>
+        <button  class="btn btn-primary">Compute</button>
       </div>
 </form>
 </div>
@@ -328,6 +340,7 @@ v-show="$gate.isAdmin()"
                 isActivationKey:false,
                 isStudent:window.user.student_id,
                 reports:{},
+                arm_id:'',
 
                 form: new Form({
                     id:'',
@@ -347,8 +360,8 @@ v-show="$gate.isAdmin()"
 
                 }),
 
-                activationForm:new Form({
-                   activation_key:'',
+                computeForm:new Form({
+                  arm_id:'',
                    report_id:''
                 })
 
@@ -523,17 +536,23 @@ v-show="$gate.isAdmin()"
 .catch(err=>{
       swal.fire(
                         'fail!',
-                        'server errors',
+                        err,
                         'failure'
                         )
 
 
 })
 
-        },loadArms(){
-       axios.get('/api/loadArms/'+this.form.level_id).then(res=>{
-           this.arms=res.data
+        },
 
+
+        loadArms(id){
+       axios.get('/api/getArms/'+id).then(res=>{
+           this.arms=res.data
+           this.computeForm.report_id=id;
+
+           $('#summaryModal').modal('show');
+              console.log(res.data)
        })},
 
 
@@ -541,11 +560,12 @@ v-show="$gate.isAdmin()"
                 axios.get('api/gradinggroup')
                 .then(res=>this.gradinggroup=res.data)
         },
-             computeSummary(reportId){
+             computeSummary(){
                  this.setLoading();
-axios.post('api/computeSummary/'+reportId)
+axios.post('api/computeSummary/'+this.computeForm.report_id+'/'+this.computeForm.arm_id)
                 .then(res=>{
            if(res.data.message==='success'){
+                $('#summaryModal').modal('hide');
              swal.fire(
                         'success',
                         'Summary in progress, check results in a min',

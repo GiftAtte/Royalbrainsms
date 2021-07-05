@@ -607,7 +607,7 @@ return $this->Rank($positions,$student_id);
     }
 
     // Class and arm positioning ===sorting students
-  public function studentPosition($id,$report_id,$arm=false){
+  public function studentPosition($id,$report_id,$arm=true){
   $report=Report::findOrFail($report_id);
   $student=Student::findOrFail($id);
   $is_history=Level::findOrFail($report->level_id)->is_history;
@@ -798,7 +798,7 @@ public function studenResult( $report_id, $student_id=null)
     $noneAcademic=Mark::whereNotIn('total',[0])->whereNotIn('class_avg_score',[0])->with('subjects')->where([['report_id',$report_id],
     ['student_id',$student_id],['type','None Academic']])->get();
 
-    if($summary){
+
       $principal_comment=$this->principalComment($summary?$summary->average_scores:0,$report->gradinggroup_id);
        $staff_comment=$this->staffComment($student_id,$report_id);
         $LDomain=$this->learningDomain($student_id,$report_id);
@@ -806,9 +806,8 @@ public function studenResult( $report_id, $student_id=null)
         return response()->json(['principal_comment'=>$principal_comment,'scores'=>$scores,'summary'=>$summary,'user'=>$user,'pastTotal'=>$pastTotalarray,
     'comment'=>$comment,'signature'=>$principal_sign, 'staff_comment'=>$staff_comment,
      'report'=>$report,'arm'=>$arm,'gradings'=>$grading,'noneAcademic'=>$noneAcademic,'LDomain'=>$LDomain]);
-    }else{
-        return ['Not_found'=>'No reusult found'];
-    }
+
+
 
 }
 
@@ -867,29 +866,67 @@ public function importExcel( Request $request){
 
 
 
-public function computeSummary($report_id){
-     // $school_id=auth('api')->user()->school_id;
-      $report=Report::findOrFail($report_id);
-   // $aStudents=Student::where('class_id',$report->level_id)->pluck('id');
-    $is_history=Level::findOrFail($report->level_id)->is_history;
-    $students=Mark::whereNotIn('total',[0])->where('report_id',$report_id)->get();
+public function computeSummary($report_id,$arm_id){
+
+
+
+
+
+
+
+        $aStudents=null;
+        $report=Report::findOrFail($report_id);
+       $is_history=Level::findOrFail($report->level_id)->is_history;
+       if($is_history>0){
+        $aStudents=Level_history::where([['level_id',$report->level_id],['arm_id',$arm_id]])->pluck('student_id');
+
+       }else{
+        $aStudents=Student::where([['class_id',$report->level_id],['arm_id',$arm_id]])->pluck('id');
+       }
+
+               $students=Mark::whereNotIn('total',[0])->where('report_id',$report_id)
+               ->whereIn('student_id',$aStudents)
+               ->select('student_id','arm_id')->distinct('student_id')->get();
+
+
 if(count($students)>0){
-    CheckResult::create([
-        'report_id'=>$report_id,
-        'is_history'=> $is_history,
-          'school_id'=>auth('api')->user()->school_id,
-          'compute_summary'=>1
-       ]);
-       return ['message'=>'success'];
-    }else
+               foreach($students as $student){
+                    $this->resultSummary($report_id,$student->student_id,$arm_id,$report->school_id);
+                  }
+               // $this->resultSummary($checkreport->report_id,$checkreport->is_history);
+
+  return ['message'=>'success'];
+    //     }else
+                }else{
+                    return['message'=>'no record'];
+                }
+}
 
 
-    // foreach($students as $student){
-    //  $this->resultSummary($report_id,$student->student_id,$student->arm_id,$school_id);
-    //   }
-   return ['message'=>'no record'];
 
-    }
+
+//      // $school_id=auth('api')->user()->school_id;
+//       $report=Report::findOrFail($report_id);
+//    // $aStudents=Student::where('class_id',$report->level_id)->pluck('id');
+//     $is_history=Level::findOrFail($report->level_id)->is_history;
+//     $students=Mark::whereNotIn('total',[0])->where('report_id',$report_id)->get();
+// if(count($students)>0){
+//     CheckResult::create([
+//         'report_id'=>$report_id,
+//         'is_history'=> $is_history,
+//           'school_id'=>auth('api')->user()->school_id,
+//           'compute_summary'=>1
+//        ]);
+//        return ['message'=>'success'];
+//     }else
+
+
+//     // foreach($students as $student){
+//     //  $this->resultSummary($report_id,$student->student_id,$student->arm_id,$school_id);
+//     //   }
+//    return ['message'=>'no record'];
+
+//}
 
 
 
