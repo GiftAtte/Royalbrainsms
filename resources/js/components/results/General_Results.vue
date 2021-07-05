@@ -47,9 +47,7 @@
 
 <div class="row col-md-10">
 <div class="col-md-6 py-2">
-<h5><b>Name:</b>&nbsp; {{summary?summary.student.surname:user.name}}&nbsp; {{summary?summary.student.first_name:''}} &nbsp;
- <!-- {{summary.student.middle_name?summary.student.middle_name:''}} -->
- </h5>
+<h5><b>Name:</b>&nbsp; {{summary.student.surname}}&nbsp; {{summary.student.first_name}} &nbsp; {{summary.student.middle_name?summary.student.middle_name:''}}</h5>
 <h5><b>class:&nbsp;</b> {{report.levels.level_name}}&nbsp;{{arm.name}}</h5>
 <h5><b>Gender:&nbsp;</b> {{'-----------'}} </h5>
 <h5 ><b>Dob:</b>&nbsp; {{'-------------'}}</h5>
@@ -211,7 +209,7 @@
 
 
 
-<div class="row col-md-12 py-1" v-if="summar">
+<div class="row col-md-12 py-1">
 <div class="col-md-4 " v-show="isRSummary">
  <table class="table table-bordered table-sm font-weight-bold  table-striped" >
  <tr >
@@ -226,22 +224,22 @@
  <td v-show="isCAPosition" >Position In Arm</td><td v-show="isCAPosition" >{{summary.arm_position}}</td>
  </tr>
  <tr>
- <td>Total score</td><td>{{summary?summary.total_scores:''}}</td>
+ <td>Total score</td><td>{{summary.total_scores}}</td>
  </tr>
  <tr>
- <td>Average score</td><td>{{summary?summary.average_scores	:''}}</td>
+ <td>Average score</td><td>{{summary.average_scores	}}</td>
  </tr>
  <tr>
- <td>Cummulative Avg score</td><td>{{summary?summary.cummulative_average:''	}}</td>
+ <td>Cummulative Avg score</td><td>{{summary.cummulative_average	}}</td>
  </tr>
  <tr>
- <td>Grade</td><td>{{summary?summary.grade:''}}</td>
+ <td>Grade</td><td>{{summary.grade}}</td>
  </tr>
  <tr>
- <td>Narration<td>{{summary?summary.narration:''}}</td>
+ <td>Narration<td>{{summary.narration}}</td>
  </tr>
  <tr>
- <td>Total Students in Arm</td><td>{{summary?total_studentssummary.total_students:''}}</td>
+ <td>Total Students in Arm</td><td>{{summary.total_students}}</td>
  </tr>
  <tr>
  <td>Progress status</td><td>{{comment?comment.comment:''}}</td>
@@ -309,7 +307,6 @@
 
 </div>
 </div>
-<div v-else> Summary Not computed</div>
 <div class="  card-body row ">
 <div v-show="isPComment" class=" row col-6"><span><b>Principal's Comment:&nbsp;</b>{{principal_comment?principal_comment:''}}</span></div>
 <div v-show="isTComment" class=" row col-6 "><span><b>Teacher's Comment:&nbsp;</b >{{staff_comment?staff_comment:''}}</span></div>
