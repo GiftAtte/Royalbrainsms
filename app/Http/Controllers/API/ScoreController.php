@@ -797,7 +797,7 @@ public function studenResult( $report_id, $student_id=null)
    $summary=Result::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
    $scores=Mark::whereNotIn('total',[0])->with('subjects')->where([['report_id',$report_id],
     ['student_id',$student_id],['type','Academic']])->distinct('subject_id')->get();
-    $noneAcademic=Mark::whereNotIn('total',[0])->whereNotIn('arm_avg_score',[0])->with('subjects')->where([['report_id',$report_id],
+    $noneAcademic=Mark::whereNotIn('total',[0])->with('subjects')->where([['report_id',$report_id],
     ['student_id',$student_id],['type','None Academic']])->get();
 
 
