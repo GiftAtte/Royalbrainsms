@@ -162,12 +162,12 @@ public function AnnualScore($score,$term_id){
      'school_id'=>auth('api')->user()->school_id,
  ]);
 
- CheckResult::create([
-  'report_id'=>$request->report_id,
-  'is_history'=>0,
-    'school_id'=>auth('api')->user()->school_id,
-    'compute_summary'=>1
- ]);
+//  CheckResult::create([
+//   'report_id'=>$request->report_id,
+//   'is_history'=>0,
+//     'school_id'=>auth('api')->user()->school_id,
+//     'compute_summary'=>1
+//  ]);
 
     return ['message'=>'success'];
     }
@@ -376,7 +376,16 @@ return ['message'=>'success'];
     public function resultSummary($report_id,$student_id,$arm_id,$school_id)
     {
         Result::where([['report_id',$report_id],['student_id',$student_id]])->delete();
-      $report=Report::findOrFail($report_id);
+
+        // $avg=DB::table('marks')->whereNotIn('total',[0])
+        // -> where([['student_id',$student->id],['type','Academic'],
+        // ['report_id',$report_id]
+
+        // ])->avg('total');
+
+
+
+        $report=Report::findOrFail($report_id);
 
       $total_student=Student::where([['class_id',$report->level_id],['arm_id',$arm_id]])->count();
     //    $students=Mark::where('report_id',$report_id)->whereNotIn('total',[0])
@@ -409,7 +418,8 @@ return ['message'=>'success'];
                                 'total_students'=>$total_student,
                                 'cummulative_average'=>round($cummulative_avg,2),
                                 'class_position'=>'-',
-                                'arm_position'=>$this->studentPosition($student_id,$report_id,true),
+                                'arm_position'=>'',
+                                'arm_id'=>$arm_id,
                        ]
                     );
 }
@@ -636,7 +646,7 @@ return $this->Rank($positions,$student_id);
   ])
   ->select(DB::raw('avg(total) as Total'),'student_id')
 
-   ->groupBy('student_id')
+   ->orderBy('Total','DESC')
   ->get();
 
   foreach($avgScores as $avgScore){
@@ -895,6 +905,28 @@ if(count($students)>0){
                foreach($students as $student){
                     $this->resultSummary($report_id,$student->student_id,$arm_id,$report->school_id);
                   }
+
+                  $collect=collect(DB::table('results')->where([['average_scores','>',0],['report_id',$report_id],['arm_id',$arm_id]])
+                  ->select('total_scores as total','student_id')->orderBy('total','DESC')->get());
+
+                 // ['report_id',$report_id]
+
+                 // ])->avg('total');
+                         foreach($students as $student){
+                           //$collect=collect(collect($avgArr))->orderBy('total','DESC')->all();
+                               //$data=$collect->orderBy('total','DESC')->all();
+                           //if($armScores=$collect->where('arm_id',$student->arm_id)->get()){;
+                           $score=DB::table('results')->where([['student_id',$student->student_id],['report_id',$report_id]])->first();
+
+                          if($score){
+                           Result::where([['student_id',$student->student_id],['report_id',$report_id]])
+                           ->update([
+                               'arm_position'=>$this->getRanking($collect,$score->total_scores)
+                           ]);
+                         }}
+
+
+
                // $this->resultSummary($checkreport->report_id,$checkreport->is_history);
 
   return ['message'=>'success'];

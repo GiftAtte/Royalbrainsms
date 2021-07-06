@@ -41,11 +41,13 @@ class MarksObserver //implements ShouldQueue
      foreach($students as $student){
         //   $score=Mark::where([['student_id',$student->student_id],['report_id',$student->report_id],['subject_id',$student->subject_id]])->first();
         //   $arm_scores=(DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id],['arm_id',$student->arm_id]])->select('total')->groupBy('total')->get())->toArray();
+        $collection = collect(Mark::where([['report_id',$student->report_id],['subject_id',$markcheck->subject_id],['arm_id',$student->arm_id],['total','>',0]])
+                  ->select('total','student_id')->orderBy('total', 'DESC')->get());
 
     $cummulative_avg=DB::table('marks')->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->avg('total');
     $grand_total=DB::table('marks')->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->sum('total');
    // $subject_positions=$scoreController->getSubjectRank($student->student_id,$student->report_id,$markcheck->subject_id);
-    $subject_position_arm=$scoreController->getSubjectRank($student->student_id,$student->report_id,$markcheck->subject_id,$student->arm_id);
+    $subject_position_arm=$scoreController->getRanking($collection,$student->total);
     $arm_max_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->max('total');
    $arm_min_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->min('total');
     $arm_avg_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->avg('total');
@@ -55,7 +57,7 @@ class MarksObserver //implements ShouldQueue
     // $annual_grade=$this->grade($annual_total,$report->gradinggroup_id,$markcheck->school_id);
 
      //$class_sub_position=$subject_positions['position'];
-       $arm_sub_position= $subject_position_arm['position'];
+       $arm_sub_position= $subject_position_arm;
               $cGradding=$scoreController->grade($cummulative_avg,$report->graddinggroup_id,$markcheck->school_id);
 
 if($cummulative_avg){

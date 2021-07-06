@@ -11,10 +11,10 @@ class Result extends Model
     protected $fillable=[
         'student_id','report_id','total_scores','narration',
         'grade','average_scores','total_students','level_id',
-        'cummulative_average','arm_position','class_position'
-        
+        'cummulative_average','arm_position','class_position','arm_id'
+
     ];
-    
+
         public function student()
         {
             return $this->belongsTo('App\Student', 'student_id', 'id');
@@ -24,6 +24,6 @@ class Result extends Model
         {
             return $this->belongsTo('App\Report', 'report_id', 'id');
         }
-        
-    
+
+
 }

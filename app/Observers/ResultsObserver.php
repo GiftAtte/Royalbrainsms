@@ -14,11 +14,12 @@ use App\Level;
 use App\Level_history;
 use Illuminate\Contracts\Queue\ShouldQueue;
 ini_set('max_execution_time', '1000');
-class ResultsObserver implements ShouldQueue
+class ResultsObserver //implements ShouldQueue
 {
 
     public function created(CheckResult $checkreport)
     {             $scoreController=new ScoreController();
+                  // $avgArr=[];
         $aStudents=null;
         $report=Report::findOrFail($checkreport->report_id);
        $is_history=Level::findOrFail($report->level_id)->is_history;
@@ -31,12 +32,35 @@ class ResultsObserver implements ShouldQueue
                $students=Mark::whereNotIn('total',[0])->where('report_id',$checkreport->report_id)
                ->whereIn('student_id',$aStudents)
                ->select('student_id','arm_id')->distinct('student_id')->get();
+
                  if($checkreport->compute_summary>0){
 
 
                foreach($students as $student){
                     $scoreController->resultSummary($checkreport->report_id,$student->student_id,$student->arm_id,$checkreport->school_id);
-                  }
+
+
+                 // array_push($avgArr,['total'=>$avg,'student_id'=>$student->id]);
+                }
+
+
+                $collect=collect(DB::table('results')->where([['average_scores','>',0],['report_id',$checkreport->report_id]])
+         ->select('total_scores as total','student_id')->orderBy('total','DESC')->get());
+
+        // ['report_id',$report_id]
+
+        // ])->avg('total');
+                foreach($students as $student){
+                  //$collect=collect(collect($avgArr))->orderBy('total','DESC')->all();
+                      //$data=$collect->orderBy('total','DESC')->all();
+                  if($armScores=$collect->where('arm_id',$student->arm_id)->get()){;
+                     $score=$armScores->where('student_id',$student->id)->first();
+
+                  Result::where([['student_id',$student->id],['report_id',$checkreport->report_id]])
+                  ->update([
+                      'arm_position'=>$scoreController->getRanking($collect,$score)
+                  ]);
+                }}
                // $this->resultSummary($checkreport->report_id,$checkreport->is_history);
     }
     return 'done';
