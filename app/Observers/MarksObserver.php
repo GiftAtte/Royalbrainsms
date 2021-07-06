@@ -35,6 +35,9 @@ class MarksObserver //implements ShouldQueue
 
        // positioning
       // $class_sub_position='';
+    //   $collection = collect(Mark::where([['report_id',$request->report_id],['subject_id',$request->subject_id],['arm_id',$request->arm_id[0]],['total','>',0]])
+    //           ->select('total','student_id')->orderBy('total', 'DESC')->get());
+    //           return $this->getRanking($collection,$total);
      foreach($students as $student){
         //   $score=Mark::where([['student_id',$student->student_id],['report_id',$student->report_id],['subject_id',$student->subject_id]])->first();
         //   $arm_scores=(DB::table('marks')->whereNotIn('total',[0])->where([['report_id',$markcheck->report_id],['subject_id',$markcheck->subject_id],['arm_id',$student->arm_id]])->select('total')->groupBy('total')->get())->toArray();
@@ -196,7 +199,7 @@ public function grade($score,$gradinggroup_id,$school_id)
 
   return ["grade"=>$Grade,"narration"=>$narration,'credit_point'=>$credite_point,'total'=>$score];
 }}
-return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
+return ["grade"=>'Not Applied',"narration"=>'','credit_point'=>0,'total'=>0];
 }
 
   // Class and arm positioning ===sorting students

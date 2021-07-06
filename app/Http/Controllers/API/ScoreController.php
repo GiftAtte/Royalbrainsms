@@ -108,6 +108,7 @@ public function AnnualScore($score,$term_id){
             $subject_type=Level_sub::where([['level_id',$report->level_id],['subject_id',$request->subject_id]])->first();
             $term_id=$report->term_id;
 
+
             //return  $student_id;
             for($i=0;$i<$Nstudents; ++$i){
      Mark::where([['report_id',$request->report_id], ['student_id', $request->student_id[$i]],['subject_id',$request->subject_id]])->delete();
@@ -150,6 +151,7 @@ public function AnnualScore($score,$term_id){
             ]
            );
          //   Mark::insert($scores);
+
 
 
           }
@@ -795,7 +797,7 @@ public function studenResult( $report_id, $student_id=null)
    $summary=Result::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
    $scores=Mark::whereNotIn('total',[0])->with('subjects')->where([['report_id',$report_id],
     ['student_id',$student_id],['type','Academic']])->distinct('subject_id')->get();
-    $noneAcademic=Mark::whereNotIn('total',[0])->whereNotIn('class_avg_score',[0])->with('subjects')->where([['report_id',$report_id],
+    $noneAcademic=Mark::whereNotIn('total',[0])->whereNotIn('arm_avg_score',[0])->with('subjects')->where([['report_id',$report_id],
     ['student_id',$student_id],['type','None Academic']])->get();
 
 
@@ -1021,5 +1023,13 @@ public function default_sum($t1,$t2,$t3,$exams){
     return round($sum,2);
 }
 
+
+public function getRanking($scoresCollection,$total){
+        //return$scoresCollection;
+       //$orderResult=$scoresCollection->groupBy('total');
+     $data = $scoresCollection->where('total', $total);
+         $value = $data->keys()->first() + 1;
+    return $this->ordinal($value);
+ }
 
 }
