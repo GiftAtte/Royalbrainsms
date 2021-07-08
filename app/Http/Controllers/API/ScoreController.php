@@ -860,12 +860,16 @@ public function importExcel( Request $request){
    Excel::import(new MarksImport, $request->file('file'));
 
    // updating the marks table with subject positioning
-  $mark=Mark::latest()->first();
-   Markcheck::create([
-    'report_id'=>$mark->report_id,
-    'subject_id'=>$mark->subject_id,
-    'school_id'=>auth('api')->user()->school_id,
-]);
+//   $mark=Mark::latest()->first();
+//    Markcheck::create([
+//     'report_id'=>$mark->report_id,
+//     'subject_id'=>$mark->subject_id,
+//     'school_id'=>auth('api')->user()->school_id,
+// ]);
+
+MarksImport::MarksCompute();
+
+
 
 // CheckResult::create([
 //  'report_id'=>$mark->report_id,

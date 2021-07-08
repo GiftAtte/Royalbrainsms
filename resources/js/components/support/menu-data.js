@@ -100,6 +100,13 @@ export default {
         txt: 'Score Card',
         link: '/scores',
       },
+
+      {
+        type: 'link',
+        txt: 'Creche'+"'s Comments",
+        link: '/creche_comment',
+
+      },
       {
           type: 'link',
           txt: 'Backup Scores',
@@ -243,6 +250,20 @@ export default {
           link: '/teachers_comment',
 
         },
+        {
+            type: 'link',
+            txt: 'Creche Domain',
+            link: '/creche_domain',
+
+          },
+
+          {
+            type: 'link',
+            txt: 'Creche Ratings',
+            link: '/creche_ratings',
+
+          },
+
         {
           type: 'link',
           txt: 'Grading Group',
@@ -447,6 +468,12 @@ export default {
           link: '/tutor_comments',
 
         },
+        {
+            type: 'link',
+            txt: 'Creche'+"'s Comments",
+            link: '/creche_rating',
+
+          },
 
         {
           type: 'link',

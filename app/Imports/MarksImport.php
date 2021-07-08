@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Mark;
 use App\Report;
+use App\Markcheck;
 use App\Level_sub;
 use App\Http\Controllers\API\ScoreController;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -11,6 +12,11 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 class MarksImport implements ToModel, WithHeadingRow
 
 {
+
+    public static $subject_id;
+    public  static $report_id;
+
+
 
     /**
     * @param array $row
@@ -21,6 +27,8 @@ class MarksImport implements ToModel, WithHeadingRow
     {//
         Mark::where([['subject_id',$row['subjects_id']],['report_id',$row['report_id']],['student_id',$row['student_id']]])->delete();
         $scoreController =new ScoreController();
+        self::$subject_id=$row['subjects_id'];
+        self::$report_id=$row['report_id'];
        $report=Report::findOrFail($row['report_id']);
         $total=$scoreController->default_sum($row['ca1'],$row['ca2'],['ca3'],$row['exams']);
         $gradding=$scoreController->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
@@ -48,4 +56,16 @@ class MarksImport implements ToModel, WithHeadingRow
 
         ]);
     }
+
+
+     public static function MarksCompute(){
+
+        Markcheck::create([
+            'report_id'=>self::$report_id,
+            'subject_id'=>self::$subject_id,
+            'school_id'=>auth('api')->user()->school_id,
+        ]);
+
+     }
+
 }

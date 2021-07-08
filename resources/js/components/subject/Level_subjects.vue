@@ -48,7 +48,7 @@
                     </div>
                        <div class="card-tools float-right col-md-2">
                            <button class="btn btn-success btn-sm float-right m-2" @click="set_AddToList">Add Subjects  <i class="fas fa-user-plus fa-fw"></i></button></div>
-                      <div class="form-group col-md-6" v-show="addToList">
+                    <div class="form-group col-md-6" v-show="addToList">
                       <select
                       class="form-control"
                       v-model="form.type"

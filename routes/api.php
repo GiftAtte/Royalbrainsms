@@ -226,5 +226,19 @@ Route::get('student_fees/{feegroup_id}/','API\FeeactivationController@loadActiva
 Route::post('student_fees','API\FeeactivationController@store');
 Route::post('fee_pay','API\FeeactivationController@pay');
 
+/// Creche Domain Routes
+Route::post('domains', 'API\DomainController@store');
+Route::get('domains', 'API\DomainController@index');
+Route::delete('domains/{id}','API\DomainController@destroy');
+Route::put('domains','API\DomainController@update');
+// Ratings
+Route::post('ratings', 'API\RatingController@store');
+Route::get('ratings', 'API\RatingController@index');
+Route::delete('ratings/{id}','API\RatingController@destroy');
+Route::put('ratings','API\RatingController@update');
 
+Route::post('subdomains', 'API\SubDomainController@store');
+Route::get('subdomains/{domain_id?}', 'API\SubDomainController@index');
+Route::delete('subdomains/{id}','API\SubDomainController@destroy');
+Route::put('subdomains','API\SubDomainController@update');
 });
