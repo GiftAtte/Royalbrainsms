@@ -233,6 +233,7 @@ Route::delete('domains/{id}','API\DomainController@destroy');
 Route::put('domains','API\DomainController@update');
 // Ratings
 Route::post('ratings', 'API\RatingController@store');
+Route::post('crecheComment', 'API\RatingController@createRating');
 Route::get('ratings', 'API\RatingController@index');
 Route::delete('ratings/{id}','API\RatingController@destroy');
 Route::put('ratings','API\RatingController@update');

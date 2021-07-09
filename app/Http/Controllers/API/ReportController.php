@@ -15,6 +15,7 @@ use App\Staff_comment;
 use App\Comment;
 use App\Grading;
 use App\Has_arm;
+use App\CrechestudentDomain;
 use App\Level_history;
 use App\Result_activation;
 use App\Http\Controllers\Controller;
@@ -119,13 +120,18 @@ if($user->type==='tutor'){
 
    public function student_list($id)
    {
-
+    $stu=null;
     $user=auth('api')->user();
        $report=Report::findOrFail($id);
-       $stu= Mark::where('report_id',$id)->distinct('student_id')->pluck('student_id');
+       if($report->type==='creche'){
+        $stu= CrechestudentDomain::where('report_id',$id)->distinct('student_id')->pluck('student_id');
+       }else{
+        $stu= Mark::where('report_id',$id)->distinct('student_id')->pluck('student_id');
+       }
+
        if($user->type==='tutor'){
        $arm=Has_arm::where('staff_id',$user->staff_id)->first();
-       return $students=Student::with('arm')->whereIn('id',$stu)->where('arm_id',$arm->arms_id)->orderby('students.surname')->paginate(25);
+       return $students=Student::with('arm')->whereIn('id',$stu)->where('arm_id',$arm->arms_id)->orderby('students.surname')->paginate(50);
        }
 
      return $students=Student::with('arm')->whereIn('id',$stu)->orderby('students.surname')->paginate(50);

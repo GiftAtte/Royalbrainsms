@@ -25,6 +25,7 @@
             <mock v-show="!isAnnual"  v-if="report.type==='mock'"></mock>
             <primary-midterm v-show="!isAnnual"  v-if="report.type==='primary-midterm'"></primary-midterm>
             <primary-terminal v-show="!isAnnual"  v-if="report.type==='primary-terminal'"></primary-terminal>
+            <creche-comment  v-if="report.type==='creche'"></creche-comment>
             <general-results  v-if="report.type==='default-result'"></general-results>
 
 
@@ -36,11 +37,13 @@
 </template>
 
 <script >
+import CrecheComment from './CrecheComment.vue'
    // import jspdf from "jspdf";
    // import html2canvas from "html2canvas";
 
 
   export default {
+  components: { CrecheComment },
      // computed: mapState(['school']),
 
         data(){

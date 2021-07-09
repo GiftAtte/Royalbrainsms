@@ -213,6 +213,7 @@ v-show="$gate.isAdmin()"
                         <option value="annual">Annual Report</option>
                         <option value="primary-midterm">Primary Mid-Term</option>
                         <option value="primary-terminal">Primary Terminal</option>
+                        <option value="creche">Creche Comment</option>
 
                         </select>
 

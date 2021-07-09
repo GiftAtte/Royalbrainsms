@@ -158,6 +158,10 @@ Vue.component(
     require('./components/results/Terminal_Results.vue').default
 );
 Vue.component(
+    'creche-comment',
+    require('./components/results/CrecheComment.vue').default
+);
+Vue.component(
     'primary-terminal',
     require('./components/results/PrimaryTerminal.vue').default
 );
@@ -279,7 +283,7 @@ const app = new Vue({
 
 
     },
-   
+
 
 
 

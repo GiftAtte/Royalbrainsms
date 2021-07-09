@@ -15,4 +15,16 @@ class CrechestudentDomain extends Model
     {
         return $this->belongsTo('App\CrecheDomain', 'domain_id', 'id');
     }
+    public function ratings()
+    {
+        return $this->belongsTo('App\CrecheRating', 'rating_id', 'id');
+    }
+    public function subdomains()
+    {
+        return $this->belongsTo('App\Crechesubdomain', 'subdomain_id', 'id');
+    }
+    public function student()
+    {
+        return $this->belongsTo('App\Student', 'student_id', 'id');
+    }
 }

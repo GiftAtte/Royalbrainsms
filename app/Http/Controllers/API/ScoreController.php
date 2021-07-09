@@ -13,6 +13,7 @@ use App\Grading;
 use App\Student;
 use App\Subject;
 use App\Level_sub;
+use App\CrecheDomain;
 use App\Level;
 use App\Assessment;
 use App\CheckResult;
@@ -27,6 +28,8 @@ use App\Level_history;
 use App\Markcheck;
 use App\Imports\MarksImport;
 use App\Teachersubject;
+use App\CrechestudentDomain;
+//use App\CrechestudentDomain;
 use Maatwebsite\Excel\Facades\Excel;
 ini_set('max_execution_time', '1000');
 class ScoreController extends Controller
@@ -759,13 +762,16 @@ return 'Not permitted';
 
 public function studenResult( $report_id, $student_id=null)
 {
+    $scoreArr=[];
+    $scores=null;
+    $summary=null;
  // return Mark:: where([['subject_id',98],['level_id',28]])->whereNotIn('report_id',[140,141,22])->get();
     $principal_sign=User::where([['type','principal'],['school_id',auth('api')->user()->school_id]])->select('photo')->first();
       if($student_id===null){
-       //   $student_id=auth('api')->user()->student_id;
+        $student_id=auth('api')->user()->student_id;
       }
 
-        $student=Student::findOrFail($student_id);
+
         $comment=Result_activation::where([['report_id',$report_id],['student_id',$student_id]])->first();
       $report=Report::with(['levels','sessions','terms'])->where('id',$report_id)->first();
 
@@ -798,15 +804,29 @@ public function studenResult( $report_id, $student_id=null)
 //         }
 
   $level_sub=Level_sub::where('level_id',$report->level_id)->pluck('subject_id');
-      Mark::where('report_id',$report_id)->whereNotIn('subject_id',$level_sub)->distinct('subject_id')->delete();
-
+      //Mark::where('report_id',$report_id)->whereNotIn('subject_id',$level_sub)->distinct('subject_id')->delete();
+$student=Student::findOrFail($student_id);
      $arm=Arm::findOrFail($student->arm_id);
     // $this->resultSummary($report_id, $student_id,$student->arm_id);
     $user=User::with(['students','school'])->where('student_id',$student_id)->first();
     $grading=Grading::whereIn('group_id',[$report->gradinggroup_id])->where('school_id',$user->school_id)->get();
-   $summary=Result::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
+
+if($report->type='creche'){
+
+    $domains=CrechestudentDomain::where([['report_id',$report_id],['student_id',$student_id]])->distinct('domain_id')->pluck('domain_id');
+    for($i=0;$i<count($domains);++$i){
+
+        $subdomains=  CrechestudentDomain::where([['domain_id',$domains[$i]],['report_id',$report_id],['student_id',$student_id]])->with(['ratings','subdomains'])->get();
+        $domain=CrecheDomain::findOrFail($domains[$i]);
+            array_push($scoreArr,['domain'=>$domain->name,'subdomains'=>$subdomains]);
+    }
+    $scores=collect($scoreArr);
+    $summary=CrechestudentDomain::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
+}else{
    $scores=Mark::whereNotIn('total',[0])->with('subjects')->where([['report_id',$report_id],
     ['student_id',$student_id],['type','Academic']])->distinct('subject_id')->get();
+    $summary=Result::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
+}
     $noneAcademic=Mark::whereNotIn('total',[0])->with('subjects')->where([['report_id',$report_id],
     ['student_id',$student_id],['type','None Academic']])->get();
 
@@ -826,14 +846,19 @@ public function studenResult( $report_id, $student_id=null)
 
 
 public function principalComment($average,$gradinggroup_id){
+    if($average){
     $comment=Comment::where([['lower_bound','<=',$average],['upper_bound','>=',$average],['school_id',auth('api')->user()->school_id]],['group_id',$gradinggroup_id])->first();
      if($comment){
 
     return $comment->comment;
      }
      else {
-         return 'principal';
+         return '-';
      }
+    }
+    else {
+        return '-';
+    }
     }
 
 

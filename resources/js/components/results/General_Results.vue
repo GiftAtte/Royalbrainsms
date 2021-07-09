@@ -265,7 +265,7 @@
 </table>
 </div>
 <div class=" col-md-4 ">
-<table class="table table-bordered table-sm  table-striped font-weight-bold" width="100%" >
+<table class="table table-bordered table-sm  table-striped " width="100%" >
  <tr >
  <th colspan="2"  class="text-uppercase text-center text-bold text-primary">Short Keys</th>
  </tr>

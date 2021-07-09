@@ -17,7 +17,7 @@
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
-    <div class="content col-12">
+    <div class="content col-md-12">
 <div class="card">
     <div class="card-header row">
         <div class="container">
@@ -84,7 +84,7 @@
 
 
 
-<div class="col-md-12">
+<div class="col-md-12 row">
     <div class="form-group col-md-6" >
                      <select
                     name="sudomain_id"
@@ -111,10 +111,10 @@
                     :class="{'is-invalid':form.errors.has('subdomain_id')}"
                     class="form-control"
                     v-model="form.subdomain_id"
-
+                       @change="loadRating"
 
                   >
-                    <option value selected>Select subject to Add to list</option>
+                    <option value selected>Select subdomain</option>
                     <option
                       v-for="subdomain in Subdomains"
                       :key="subdomain.id"
@@ -347,11 +347,11 @@ setFile () {
 
 
             this.form.student_id.push(student_id)
-            this.form.comment_id.push(rate_id)
+            this.form.rate_id.push(rate_id)
             this.form.number_of_students=++this.form.number_of_students;
          }
              //  console.log(this.form)
-            this.form.post('/api/tutorsComment')
+            this.form.post('/api/crecheComment')
 
             .then(res=>{
 
@@ -370,13 +370,17 @@ setFile () {
                         this.isLoading=false
               });
 
+            },
+            loadRating(){
+                 axios.get('/api/ratings')
+            .then(res=>{
+                this.loadStudents()
+                this.comments=res.data
+            })
             }
     },
     created() {
-            axios.get('/api/ratings')
-            .then(res=>{
-                this.comments=res.data
-            })
+
           this.loadDomain();
 
            Fire.$on('AfterCreate',() => {

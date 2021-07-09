@@ -97,7 +97,7 @@
 <table class="table  table-sm table-striped ">
 <thead>
 <tr>
-<th>S/N</th><th>Name</th><th>Average Scores</th>
+<th>S/N</th><th>Name</th>
 <th>
  Grades
 </th>
@@ -109,7 +109,6 @@
 <td>{{assessment.name}}
  <input type="hidden" :id="`student_id${index}`" :value="assessment.student_id">
  </td>
- <td>{{assessment.average_score?assessment.average_score:''}}</td>
 
 <td  >
 
@@ -285,7 +284,7 @@ form:new Form({
                         });
                        // this.Assessments={};
                         this.loadAssessment();
-                       
+
 
           })
 

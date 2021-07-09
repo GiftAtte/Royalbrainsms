@@ -66,15 +66,14 @@ class LDomainController extends Controller
     $report=Report::findOrFail($report_id);
 
     return  DB::table('students')->where([['students.class_id',$report->level_id],['students.arm_id',$arm_id]])
-       ->leftJoin('results','students.id','=','results.student_id')
-       ->where('results.report_id',$report_id)
       ->leftJoin('assessments', function($join) use($report_id,$ld_id)
       {
           $join->on('assessments.student_id', '=', 'students.id')
           ->where([['assessments.report_id',$report_id],['learning_domain_id',$ld_id]]);
-      })->select(DB::raw('CONCAT(students.surname," ", students.first_name)as name,
-       students.id as student_id, assessments.grade as grade,
-       results.average_scores as average_score
+      })
+      ->select(DB::raw('CONCAT(students.surname," ", students.first_name)as name,
+       students.id as student_id, assessments.grade as grade
+
        '))->distinct('students.id')
       ->get();
 
