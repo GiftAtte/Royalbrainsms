@@ -811,7 +811,7 @@ $student=Student::findOrFail($student_id);
     $user=User::with(['students','school'])->where('student_id',$student_id)->first();
     $grading=Grading::whereIn('group_id',[$report->gradinggroup_id])->where('school_id',$user->school_id)->get();
 
-if($report->type='creche'){
+if($report->type==='creche'){
 
     $domains=CrechestudentDomain::where([['report_id',$report_id],['student_id',$student_id]])->distinct('domain_id')->pluck('domain_id');
     for($i=0;$i<count($domains);++$i){
