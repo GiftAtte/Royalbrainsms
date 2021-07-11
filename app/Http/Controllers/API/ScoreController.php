@@ -1104,6 +1104,7 @@ if(count($students)>0){
                       'term_id'=>$term_id,
                       'arm_id'=>$student_arm->arm_id,
                       'type'=>$subject_type->type,
+                      'mid_term'=>$request->midterm[$i],
                       'report_type'=>$report->type,
                       'is_history'=>0
             ]
