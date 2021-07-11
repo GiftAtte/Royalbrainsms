@@ -206,14 +206,16 @@ v-show="$gate.isAdmin()"
                         <select v-model="form.type"  name="type" id="term_end"
                         class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
                         <option value="" selected>Select Report Type</option>
-                        <option value="default-result">Default </option>
+                        <option value="default-result">Default-Terminal</option>
+                        <option value="default-midterm">Default Midterm</option>
+                        <option value="creche">Default Creche Comment</option>
                         <option value="mid_term" selected>Mid-Term Report</option>
-                        <option value="terminal">Terminal Report</option>
+                        <option value="terminal">Madonna Termial</option>
                         <option value="mock">Mock Exam Report</option>
-                        <option value="annual">Annual Report</option>
-                        <option value="primary-midterm">Primary Mid-Term</option>
-                        <option value="primary-terminal">Primary Terminal</option>
-                        <option value="creche">Creche Comment</option>
+                        <option value="annual"> Madonna Annual Report</option>
+                        <option value="primary-midterm">Madonna Primary Mid-Term</option>
+                        <option value="primary-terminal"> Madonna Primary Terminal</option>
+
 
                         </select>
 

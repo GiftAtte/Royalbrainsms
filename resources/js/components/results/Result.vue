@@ -26,7 +26,7 @@
             <primary-midterm v-show="!isAnnual"  v-if="report.type==='primary-midterm'"></primary-midterm>
             <primary-terminal v-show="!isAnnual"  v-if="report.type==='primary-terminal'"></primary-terminal>
             <creche-comment  v-if="report.type==='creche'"></creche-comment>
-            <general-results  v-if="report.type==='default-result'"></general-results>
+            <general-results  v-if="report.type==='default-result'||report.type==='default-midterm'"></general-results>
 
 
 

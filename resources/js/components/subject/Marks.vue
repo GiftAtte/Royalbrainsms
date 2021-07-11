@@ -131,6 +131,7 @@
  </td>
 <td><input :id="`test1${index}`" :value="score.test1" type="number"  placeholder="Class Work" max="100" min="0" step="0.01"></td>
 <td><input :id="`test2${index}`" :value="score.test2" type="number"  placeholder="Assignment " max="100" min="0" step="0.01">
+<td><input type="number" :id="`midterm${index}`" :value="score.total"  placeholder="Class Test " max="100" min="0" step="0.01" disabled></td>
 <!-- <input type="hidden" :id="`test3${index}`" :value="score.test3"  placeholder="Class Test " max="100" min="0" step="0.01">
 <input :id="`note${index}`" :value="score.note" type="hidden" placeholder="Notes " max="100" min="0" step="0.01"></td> -->
 <td><input :id="`exams${index}`" :value="score.exams" type="number"   placeholder="Mid-Term Test/Exams" max="100" min="0" step="0.01"></td>
@@ -138,11 +139,11 @@
 
 </tbody>
 </table>
-<table v-if="report==='default-result'" class="table table-hover table-sm ">
+<table v-if="report==='default-result'||report==='default-midterm'" class="table table-hover table-sm ">
 <thead>
 
 <tr>
-<th>S/N</th><th>Name</th><th>CA1</th><th>CA2</th><th>CA3</th><th>Exams/Mid-term[40%]</th>
+<th>S/N</th><th>Name</th><th>CA1</th><th>CA2</th><th>CA3</th><th v-show="Scores[0] && Scores[0].total && report==='default-result'">MID-TERM</th><th v-show="report==='default-midterm'">MID-TERM EXAMS</th><th v-show="report==='default-result'">TERMINAL EXAMS</th>
 </tr>
 </thead>
 <tbody>
@@ -156,7 +157,8 @@
 <td><input :id="`test2${index}`" :value="score.test2" type="number"  placeholder="Assignment " max="100" min="0" step="0.01"></td>
 <td><input type="number" :id="`test3${index}`" :value="score.test3"  placeholder="Class Test " max="100" min="0" step="0.01"></td>
 <td style="display:none"><input :id="`note${index}`" :value="score.note" type="hidden" placeholder="Notes " max="100" min="0" step="0.01"></td>
-<td><input :id="`exams${index}`" :value="score.exams" type="number"   placeholder="Mid-Term Test/Exams" max="100" min="0" step="0.01"></td>
+<td v-show="Scores[0] && Scores[0].total && report==='default-result'"><input type="number" :id="`midterm${index}`" :value="score.total"  placeholder="mid term " max="100" min="0" step="0.01" disabled></td>
+    <input :id="`exams${index}`" :value="score.exams" type="number"   placeholder="Mid-Term Test/Exams" max="100" min="0" step="0.01">
 </tr>
 
 </tbody>
@@ -167,7 +169,7 @@
 <thead>
 
 <tr>
-<th>S/N</th><th>Name</th><th>Class work[2]</th><th>Assignment[2]</th><th>Class Test[5]</th> <th>Notes[1]</th><th>Exams[20/70]</th>
+<th>S/N</th><th>Name</th><th>Class work[2]</th><th>Assignment[2]</th><th>Class Test[5]</th> <th>Notes[1]</th><th v-show="Scores[0] && Scores[0].total && report!='mid_term'">midterm</th><th>Exams[20/70]</th>
 </tr>
 </thead>
 <tbody>
@@ -180,7 +182,8 @@
 <td><input :id="`test1${index}`" :value="score.test1" type="number"  placeholder="Class Work" max="100" min="0" step="0.01"></td>
 <td><input :id="`test2${index}`" :value="score.test2" type="number"  placeholder="Assignment " max="100" min="0" step="0.01"></td>
 <td><input :id="`test3${index}`" :value="score.test3" type="number" placeholder="Class Test " max="100" min="0" step="0.01"></td>
-<td><input :id="`note${index}`" :value="score.note" type="number" placeholder="Notes " max="100" min="0" step="0.01"></td>
+<td><input :id="`note${index}`" :value="score.note"    type="number" placeholder="Notes " max="100" min="0" step="0.01"></td>
+<td v-if="score.total!=null && report!='mid_term'"><input :id="`midterm${index}`" :value="score.total"  disabled max="100" min="0" step="0.01" ></td>
 <td><input :id="`exams${index}`" :value="score.exams" type="number"   placeholder="Mid-Term Test/Exams" max="100" min="0" step="0.01"></td>
 </tr>
 
@@ -234,6 +237,7 @@ form:new Form({
            test2:[],
            test3:[],
            exams:[],
+           midterm:[],
            arm_id:'',
 number_of_students:0
 })
@@ -296,7 +300,7 @@ number_of_students:0
                     .then( res  => {
                       this.subjects = res.data;
                          this.report_id=this.form.report_id
-                           console.log(this.report_id)
+                          // console.log(this.report_id)
                             this.$Progress.finish();
                           }
                       );
@@ -362,7 +366,10 @@ setFile () {
             this.form.exams=[];
              this.form.note=[];
             this.form.arm_id=[];
+            this.form.midterm=[];
             this.form.number_of_students=0;
+            var check=false
+            if(this.Scores[0].total!=null){check=true}
          for (let index = 0; index < this.Scores.length; index++) {
 
            var student_id=document.querySelector(`#student_id${index}`).value
@@ -373,10 +380,17 @@ setFile () {
 
             this.form.student_id.push(student_id)
             this.form.test1.push(test1)
+
             this.form.test2.push(test2)
-               if(this.report!='primary-midterm'&&this.report!='primary-terminal'){
+               if(this.report!='primary-midterm' && this.report!='primary-terminal'){
               var test3=document.querySelector(`#test3${index}`).value
-               var note=document.querySelector(`#note${index}`).value
+              if(check){
+              var midterm=document.querySelector(`#midterm${index}`).value
+              this.form.midterm.push(midterm)
+              console.log(check)
+              }
+              var note=document.querySelector(`#note${index}`).value
+
             this.form.test3.push(test3)
              this.form.note.push(note)
                }

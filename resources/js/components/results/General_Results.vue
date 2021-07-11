@@ -77,10 +77,10 @@
 <th v-show="isTest3">3rd CA</th>
 <th>Exams</th>
 <th>Total</th>
-<th v-show="isThird_term" >1st Term</th>
-<th v-show="isThird_term" >2nd Term</th>
-<th v-show="isThird_term" >Grand Total</th>
-<th v-show="isThird_term"  >C.Avg</th>
+<th v-show="isThird_term && isCummulative" >1st Term</th>
+<th v-show="isThird_term && isCummulative" >2nd Term</th>
+<th v-show="isThird_term && isCummulative" >Grand Total</th>
+<th v-show="isThird_term && isCummulative"  >C.Avg</th>
 
 <th>Grade</th>
 <th>Narration</th>
@@ -107,17 +107,17 @@
 <td v-show="isTest3">{{score.test3}}</td>
 <td>{{score.exams}}</td>
 <td>{{score.total}}</td>
-<td v-show="isThird_term"  v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===1)">
+<td v-show="isThird_term && isCummulative"  v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===1)">
 {{total.total?total.total:'-'}}</td>
-<td v-show="isThird_term"   v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===2)">
+<td v-show="isThird_term && isCummulative"   v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===2)">
 {{total.total?total.total:'-'}}</td>
-<td v-show="isThird_term" >{{score.grand_total?score.grand_total:'-'}}</td>
-<td v-show="isThird_term" >{{score.average?score.average:'-'}}</td>
-<td v-show="isThird_term" >{{score.cummulative_grade?score.cummulative_grade:'-'}}</td>
-<td v-show="isThird_term" >{{score.cummulative_narration?score.cummulative_narration:'-'}}</td>
+<td v-show="isThird_term && isCummulative" >{{score.grand_total?score.grand_total:'-'}}</td>
+<td v-show="isThird_term && isCummulative" >{{score.average?score.average:'-'}}</td>
+<td v-show="isThird_term && isCummulative" >{{score.cummulative_grade?score.cummulative_grade:'-'}}</td>
+<td v-show="isThird_term && isCummulative" >{{score.cummulative_narration?score.cummulative_narration:'-'}}</td>
 
-<td v-show="!isThird_term">{{score.grade}}</td>
-<td v-show="!isThird_term">{{score.narration}}</td>
+<td v-show="!isThird_term ||!isCummulative">{{score.grade}}</td>
+<td v-show="!isThird_term ||!isCummulative">{{score.narration}}</td>
 
 <td v-show="isAHScore">{{score.arm_max_score}}</td>
 <td v-show="isASLScore">{{score.arm_min_score}}</td>
@@ -230,7 +230,7 @@
  <td>Average score</td><td>{{summary.average_scores	}}</td>
  </tr>
  <tr>
- <td>Cummulative Avg score</td><td>{{summary.cummulative_average	}}</td>
+ <td v-show="isThird_term && isCummulative">Cummulative Avg score</td><td v-show="isThird_term && isCummulative">{{summary.cummulative_average	}}</td>
  </tr>
  <tr>
  <td>Grade</td><td>{{summary.grade}}</td>
@@ -321,8 +321,7 @@
 </div>
 
 </div>
- </section>
- </vue-html2pdf>
+
     </div>
 
 </template>
@@ -369,7 +368,8 @@
                  isTest2:false,
                  isTest3:false,
                  isPComment:false,
-                 isTComment:false
+                 isTComment:false,
+                 isCummulative:false
 
             }
         },
@@ -462,6 +462,12 @@ axios.get('/api/result_config')
    if(element.name==='Show Arm Subject Lowest Score') {
       if(element.status===1){
        this.isASLScore=true
+         }
+
+   }
+    if(element.name==='Use Cummulative For Third Term') {
+      if(element.status===1){
+       this.isCummulative=true
          }
 
    }

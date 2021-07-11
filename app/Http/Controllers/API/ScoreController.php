@@ -79,6 +79,7 @@ class ScoreController extends Controller
         if(is_numeric($midterm_score)){
             $sum=  $sum+$midterm_score;
         }
+
         return round($sum,2);
     }
 
@@ -97,8 +98,9 @@ public function AnnualScore($score,$term_id){
 
     public function store(Request $request)
     {
+
         $report=Report::findOrFail($request->report_id);
-        if($report->type==='default-result'){
+        if($report->type==='default-result'||$report->type==='default-midterm'){
            return $this->default_store($request);
         }
        $Nstudents= $request->number_of_students;
@@ -114,13 +116,16 @@ public function AnnualScore($score,$term_id){
 
             //return  $student_id;
             for($i=0;$i<$Nstudents; ++$i){
+              //  if($request->exams[$i]>0||!empty($request->midterm[$i])){
      Mark::where([['report_id',$request->report_id], ['student_id', $request->student_id[$i]],['subject_id',$request->subject_id]])->delete();
          // $student_arm=Student::findOrFail($request->student_id[$i]);
 
           $weighted_score=$this->weightScore($request->test1[$i],$request->test2[$i],$request->test3[$i],$request->note[$i]);
-          $midterm_score=Mark::where([['student_id',$request->student_id[$i]],['subject_id',$request->subject_id],['term_id',$report->term_id],['session_id',$report->session_id],['report_type','mid_term']])->first();
-            // computing sum and grading
-                $total=$this->sum($weighted_score,$request->exams[$i],$midterm_score?$midterm_score->total:0);
+         // $midterm_score=Mark::where([['student_id',$request->student_id[$i]],['subject_id',$request->subject_id],['term_id',$report->term_id],['session_id',$report->session_id],['report_type','mid_term']])->first();
+         // $midterm_score=$request->midterm[$i];
+          // computing sum and grading
+          //return$request->exams[$i];
+                $total=$this->sum($weighted_score,$request->exams[$i],$request->midterm?$request->midterm[$i]:0);
                $annual_score= $this->AnnualScore($total,$term_id);
              // $convertedScore=$this->convertedScore($total,$report->type);
                 $gradding= $this->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
@@ -148,7 +153,7 @@ public function AnnualScore($score,$term_id){
                       'type'=>$subject_type->type,
                       'annual_score'=>$this->AnnualScore($total,$term_id),
                       'report_type'=>$report->type,
-                      'mid_term'=>$midterm_score?$midterm_score->total:0,
+                      'mid_term'=>$request->midterm?$request->midterm[$i]:0,
                       'session_id'=>$report->session_id,
                       'is_history'=>0
             ]
@@ -157,8 +162,8 @@ public function AnnualScore($score,$term_id){
 
 
 
-          }
-
+          //}
+        }
     Markcheck::create([
      'report_id'=>$request->report_id,
      'subject_id'=>$request->subject_id,
@@ -180,7 +185,7 @@ public function AnnualScore($score,$term_id){
 public function import(Request $request)
 {
 
-  $students=$request->csv;
+
 
         $subject_id=null;
          $report_id=null;
@@ -476,6 +481,72 @@ return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
     //     ->get();
 
     // }else{
+                    if($report->type==='terminal'){
+
+   $terminal=DB::table('students')->where([['class_id',$report->level_id],['students.arm_id',$request->arm_id]])
+        ->leftJoin('marks', function($join) use($report_id,$subject_id)
+        {
+            $join->on('marks.student_id', '=', 'students.id')
+            ->where([['marks.report_id',$report_id],
+                     ['marks.subject_id',$subject_id]]);
+        })->select(DB::raw('CONCAT(students.surname," ", students.first_name)as name,students.arm_id as arm_id,
+         students.id as student_id,marks.test1 as test1,marks.test2 as test2, marks.test3 as test3,
+         marks.exams as exams,marks.subject_id as subject_id, marks.note as note'))->orderBy('name');
+      //  ->get();
+     // return collect($terminal->get());
+
+       $list= DB::table('marks')->where([
+        ['marks.subject_id',$subject_id],['marks.term_id',$report->term_id], ['marks.level_id',$report->level_id],
+        ['marks.report_type','mid_term']  ])->orWhere([
+            ['marks.subject_id',$subject_id],['marks.term_id',$report->term_id], ['marks.level_id',$report->level_id],
+            ['marks.report_type','default_midterm']  ])
+            ->joinSub($terminal, 'terminals', function ($join) use($report,$subject_id) {
+                $join->on('marks.student_id', '=', 'terminals.student_id');
+            })->select('terminals.*','marks.total as total')->distinct('student_id')
+            ->orderBy('name')->get();
+
+                if(count($list)>0){
+                    return collect($list)->unique('student_id')->values()->all();
+                }else{
+                    return collect($terminal->get());
+
+                }
+}
+
+
+// default mid term
+if($report->type==='default-result'){
+
+    $terminal=DB::table('students')->where([['class_id',$report->level_id],['students.arm_id',$request->arm_id]])
+         ->leftJoin('marks', function($join) use($report_id,$subject_id)
+         {
+             $join->on('marks.student_id', '=', 'students.id')
+             ->where([['marks.report_id',$report_id],
+                      ['marks.subject_id',$subject_id]]);
+         })->select(DB::raw('CONCAT(students.surname," ", students.first_name)as name,students.arm_id as arm_id,
+          students.id as student_id,marks.test1 as test1,marks.test2 as test2, marks.test3 as test3,
+          marks.exams as exams,marks.subject_id as subject_id, marks.note as note'))->orderBy('name');
+       //  ->get();
+      // return collect($terminal->get());
+
+        $list= DB::table('marks')->where([
+             ['marks.subject_id',$subject_id],['marks.term_id',$report->term_id], ['marks.level_id',$report->level_id],
+             ['marks.report_type','default-midterm']  ])
+             ->joinSub($terminal, 'terminals', function ($join) use($report,$subject_id) {
+                 $join->on('marks.student_id', '=', 'terminals.student_id');
+             })->select('terminals.*','marks.total as total')->distinct('student_id')
+             ->orderBy('name')->get();
+
+                 if(count($list)>0){
+                     return collect($list)->unique('student_id')->values()->all();
+                 }else{
+                     return collect($terminal->get());
+
+                 }
+ }
+
+
+
         return  DB::table('students')->where([['class_id',$report->level_id],['students.arm_id',$request->arm_id]])
         ->leftJoin('marks', function($join) use($report_id,$subject_id)
         {
@@ -1009,15 +1080,15 @@ if(count($students)>0){
           $student_arm=Student::findOrFail($request->student_id[$i]);
 
             // computing sum and grading
-             $total=$this->default_sum($request->test1[$i],$request->test2[$i],$request->test3[$i],$request->exams[$i]);
+             $total=$this->default_sum($request->test1[$i],$request->test2[$i],$request->test3[$i],$request->exams[$i],$request->midterm?$request->midterm[$i]:0);
             $gradding= $this->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
 
             // return $gradding;
 
   // return $this->studentPosition($request->student_id[$i+2],$request->report_id,false);
  Mark::where([['report_id',$request->report_id], ['student_id', $request->student_id[$i]],['subject_id',$request->subject_id]])->delete();
-         Mark::updateOrInsert(
-          ['report_id' => $request->report_id, 'student_id' => $request->student_id[$i],'subject_id'=>$request->subject_id],
+         Mark::create(
+
 
                [ 'student_id'=>$request->student_id[$i],
                 'report_id'=>$request->report_id,
@@ -1052,20 +1123,20 @@ if(count($students)>0){
      'school_id'=>auth('api')->user()->school_id,
  ]);
 
- CheckResult::create([
-  'report_id'=>$request->report_id,
-  'is_history'=>0,
-    'school_id'=>auth('api')->user()->school_id,
-    'compute_summary'=>1
- ]);
- return ['message'=>'success'];
+//  CheckResult::create([
+//   'report_id'=>$request->report_id,
+//   'is_history'=>0,
+//     'school_id'=>auth('api')->user()->school_id,
+//     'compute_summary'=>1
+//  ]);
+ return ['message'=>'default success'];
 }
 
 
 
 
 
-public function default_sum($t1,$t2,$t3,$exams){
+public function default_sum($t1,$t2,$t3,$exams,$midterm=0){
     $sum=0;
     if(is_numeric($t1)){
       $sum=  $sum+ $t1;
@@ -1079,6 +1150,9 @@ public function default_sum($t1,$t2,$t3,$exams){
      if(is_numeric($exams)){
        $sum=  $sum+ $exams;
     }
+    if(is_numeric($midterm)){
+        $sum=  $sum+ $midterm;
+     }
 
 
     return round($sum,2);
