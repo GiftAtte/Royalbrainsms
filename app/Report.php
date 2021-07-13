@@ -9,7 +9,7 @@ class Report extends Model
     //
     protected $table='reports';
     protected $fillable=['level_id','term_id','session_id','title','term_start','term_end','school_days','next_term',
-    'school_id','header','arm_id','type','gradinggroup_id'];
+    'school_id','header','arm_id','type','gradinggroup_id','isCummulative'];
 
     public function levels()
     {

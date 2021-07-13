@@ -194,6 +194,29 @@ v-show="$gate.isAdmin()"
                         <has-error :form="form" field="term_id"></has-error>
                  </div>
 
+                 <div class="form-group" v-show="form.term_id===3">
+                     <label>Results Format</label>
+                     <select
+                    name="isCummulative"
+                    id="term_id"
+                    :class="{'is-invalid':form.errors.has('isCummulative')}"
+                    class="form-control"
+                    v-model="form.isCummulative"
+                  >
+                    <option value selected>select report format</option>
+                    <option
+
+                      value="1"
+                    >Use Cummulative</option>
+                    <option
+
+                      value="0"
+                    >Use Termial Results</option>
+                  </select>
+                        <has-error :form="form" field="term_id"></has-error>
+                 </div>
+
+
 
                     <div class="form-group">
                     <label>Next Term Begins:</label>
@@ -358,6 +381,7 @@ v-show="$gate.isAdmin()"
                     next_term:'',
                     header:'',
                     gradinggroup_id:'',
+                    isCummulative:0,
                     school_id:window.user.school_id
 
 

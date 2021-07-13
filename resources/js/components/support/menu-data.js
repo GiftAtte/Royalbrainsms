@@ -471,7 +471,7 @@ export default {
         {
             type: 'link',
             txt: 'Creche'+"'s Comments",
-            link: '/creche_rating',
+            link: '/creche_comment',
 
           },
 

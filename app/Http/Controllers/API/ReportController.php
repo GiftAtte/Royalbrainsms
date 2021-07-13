@@ -69,6 +69,7 @@ if($user->type==='tutor'){
             'session_id' => 'required|integer',
             'school_id'=>'required|integer',
             'gradinggroup_id'=>'required|integer',
+          
         ]);
         return Report::create($request->all());
     }

@@ -468,12 +468,12 @@ axios.get('/api/result_config')
          }
 
    }
-    if(element.name==='Use Cummulative For Third Term') {
-      if(element.status===1){
-       this.isCummulative=true
-         }
+//     if(element.name==='Use Cummulative For Third Term') {
+//       if(element.status===1){
+//        this.isCummulative=true
+//          }
 
-   }
+//    }
 
 
    if(element.name==='Show Test2') {
@@ -586,6 +586,11 @@ axios.get('/api/result_config')
                  this.isMidterm=result.data.scores[0].mid_term?true:false
                  if(this.report.term_id===3){
                      this.isThird_term=true
+                      console.log(this.report)
+                      if(this.report.isCummulative===1){
+                          this.isCummulative=true
+
+                     }
                  }
                  this.signature=result.data.signature
                   this.noneAcademic=result.data.noneAcademic
@@ -618,7 +623,11 @@ axios.get('/api/result_config')
                  this.staff_comment=result.data.staff_comment
                  if(this.report.term_id===3){
                      this.isThird_term=true
+                     if(this.report.isCummulative===1){
+                          this.isCummulative=true
+                     }
                  }
+
                   this.signature=result.data.signature
                     this.LDomain=result.data.LDomain
                  this.noneAcademic=result.data.noneAcademic
