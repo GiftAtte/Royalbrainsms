@@ -103,12 +103,12 @@
 <tr v-for="(score,index) in scores">
 <td>{{index+1}}</td>
 <td>{{score.subjects?score.subjects.name:''}}</td>
-<td>{{score.test1?score.test1:''}}</td>
+<td>{{score.test1?score.test1:'-'}}</td>
 <td v-show="isTest2">{{score.test2}}</td>
 <td v-show="isTest3">{{score.test3}}</td>
-<td>{{score.exams?score.exams:''}}</td>
-<td  v-show="isMidterm">{{score.mid_term?score.mid_term:''}}</td>
-<td>{{score.total?score.total:''}}</td>
+<td>{{score.exams?score.exams:'-'}}</td>
+<td  v-show="isMidterm">{{score.mid_term?score.mid_term:'-'}}</td>
+<td>{{score.total?score.total:'-'}}</td>
 <td v-show="isThird_term && isCummulative"  v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===1)">
 {{total.total?total.total:'-'}}</td>
 <td v-show="isThird_term && isCummulative"   v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===2)">
@@ -122,9 +122,9 @@
 <td v-show="!isThird_term ||!isCummulative">{{score.grade}}</td>
 <td v-show="!isThird_term ||!isCummulative">{{score.narration}}</td>
 
-<td v-show="isAHScore">{{score.arm_max_score?score.arm_max_score:''}}</td>
-<td v-show="isASLScore">{{score.arm_min_score?score.arm_min_score:''}}</td>
-<td v-show="isASAScore">{{score.arm_avg_score?score.arm_avg_score:''}}</td>
+<td v-show="isAHScore">{{score.arm_max_score?score.arm_max_score:'-'}}</td>
+<td v-show="isASLScore">{{score.arm_min_score?score.arm_min_score:'-'}}</td>
+<td v-show="isASAScore">{{score.arm_avg_score?score.arm_avg_score:'-'}}</td>
 <td v-show="isASPosition">{{score.arm_subj_position}}</td>
 
 <td v-show="isCSPosition">{{score.class_subj_position?score.arm_subj_position:''}}</td>
@@ -163,7 +163,7 @@
 <td v-show="isAHScore">{{score.arm_max_score?score.arm_max_score:''}}</td>
 <td v-show="isASLScore">{{score.arm_min_score?score.arm_min_score:''}}</td>
 <td v-show="isASAScore">{{score.arm_avg_score?score.arm_avg_score:''}}</td>
-<td v-show="isASPosition">{{score.arm_subj_position}}</td>
+<td v-show="isASPosition">{{score.arm_subj_position?score.arm_subj_position:''}}</td>
 
 <td v-show="isCSPosition">{{score.class_subj_position?score.arm_subj_position:''}}</td>
 <td v-show="isCSHScore">{{score.max_class_score}}</td>
