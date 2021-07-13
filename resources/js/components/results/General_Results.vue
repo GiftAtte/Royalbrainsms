@@ -83,7 +83,7 @@
 <th v-show="isThird_term && isCummulative" >Grand Total</th>
 <th v-show="isThird_term && isCummulative"  >C.Avg</th>
 
-<th>Grade</th>
+<th >Grade</th>
 <th>Narration</th>
 <th class="text-center" v-show="isAHScore"><div><span>ASH<br> Score</span></div></th>
 <th class="text-center" v-show="isASLScore"><div><span>ASL <br> Score</span></div></th>
@@ -103,18 +103,19 @@
 <tr v-for="(score,index) in scores">
 <td>{{index+1}}</td>
 <td>{{score.subjects?score.subjects.name:''}}</td>
-<td>{{score.test1}}</td>
+<td>{{score.test1?score.test1:''}}</td>
 <td v-show="isTest2">{{score.test2}}</td>
 <td v-show="isTest3">{{score.test3}}</td>
-<td>{{score.exams}}</td>
-<td  v-show="isMidterm">{{score.mid_term}}</td>
-<td>{{score.total}}</td>
+<td>{{score.exams?score.exams:''}}</td>
+<td  v-show="isMidterm">{{score.mid_term?score.mid_term:''}}</td>
+<td>{{score.total?score.total:''}}</td>
 <td v-show="isThird_term && isCummulative"  v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===1)">
 {{total.total?total.total:'-'}}</td>
 <td v-show="isThird_term && isCummulative"   v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===2)">
 {{total.total?total.total:'-'}}</td>
 <td v-show="isThird_term && isCummulative" >{{score.grand_total?score.grand_total:'-'}}</td>
 <td v-show="isThird_term && isCummulative" >{{score.average?score.average:'-'}}</td>
+
 <td v-show="isThird_term && isCummulative" >{{score.cummulative_grade?score.cummulative_grade:'-'}}</td>
 <td v-show="isThird_term && isCummulative" >{{score.cummulative_narration?score.cummulative_narration:'-'}}</td>
 
@@ -141,12 +142,12 @@
 <tr v-for="(score,index) in noneAcademic">
 <td>{{index+1}}</td>
 <td>{{score.subjects?score.subjects.name:''}}</td>
-<td>{{score.test1}}</td>
+<td>{{score.test1?score.test1:''}}</td>
 <td v-show="isTest2">{{score.test2}}</td>
 <td v-show="isTest3">{{score.test3}}</td>
-<td>{{score.exams}}</td>
-<td  v-show="isMidterm">{{score.mid_term}}</td>
-<td>{{score.total}}</td>
+<td>{{score.exams?score.exams:''}}</td>
+<td  v-show="isMidterm">{{score.mid_term?score.mid_term:''}}</td>
+<td>{{score.total?score.total:''}}</td>
 <td v-show="isThird_term && isCummulative"  v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===1)">
 {{total.total?total.total:'-'}}</td>
 <td v-show="isThird_term && isCummulative"   v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===2)">
