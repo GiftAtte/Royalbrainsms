@@ -48,7 +48,10 @@ class ScoreController extends Controller
         //     $arm=Has_arm::where('staff_id',$user->staff_id)->whereNotIn('level_id',$historyLevel)->first();
         //     return Report::where([['school_id',$user->school_id],['level_id',$arm->level_id]])->latest()->get();
         // }
-       return Report::where('school_id',auth('api')->user()->school_id)->latest()->get();
+
+
+
+        return Report::where('school_id',auth('api')->user()->school_id)->latest()->get();
     }
 
      public function convertedScore($total,$type){
@@ -845,10 +848,17 @@ public function studenResult( $report_id, $student_id=null)
 
         $comment=Result_activation::where([['report_id',$report_id],['student_id',$student_id]])->first();
       $report=Report::with(['levels','sessions','terms'])->where('id',$report_id)->first();
+           // MADONNA ANNUAL
+    // $pastTotal=Mark::select('annual_score','subject_id','term_id','total')
+    //      ->where([['student_id',$student_id],['level_id',$report->level_id]
+    //      ])->whereNotIn('report_type',['mid_term'])->distinct('term_id')->get();
 
-    $pastTotal=Mark::select('annual_score','subject_id','term_id')
+// Thinks School Annual
+         $pastTotal=Mark::select('total as annual_score','subject_id','term_id')
          ->where([['student_id',$student_id],['level_id',$report->level_id]
-         ])->whereNotIn('report_type',['mid_term'])->distinct('term_id')->get();
+         ])->whereNotIn('report_type',['mid_term','default-midterm'])->distinct('term_id')->get();
+
+
 
           $pastTotalarray=[];
           foreach ($pastTotal as $total ) {
