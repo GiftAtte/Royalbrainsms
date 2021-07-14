@@ -1133,7 +1133,7 @@ if(count($students)>0){
      'report_id'=>$request->report_id,
      'subject_id'=>$request->subject_id,
      'gradinggroup_id'=>$report->gradinggroup_id,
-     'gradinggroup_id'=>$request->arm_id[0],
+     'arm_id'=>$request->arm_id[0],
      'school_id'=>auth('api')->user()->school_id,
  ]);
 

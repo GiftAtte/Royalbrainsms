@@ -193,7 +193,7 @@ if($cummulative_avg){
        // $user_school=auth('api')->user()->school_id;
         if(is_numeric($score)){
             $score=round($score,2);
-        $grading=Grading::whereIn('group_id',[$gradinggroup_id])->where([['lower_bound','<=',$score],['upper_bound','>=',$score],['school_id',$school_id]])->first();
+        $grading=Grading::whereIn('group_id',[$gradinggroup_id])->where([['lower_bound','<=',floatVal($score)],['upper_bound','>=',$score],['school_id',$school_id]])->first();
         if($grading){
        $Grade=$grading->grade;
        $credite_point=$grading->credit_point;
