@@ -107,7 +107,7 @@
 <td v-show="isTest2">{{score.test2}}</td>
 <td v-show="isTest3">{{score.test3}}</td>
 <td>{{score.exams?score.exams:'-'}}</td>
-<td  v-show="isMidterm">{{score.mid_term?score.mid_term:'-'}}</td>
+<!-- <td  v-show="isMidterm">{{score.mid_term?score.mid_term:'-'}}</td> -->
 <td>{{score.total?score.total:'-'}}</td>
 <td v-show="isThird_term && isCummulative"  v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===1)">
 {{total.total?total.total:'-'}}</td>
@@ -586,7 +586,7 @@ axios.get('/api/result_config')
                  this.isMidterm=result.data.scores[0].mid_term?true:false
                  if(this.report.term_id===3){
                      this.isThird_term=true
-                      console.log(this.report)
+                      console.log(this.Total)
                       if(this.report.isCummulative===1){
                           this.isCummulative=true
 
