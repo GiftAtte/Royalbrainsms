@@ -44,7 +44,7 @@ class MarksObserver implements ShouldQueue
         $collection = collect(Mark::where([['report_id',$student->report_id],['subject_id',$markcheck->subject_id],['arm_id',$student->arm_id],['total','>',0]])
                   ->select('total','student_id')->orderBy('total', 'DESC')->get());
 
-    $cummulative_avg=DB::table('marks')->whereNotIn('report_type',['mid_term','default-midterm'])->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->avg('total');
+    $cummulative_avg=DB::table('marks')->whereIn('report_type',['default-result'])->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->avg('total');
     $grand_total=DB::table('marks')->whereNotIn('report_type',['mid_term','default-midterm'])->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->sum('total');
    // $subject_positions=$scoreController->getSubjectRank($student->student_id,$student->report_id,$markcheck->subject_id);
     $subject_position_arm=$scoreController->getRanking($collection,$student->total);

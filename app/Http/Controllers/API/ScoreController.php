@@ -856,7 +856,7 @@ public function studenResult( $report_id, $student_id=null)
 // Thinks School Annual
          $pastTotal=Mark::select('total as annual_score','subject_id','term_id','report_id')
          ->where([['student_id',$student_id],['level_id',$report->level_id]
-         ])->whereNotIn('report_type',['mid_term','default-midterm','null'])->whereIn('term_id',[1,2])->distinct(['term_id','subject_id'])->get();
+         ])->whereNotIn('report_type',['default-result'])->whereIn('term_id',[1,2])->distinct(['term_id','subject_id'])->get();
 
 
 
