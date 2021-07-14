@@ -457,7 +457,7 @@ public function grade($score,$gradinggroup_id,$school_id)
 
   return ["grade"=>$Grade,"narration"=>$narration,'credit_point'=>$credite_point,'total'=>$score];
 }}
-return ["grade"=>'F',"narration"=>'','credit_point'=>0,'total'=>0];
+return ["grade"=>'-',"narration"=>'-','credit_point'=>0,'total'=>0];
 }
 
 
@@ -1132,6 +1132,7 @@ if(count($students)>0){
     Markcheck::create([
      'report_id'=>$request->report_id,
      'subject_id'=>$request->subject_id,
+     'gradinggroup_id'=>$report->gradinggroup_id,
      'school_id'=>auth('api')->user()->school_id,
  ]);
 

@@ -44,8 +44,8 @@ class MarksObserver //implements ShouldQueue
         $collection = collect(Mark::where([['report_id',$student->report_id],['subject_id',$markcheck->subject_id],['arm_id',$student->arm_id],['total','>',0]])
                   ->select('total','student_id')->orderBy('total', 'DESC')->get());
 
-    $cummulative_avg=DB::table('marks')->whereIn('report_type',['default-result'])->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->avg('total');
-    $grand_total=DB::table('marks')->whereIn('report_type',['default-result'])->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->sum('total');
+    $cummulative_avg=DB::table('marks')->whereNotIn('report_type',['default-midterm','mid_term'])->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->avg('total');
+    $grand_total=DB::table('marks')->whereNotIn('report_type',['default-midterm','mid_term'])->whereNotIn('total',[0])->where([['level_id',$student->level_id],['subject_id',$markcheck->subject_id],['student_id',$student->student_id]])->sum('total');
    // $subject_positions=$scoreController->getSubjectRank($student->student_id,$student->report_id,$markcheck->subject_id);
     $subject_position_arm=$scoreController->getRanking($collection,$student->total);
     $arm_max_score=DB::table('marks')->whereNotIn('total',[0])->where([['subject_id',$markcheck->subject_id],['report_id',$markcheck->report_id],['arm_id',$student->arm_id]])->max('total');
@@ -58,7 +58,7 @@ class MarksObserver //implements ShouldQueue
 
      //$class_sub_position=$subject_positions['position'];
        $arm_sub_position= $subject_position_arm;
-              $cGradding=$scoreController->grade($cummulative_avg,$report->graddinggroup_id,$markcheck->school_id);
+              $cGradding=$this->grade($cummulative_avg,$markcheck->gradinggroup_id_id,$markcheck->school_id);
 
 if($cummulative_avg){
        DB::table('marks')
@@ -188,21 +188,21 @@ if($cummulative_avg){
 
 
 
+    public function grade($score,$gradinggroup_id,$school_id)
+    {
+       // $user_school=auth('api')->user()->school_id;
+        if(is_numeric($score)){
+            $score=round($score,2);
+        $grading=Grading::whereIn('group_id',[$gradinggroup_id])->where([['lower_bound','<=',$score],['upper_bound','>=',$score],['school_id',$school_id]])->first();
+        if($grading){
+       $Grade=$grading->grade;
+       $credite_point=$grading->credit_point;
+       $narration=$grading->narration;
 
-public function grade($score,$gradinggroup_id,$school_id)
-{
-    if(is_numeric($score)){
-        $score=round($score,2);
-    $grading=Grading::whereIn('group_id',[$gradinggroup_id])->where([['lower_bound','<=',$score],['upper_bound','>=',$score],['school_id',$school_id]])->first();
-    if($grading){
-   $Grade=$grading->grade;
-   $credite_point=$grading->credit_point;
-   $narration=$grading->narration;
-
-  return ["grade"=>$Grade,"narration"=>$narration,'credit_point'=>$credite_point,'total'=>$score];
-}}
-return ["grade"=>'Not Applied',"narration"=>'','credit_point'=>0,'total'=>0];
-}
+      return ["grade"=>$Grade,"narration"=>$narration,'credit_point'=>$credite_point,'total'=>$score];
+    }}
+    return ["grade"=>'-',"narration"=>'-','credit_point'=>0,'total'=>0];
+    }
 
   // Class and arm positioning ===sorting students
   public function studentPosition($id,$report_id,$arm=false){

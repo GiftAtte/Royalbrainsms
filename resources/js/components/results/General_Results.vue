@@ -113,8 +113,8 @@
 <div>{{total.total?total.total:'-'}}</div></td>
 <td v-show="isThird_term && isCummulative"   v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===2)">
 <div>{{total.total?total.total:'-'}}</div></td>
-<td v-show="isThird_term && isCummulative" >{{score.grand_total?score.grand_total:'-'}}</td>
-<td v-show="isThird_term && isCummulative" >{{score.average?score.average:'-'}}</td>
+<td v-show="isThird_term && isCummulative" >{{score.grand_total?score.grand_total:''}}</td>
+<td v-show="isThird_term && isCummulative" >{{score.average?score.average:''}}</td>
 
 <td v-show="isThird_term && isCummulative" >{{score.cummulative_grade?score.cummulative_grade:'-'}}</td>
 <td v-show="isThird_term && isCummulative" >{{score.cummulative_narration?score.cummulative_narration:'-'}}</td>
