@@ -48,6 +48,7 @@ class MarksImport implements ToModel, WithHeadingRow
                   'grade'=>$gradding['grade'],
                   'narration'=>$gradding['narration'],
                   'term_id'=>$report->term_id,
+                  'report_type'=>$report->type,
                   'arm_id'=>$row['arm_id'],
                   'type'=>$subject_type->type,
                   'is_history'=>$row['is_history'],

@@ -148,10 +148,10 @@
 <td>{{score.exams?score.exams:''}}</td>
 <td  v-show="isMidterm">{{score.mid_term?score.mid_term:''}}</td>
 <td>{{score.total?score.total:'-'}}</td>
-<td v-show="isThird_term && isCummulative"  v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===1)">
-{{total.total?total.total:'-'}}</td>
-<td v-show="isThird_term && isCummulative"   v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===2)">
-{{total?total.total:'-'}}</td>
+<td >
+<div v-show="isThird_term && isCummulative"  v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===1)">{{total.total?total.total:'-'}}{{''}}</div></td>
+<td >
+<div v-show="isThird_term && isCummulative"   v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===2)">{{total?total.total:'-'}}{{''}}</div></td>
 
 <td v-show="isThird_term && isCummulative" >{{score.grand_total?score.grand_total:'-'}}</td>
 <td v-show="isThird_term && isCummulative" >{{score.average?score.average:'-'}}</td>
