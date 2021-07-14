@@ -856,7 +856,7 @@ public function studenResult( $report_id, $student_id=null)
 // Thinks School Annual
          $pastTotal=Mark::select('total as annual_score','subject_id','term_id','report_id')
          ->where([['student_id',$student_id],['level_id',$report->level_id]
-         ])->whereNotIn('report_type',['mid_term','default-midterm','null',])->distinct(['term_id','report_id'])->get();
+         ])->whereNotIn('report_type',['mid_term','default-midterm','null'])->whereIn('term_id',[1,2])->distinct(['term_id','report_id'])->get();
 
 
 
@@ -866,6 +866,7 @@ public function studenResult( $report_id, $student_id=null)
               array_push($pastTotalarray,['subject_id'=>$total->subject_id,'term_id'=>$total->term_id,'total'=>$total->annual_score]);
               # code...
           }
+          $collect= collect($pastTotalarray)->unique('term_id')->all();
           // return $pastTotalarray;
 // if($report->term_id===3){
 //   // return    Mark::where('level_id',28)->whereNotIn('report_id',[22,141,140])->get();
@@ -916,7 +917,7 @@ if($report->type==='creche'){
        $staff_comment=$this->staffComment($student_id,$report_id);
         $LDomain=$this->learningDomain($student_id,$report_id);
 
-        return response()->json(['principal_comment'=>$principal_comment,'scores'=>$scores,'summary'=>$summary,'user'=>$user,'pastTotal'=>$pastTotalarray,
+        return response()->json(['principal_comment'=>$principal_comment,'scores'=>$scores,'summary'=>$summary,'user'=>$user,'pastTotal'=>$collect,
     'comment'=>$comment,'signature'=>$principal_sign, 'staff_comment'=>$staff_comment,
      'report'=>$report,'arm'=>$arm,'gradings'=>$grading,'noneAcademic'=>$noneAcademic,'LDomain'=>$LDomain]);
 
