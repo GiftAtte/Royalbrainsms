@@ -147,7 +147,7 @@
 <td v-show="isTest3">{{score.test3}}</td>
 <td>{{score.exams?score.exams:''}}</td>
 <td  v-show="isMidterm">{{score.mid_term?score.mid_term:''}}</td>
-<td>{{score.total?score.total:''}}</td>
+<td>{{score.total?score.total:'-'}}</td>
 <td v-show="isThird_term && isCummulative"  v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===1)">
 {{total.total?total.total:'-'}}</td>
 <td v-show="isThird_term && isCummulative"   v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===2)">
@@ -157,8 +157,8 @@
 <td v-show="isThird_term && isCummulative" >{{score.cummulative_grade?score.cummulative_grade:'-'}}</td>
 <td v-show="isThird_term && isCummulative" >{{score.cummulative_narration?score.cummulative_narration:'-'}}</td>
 
-<td v-show="!isThird_term ||!isCummulative">{{score.grade}}</td>
-<td v-show="!isThird_term ||!isCummulative">{{score.narration}}</td>
+<td v-show="!isThird_term ||!isCummulative">{{score.grade?score.grade:''}}</td>
+<td v-show="!isThird_term ||!isCummulative">{{score.narrationscore.narration?score.narration:""}}</td>
 
 <td v-show="isAHScore">{{score.arm_max_score?score.arm_max_score:''}}</td>
 <td v-show="isASLScore">{{score.arm_min_score?score.arm_min_score:''}}</td>
