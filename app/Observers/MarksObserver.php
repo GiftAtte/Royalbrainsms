@@ -58,7 +58,7 @@ class MarksObserver //implements ShouldQueue
 
      //$class_sub_position=$subject_positions['position'];
        $arm_sub_position= $subject_position_arm;
-              $cGradding=$this->grade($cummulative_avg,$markcheck->gradinggroup_id_id,$markcheck->school_id);
+              $cGradding=$this->grade($cummulative_avg,$markcheck->gradinggroup_id,$markcheck->school_id);
 
 if($cummulative_avg){
        DB::table('marks')
