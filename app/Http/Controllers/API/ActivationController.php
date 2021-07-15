@@ -156,6 +156,7 @@ class ActivationController extends Controller
 
 
     }
+    return 'success';
     }
 
 
