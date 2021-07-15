@@ -258,10 +258,10 @@
  <td>Total Students in Arm</td><td>{{summary.total_students}}</td>
  </tr>
  <tr>
- <td>Progress status</td><td>{{comment?comment.comment:''}}</td>
+ <td>Progress status</td><td>{{summary.progress_status?summary.progress_status:''}}</td>
  </tr>
  <tr>
- <td>Remarks</td><td>{{comment?comment.comment:''}}</td>
+ <td>Remarks</td><td>{{summary.progress_status?summary.progress_status:''}}</td>
  </tr>
 
  </tbody>

@@ -28,8 +28,8 @@ class ActivationController extends Controller
        $studentsA=[];
      $students=Mark::where([['report_id',$report_id],['arm_id',$arm_id]])->distinct('student_id')->pluck('student_id')
      ->toArray();
-     
-          
+
+
     //      $history=Level_history::where([['level_id',$report->level_id],['arm_id',$arm_id]])->pluck('student_id')->toArray();
     //       $studentsA=array_merge($students,$history);
     //       if(!empty($history)){
@@ -44,12 +44,12 @@ class ActivationController extends Controller
          result_activations.comment as comment
          '))->distinct('students.id')->orderBy('name')
         ->get();
- 
-          
-            
-      
-      
- 
+
+
+
+
+
+
     //   return  \DB::table('students')->where([['class_id',$report->level_id],['arm_id',$arm_id]])
     //     ->leftJoin('result_activations', function($join) use($report_id)
     //     {
@@ -145,14 +145,12 @@ class ActivationController extends Controller
     {
         $students=$request->csv;
           foreach($students as $student){
-           
-              return  Result_Activation::updateOrCreate(['student_id'=>$student['student_id'],'report_id' => $student['report_id']],
-               [
-                    
-                    'student_id'=>$student['student_id'],
-                    'report_id' => $student['report_id'],
+
+                Result::where([['student_id',$student['student_id']],['report_id', $student['report_id']]])
+              ->update([
+
                     'progress_status' => $student['progress_status'],
-                    
+
                 ]);
 
 
