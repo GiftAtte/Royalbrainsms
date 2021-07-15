@@ -260,9 +260,7 @@
  <tr>
  <td>Progress status</td><td>{{summary.progress_status?summary.progress_status:''}}</td>
  </tr>
- <tr>
- <td>Remarks</td><td>{{summary.progress_status?summary.progress_status:''}}</td>
- </tr>
+
 
  </tbody>
  </table>
