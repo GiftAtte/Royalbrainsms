@@ -15,6 +15,7 @@ class MarksImport implements ToModel, WithHeadingRow
 
     public static $subject_id;
     public  static $report_id;
+    public  static $gradinggroup_id;
 
 
 
@@ -30,6 +31,7 @@ class MarksImport implements ToModel, WithHeadingRow
         self::$subject_id=$row['subjects_id'];
         self::$report_id=$row['report_id'];
        $report=Report::findOrFail($row['report_id']);
+       self::$gradinggroup_id=$report->gradinggroup_id;
         $total=$scoreController->default_sum($row['ca1'],$row['ca2'],['ca3'],$row['exams']);
         $gradding=$scoreController->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
 
@@ -65,6 +67,7 @@ class MarksImport implements ToModel, WithHeadingRow
             'report_id'=>self::$report_id,
             'subject_id'=>self::$subject_id,
             'school_id'=>auth('api')->user()->school_id,
+            'gradinggroup_id'=>self::$gradinggroup_id
         ]);
 
      }
