@@ -339,6 +339,38 @@ v-show="$gate.isAdmin()"
 
 
 
+<div class="modal fade" id="activationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="example">Activate Result</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+       <form @submit.prevent="getActivated()">
+      <div class="modal-body">
+
+                <div class="form-group">
+                    <input class="form-control" type="text" placeholder="Enter Activation Key"
+                     :class="{'is-invalid':activationForm.errors.has('activation_key')}"
+                      v-model="activationForm.activation_key"
+                    >
+                      <has-error :form="activationForm" field="activation_key"></has-error>
+                </div>
+
+
+
+        </div>
+
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button  class="btn btn-primary">Save changes</button>
+      </div>
+</form>
+</div>
+</div>
+</div>
 
 
         </div>
@@ -389,6 +421,10 @@ v-show="$gate.isAdmin()"
 
                 computeForm:new Form({
                   arm_id:'',
+                   report_id:''
+                }),
+                  activationForm:new Form({
+                   activation_key:'',
                    report_id:''
                 })
 
