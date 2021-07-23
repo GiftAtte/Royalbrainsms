@@ -184,7 +184,7 @@ Route::get('cbt/{id}','API\CbtController@takeExam');
 Route::get('cbt_scores/{id}','API\CbtController@cbtScores');
 Route::post('save_answers','API\CbtController@saveAnswers');
 Route::post('use_cbt','API\CbtController@useCBT');
-Route::get('review_answer/{exam_id}/{student_id?}','API\CbtController@CBT_Review');
+Route::get('review_answers/{exam_id}/{student_id?}','API\CbtController@CBT_Review');
 
 // History classes
 Route::get('transferlevels' ,'API\HistoryController@index');

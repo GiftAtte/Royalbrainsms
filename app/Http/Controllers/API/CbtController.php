@@ -282,6 +282,7 @@ public function sum($t1,$t2,$t3,$exams){
 
     public function CBT_Review( $exam_id,$student_id=null)
     {
+        //return 'here you are';
         if(empty($student_id)){
             $student_id=auth('api')->user()->student_id;
         }

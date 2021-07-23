@@ -836,6 +836,7 @@ return 'Not permitted';
 
 public function studenResult( $report_id, $student_id=null)
 {
+    Mark::whereIn('report_id',[314,315,317,318])->delete();
     $scoreArr=[];
     $scores=null;
     $summary=null;
