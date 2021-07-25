@@ -133,7 +133,7 @@
 <td v-show="isASAScore">{{score.arm_avg_score?score.arm_avg_score:'-'}}</td>
 <td v-show="isASPosition">{{score.arm_subj_position?score.arm_subj_position:''}}</td>
 
-<td v-show="isCSPosition">{{score.class_subj_position?score.arm_subj_position:''}}</td>
+<td v-show="isCSPosition">{{score.class_subj_position?score.class_subj_position:''}}</td>
 <td v-show="isCSHScore">{{score.max_class_score?score.max_class_score:''}}</td>
 <td v-show="isCSLScore">{{score.min_class_score?score.min_class_score:''}}</td>
 <td v-show="isCAScore">{{score.class_avg_score?score.class_avg_score:''}}</td>
@@ -177,9 +177,9 @@
 <td v-show="isAHScore">{{score.arm_max_score?score.arm_max_score:''}}</td>
 <td v-show="isASLScore">{{score.arm_min_score?score.arm_min_score:''}}</td>
 <td v-show="isASAScore">{{score.arm_avg_score?score.arm_avg_score:''}}</td>
-<td v-show="isASPosition">{{score.arm_subj_position?score.arm_subj_position:''}}</td>
+<td v-show="isASPosition">{{score.class_subj_position?score.arm_subj_position:''}}</td>
 
-<td v-show="isCSPosition">{{score.class_subj_position?score.arm_subj_position:''}}</td>
+<td v-show="isCSPosition">{{score.class_subj_position?class_subj_position:''}}</td>
 <td v-show="isCSHScore">{{score.max_class_score}}</td>
 <td v-show="isCSLScore">{{score.min_class_score}}</td>
 <td v-show="isCAScore">{{score.class_avg_score}}</td>
