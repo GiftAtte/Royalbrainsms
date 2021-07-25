@@ -976,7 +976,7 @@ $data=array_map('str_getcsv',file($request->file));
     $report_id=intval(array_combine($header,$data[1])['report_id']);
     $subject_id=intval(array_combine($header,$data[1])['subjects_id']);
     $report=Report::findOrFail($report_id);
-   $subject=Level_sub::findOrFail($subject_id);
+    $subject=Level_sub::where('subject_id',$subject_id)->first();
     // retrieve the scores for the level
    Mark::whereIn('subject_id',[$subject_id])->whereIn('report_id',[$report_id])->delete();
     $LevelScores=Mark::whereIn('subject_id',[$subject_id])->whereIn('level_id',[$report->level_id])->get();
@@ -985,9 +985,9 @@ $data=array_map('str_getcsv',file($request->file));
 
         $score=array_combine($header,$score);
         $score['total']=$this->default_sum($score['ca1'],$score['ca2'],$score['ca3'],$score['exams']);
-if($score['total']>0){
+
         array_push($score_array, $score);
-}
+
     }
 
   $totals=collect($score_array);
@@ -1019,11 +1019,11 @@ $CurrentlevelScores=$totals->sortByDesc('total')->values();
          $score['term_id']=$report->term_id;
          $score['report_id']=$report_id;
          $score['subject_id']=$subject_id;
-          $score['arm_id']=intval($score['arm_id']);
+         $score['arm_id']=intval($score['arm_id']);
          $score['level_id']=$report->level_id;
          $score['report_type']=$report->type;
          $score['type']=$subject->type;
-          $score['exams']=floatval($score['exams']);
+         $score['exams']=floatval($score['exams']);
          $score['test1']=floatval($score['ca1']);
          $score['test2']=floatval($score['ca2']);
          $score['test3']=floatval($score['ca3']);
