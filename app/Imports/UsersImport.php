@@ -11,7 +11,7 @@ class UsersImport implements ToModel, WithHeadingRow
 
     public $model = User::class;
     public $header = [
-        'id' , 'usertype_id', 'name','email', 'password', 'type', 'bio', 'photo'
+        'id' , 'usertype_id', 'name','email', 'password', 'type', 'bio'
     ];
     public $verifyHeader = true;
     /**
@@ -21,19 +21,19 @@ class UsersImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     { return new User([
-        //'id' =>$row['id'], 
+        //'id' =>$row['id'],
         'student_id'=>$row['student_id'],
-        'staff_id'=>$row['staff_id'],  
-        'name'=>$row['name'], 
-        'email'=>$row['email'], 
-        'password'=>Hash::make($row['password']), 
-        'type'=>$row['type'], 
-        'bio'=>$row['bio'], 
+        'staff_id'=>$row['staff_id'],
+        'name'=>$row['name'],
+        'email'=>$row['email'],
+        'password'=>Hash::make($row['password']),
+        'type'=>$row['type'],
+        'bio'=>$row['bio'],
         'photo'=>$row['photo'],
-        'full_name'=> $row['name'].$row['email'], 
+        'full_name'=> $row['name'].$row['email'],
     ]
 
     ); // We have matching table fields, so we can just do that
         // return new GasStation($row); // If you don't need globalization
-    
+
 }}
