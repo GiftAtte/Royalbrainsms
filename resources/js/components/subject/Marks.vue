@@ -231,7 +231,6 @@ form:new Form({
      report_id:'',
            name:[],
      student_id:[],
-     arm_id:[],
      subject_id:'',
            test1:[],
            test2:[],
@@ -365,7 +364,6 @@ setFile () {
              this.form.test3=[];
             this.form.exams=[];
              this.form.note=[];
-            this.form.arm_id=[];
             this.form.midterm=[];
             this.form.number_of_students=0;
             var check=false
@@ -376,7 +374,6 @@ setFile () {
            var test1=document.querySelector(`#test1${index}`).value
            var test2=document.querySelector(`#test2${index}`).value
            var exams=document.querySelector(`#exams${index}`).value
-           var arm_id=document.querySelector(`#arm_id${index}`).value
 
             this.form.student_id.push(student_id)
             this.form.test1.push(test1)
@@ -395,7 +392,7 @@ setFile () {
              this.form.note.push(note)
                }
             this.form.exams.push(exams)
-            this.form.arm_id.push(arm_id)
+
 
 
             this.form.number_of_students=++this.form.number_of_students;
@@ -412,7 +409,8 @@ setFile () {
                         title: 'marks added successfully'
                         })
                        this.isSubject=false;
-             this.isLoading=false
+                   this.isLoading=false
+                  // this.Scores=[]
 
               }).catch(err=>{
                 toast.fire({

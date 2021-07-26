@@ -18,7 +18,7 @@ class LevelController extends Controller
     public function index()
     {
         $id=auth('api')->user()->school_id;
-        return Level::with('staff')->where([['school_id',$id],['is_history',0]])->latest()->paginate(10);
+        return Level::with('staff')->where([['school_id',$id],['is_history',0]])->latest()->paginate(20);
     }
 
     /**

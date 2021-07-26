@@ -631,7 +631,7 @@ axios.post('api/computeSummary/'+this.computeForm.report_id+'/'+this.computeForm
                 $('#summaryModal').modal('hide');
              swal.fire(
                         'success',
-                        'Summary in progress, check results in a min',
+                        'Summary computed successfully',
                         'success'
                         )
 
