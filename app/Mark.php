@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Mark extends Model
 {
     //
-    protected $guaded=[];
+    //protected $guaded=[];
     protected $table="marks";
     protected $fillable=['report_id','student_id','subject_id',
     'test1','test2','test3','exams','total','grade','narration','level_id','term_id','cummulative_narration','cummulative_grade',
