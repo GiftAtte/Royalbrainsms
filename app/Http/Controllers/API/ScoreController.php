@@ -1039,8 +1039,8 @@ $CurrentlevelScores=$totals->sortByDesc('total')->values();
                 $CAvg=round($score['total'],2);
                 $CGrade=$grade;
           }
-          $score['cummulative_avg']=round(($CAvg+$score['total']),2);
-          $score['grand_total']=$grand_total;
+          $score['cummulative_avg']=$CAvg;
+          $score['grand_total']=round(($grand_total+$score['total']),2);
           $score['cummulative_grade']=$CGrade['grade'];
           $score['cummulative_narration']=$CGrade['narration'];
 
