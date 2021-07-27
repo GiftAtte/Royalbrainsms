@@ -1024,10 +1024,10 @@ $CurrentlevelScores=$totals->sortByDesc('total')->values();
          $score['report_type']=$report->type;
          $score['type']=$subject->type;
          $score['exams']=floatval($score['exams']);
-         $score['test1']=$score['ca1']?floatval($score['ca1']):null;
-         $score['test2']=$score['ca2']?floatval($score['ca2']):null;
-         $score['test3']=$score['ca3']?floatval($score['ca3']):null;
-         $score['is_history']=intval($score['is_history']);
+         $score['test1']=$score['ca1'];
+         $score['test2']=$score['ca2'];
+         $score['test3']=$score['ca3'];
+         $score['is_history']=$score['is_history'];
          $score['arm_max_score']=$armScores->max('total');
          $score['arm_min_score']=$armScores->min('total');
          $score['arm_avg_score']=round($armScores->avg('total'),2);
@@ -1039,8 +1039,8 @@ $CurrentlevelScores=$totals->sortByDesc('total')->values();
                 $CAvg=round($score['total'],2);
                 $CGrade=$grade;
           }
-          $score['cummulative_avg']=$CAvg;
-          $score['grand_total']=round($grand_total+$score['total'],2);
+          $score['cummulative_avg']=round(($CAvg+$score['total']),2);
+          $score['grand_total']=$grand_total;
           $score['cummulative_grade']=$CGrade['grade'];
           $score['cummulative_narration']=$CGrade['narration'];
 
@@ -1106,6 +1106,7 @@ array_push($scoreArr,
    'cummulative_average'=>round($cummulative_avg,2),
    'report_id'=>$report_id,
     'level_id'=>$report->level_id,
+    'total_students'=>count($students),
 
    ]);
 
@@ -1126,7 +1127,7 @@ foreach($scoreArr as $score){
 
      Result::create($score);
 
-//return $score;
+///return $score;
 
 }
 
