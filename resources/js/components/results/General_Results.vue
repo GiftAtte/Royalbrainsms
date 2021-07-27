@@ -120,7 +120,7 @@
 </div>
 </td>
 <td v-show="isThird_term && isCummulative" >{{score.grand_total?score.grand_total:'-'}}</td>
-<td v-show="isThird_term && isCummulative" >{{score.score.cummulative_avg:?score.cummulative_avg:score.average}}</td>
+<td v-show="isThird_term && isCummulative" >{{score.cummulative_avg?score.cummulative_avg:'-'}}</td>
 
 <td v-show="isThird_term && isCummulative" >{{score.cummulative_grade?score.cummulative_grade:'-'}}</td>
 <td v-show="isThird_term && isCummulative" >{{score.cummulative_narration?score.cummulative_narration:'-'}}</td>
@@ -167,7 +167,7 @@
 
 
 <td v-show="isThird_term && isCummulative" >{{score.grand_total?score.grand_total:'-'}}</td>
-<td v-show="isThird_term && isCummulative" >{{score.score.cummulative_avg:?score.cummulative_avg:score.average}}</td>
+<td v-show="isThird_term && isCummulative" >{{score.cummulative_avg?score.cummulative_avg:'-'}}</td>
 <td v-show="isThird_term && isCummulative" >{{score.cummulative_grade?score.cummulative_grade:'-'}}</td>
 <td v-show="isThird_term && isCummulative" >{{score.cummulative_narration?score.cummulative_narration:'-'}}</td>
 
@@ -177,7 +177,7 @@
 <td v-show="isAHScore">{{score.arm_max_score?score.arm_max_score:''}}</td>
 <td v-show="isASLScore">{{score.arm_min_score?score.arm_min_score:''}}</td>
 <td v-show="isASAScore">{{score.arm_avg_score?score.arm_avg_score:''}}</td>
-<td v-show="isASPosition">{{score.arm_subj_position?score.arm_subj_position:''}}</td>
+<td v-show="isASPosition">{{score.score.arm_subj_position?score.arm_subj_position:''}}</td>
 
 <td v-show="isCSPosition">{{score.class_subj_position?class_subj_position:''}}</td>
 <td v-show="isCSHScore">{{score.max_class_score}}</td>
