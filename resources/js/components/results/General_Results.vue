@@ -120,7 +120,7 @@
 </div>
 </td>
 <td v-show="isThird_term && isCummulative" >{{score.grand_total?score.grand_total:'-'}}</td>
-<td v-show="isThird_term && isCummulative" >{{score.average?score.cummulative_average:'-'}}</td>
+<td v-show="isThird_term && isCummulative" >{{score.average?score.cummulative_avg:'-'}}</td>
 
 <td v-show="isThird_term && isCummulative" >{{score.cummulative_grade?score.cummulative_grade:'-'}}</td>
 <td v-show="isThird_term && isCummulative" >{{score.cummulative_narration?score.cummulative_narration:'-'}}</td>
@@ -167,7 +167,7 @@
 
 
 <td v-show="isThird_term && isCummulative" >{{score.grand_total?score.grand_total:'-'}}</td>
-<td v-show="isThird_term && isCummulative" >{{score.average?score.cummulative_average:'-'}}</td>
+<td v-show="isThird_term && isCummulative" >{{score.average?score.cummulative_avg:'-'}}</td>
 <td v-show="isThird_term && isCummulative" >{{score.cummulative_grade?score.cummulative_grade:'-'}}</td>
 <td v-show="isThird_term && isCummulative" >{{score.cummulative_narration?score.cummulative_narration:'-'}}</td>
 
