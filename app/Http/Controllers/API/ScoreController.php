@@ -968,17 +968,19 @@ public function importExcel( Request $request){
 
 
 if($request->has('file')){
-$data=array_map('str_getcsv',file($request->file));
-  $header=$data[0];
+
+   $data=array_map('str_getcsv',file($request->file));
+    $header=$data[0];
     unset($data[0]);
     $score_array2=[];
     $score_array=[];
     $report_id=intval(array_combine($header,$data[1])['report_id']);
     $subject_id=intval(array_combine($header,$data[1])['subjects_id']);
     $report=Report::findOrFail($report_id);
+     $isDelete=  Mark::whereIn('report_id',[$report_id])->whereIn('subject_id',[$subject_id])->delete();
     $subject=Level_sub::where('subject_id',$subject_id)->first();
     // retrieve the scores for the level
-   Mark::whereIn('subject_id',[$subject_id])->whereIn('report_id',[$report_id])->delete();
+
     $LevelScores=Mark::whereIn('subject_id',[$subject_id])->whereIn('level_id',[$report->level_id])->get();
 
     foreach($data as $score){
@@ -992,7 +994,7 @@ $data=array_map('str_getcsv',file($request->file));
 
   $totals=collect($score_array);
 
-  $arm_ids=$totals->unique('arm_id')->toArray();
+  $arm_ids=$totals->unique('arm_id')->values();
    // $level_ids=$totals->pluck('level_id')->unique();
   // return $arm_ids->toArray();
     foreach($arm_ids  as $arm_id){
@@ -1054,7 +1056,7 @@ $CurrentlevelScores=$totals->sortByDesc('total')->values();
 
        }
 
-   return collect($score_array2)->sortByDesc('total') ;
+   return 'success' ;
 }
 
 
