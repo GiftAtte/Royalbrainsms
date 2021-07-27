@@ -1043,9 +1043,9 @@ $CurrentlevelScores=$totals->sortByDesc('total')->values();
           $score['grand_total']=round(($grand_total+$score['total']),2);
           $score['cummulative_grade']=$CGrade['grade'];
           $score['cummulative_narration']=$CGrade['narration'];
-
+//return $score;
         Mark::create($score);
-         array_push($score_array2, collect($score));
+        // array_push($score_array2, collect($score));
 
 
 

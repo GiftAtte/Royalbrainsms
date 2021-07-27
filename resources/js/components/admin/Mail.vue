@@ -17,7 +17,28 @@
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
-    <div class="card card-navy row col-md-12">
+    <div class="col-md-12 row">
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>RECIPIENTS</label>
+ <select class="form-control"
+ v-model="form.type"
+ @change="getRecipients"
+ >
+    <option value="">Select Recipients</option>
+     <option value="parents">Parents</option>
+      <option value="students">Students</option>
+       <option value="staff">Teachers</option>
+ </select>
+
+        </div>
+
+
+</div>
+<div class="col-md-6">
+    <div class="card card-navy row ">
+
   <div class="card-header">
 
       <h3 class="card-title">Email Sender </h3>
@@ -27,7 +48,7 @@
       </div>
     </div>
   </div>
-<form  @submit.prevent="sendMail">
+<form  @submit.prevent="sendMessage">
 <div class="card-body">
 <div class="table-responsive">
 <table class="table ">
@@ -83,7 +104,7 @@
 
     <div class="form-group">
      <label>Enter  Message</label>
-      <vue-editor v-model="form.message"></vue-editor>
+      <textarea rows="5"  class="form-control">Enter Message</textarea>
 
     </div>
 
@@ -95,6 +116,9 @@
 
 
     </div>
+</div>
+    </div>
+
     </div>
 </template>
 
@@ -108,6 +132,12 @@ import { VueEditor } from "vue2-editor";
     data(){
       return {
         isEmail:false,
+        Recipients:'2348063611790',
+        sender:'Royalbrains',
+        message:'Testing things',
+        email:'attegift@gmail.com',
+        apikey:'b1e92675e7b00c7ff6a06a552029917006a8b2f0',
+
         form:new Form({
           type:'',
           email:'',
@@ -122,16 +152,22 @@ import { VueEditor } from "vue2-editor";
      setEmail(){
        this.isEmail=true
      },
-     sendMail(){
+     getRecipients(){
        this.form.post('api/send_mail')
-       .then((result) => {
-
+       .then(result=> {
+             this.Recipients=result.data
        }).catch((err) => {
 
        });
       console.log(this.form.data);
 
+     },
+     sendMessage(){
+         axios.post(`
+             http://api.ebulksms.com:8080/sendsms?username=${this.email}&apikey=${this.apikey}&sender=${this.sender}&messagetext=${this.message}&flash=0&recipients=${this.Recipients}`
+         )
      }
+
  }
     }
 </script>
