@@ -15,42 +15,45 @@ class EmailController extends Controller
     {
      return view('admin.Mail.create');
     }
-    
+
      function send(Request $request)
     {   $name=null;
-        $Recipients=null;
+        $Recipients='';
      $this->validate($request, [
 
       'message' =>  'required'
      ]);
 if(($request->email!=null)||($request->type!=null)){
- 
+
          if($request->type=='students'){
              $name="STUDENT";
-              $recipients=User::whereNotNull('student_id')->select('email')->get();
+              $recipients=Student::whereNotNull('phone')->select('phone')->get();
               foreach($recipients as $res){
-           $Recipients=$Recipients.','.$res->Email;
+           $Recipients=$Recipients.','.$res->email;
        }
+       return$Recipients;
 }
       if($request->type=='staff'){
           $name="STAFF";
-              $recipients=User::whereNotNull('staff_id')->select('email')->get();
+              $recipients=staff::whereNotNull('phone')->select('phone')->get();
               foreach($recipients as $res){
            $Recipients=$Recipients.','.$res->Email;
        }
+      return$Recipients;
 }
       if($request->type=='parents'){
           $name="PARENTS";
-              $recipients=Parents::whereNotNull('parent_id')->select('email')->get();
+              $recipients=Student::whereNotNull('fphone')->select('fphone')->get();
               foreach($recipients as $res){
-           $Recipients=$Recipients.', '.$res->PEmail;
+           $Recipients=$Recipients.', '.$res->femail;
        }
+       return$Recipients;
 }
  elseif($request->email!=null){
               $Recipients=','.(string)$request->email;
               $recipients=explode(",",$request->email);
              $name='emails';
-            
+
          }
 
         $data = array(
@@ -63,11 +66,11 @@ if(($request->email!=null)||($request->type!=null)){
      $re= explode(",",$Recipients);
     $re[0]="attegift@gmail.com";
      //return $re;
-      
+
       //for($i=0;$i<count($recipients);++$i){
-       
-           
-            
+
+
+
      Mail::to($re)->send(new SendMail($data));
      return ['success'=> 'Mail sent to '.(count($re)-1)." ". $name];
 
@@ -80,53 +83,53 @@ if(($request->email!=null)||($request->type!=null)){
     public function createSMS(){
         return view('admin.sms.create');
     }
-    
+
     public function sendSMS(Request $request, EbulkSMS $sms){
          $Recipients=null;
          $recipients=null;
-         
+
     if(($request->phone!=null)||($request->type!=null)){
 
-         
+
          if($request->type=='students'){
               $recipients=Student::whereNotNull('PhoneNumber')->select('PhoneNumber')->get();
               foreach($recipients as $res){
            $Recipients=$Recipients.','.$res->PhoneNumber;
        }
-             
+
          }
           if($request->type=='parents'){
               $recipients=Parents::whereNotNull('Pphone')->select('Pphone')->get();
               foreach($recipients as $res){
            $Recipients=$Recipients.','.$res->Pphone;
        }
-             
+
          }
        if($request->type=='employees'){
               $recipients=Employee::whereNotNull('PhoneNumber')->select('PhoneNumber')->get();
                foreach($recipients as $res){
            $Recipients=$Recipients.','.$res->PhoneNumber;
        }
-             
+
          }
          elseif($request->phone!=null){
               $Recipients=(string)$request->phone;
               $recipients=explode(",",$request->phone);
-             
-            
+
+
          }
  // return  $Recipients;
        $message=$request->message;
-      
-      
-       
+
+
+
        $sms->composeMessage($message)
                         ->addRecipients($Recipients)
                         ->send(); //
                          return back()->with('success', 'Message sent sent successfully to '." ". count($recipients)." "."contacts");
     }
-    else{ 
+    else{
         return back()->withErrors('Please add recipients');
-        
+
     }}
 }

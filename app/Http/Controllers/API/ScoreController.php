@@ -981,15 +981,15 @@ if($request->has('file')){
     $subject=Level_sub::where('subject_id',$subject_id)->first();
     // retrieve the scores for the level
 
-    $LevelScores=Mark::whereIn('subject_id',[$subject_id])->whereIn('level_id',[$report->level_id])->get();
+    $LevelScores=Mark::whereIn('level_id',[$report->level_id])->where('subject_id',$subject_id)->get();
 
     foreach($data as $score){
 
         $score=array_combine($header,$score);
         $score['total']=$this->default_sum($score['ca1'],$score['ca2'],$score['ca3'],$score['exams']);
-
+if($score['total']>0){
         array_push($score_array, $score);
-
+}
     }
 
   $totals=collect($score_array);
@@ -1000,6 +1000,8 @@ if($request->has('file')){
     foreach($arm_ids  as $arm_id){
 
 $armScores=$totals->whereIn('arm_id',$arm_id['arm_id'])->sortByDesc('total')->values();
+$armScoresTotal=$totals->whereIn('arm_id',$arm_id['arm_id']);
+
 $CurrentlevelScores=$totals->sortByDesc('total')->values();
 //$lev=$LevelScores->whereIn('arm_id',[$arm_ids[$i]]);
 
@@ -1008,7 +1010,8 @@ $CurrentlevelScores=$totals->sortByDesc('total')->values();
              $CGrade='';
              $CNarration='';
              $grand_total=0;
-             $averageScore=collect($LevelScores)->where('student_id',$score['student_id'])->avg('total');
+           $averageScore=collect($LevelScores)->where('student_id',$score['student_id'])->pluck('total');
+           $averageScore=  collect($averageScore)->push($score['total'])->avg();
                $grand_total=collect($LevelScores)->where('student_id',$score['student_id'])->sum('total');
              $grade=$this->grade(floatval($score['total']),$report->gradinggroup_id,auth('api')->user()->school_id);
 
@@ -1030,18 +1033,14 @@ $CurrentlevelScores=$totals->sortByDesc('total')->values();
          $score['test2']=$score['ca2'];
          $score['test3']=$score['ca3'];
          $score['is_history']=$score['is_history'];
-         $score['arm_max_score']=$armScores->max('total');
-         $score['arm_min_score']=$armScores->min('total');
-         $score['arm_avg_score']=round($armScores->avg('total'),2);
-          if($averageScore>0){
-               $CAvg=round((($score['total']+$averageScore)/2),2);
+         $score['arm_max_score']=collect($score_array)->max('total');
+         $score['arm_min_score']=collect($score_array)->min('total');
+         $score['arm_avg_score']=round(collect($score_array)->avg('total'),2);
 
-               $CGrade=$this->grade(floatval($CAvg),$report->gradinggroup_id,auth('api')->user()->school_id);
-          }else{
-                $CAvg=round($score['total'],2);
-                $CGrade=$grade;
-          }
-          $score['cummulative_avg']=$CAvg;
+
+               $CGrade=$this->grade(floatval($averageScore),$report->gradinggroup_id,auth('api')->user()->school_id);
+
+          $score['cummulative_avg']=$averageScore;
           $score['grand_total']=round(($grand_total+$score['total']),2);
           $score['cummulative_grade']=$CGrade['grade'];
           $score['cummulative_narration']=$CGrade['narration'];
@@ -1160,8 +1159,8 @@ foreach($scoreArr as $score){
 
             $report=Report::findOrFail($request->report_id);
             $subject=Level_sub::where([['level_id',$report->level_id],['subject_id',$request->subject_id]])->first();
-            $LevelScores=Mark::whereIn('subject_id',[$request->subject_id])->whereIn('level_id',[$report->level_id])
-             ->whereIn('report_type',[$report->type])->get();
+            $LevelScores=Mark::whereIn('subject_id',[$request->subject_id])->where('level_id',$report->level_id)
+             ->where('report_type',$report->type)->get();
 
  Mark::whereIn('report_id',[$report->id])->where([['arm_id',$request->arm_id],['subject_id',$request->subject_id]])->delete();
             for($i=0;$i<$Nstudents; ++$i){
@@ -1203,30 +1202,28 @@ foreach($scoreArr as $score){
              $CGrade=['grade'=>'','narration'=>''];
              $CNarration='';
              $grand_total=0;
-             $averageScore=collect($LevelScores)->where('student_id',$score['student_id'])->avg('total');
+             $averageScore=collect($LevelScores)->where('student_id',$score['student_id'])->pluck('total');
+             $averageScore=  collect($averageScore)->push($score['total'])->avg();
              $grand_total=collect($LevelScores)->where('student_id',$score['student_id'])->sum('total');
              $score['arm_subj_position']=$this->getRanking($armScores,$score['total']);
              //$score['class_subj_position']=$this->getRanking($CurrentlevelScores,$score['total']);
 
 
          $score['arm_max_score']=$armScores->max('total');
-         $score['arm_min_score']=$armScores->min('total');
-         $score['arm_avg_score']=round($armScores->avg('total'),2);
-          if($averageScore>0){
-               $CAvg=round((($score['total']+$averageScore)/2),2);
+         $score['arm_min_score']=collect($marksArray)->min('total');
+         $score['arm_avg_score']=round(collect($marksArray)->avg('total'),2);
 
-               $CGrade=$this->grade(floatval($CAvg),$report->gradinggroup_id,auth('api')->user()->school_id);
-          }else{
-                $CAvg=round($score['total'],2);
-                $CGrade['grade']=$score['grade'];
-                $CGrade['narration']=$score['narration'];
-          }
-          $score['cummulative_avg']=$CAvg;
-          $score['grand_total']=round($grand_total+$score['total'],2);
+
+
+               $CGrade=$this->grade(floatval($averageScore),$report->gradinggroup_id,auth('api')->user()->school_id);
+
+
+          $score['cummulative_avg']=$averageScore;
+          $score['grand_total']=round(($grand_total+$score['total']),2);
           $score['cummulative_grade']=$CGrade['grade'];
           $score['cummulative_narration']=$CGrade['narration'];
 
-        Mark::create($score);
+            Mark::create($score);
 
 
     }

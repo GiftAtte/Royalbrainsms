@@ -109,7 +109,7 @@
     </div>
 
 <div class="card-footer">
-<button class="btn btn-success"><i class="fa fa-envelope" ></i> send </button>
+<button class="btn btn-success" type="submit"><i class="fa fa-envelope" ></i> send </button>
 </div>
 </div>
 </form>
@@ -136,7 +136,7 @@ import { VueEditor } from "vue2-editor";
         sender:'Royalbrains',
         message:'Testing things',
         email:'attegift@gmail.com',
-        apikey:'b1e92675e7b00c7ff6a06a552029917006a8b2f0',
+        apikey:'22b6d93d3efda662aac6da47790ebbe21712fbe2',
 
         form:new Form({
           type:'',
@@ -156,16 +156,20 @@ import { VueEditor } from "vue2-editor";
        this.form.post('api/send_mail')
        .then(result=> {
              this.Recipients=result.data
-       }).catch((err) => {
+                console.log(this.Recipients);
+       })
 
-       });
-      console.log(this.form.data);
 
      },
      sendMessage(){
-         axios.post(`
-             http://api.ebulksms.com:8080/sendsms?username=${this.email}&apikey=${this.apikey}&sender=${this.sender}&messagetext=${this.message}&flash=0&recipients=${this.Recipients}`
-         )
+         let request = new XMLHttpRequest();
+         let url=`
+             http://api.ebulksms.com:4433/sendsms?username=${this.email}&apikey=${this.apikey}&sender=${this.sender}&messagetext=${this.message}&flash=0&recipients=${this.Recipients}`
+
+              request.open('GET', url);
+              request.send(null)
+
+
      }
 
  }
