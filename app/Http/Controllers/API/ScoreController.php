@@ -1091,7 +1091,7 @@ public function computeSummary($report_id,$arm_id){
 $scores=Mark::whereIn('report_id',[$report_id])->where([['arm_id',$arm_id],['total','>',0],['type','Academic']])->get();
 if(count($scores)>0){
 $cummulativeScores=Mark::whereIn('level_id',[$report->level_id])->whereNotIn('report_type',['default-midterm','mid_term'])
-->whereNotIn('total',[0])->where('type','Academic')->get();
+->whereNotIn('total',[0])->where([['type','Academic'],['arm_id',$arm_id]])->get();
 $students=collect($scores)->unique('student_id')->pluck('student_id');
 
 $scoreArr=[];
@@ -1100,6 +1100,7 @@ for($i=0;$i<count($students);++$i){
 $averageScore=collect($scores)->where('student_id',$students[$i])->whereNotIn('total',[0])->avg('total');
 $total=collect($scores)->where('student_id',$students[$i])->sum('total');
 $cummulative_avg=collect($cummulativeScores)->where('student_id',$students[$i])->avg('total');
+ count($students);
 if($total>0){
 array_push($scoreArr,
   ['student_id'=>$students[$i],
@@ -1109,17 +1110,18 @@ array_push($scoreArr,
    'report_id'=>$report_id,
     'level_id'=>$report->level_id,
     'total_students'=>count($students),
+    'total'=>round($averageScore,2)
 
    ]);
 
 }
 }
 $results=[];
-  $ScoreCollects=collect($scoreArr)->sortByDesc('avg')->values();
+  $ScoreCollects=collect($scoreArr)->sortByDesc('total')->values();
   Result::whereIn('report_id',[$report_id])->where('arm_id',$arm_id)->delete();
 foreach($scoreArr as $score){
      $grade=$this->grade($score['average_scores'],$report->gradinggroup_id,auth('api')->user()->school_id);
-    $score['arm_position']=$this->getRanking($ScoreCollects,$score['average_scores']);
+    $score['arm_position']=$this->getRanking($ScoreCollects,$score['total']);
     $score['arm_id']=$arm_id;
     // if($report->term_id===3){
 
@@ -1127,7 +1129,7 @@ foreach($scoreArr as $score){
     $score['grade']=$grade['grade'];
      $score['narration']=$grade['narration'];
 
-     Result::create($score);
+   Result::create($score);
 
 ///return $score;
 
