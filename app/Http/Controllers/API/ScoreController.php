@@ -1040,7 +1040,7 @@ $CurrentlevelScores=$totals->sortByDesc('total')->values();
 
                $CGrade=$this->grade(floatval($averageScore),$report->gradinggroup_id,auth('api')->user()->school_id);
 
-          $score['cummulative_avg']=$averageScore;
+          $score['cummulative_avg']=round($averageScore,2);
           $score['grand_total']=round(($grand_total+$score['total']),2);
           $score['cummulative_grade']=$CGrade['grade'];
           $score['cummulative_narration']=$CGrade['narration'];
@@ -1204,12 +1204,12 @@ foreach($scoreArr as $score){
              $grand_total=0;
              $averageScore=collect($LevelScores)->where('student_id',$score['student_id'])->pluck('total');
              $averageScore=  collect($averageScore)->push($score['total'])->avg();
-             $grand_total=collect($LevelScores)->where('student_id',$score['student_id'])->sum('total');
+             $grand_total=collect($averageScore)->where('student_id',$score['student_id'])->sum('total');
              $score['arm_subj_position']=$this->getRanking($armScores,$score['total']);
              //$score['class_subj_position']=$this->getRanking($CurrentlevelScores,$score['total']);
 
 
-         $score['arm_max_score']=$armScores->max('total');
+         $score['arm_max_score']=collect($marksArray)->max('total');
          $score['arm_min_score']=collect($marksArray)->min('total');
          $score['arm_avg_score']=round(collect($marksArray)->avg('total'),2);
 
@@ -1218,7 +1218,7 @@ foreach($scoreArr as $score){
                $CGrade=$this->grade(floatval($averageScore),$report->gradinggroup_id,auth('api')->user()->school_id);
 
 
-          $score['cummulative_avg']=$averageScore;
+          $score['cummulative_avg']=round($averageScore,2);
           $score['grand_total']=round(($grand_total+$score['total']),2);
           $score['cummulative_grade']=$CGrade['grade'];
           $score['cummulative_narration']=$CGrade['narration'];
