@@ -1000,7 +1000,7 @@ if($score['total']>0){
     foreach($arm_ids  as $arm_id){
 
 $armScores=$totals->whereIn('arm_id',$arm_id['arm_id'])->sortByDesc('total')->values();
-$armScoresTotal=$totals->whereIn('arm_id',$arm_id['arm_id']);
+$armScoresTotal=$armScores;
 
 $CurrentlevelScores=$totals->sortByDesc('total')->values();
 //$lev=$LevelScores->whereIn('arm_id',[$arm_ids[$i]]);
@@ -1015,7 +1015,7 @@ $CurrentlevelScores=$totals->sortByDesc('total')->values();
                $grand_total=collect($LevelScores)->where('student_id',$score['student_id'])->sum('total');
              $grade=$this->grade(floatval($score['total']),$report->gradinggroup_id,auth('api')->user()->school_id);
 
-             $score['arm_subj_position']=$this->getRanking($armScores,$score['total']);
+             $score['arm_subj_position']=$this->getRanking($armScoresTotal,$score['total']);
              $score['class_subj_position']=$this->getRanking($CurrentlevelScores,$score['total']);
 
              $score['grade']= $grade['grade'];
