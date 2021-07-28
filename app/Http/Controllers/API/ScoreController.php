@@ -1088,10 +1088,10 @@ $CurrentlevelScores=$totals->sortByDesc('total')->values();
 public function computeSummary($report_id,$arm_id){
 
      $report=Report::findOrFail($report_id);
-$scores=Mark::whereIn('report_id',[$report_id])->where([['arm_id',$arm_id],['total','>',0]])->get();
+$scores=Mark::whereIn('report_id',[$report_id])->where([['arm_id',$arm_id],['total','>',0],['type','Academic']])->get();
 if(count($scores)>0){
 $cummulativeScores=Mark::whereIn('level_id',[$report->level_id])->whereNotIn('report_type',['default-midterm','mid_term'])
-->whereNotIn('total',[0])->get();
+->whereNotIn('total',[0])->where('type','Academic')->get();
 $students=collect($scores)->unique('student_id')->pluck('student_id');
 
 $scoreArr=[];
