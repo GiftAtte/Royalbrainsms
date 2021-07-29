@@ -1033,9 +1033,9 @@ $CurrentlevelScores=$totals->sortByDesc('total')->values();
          $score['test2']=$score['ca2'];
          $score['test3']=$score['ca3'];
          $score['is_history']=$score['is_history'];
-         $score['arm_max_score']=collect($score_array)->max('total');
-         $score['arm_min_score']=collect($score_array)->min('total');
-         $score['arm_avg_score']=round(collect($score_array)->avg('total'),2);
+         $score['arm_max_score']=collect($armScores)->max('total');
+         $score['arm_min_score']=collect($armScores)->min('total');
+         $score['arm_avg_score']=round(collect($armScores)->avg('total'),2);
 
 
                $CGrade=$this->grade(floatval($averageScore),$report->gradinggroup_id,auth('api')->user()->school_id);
@@ -1155,16 +1155,16 @@ foreach($scoreArr as $score){
     $Nstudents= $request->number_of_students;
 
         $marksArray=[];
+ $report=Report::findOrFail($request->report_id);
+ Mark::whereIn('report_id',[$request->report_id])->where([['arm_id',$request->arm_id],['subject_id',$request->subject_id]])->delete();
 
-
-            $report=Report::findOrFail($request->report_id);
             $subject=Level_sub::where([['level_id',$report->level_id],['subject_id',$request->subject_id]])->first();
-            $LevelScores=Mark::whereIn('subject_id',[$request->subject_id])->where('level_id',$report->level_id)
-             ->where('report_type',$report->type)->get();
+            $LevelScores=Mark::whereIn('subject_id',[$request->subject_id])->where([['level_id',$report->level_id],['arm_id',$request->arm_id]],)
+             ->get();
 
- Mark::whereIn('report_id',[$report->id])->where([['arm_id',$request->arm_id],['subject_id',$request->subject_id]])->delete();
+
             for($i=0;$i<$Nstudents; ++$i){
-                $total=$this->default_sum($request->test1[$i],$request->test2[$i],$request->test3[$i],$request->exams[$i],$request->midterm?$request->midterm[$i]:0);
+                $total=$this->default_sum($request->test1[$i],$request->test2[$i],$request->test3[$i],$request->exams[$i]);
                 $gradding= $this->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
 
                 $mark=[];
@@ -1192,7 +1192,7 @@ foreach($scoreArr as $score){
 
           }
       $armScores=collect($marksArray)->sortByDesc('total')->values();
-      $CurrentlevelScores=collect($LevelScores)->sortByDesc('total')->values();
+      $CurrentlevelScores=collect($LevelScores);
 
          $count=0;
          $score_array2=[];
@@ -1204,7 +1204,7 @@ foreach($scoreArr as $score){
              $grand_total=0;
              $averageScore=collect($LevelScores)->where('student_id',$score['student_id'])->pluck('total');
              $averageScore=  collect($averageScore)->push($score['total'])->avg();
-             $grand_total=collect($averageScore)->where('student_id',$score['student_id'])->sum('total');
+            $grand_total=collect($LevelScores)->where('student_id',$score['student_id'])->sum('total');
              $score['arm_subj_position']=$this->getRanking($armScores,$score['total']);
              //$score['class_subj_position']=$this->getRanking($CurrentlevelScores,$score['total']);
 
