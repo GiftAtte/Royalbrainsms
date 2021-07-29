@@ -52,7 +52,7 @@
         "datatables.net-dt": "^1.10.21",
         "debounce": "^1.2.0",
         "dual-listbox-vue": "^1.0.2",
-        "emailjs-com": "^2.4.1",
+        "emailjs-com": "^2.6.4",
         "es6-promise": "^4.2.8",
         "file-saver": "^2.0.2",
         "html2canvas": "^1.0.0-rc.5",

@@ -67,11 +67,7 @@ export default {
         link: '/subject_teacher',
       },
 
-      {
-          type: 'link',
-          txt: 'Email',
-          link: '/mail',
-        },
+
         {
           type: 'link',
           txt: 'Level History',
@@ -288,7 +284,11 @@ export default {
           link: '/learning_domain',
         },
 
-
+{
+          type: 'link',
+          txt: 'SMS Message',
+          link: '/sms',
+        },
     ],
   //superadmin
    superadmin: [

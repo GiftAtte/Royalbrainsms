@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMail;
 use App\Student;
+use App\Staff;
 use App\User;
 use App\Http\Controllers\Controller;
 class EmailController extends Controller
@@ -19,33 +20,39 @@ class EmailController extends Controller
      function send(Request $request)
     {   $name=null;
         $Recipients='';
-     $this->validate($request, [
 
-      'message' =>  'required'
-     ]);
 if(($request->email!=null)||($request->type!=null)){
 
          if($request->type=='students'){
              $name="STUDENT";
-              $recipients=Student::whereNotNull('phone')->select('phone')->get();
+              $recipients=Student::whereNotNull('phone')
+              ->where('school_id',auth('api')->user()->school_id)
+              ->select('phone')->get();
               foreach($recipients as $res){
-           $Recipients=$Recipients.','.$res->email;
+                  $phone=',234'.$res->phone;
+           $Recipients=$Recipients.',234'.$res->phone;
        }
        return$Recipients;
 }
       if($request->type=='staff'){
           $name="STAFF";
-              $recipients=staff::whereNotNull('phone')->select('phone')->get();
+              $recipients=Staff::whereNotNull('phone')
+              ->where('school_id',auth('api')->user()->school_id)
+              ->select('phone')->get();
               foreach($recipients as $res){
-           $Recipients=$Recipients.','.$res->Email;
+              $phone=',234'.$res->phone;
+           $Recipients=$Recipients.',234'.$res->phone;
        }
       return$Recipients;
 }
       if($request->type=='parents'){
           $name="PARENTS";
-              $recipients=Student::whereNotNull('fphone')->select('fphone')->get();
+              $recipients=Student::whereNotNull('fphone')
+              ->where('school_id',auth('api')->user()->school_id)
+              ->select('fphone')->get();
               foreach($recipients as $res){
-           $Recipients=$Recipients.', '.$res->femail;
+                $phone=',234'.$res->fphone;
+           $Recipients=$Recipients.',234'.$res->phone;
        }
        return$Recipients;
 }
@@ -94,21 +101,21 @@ if(($request->email!=null)||($request->type!=null)){
          if($request->type=='students'){
               $recipients=Student::whereNotNull('PhoneNumber')->select('PhoneNumber')->get();
               foreach($recipients as $res){
-           $Recipients=$Recipients.','.$res->PhoneNumber;
+           $Recipients=$Recipients.',234'.$res->PhoneNumber;
        }
 
          }
           if($request->type=='parents'){
               $recipients=Parents::whereNotNull('Pphone')->select('Pphone')->get();
               foreach($recipients as $res){
-           $Recipients=$Recipients.','.$res->Pphone;
+           $Recipients=$Recipients.',234'.$res->Pphone;
        }
 
          }
-       if($request->type=='employees'){
-              $recipients=Employee::whereNotNull('PhoneNumber')->select('PhoneNumber')->get();
+       if($request->type=='staff'){
+              $recipients=Employee::whereNotNull('phoneNumber')->select('PhoneNumber')->get();
                foreach($recipients as $res){
-           $Recipients=$Recipients.','.$res->PhoneNumber;
+           $Recipients=$Recipients.',234'.$res->PhoneNumber;
        }
 
          }

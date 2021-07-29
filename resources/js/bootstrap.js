@@ -2,7 +2,8 @@
 window._ = require('lodash');
 window.Popper = require('popper.js').default;
 
-
+import{ init } from 'emailjs-com';
+init("user_oJ72BF49hV8qMCMISA5OE");
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support

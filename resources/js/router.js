@@ -31,7 +31,7 @@ export default new Router({
     { path: '/reports/:message?', component: require('./components/Report.vue').default },
     { path: '/scores', component: require('./components/subject/Marks.vue').default },
     { path: '/import_scores', component: require('./components/students/Import_scores.vue').default },
-    { path: '/mail', component: require('./components/admin/Mail.vue').default },
+    { path: '/sms', component: require('./components/admin/Mail.vue').default },
     { path: '/load_activation', component: require('./components/admin/Activate_results.vue').default },
     { path: '/import_students', component: require('./components/students/Import_student.vue').default },
     { path: '/assignments', component: require('./components/assignments/Assignment_note.vue').default },
