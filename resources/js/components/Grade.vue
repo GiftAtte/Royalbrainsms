@@ -43,7 +43,7 @@
                         <th>Grading Group</th>
                         <th>Score Range</th>
                         <th>Grade</th>
-                        <th>Credit Point</th>
+                        <th>Promotion Status</th>
                         <th>Narration</th>
                         <th>Modify</th>
                   </tr>
@@ -55,7 +55,7 @@
                     <td>{{grade.gradinggroups?grade.gradinggroups.group_name:''}}</td>
                     <td>{{grade.lower_bound}} - {{grade.upper_bound}} </td>
                     <td>{{grade.grade}}</td>
-                    <td>{{grade.credit_point}}</td>
+                    <td>{{grade.progress_status}}</td>
                     <td>{{grade.narration}}</td>
 
                     <td>
@@ -143,11 +143,11 @@
                 <has-error :form="form" field="grade"></has-error>
                  </div>
                  <div class="form-group">
-                  <label>Credit Point</label>
-                <input type="number" name="credit_point" placeholder="Enter Credit Point" id="credit_point" step="0.01"
-                   class="form-control" :class="{ 'is-invalid': form.errors.has('credit_point') }"
-                   v-model="form.credit_point" >
-                <has-error :form="form" field="credit_point"></has-error>
+                  <label class="text-danger">PROMOTION STATUS</label>
+                <input type="text" name="progress_status" placeholder="Enter progress_status" id="credit_point" step="0.01"
+                   class="form-control" :class="{ 'is-invalid': form.errors.has('progress_status') }"
+                   v-model="form.progress_status" >
+                <has-error :form="form" field="progress_status"></has-error>
                  </div>
                   <div class="form-group">
                   <label>Narration</label>
@@ -195,7 +195,7 @@
                     id : '',
                     lower_bound:'',
                     upper_bound:'',
-                   credit_point:'',
+                   progress_status:'',
                     grade:'',
                     group_id:'',
                     narration:'',

@@ -38,7 +38,7 @@ class GradingController extends Controller
             'upper_bound' => $request->upper_bound,
             'narration' => $request->narration,
             'grade' => $request->grade,
-            'credit_point'=>$request->credit_point,
+            'progress_status'=>$request->progress_status,
             'group_id'=>$request->group_id,
             'school_id' => auth('api')->user()->school_id,
         ]);

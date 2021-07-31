@@ -43,7 +43,7 @@
                         <th>Title</th>
 
                         <th >Class/Level</th>
-                          <th v-show="$gate.isAdminOrTutor()" >Downloads</th>
+                          <th v-show="$gate.isSuperadmin()" >Downloads</th>
                         <th>Action</th>
                         <th v-show="$gate.isAdminOrTutor()">Status</th>
                   </tr>
@@ -54,7 +54,7 @@
                     <td>{{report.id}}</td>
                     <td>{{report.title}}</td>
                     <td>{{report.levels?report.levels.level_name:''}} </td>
-                    <td><a v-show="$gate.isAdminOrTutor()" disabled="true"   href="#" @click="download(report.id)" >downloads</a></td>
+                    <td><a v-show="$gate.isSuperadmin()" disabled="true"   href="#" @click="download(report.id)" >downloads</a></td>
                      <td >
                          <router-link v-show="$gate.isAdminOrTutor()"  :to="`result_list/${report.id}`" title="view report list" tag="a" exact><i class="fa fa-eye blue"></i></router-link>
                        <a href="#" @click="editModal(report)" v-show="$gate.isAdmin()" class="pl-2">

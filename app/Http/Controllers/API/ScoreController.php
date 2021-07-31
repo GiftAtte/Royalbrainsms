@@ -390,12 +390,12 @@ public function grade($score,$gradinggroup_id,$school_id)
     $grading=Grading::whereIn('group_id',[$gradinggroup_id])->where([['lower_bound','<=',$score],['upper_bound','>=',$score],['school_id',$school_id]])->first();
     if($grading){
    $Grade=$grading->grade;
-   $credite_point=$grading->credit_point;
+   $progress=$grading->progress_status;
    $narration=$grading->narration;
 
-  return ["grade"=>$Grade,"narration"=>$narration,'credit_point'=>$credite_point,'total'=>$score];
+  return ["grade"=>$Grade,"narration"=>$narration,'progress_status'=>$progress,'total'=>$score];
 }}
-return ["grade"=>'-',"narration"=>'-','credit_point'=>0,'total'=>0];
+return ["grade"=>'-',"narration"=>'-','progress_status'=>0,'total'=>0];
 }
 
 
@@ -828,12 +828,14 @@ if($report->type==='creche'){
     $scores=collect($scoreArr);
     $summary=CrechestudentDomain::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
 }else{
-   $scores=Mark::whereNotIn('total',[0])->with('subjects')->where([['report_id',$report_id],
-    ['student_id',$student_id],['type','Academic']])->distinct('subject_id')->get();
+   $scores=Mark::whereIn('report_id',[$report_id])->with('subjects')
+    ->where([['student_id',$student_id],['type','Academic']])->whereNotIn('total',[0])
+    ->distinct('subject_id')->get();
     $summary=Result::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
 }
-    $noneAcademic=Mark::whereNotIn('total',[0])->with('subjects')->where([['report_id',$report_id],
-    ['student_id',$student_id],['type','None Academic']])->get();
+    $noneAcademic=Mark::whereIn('report_id',[$report_id])->with('subjects')
+    ->where([['student_id',$student_id],['type','None Academic']])->whereNotIn('total',[0])
+    ->distinct('subject_id')->get();
 
 
       $principal_comment=$this->principalComment($summary?$summary->average_scores:0,$report->gradinggroup_id);
@@ -1028,6 +1030,7 @@ foreach($scoreArr as $score){
     // }
     $score['grade']=$grade['grade'];
      $score['narration']=$grade['narration'];
+     $score['progress_status']=$this->grade($score['cummulative_average'],$report->gradinggroup_id,auth('api')->user()->school_id)['progress_status'];
 
    Result::create($score);
 

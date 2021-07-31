@@ -86,7 +86,10 @@ Route::get('teacher_subjects/{id}', 'API\TeachersController@loadSubjects');
  Route::get('result/{report_id}/{student_id?}','API\ScoreController@studenResult');
  Route::get('pdf_download/{report_id}/{student_id?}', 'API\ReportController@pdfDownload');
  Route::put('report','API\ReportController@update');
- Route::get('checkreport/{id}','API\ReportController@checkReport');
+  Route::get('load_results/{report_id}/{arm_id}','API\ActivationController@loadResults');
+  Route::post('update_results','API\ActivationController@updateResults');
+
+  Route::get('checkreport/{id}','API\ReportController@checkReport');
  Route::get('getArms/{report_id}','API\ReportController@getArms');
  Route::get('loadArms/{level_id}','API\LevelController@loadArms');
  Route::get('master/{report_id}','API\ReportController@masterCard');
@@ -217,6 +220,12 @@ Route::post('fee_description','API\FeesController@newDescription');
 Route::get('fee_description/{id}/{student_id?}','API\FeesController@feeDescriptions');
 Route::put('fee_description/{id}','API\FeesController@updateDescriptions');
 Route::delete('fee_description/{id}','API\FeesController@deleteDescription');
+
+Route::post('messageApi','API\SmsController@createMessageApi');
+Route::get('messageApi','API\SmsController@MessageApi');
+Route::put('messageApi','API\SmsController@updateMessageApi');
+Route::delete('messageApi/{id}','API\SmsController@deleteMessageApi');
+
 Route::post('paystack','API\FeesController@createPaystack');
 Route::get('paystack','API\FeesController@paystack');
 Route::put('paystack','API\FeesController@updatePaystack');

@@ -258,7 +258,7 @@
  <td>Total Students in Arm</td><td>{{summary.total_students}}</td>
  </tr>
  <tr>
- <td>Progress status</td><td>{{summary.progress_status?summary.progress_status:''}}</td>
+ <td>Progress status</td><td><b v-show="isThird_term">{{summary.progress_status?summary.progress_status:''}}</b></td>
  </tr>
 
 
@@ -266,7 +266,7 @@
  </table>
 </div>
 <div class="  col-md-4  " v-show="isGFormula">
-<table class=" table table-bordered table-sm   table-striped" width="100%">
+<table class=" table table-bordered table-sm font-weight-bold  table-striped" width="100%">
 <tr>
 <th colspan="3" class="text-center text-primary" >Grading Key</th>
 </tr>
@@ -279,7 +279,7 @@
 </table>
 </div>
 <div class=" col-md-4 ">
-<table class="table table-bordered table-sm  table-striped " width="100%" >
+<table class="table table-bordered table-sm font-weight-bold  table-striped " width="100%" >
  <tr >
  <th colspan="2"  class="text-uppercase text-center text-bold text-primary">Short Keys</th>
  </tr>

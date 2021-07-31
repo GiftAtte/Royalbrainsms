@@ -26,7 +26,7 @@ class ActivationController extends Controller
     {
       $report=Report::findOrFail($report_id);
        $studentsA=[];
-     $students=Mark::where([['report_id',$report_id],['arm_id',$arm_id]])->distinct('student_id')->pluck('student_id')
+     $students=Mark::whereIn('report_id',[$report_id])->where('arm_id',$arm_id)->distinct('student_id')->pluck('student_id')
      ->toArray();
 
 
@@ -160,7 +160,43 @@ class ActivationController extends Controller
     }
 
 
+      public function loadResults($report_id,$arm_id){
+            $students=Result::whereIn('report_id',[$report_id])->where('arm_id',$arm_id)->distinct('student_id')->pluck('student_id')
+     ->toArray();
 
+
+         return  \DB::table('students')->whereIn('students.id',$students)
+        ->leftJoin('results', function($join) use($report_id)
+        {
+            $join->on('results.student_id', '=', 'students.id')
+            ->where('results.report_id',$report_id);
+        })->select(\DB::raw('CONCAT(students.surname," ", students.first_name)as name,
+         students.id as student_id, results.progress_status as progress_status,results.cummulative_average as average_score
+
+         '))->distinct('students.id')->orderBy('name')
+        ->get();
+      }
+
+
+       public function updateResults(Request $request)
+    {
+            $students=collect($request->student_id);
+           //$students['progress_status']=$students=$request->importProgress;
+           $results=collect(Result::whereIn('report_id',[$request->report_id])->where('arm_id',$request->arm_id)->get());
+           foreach($students as $student){
+            //return$student;
+               $result= $results->where('student_id',$student['student_id'])->first();
+
+
+                  $result['progress_status'] = $student['progress_status'];
+
+                   $result->save();
+
+
+
+    }
+    return 'success';
+    }
 
 }
 

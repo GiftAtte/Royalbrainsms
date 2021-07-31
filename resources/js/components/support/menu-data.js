@@ -112,7 +112,12 @@ export default {
         type: 'link',
         txt: 'Activate Results',
         link: '/load_activation',
-      },
+        },
+      {
+          type: 'link',
+          txt: 'Manage Promotion',
+          link: '/manage_progress',
+        },
       {
         type: 'link',
         txt: 'Performance Tracker',
@@ -316,6 +321,11 @@ export default {
           type: 'link',
           txt: 'Manage Paystack',
           link: '/paystack_key',
+       },
+        {
+          type: 'link',
+          txt: 'Manage SMS',
+          link: '/manage_sms',
         },
     ],
     account: [
@@ -445,7 +455,11 @@ export default {
           txt: 'Report Card',
           link: '/reports',
         },
-
+{
+          type: 'link',
+          txt: 'Manage Promotion',
+          link: '/manage_progress',
+        },
         {
           type: 'link',
           txt: 'Score Card',

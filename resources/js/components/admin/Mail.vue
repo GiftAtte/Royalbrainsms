@@ -102,8 +102,8 @@ import { VueEditor } from "vue2-editor";
         resipeint:'',
         sender:'',
         message:'',
-        email:'attegift@gmail.com',
-        apikey:'22b6d93d3efda662aac6da47790ebbe21712fbe2',
+        email:'',
+        apikey:'',
 
         form:new Form({
           type:'',
@@ -153,19 +153,23 @@ let Recipient=`${this.resipeint?'234'+this.resipeint:''}${this.Recipients?this.R
            let request = new XMLHttpRequest();
            let url=`
              http://api.ebulksms.com:4433/sendsms?username=${this.email}&apikey=${this.apikey}&sender=${this.sender}&messagetext=${this.message}&flash=0&recipients=${Recipient}`
+              // axios.get(url)
 
-              request.open('GET', url);
-              request.send(null)
-
-                                        swal.fire(
+             request.open('GET', url);
+         request.send(null)
+                 swal.fire(
                                         'success!',
                                         'Message Sent successfully',
                                         'success'
                                         )
-this.Recipients=''
+                                        this.Recipients=''
 this.resipeint='';
 this.message='';
 this.sender='';
+this.loadMessageApi()
+
+
+
 
                          }
                     })
@@ -185,8 +189,22 @@ this.sender='';
         }, (error) => {
             console.log('FAILED...', error);
         });
-     }
+     },
+         loadMessageApi(){
 
+                if(this.$gate.isAdmin()){
+                    axios.get("/api/messageApi").then(res  => {
+
+                        let smsApi=res.data.is_active;
+                        this.email=smsApi.email
+                        this.apikey=smsApi.api_key
+                        }
+                    );
+                }
+
+ }},
+ created(){
+     this.loadMessageApi()
  }
     }
 </script>
