@@ -101,7 +101,10 @@ public function AnnualScore($score,$term_id){
 
     public function store(Request $request)
     {
-              // return $request->all();
+         $report=Report::findOrFail($request->report_id);
+        if($report->type==='default-result'||$report->type==='default-midterm'){
+           return $this->default_store($request);
+        }
                $request->subject_id;
                $Nstudents= $request->number_of_students;
 

@@ -340,8 +340,8 @@ public function transcript($student_id=null)
                     foreach($subjects as $subject){
                        $isSubject=0;
                         foreach($scores as $score){
-                              $arm=$score->arm_id;
-                               if($score->subject_id===$subject->subject_id  &&$score->total>0){
+                             $arm=$score->arm_id;
+                               if($score->subject_id===$subject->subject_id){
                                 $collect=  $collect->put(strval($subject->subjects->name),round($score->total,2));
 
                                $isSubject=1;
