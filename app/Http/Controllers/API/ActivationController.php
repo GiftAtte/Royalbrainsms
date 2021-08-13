@@ -161,10 +161,22 @@ class ActivationController extends Controller
 
 
       public function loadResults($report_id,$arm_id){
+          $report=Report::findOrFail($report_id);
             $students=Result::whereIn('report_id',[$report_id])->where('arm_id',$arm_id)->distinct('student_id')->pluck('student_id')
-     ->toArray();
+          ->toArray();
 
+               if($report->type==='terminal'){
+                    return  \DB::table('students')->whereIn('students.id',$students)
+        ->leftJoin('results', function($join) use($report_id)
+        {
+            $join->on('results.student_id', '=', 'students.id')
+            ->where('results.report_id',$report_id);
+        })->select(\DB::raw('CONCAT(students.surname," ", students.first_name)as name,
+         students.id as student_id, results.progress_status as progress_status,results.annual_average as average_score
 
+         '))->distinct('students.id')->orderBy('name')
+        ->get();
+               }
          return  \DB::table('students')->whereIn('students.id',$students)
         ->leftJoin('results', function($join) use($report_id)
         {

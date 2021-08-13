@@ -323,12 +323,13 @@ public function transcript($student_id=null)
 
                 $count=0;
                 $report=Report::findOrFail($report_id);
-                $ids=Mark::where('report_id',$report_id)->distinct('student_id')->pluck('student_id');
+                $ids=Mark::whereIn('report_id',[$report_id])->distinct('student_id')->pluck('student_id');
                 $subjects=Level_sub::with('subjects')->where('level_id',$report->level_id)->get();
-              $students=Student::whereIn('id',$ids)->select('id','surname','first_name','middle_name','class_id','arm_id')->get();
+                $students=Student::whereIn('id',$ids)->select('id','surname','first_name','middle_name','class_id','arm_id')->get();
                  foreach($students as $student){
                      $arm=null;
-                   $scores =Mark::where([['report_id',$report_id],['student_id',$student->id]])
+                   $scores =Mark::whereIn('report_id',[$report_id])
+                   ->whereIn('student_id',[$student->id])
                    ->join('subjects','marks.subject_id','=','subjects.id')
                    ->select('subjects.name as subject','marks.test1 as ca1','marks.test2 as ca2','marks.exams as exam',
                    'marks.total as total','subjects.id as subject_id','marks.arm_id as arm_id')
@@ -337,14 +338,22 @@ public function transcript($student_id=null)
                    $name=$student->surname.' '.$student->first_name.' '.$student->middle_name;
                    $collect=collect(['STUDENT ID'=>$student->id,'NAMES'=>$name]);
                     foreach($subjects as $subject){
-
+                       $isSubject=0;
                         foreach($scores as $score){
-                               if($score->subject_id===$subject->subject_id){
+                              $arm=$score->arm_id;
+                               if($score->subject_id===$subject->subject_id  &&$score->total>0){
                                 $collect=  $collect->put(strval($subject->subjects->name),round($score->total,2));
-                               $arm=$score->arm_id;
+
+                               $isSubject=1;
                             }
+
                         }
+                               if($isSubject<1){
+                                $collect=  $collect->put(strval($subject->subjects->name),'');
+                            }
+
                     }
+
                     $arms=Arm::findOrFail($arm);
                     $collect= $collect->put('TOTAL',round($total,2));
                     $collect= $collect->put('CLASS ARM',$arms->name);

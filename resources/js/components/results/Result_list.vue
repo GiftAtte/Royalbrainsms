@@ -28,7 +28,7 @@
     </div>
 <h5 class="header text-danger text-uppercase">Result Class List for {{report.title}}</h5>
 </div>
-<div class="card-body table-responsive col-12">
+<div class="card-body table-responsive col-md-12">
 <table class="table table-hover  display" id="data_tb" width="100%">
 <thead>
 <tr>
@@ -42,7 +42,7 @@
 <td>{{student.arm?student.arm.name:''}}</td>
  <td class="row">
 <router-link v-if="$gate.isTutorOrAdmin()"     :to="`/result/${report}/${student.id}`"  tag="a" exact class="pr-2">view report card</router-link>
-<router-link v-if="$gate.isTutorOrAdmin()"     :to="`/result/${report}/${student.id}/annual`"  tag="a" exact class="pr-2">view Annual Report</router-link>
+<router-link v-show="isThirdTerm" v-if="$gate.isTutorOrAdmin()"     :to="`/result/${report}/${student.id}/annual`"  tag="a" exact class="pr-2">view Annual Report</router-link>
 
 <router-link :to="`/transcript/${student.id}`"  tag="a" exact>view transcript</router-link>
 
@@ -76,7 +76,8 @@ components: {
         data(){
             return{
                 students:{},
-                report:this.$route.params.id
+                report:this.$route.params.id,
+                isThirdTerm:false
 
             }
         },
@@ -108,6 +109,12 @@ components: {
                   window.print();
                 }},
                 created(){
+                    axios.get('/api/checkreport/'+this.report)
+                    .then(res=>{
+                      if(res.data.term_id===3){
+                          this.isThirdTerm=true
+                      }
+                    })
 
  Fire.$on('searching',() => {
                 let query = this.$parent.search;

@@ -12,7 +12,7 @@
 
     </div>
 <div class="card-body pt-0" id="section-to-print"  ref="generatePDF" :style="`background-image: linear-gradient(to bottom, rgba(255,255,255,0.98) 100%,rgba(255,255,255,0.98) 100%), url(/img/schools/${school.logo}) ;background-repeat: no-repeat; background-position: center;background-size: 80%;`">
-<div class="card-body row col-md-12 col-sm-12 pt-1 mt-0">
+<div class="card-body row col-md-12  pt-1 mt-0">
 <div class="col-md-2 col-sm-2"><img :src="`/img/schools/${school.logo}`" class="img-thumbnail  result-logo" alt="logo" width="100" height="100"></div>
 <div class="col-md-8 col-sm-12">
 <h3 class="text-primary text-uppercase">{{school.name}},

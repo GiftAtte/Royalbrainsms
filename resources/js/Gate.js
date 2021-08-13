@@ -9,7 +9,7 @@ export default class Gate {
         if(this.user.type === 'admin'||this.user.type === 'superadmin'){
             return true;
         }
-       
+
     }
     isSuperadmin() {
         if(this.user.type === 'superadmin'){
@@ -63,15 +63,15 @@ export default class Gate {
         if (this.user.type === 'subjectTeacher'|| this.user.type === 'tutor' ) {
             return true;
         }
-      
+
 
     }
-   
+
     isAdminOrSubjectTutor() {
         if (this.user.type === 'subjectTeacher'|| this.user.type === 'tutor'|| this.user.type === 'admin'|| this.user.type === 'superadmin' ) {
             return true;
         }
     }
-    
+
 }
 

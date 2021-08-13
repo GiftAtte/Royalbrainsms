@@ -671,7 +671,7 @@ this.resetLoading()
         },
         created() {
              this.getGradinggroup();
-          console.log(window.user)
+         // console.log(window.user)
             Fire.$on('searching',() => {
                 let query = this.$parent.search;
                 axios.get('api/findStudent?q=' + query)

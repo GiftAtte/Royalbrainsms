@@ -46,7 +46,7 @@
 </center>
 </div>
 </div>
-<div class="col col-12 py-2 ">
+<div class="col col-md-12 py-2 ">
 
 <div class="row col-md-10">
 <div class="col-md-6 py-2">
@@ -78,9 +78,9 @@
 <th>2nd Term<br>[30%]</th>
 <th>3rd Term<br>[40%]</th>
 <th>Total<br>[100%]</th>
-<th>Average</th>
-<th>Grade</th>
-<th>Narration</th>
+<th>Class Average</th>
+<th>Teacher's<br> Comment</th>
+
 <th>Position</th>
 
 <!-- <th class="text-center " v-show="isAHScore"><div><span>HIGHEST<br> SCORE</span></div></th>
@@ -93,18 +93,23 @@
 <tr v-for="(score,index) in scores" :key="index">
 <td>{{index+1}}</td>
 <td>{{score.subjects?score.subjects.name:''}}</td>
-<td v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===1)">
-{{total.total?total.total:'-'}}</td>
-<td  v-for="total in Total"    v-if="(total.subject_id===score.subject_id && total.term_id===2)">
-{{total.total?total.total:'-'}}</td>
-
+<td  >
+<div v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===1)">
+    {{total.total?total.total:'-'}}
+</div>
+</td>
+<td  >
+<div v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===2)">
+    {{total.total?total.total:'-'}}
+</div>
+</td>
 <td>{{score.annual_score}}</td>
 <td>{{score.annual_total}}</td>
-<td>{{score.arm_avg_score}}</td>
-<td>{{score.grade}}</td>
+<td>{{score.annual_average}}</td>
+<td>{{score.annual_grade}}</td>
 
-<td>{{score.narration}}</td>
-<td>{{score.arm_subj_position}}</td>
+
+<td>{{score.annual_position}}</td>
 
 
 <!-- <td v-show="isAHScore">{{score.arm_max_score}}</td>
@@ -124,10 +129,11 @@
 <div class="text-center text-bold text-primary container"> RESULTS SUMMARY</div>
 <hr class="text-bold">
 <div class="row col-md-12 py-3  bg-primary">
- <div class="col-md-3"><b>Total score:</b>&nbsp;&nbsp;{{summary.total_scores}}</div>
- <div class="col-md-3"><b>Average score:</b>&nbsp;&nbsp;{{summary.average_scores	}}</div>
- <div class="col-md-3"><b>Cummulative Avg score:</b>&nbsp;&nbsp;{{summary.cummulative_average}}</div>
- <div class="col-md-3"><b>Grade:</b>&nbsp;&nbsp;{{summary.grade}}</div>
+ <div class="col-md-3"><b>Total score:</b>&nbsp;&nbsp;{{summary.annual_total}}</div>
+ <div class="col-md-3"><b>Average score:</b>&nbsp;&nbsp;{{summary.annual_average?summary.annual_average:''}}</div>
+<div class="col-md-3"><b>Grade:</b>&nbsp;&nbsp;{{summary.annual_grade}}</div>
+ <div class="col-md-3"><b>Progress Status:</b>&nbsp;&nbsp;{{summary.progress_status}}</div>
+
 
   </div>
   <hr  class="text-bold">

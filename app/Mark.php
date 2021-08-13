@@ -13,7 +13,7 @@ class Mark extends Model
     'test1','test2','test3','exams','total','grade','narration','level_id','term_id','cummulative_narration','cummulative_grade','cummulative_avg',
     'grand_total','arm_id','credit_point','arm_max_score','arm_min_score','arm_avg_score','type','is_history','compute_summary',
     'report_type','note','weighted_score','session_id','annual_score','annual_average','annual_grade','annual_narration','annual_total','class_subj_position','average',
-    'arm_subj_position','annual_position','mid_term','type'];
+    'arm_subj_position','annual_position','mid_term','type','annual_position'];
 
           public function subjects()
           {

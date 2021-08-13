@@ -156,7 +156,8 @@ let Recipient=`${this.resipeint?'234'+this.resipeint:''}${this.Recipients?this.R
               // axios.get(url)
 
              request.open('GET', url);
-         request.send(null)
+             //request.setRequestHeader('Accept', 'application/json');
+             request.send(null)
                  swal.fire(
                                         'success!',
                                         'Message Sent successfully',
