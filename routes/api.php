@@ -99,6 +99,7 @@ Route::get('teacher_subjects/{id}', 'API\TeachersController@loadSubjects');
  Route::post('primary_scores','API\PrimaryController@store');
  Route::post('importExcel','API\ScoreController@importExcel');
  Route::post('load_students', 'API\ScoreController@loadStudents');
+ Route::post('deleteScores', 'API\ScoreController@deleteScores');
  Route::get('load_report', 'API\ScoreController@index');
  Route::get('score_template/{report_id}/{subject_id}','API\ScoreController@score_template');
  Route::get('backup/{report_id}/{subject_id}','API\ScoreController@score_backup');

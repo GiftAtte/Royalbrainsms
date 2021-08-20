@@ -190,7 +190,10 @@
 </tbody>
 </table>
 </div>
-<div class="card-footer"><button class="btn btn-success">submit</button></div>
+<div class="card-footer">
+    <button type="button" @click="deleteScores" class="btn btn-danger">Delete Scores</button>
+    <button class="btn btn-success pl-2">submit</button>
+    </div>
 </div>
 </div>
 
@@ -277,6 +280,33 @@ number_of_students:0
           });
            },
 
+           deleteScores(){
+                swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+
+                        // Send request to the server
+                         if (result.value) {
+                                this.form.post('api/deleteScores').
+                                then((res)=>{
+                                        swal.fire(
+                                        'Deleted!',
+                                        res.data.Message,
+                                        'success'
+                                        )
+                                    this.loadStudents();
+                                }).catch(()=> {
+                                    swal.fire("Failed!", "There was something wronge.", "warning");
+                                });
+                         }
+                    })
+            },
 
 
           checkReport(id){

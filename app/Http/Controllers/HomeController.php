@@ -25,6 +25,8 @@ use App\Result_activation;
 use App\Events\MarksCreated;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Exports\Mastersheet;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Level_history;
 use App\Markcheck;
 use App\Imports\MarksImport;
@@ -180,5 +182,118 @@ public function principalComment($average){
         public function learningDomain($student_id,$report_id){
             return Assessment::with('Ldomain')->where([['report_id',$report_id],['student_id',$student_id]])->get();
         }
+
+
+
+
+
+
+          public function export_master($report_id){
+                $masterSheet=[];
+                $masterArr=[];
+                $subject_headers=[];
+
+                $count=0;
+                $report=Report::findOrFail($report_id);
+                $ids=Mark::whereIn('level_id',[$report->level_id])->distinct('student_id')->pluck('student_id');
+                $totals =Mark::whereIn('report_id',[$report->level_id])->get();
+                $subjects=Level_sub::with('subjects')->where('level_id',$report->level_id)->get();
+                $students=Student::whereIn('id',$ids)->select('id','surname','first_name','middle_name','class_id','arm_id')->get();
+
+
+                $Allscores =Mark::whereIn('level_id',[$report->level_id])
+                  // ->whereIn('report_type',['default-result'])
+                   ->join('subjects','marks.subject_id','=','subjects.id')
+                   ->select('subjects.name as subject','marks.test1 as ca1','marks.test2 as ca2','marks.exams as exam',
+                   'marks.total as total','subjects.id as subject_id','marks.arm_id as arm_id','marks.student_id as student_id',
+                   'marks.cummulative_avg as cumm_avg','marks.term_id as term_id')
+                   ->orderBy('term_id')->orderBy('student_id')->get();
+                foreach($students as $student){
+
+                     $arm=null;
+                  $scores=collect($Allscores)->whereIn('student_id',$student->id)->all();
+                   $total =collect($totals)->whereIn('student_id',$student->id)->sum('total');
+
+                   $name=$student->surname.' '.$student->first_name.' '.$student->middle_name;
+                   $collect=collect(['STUDENT ID'=>$student->id,'NAMES'=>$name]);
+                   $subject_headers=collect(['STUDENT ID'=>'STUDENT ID','NAMES'=>'NAMES']);
+
+                    foreach($subjects as $subject){
+                                  $isSubject=0;
+                                  $average=collect($scores)->where('subject_id',$subject->subject_id)->avg('total');
+                                  $subject_headers=$subject_headers->put($subject->subjects->name,$subject->subjects->name);
+                                  $subject_headers=$subject_headers->put('t2'.$subject->subjects->name,'');
+                                  $subject_headers=$subject_headers->put('t3'.$subject->subjects->name,'');
+                                  $subject_headers=$subject_headers->put('cum'.$subject->subjects->name,'');
+
+
+                                foreach($scores as $score){
+                               $arm=$score->arm_id;
+                                 // $isSubject=0;
+                               if($score->subject_id===$subject->subject_id){
+
+                                   $isSubject=1;
+                                   $term_id=$score->term_id;
+                                   switch ($term_id) {
+                                           case 1:
+                                          $collect=  $collect->put($subject->subjects->name.'t1',$score->total?round($score->total,2):'');
+                                          break;
+                                           case 2:
+                                          $collect=  $collect->put($subject->subjects->name.'t2',$score->total?round($score->total,2):'');
+                                          break;
+                                                case 3:
+                                          $collect=  $collect->put($subject->subjects->name.'t3',$score->total?round($score->total,2):'');
+
+                                          break;
+                                          default:
+                                           # code...
+                                           break;
+                                   }
+
+
+
+
+
+
+
+                            }
+
+
+                        }
+
+                               if($isSubject<1){
+
+
+                                $collect=  $collect->put($subject->subjects->name.'t1','');
+                                $collect=  $collect->put($subject->subjects->name.'t2','');
+                                $collect=  $collect->put($subject->subjects->name.'t3','');
+                                $collect=  $collect->put($subject->subjects->name.'cum','');
+
+
+
+                            }else{
+                                $collect=  $collect->put($subject->subjects->name.'cum',round($average,2));
+                            }
+
+
+                    }
+
+                    // $arms=Arm::findOrFail($arm);
+                    // $collect= $collect->put('TOTAL',round($total,2));
+                    // $collect= $collect->put('CLASS ARM',$arms->name);
+
+
+
+                      ///return $collect;
+                    array_push($masterSheet, $collect->toArray());
+
+                    //array_push($masterSheet,...$sc);
+                   }  // $subject->subjects->name=>$subject_ScoreArr
+                  // return count($subjects);
+         $export = new Mastersheet($masterSheet,$subject_headers->toArray(),count($subjects));
+
+    return Excel::download($export, 'Mastersheet.csv');
+                 //return ['mastersheet'=>$masterSheet];
+             }
 
 }

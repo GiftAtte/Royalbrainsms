@@ -32,7 +32,8 @@ Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 
 Route::get('download_page/{id?}', 'HomeController@download');
 Route::get('pdfdownload/{id?}/{report_id}', 'HomeController@pdfdownload')->name('pdfdownload');
-Auth::routes();
+Route::get('masterCsv/{report_id}', 'HomeController@export_master')->name('export_master');
+
 Route::get('/messages','ChatsController@fetchMessages');
 Route::post('/messages','ChatsController@sendMessages');
 

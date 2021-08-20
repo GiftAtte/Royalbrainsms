@@ -7,6 +7,7 @@ use App\Sessions;
 use App\Result;
 use App\Student;
 use App\Mark;
+use App\Exports\Mastersheet;
 use App\User;
 use App\Arm;
 use App\Assessment;
@@ -20,6 +21,7 @@ use App\Level_history;
 use App\Result_activation;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\API\ScoreController as Gradding;
 use App\Level;
 use App\Level_sub;
@@ -319,37 +321,45 @@ public function transcript($student_id=null)
             public function export_master($report_id){
                 $masterSheet=[];
                 $masterArr=[];
-                $subject_ScoreArr=[];
+                $subject_headers=[];
 
                 $count=0;
                 $report=Report::findOrFail($report_id);
                 $ids=Mark::whereIn('report_id',[$report_id])->distinct('student_id')->pluck('student_id');
+                $totals =Mark::whereIn('report_id',[$report_id])->get();
                 $subjects=Level_sub::with('subjects')->where('level_id',$report->level_id)->get();
                 $students=Student::whereIn('id',$ids)->select('id','surname','first_name','middle_name','class_id','arm_id')->get();
-                 foreach($students as $student){
-                     $arm=null;
-                   $scores =Mark::whereIn('report_id',[$report_id])
-                   ->whereIn('student_id',[$student->id])
+
+
+                $Allscores =Mark::whereIn('report_id',[$report_id])
+                  // ->whereIn('student_id',[$student->id])
                    ->join('subjects','marks.subject_id','=','subjects.id')
                    ->select('subjects.name as subject','marks.test1 as ca1','marks.test2 as ca2','marks.exams as exam',
-                   'marks.total as total','subjects.id as subject_id','marks.arm_id as arm_id')
+                   'marks.total as total','subjects.id as subject_id','marks.arm_id as arm_id','marks.student_id as student_id')
                    ->get();
-                   $total =Mark::where([['report_id',$report_id],['student_id',$student->id]])->sum('total');
+                foreach($students as $student){
+                     $arm=null;
+                   $scores=collect($Allscores)->whereIn('student_id',[$student->id])->all();
+                   $total =collect($totals)->whereIn('student_id',$student->id)->sum('total');
                    $name=$student->surname.' '.$student->first_name.' '.$student->middle_name;
                    $collect=collect(['STUDENT ID'=>$student->id,'NAMES'=>$name]);
+                   $subject_headers=collect(['STUDENT ID'=>'STUDENT ID','NAMES'=>'NAMES']);
+
                     foreach($subjects as $subject){
                        $isSubject=0;
                         foreach($scores as $score){
                              $arm=$score->arm_id;
                                if($score->subject_id===$subject->subject_id){
-                                $collect=  $collect->put(strval($subject->subjects->name),round($score->total,2));
+                                $collect=  $collect->put(strval($subject->subjects->name),'t1',round($score->total,2),'t2',round($score->total,2),'t3',round($score->total,2));
 
-                               $isSubject=1;
+                                  $isSubject=1;
+                                  $subject_headers=$subject_headers->put($subject->subjects->name,$subject->subjects->name);
                             }
 
                         }
                                if($isSubject<1){
-                                $collect=  $collect->put(strval($subject->subjects->name),'');
+                                $collect=  $collect->put(strval($subject->subjects->name),'t1','','t2','','t3','');
+                                 $subject_headers=$subject_headers->put($subject->subjects->name,$subject->subjects->name);
                             }
 
                     }
@@ -361,12 +371,14 @@ public function transcript($student_id=null)
 
 
 
-                    array_push($masterSheet, $collect->all());
+                    array_push($masterSheet, $collect->toArray());
                     //array_push($masterSheet,...$sc);
                    }  // $subject->subjects->name=>$subject_ScoreArr
+         //return$subject_headers;
+         $export = new Mastersheet($masterSheet,$subject_headers);
 
-
-                 return ['mastersheet'=>$masterSheet];
+    return Excel::download($export, 'invoices.xlsx');
+                 //return ['mastersheet'=>$masterSheet];
              }
 
 

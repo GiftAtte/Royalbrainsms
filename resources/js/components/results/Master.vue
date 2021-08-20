@@ -26,14 +26,14 @@
             <div class="card card-navy card-outline">
                 <div class="card-header">
 
- <export-excel
+ <!-- <export-excel
        class="btn btn-primary"
 
        :data="masterSheet"
        >
        Download Excel
        <i class="fa fa-download"></i>
-     </export-excel>
+     </export-excel> -->
     <button class="btn btn-primary float-right pl-2" @click="printResults"><i class="fa fa-print"></i>Print Result</button>
 
     </div>

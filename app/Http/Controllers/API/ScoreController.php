@@ -1226,4 +1226,16 @@ public function getRanking($scoresCollection,$total){
     return $this->ordinal($value);
  }
 
+ public function deleteScores(Request $request){
+     try{
+     Mark::whereIn('report_id',[$request->report_id])
+     ->where([['subject_id',$request->subject_id],['arm_id',$request->arm_id]])
+     ->delete();
+     }
+     catch(Exception $err){
+              return ['Message'=>'No results found'];
+     }
+     return ['Message'=>'Scores removed Successfully'];
+ }
+
 }
