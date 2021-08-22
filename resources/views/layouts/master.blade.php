@@ -21,6 +21,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </head>
 
 <body class="hold-transition sidebar-mini layout-navbar-fixed">
+
 <div class="wrapper" id="app">
 <nav class="main-header navbar navbar-expand navbar-white navbar-navy bg-navy">
     <!-- Left navbar links -->
@@ -84,10 +85,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
       <div class="main-content__body">
-
+ @if(Auth::user()->isActive==1)
         <router-view></router-view>
-
-        <vue-progress-bar>
+@endif
+@if(!Auth::user()->isActive==1)
+<div class="container text-center py-5 "><h2 class="text-danger">This Account has been deactivated. Please contact Admin</h2></div>
+  @endif
+<vue-progress-bar>
         </vue-progress-bar>
 
         <!-- /.row -->
@@ -109,7 +113,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script>
 
     window.user = @json(auth()->user())
-
+   //  console.log(window.user)
 </script>
 @endauth
 <!-- jQuery -->

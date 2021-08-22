@@ -27,7 +27,10 @@ class EmployeeController extends Controller
     {
         $this->authorize('isAdmin');
         if (\Gate::allows('isAdmin') || \Gate::allows('isUser')) {
-            return Staff::with('users')->where('school_id',auth('api')->user()->school_id)->latest()->paginate(10);
+            return Staff::with('users')->where('staff.school_id',auth('api')->user()->school_id)
+             ->join('users','staff.id','=','users.staff_id')
+            ->select('staff.*', 'users.id as userId', 'users.isActive as isActive')->latest()->paginate(50);
+
        }
 
     }

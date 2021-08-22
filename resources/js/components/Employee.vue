@@ -77,6 +77,18 @@
                         </a>
 
                     </td>
+                    <td><toggle-button @change="setActivation(employee.userId)"
+
+                         :label="true"
+                         :labels="{checked: 'ON', unchecked: 'OFF'}"
+
+                         :height="20"
+                         :font-size='14'
+                         :value="employee.isActive"
+                         :color="'green'"
+                         :name="'activated'"
+                         class="pl-2"
+                         /></td>
                   </tr>
                 </tbody></table>
               </div>
@@ -290,7 +302,10 @@
 
                 }
             },
-
+setActivation(id){
+              axios.put('/api/activateUser/'+id)
+              .then(res=>{})
+              },
 
             createEmployee(){
                 this.$Progress.start();

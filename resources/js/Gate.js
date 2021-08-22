@@ -72,6 +72,11 @@ export default class Gate {
             return true;
         }
     }
+    isActive() {
+        if (this.user.isActive === 1) {
+            return true;
+        }
+    }
 
 }
 

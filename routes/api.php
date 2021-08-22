@@ -252,4 +252,5 @@ Route::post('subdomains', 'API\SubDomainController@store');
 Route::get('subdomains/{domain_id?}', 'API\SubDomainController@index');
 Route::delete('subdomains/{id}','API\SubDomainController@destroy');
 Route::put('subdomains','API\SubDomainController@update');
+Route::put('activateUser/{id}','API\UserController@activateUser');
 });

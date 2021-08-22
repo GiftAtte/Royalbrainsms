@@ -337,8 +337,10 @@ showEvent(arg) {
        },
 
       created(){
+          console.log(user)
           if(this.$gate.isStudent()){
             this.$router.push('/reports')
+
           }
    this.getCounts();
          this.getEvent();

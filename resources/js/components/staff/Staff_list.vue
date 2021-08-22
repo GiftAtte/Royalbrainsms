@@ -23,12 +23,12 @@
               <div class="card-header">
                 <div class="row float-right">
                <div class="card-title ">
-               
+
                <router-link to="/import_staff"> Import student list (cvs)</router-link>
                 </div>
 
                 <div class="card-tools">
-                
+
                <button class="btn btn-success float-right m-2" @click="newModal">Add New <i class="fas fa-user-plus fa-fw"></i></button>
                 </div>
                  </div>
@@ -44,6 +44,7 @@
                         <th>Type</th>
                         <th>Registered At</th>
                         <th>Modify</th>
+                        <th>Status</th>
                   </tr>
 
 
@@ -65,6 +66,18 @@
                         </a>
 
                     </td>
+                    <td><toggle-button @change="setActivation(user.userId)"
+
+                         :label="true"
+                         :labels="{checked: 'ON', unchecked: 'OFF'}"
+
+                         :height="20"
+                         :font-size='14'
+                         :value="user.isActive"
+                         :color="'green'"
+                         :name="'activated'"
+                         class="pl-2"
+                         /></td>
                   </tr>
                 </tbody></table>
               </div>
@@ -145,7 +158,7 @@
                 </div>
             </div>
             </div>
-           
+
     </div>
 
 
@@ -170,9 +183,9 @@
                     bio: '',
                     photo: ''
                 }),
-                
-                   
-               
+
+
+
             }
         },
         methods: {
@@ -240,7 +253,7 @@
                     })
             },
             loadUsers(){
-                
+
                 if(this.$gate.isAdminOrTutor()){
                     axios.get("api/user").then(({ data }) => (this.users = data));
                 }
@@ -253,7 +266,7 @@
                 .then(()=>{
                     Fire.$emit('AfterCreate');
                     $('#addNew').modal('hide')
-          
+
                     toast.fire({
                         type: 'success',
                         title: 'User Created in successfully'
@@ -283,7 +296,7 @@
                          console.log(res.data)
                     this.$Progress.finish();
                     Fire.$emit('AfterCreate');
-                   
+
            })
            .catch(err=>{
               toast.fire({
@@ -292,9 +305,14 @@
                         })
                          console.log(err)
            })
-         
-            
-            }
+
+
+            },
+            setActivation(id){
+              axios.put('/api/activateUser/'+id)
+              .then(res=>{})
+              },
+
         },
         created() {
             Fire.$on('searching',() => {

@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-container font-weight-light sidebar-dark-primary elevation-4">
+  <div  class="menu-container font-weight-light sidebar-dark-primary elevation-4">
     <!-- root level itens -->
     <ul class="menu py-5">
 

@@ -224,7 +224,7 @@ class UserController extends Controller
     }
      public function dashboard($id){
         //  $this->authorize('isAdmin');
-        $user_count=count(User::where('school_id',$id)->get());
+       return $user_count=count(User::where('school_id',$id)->get());
         $student_count=count(Student::where('school_id',$id)->get());
         $staff_count=count(Staff::where('school_id',$id)->get());
         $level_count=count(Level::where('school_id',$id)->get());
@@ -252,5 +252,19 @@ class UserController extends Controller
    return response()->json( Excel::import(new UsersImport, $request->file('selected_file')));
 
 }
+
+
+ public function activateUser($id){
+     $user=User::findOrFail($id);
+     $isActive=$user->isActive;
+     if($isActive>0){
+         $user->isActive=0;
+         $user->save();
+     }else{
+       $user->isActive=1;
+         $user->save();
+     }
+return 'user updated successfully';
+ }
 }
 

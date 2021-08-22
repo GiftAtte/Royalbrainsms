@@ -105,6 +105,7 @@
                         <th>Gender</th>
                         <th>Photo</th>
                         <th>Modify</th>
+                        <th>Status</th>
                   </tr>
 
 
@@ -135,6 +136,18 @@
                         </a>
 
                     </td>
+                    <td><toggle-button @change="setActivation(student.userId)"
+
+                         :label="true"
+                         :labels="{checked: 'ON', unchecked: 'OFF'}"
+
+                         :height="20"
+                         :font-size='14'
+                         :value="student.isActive"
+                         :color="'green'"
+                         :name="'activated'"
+                         class="pl-2"
+                         /></td>
                   </tr>
                 </tbody></table>
               </div>
@@ -643,6 +656,10 @@ else{
                     })
              },
 
+     setActivation(id){
+              axios.put('/api/activateUser/'+id)
+              .then(res=>{})
+              },
               downloadLogin(){
                 axios.get(`/api/login_export/${this.level_id}/${this.arm_id}`)
                 .then((res)=>{
