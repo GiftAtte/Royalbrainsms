@@ -350,16 +350,16 @@ public function transcript($student_id=null)
                         foreach($scores as $score){
                              $arm=$score->arm_id;
                                if($score->subject_id===$subject->subject_id){
-                                $collect=  $collect->put(strval($subject->subjects->name),'t1',round($score->total,2),'t2',round($score->total,2),'t3',round($score->total,2));
+                                $collect=  $collect->put(strval($subject->subjects->name),round($score->total,2));
 
                                   $isSubject=1;
-                                  $subject_headers=$subject_headers->put($subject->subjects->name,$subject->subjects->name);
+                                //  $subject_headers=$subject_headers->put($subject->subjects->name,$subject->subjects->name);
                             }
 
                         }
                                if($isSubject<1){
-                                $collect=  $collect->put(strval($subject->subjects->name),'t1','','t2','','t3','');
-                                 $subject_headers=$subject_headers->put($subject->subjects->name,$subject->subjects->name);
+                                $collect=  $collect->put(strval($subject->subjects->name),'');
+                                 //$subject_headers=$subject_headers->put($subject->subjects->name,$subject->subjects->name);
                             }
 
                     }
@@ -371,17 +371,14 @@ public function transcript($student_id=null)
 
 
 
-                    array_push($masterSheet, $collect->toArray());
+                    array_push($masterSheet, $collect->all());
                     //array_push($masterSheet,...$sc);
                    }  // $subject->subjects->name=>$subject_ScoreArr
-         //return$subject_headers;
-         $export = new Mastersheet($masterSheet,$subject_headers);
-
-    return Excel::download($export, 'invoices.xlsx');
-                 //return ['mastersheet'=>$masterSheet];
-             }
 
 
+                 return ['mastersheet'=>$masterSheet];
+
+                }
 
 
              function transposeData($data)
