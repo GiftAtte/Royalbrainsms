@@ -11,7 +11,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <link rel="shortcut icon" type="image/x-icon" href="img/logo.png" />
 
-  <title>NNSS</title>
+  <title>RBSMS</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -36,7 +36,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- /.content-header -->
 
     <!-- Main content -->
-    <div class="content" id="app">
+
+    <div class="content py-5" id="app" >
+      @if(session()->has('success'))
+      @php
+          $message=session()->get('success');
+      @endphp
+    <div class="alert alert-success">
+        {{ $message }}
+    </div>
+@endif
+
+@if(session()->has('errors'))
+          @php
+          $message=session()->get('errors');
+      @endphp
+    <div class="alert alert-danger">
+        {{$message}}
+    </div>
+@endif
+
+
       <div class="container-fluid">
           <div class="container" id="print">
 
@@ -73,6 +93,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <router-link :to="`/transcript/${student.id}`"  tag="a" exact>view transcript</router-link> --}}
 <a href="{{ route('pdfdownload',['id'=>$student->id,'report_id'=>$report->id]) }}">Download PDF</a>
+<a class="pl-2" href="{{ route('pdfdownload',['id'=>$student->id,'report_id'=>$report->id,'email'=>1]) }}">Send Mail</a>
                         </td>
     </tr>
     @endforeach

@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'mail.mariamontessoricaresms.online'),
+    'host' => env('MAIL_HOST', 'mail.mmcisch.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -57,7 +57,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'attegift@gmail.com'),
-        'name' => env('MAIL_FROM_NAME', 'Quadriasms'),
+        'name' => env('MAIL_FROM_NAME', 'Royalbrainsms'),
     ],
 
     /*

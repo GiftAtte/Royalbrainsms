@@ -28,50 +28,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
  * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
-:root {
-  --blue: #007bff;
-  --indigo: #6610f2;
-  --purple: #6f42c1;
-  --pink: #e83e8c;
-  --red: #dc3545;
-  --orange: #fd7e14;
-  --yellow: #ffc107;
-  --green: #28a745;
-  --teal: #20c997;
-  --cyan: #17a2b8;
-  --white: #fff;
-  --gray: #6c757d;
-  --gray-dark: #343a40;
-  --primary: #007bff;
-  --secondary: #6c757d;
-  --success: #28a745;
-  --info: #17a2b8;
-  --warning: #ffc107;
-  --danger: #dc3545;
-  --light: #f8f9fa;
-  --dark: #343a40;
-  --breakpoint-xs: 0;
-  --breakpoint-sm: 576px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 992px;
-  --breakpoint-xl: 1200px;
-  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-}
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+
 
 html {
   font-family: sans-serif;
   line-height: 1.15;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
 
-  -webkit-tap-highlight-color: transparent;
 }
 
 @-ms-viewport {
@@ -82,19 +45,40 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 1rem;
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1;
   color: #040505;
   text-align: justify;
   background-color: #fff;
 }
 
 
-hr {
-  box-sizing: content-box;
-  height: 0;
-  overflow: visible;
+
+table {
+  border-collapse: collapse;
+  width:98%;
+   font-size:5px;
+
+}
+.table-bordered th,
+.table-bordered td {
+
+  border: 0.25px solid rgb(209, 208, 208) !important;
+  padding:1.5px;
+  text-transform:capitalize;
+  font-weight:medium;
+
 }
 
+
+table.capitalize {
+  text-transform: capitalize;
+
+}
+.table td {
+  vertical-align: center;
+
+}
+.table tr { line-height: fit-content; }
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: 0.5rem;
@@ -107,12 +91,12 @@ p {
 
 
 
-h1, h2, h3, h4, h5, h6,
+h1, h2, h3, h4, h5, h6,!important;
 .h1, .h2, .h3, .h4, .h5, .h6 {
   margin-bottom: 0.5rem;
   font-family: inherit;
-  font-weight: 500;
-  line-height: 1.2;
+  font-weight: 450;
+  line-height: 1;
   color: inherit;
 }
 
@@ -133,605 +117,11 @@ h4, .h4 {
 }
 
 h5, .h5 {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
 }
 
 h6, .h6 {
-  font-size: 1rem;
-}
-
-
-
-@media (min-width: 576px) {
-  .container {
-    max-width: 540px;
-  }
-}
-
-@media (min-width: 768px) {
-  .container {
-    max-width: 720px;
-  }
-}
-
-@media (min-width: 992px) {
-  .container {
-    max-width: 960px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .container {
-    max-width: 1140px;
-  }
-}
-
-.row {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  margin-right: -5px;
-  margin-left: -5px;
-}
-
-
-.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12, .col,
-.col-auto, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm,
-.col-sm-auto, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-md,
-.col-md-auto, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg,
-.col-lg-auto, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl,
-.col-xl-auto {
-  position: relative;
-  width: 100%;
-  min-height: 1px;
-  padding-right: 5px;
-  padding-left: 5;
-}
-
-@media (min-width: 576px) {
-  .col-sm {
-    -ms-flex-preferred-size: 0;
-    flex-basis: 0;
-    -webkit-box-flex: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    max-width: 100%;
-  }
-  .col-sm-auto {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 auto;
-    flex: 0 0 auto;
-    width: auto;
-    max-width: none;
-  }
-  .col-sm-1 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 8.333333%;
-    flex: 0 0 8.333333%;
-    max-width: 8.333333%;
-  }
-  .col-sm-2 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 16.666667%;
-    flex: 0 0 16.666667%;
-    max-width: 16.666667%;
-  }
-  .col-sm-3 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 25%;
-    flex: 0 0 25%;
-    max-width: 25%;
-  }
-  .col-sm-4 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 33.333333%;
-    flex: 0 0 33.333333%;
-    max-width: 33.333333%;
-  }
-  .col-sm-5 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 41.666667%;
-    flex: 0 0 41.666667%;
-    max-width: 41.666667%;
-  }
-  .col-sm-6 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 50%;
-    flex: 0 0 50%;
-    max-width: 50%;
-  }
-  .col-sm-7 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 58.333333%;
-    flex: 0 0 58.333333%;
-    max-width: 58.333333%;
-  }
-  .col-sm-8 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 66.666667%;
-    flex: 0 0 66.666667%;
-    max-width: 66.666667%;
-  }
-  .col-sm-9 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 75%;
-    flex: 0 0 75%;
-    max-width: 75%;
-  }
-  .col-sm-10 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 83.333333%;
-    flex: 0 0 83.333333%;
-    max-width: 83.333333%;
-  }
-  .col-sm-11 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 91.666667%;
-    flex: 0 0 91.666667%;
-    max-width: 91.666667%;
-  }
-  .col-sm-12 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 100%;
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-  .order-sm-first {
-    -webkit-box-ordinal-group: 0;
-    -ms-flex-order: -1;
-    order: -1;
-  }
-  .order-sm-last {
-    -webkit-box-ordinal-group: 14;
-    -ms-flex-order: 13;
-    order: 13;
-  }
-  .order-sm-0 {
-    -webkit-box-ordinal-group: 1;
-    -ms-flex-order: 0;
-    order: 0;
-  }
-  .order-sm-1 {
-    -webkit-box-ordinal-group: 2;
-    -ms-flex-order: 1;
-    order: 1;
-  }
-  .order-sm-2 {
-    -webkit-box-ordinal-group: 3;
-    -ms-flex-order: 2;
-    order: 2;
-  }
-  .order-sm-3 {
-    -webkit-box-ordinal-group: 4;
-    -ms-flex-order: 3;
-    order: 3;
-  }
-  .order-sm-4 {
-    -webkit-box-ordinal-group: 5;
-    -ms-flex-order: 4;
-    order: 4;
-  }
-  .order-sm-5 {
-    -webkit-box-ordinal-group: 6;
-    -ms-flex-order: 5;
-    order: 5;
-  }
-  .order-sm-6 {
-    -webkit-box-ordinal-group: 7;
-    -ms-flex-order: 6;
-    order: 6;
-  }
-  .order-sm-7 {
-    -webkit-box-ordinal-group: 8;
-    -ms-flex-order: 7;
-    order: 7;
-  }
-  .order-sm-8 {
-    -webkit-box-ordinal-group: 9;
-    -ms-flex-order: 8;
-    order: 8;
-  }
-  .order-sm-9 {
-    -webkit-box-ordinal-group: 10;
-    -ms-flex-order: 9;
-    order: 9;
-  }
-  .order-sm-10 {
-    -webkit-box-ordinal-group: 11;
-    -ms-flex-order: 10;
-    order: 10;
-  }
-  .order-sm-11 {
-    -webkit-box-ordinal-group: 12;
-    -ms-flex-order: 11;
-    order: 11;
-  }
-  .order-sm-12 {
-    -webkit-box-ordinal-group: 13;
-    -ms-flex-order: 12;
-    order: 12;
-  }
-  .offset-sm-0 {
-    margin-left: 0;
-  }
-  .offset-sm-1 {
-    margin-left: 8.333333%;
-  }
-  .offset-sm-2 {
-    margin-left: 16.666667%;
-  }
-  .offset-sm-3 {
-    margin-left: 25%;
-  }
-  .offset-sm-4 {
-    margin-left: 33.333333%;
-  }
-  .offset-sm-5 {
-    margin-left: 41.666667%;
-  }
-  .offset-sm-6 {
-    margin-left: 50%;
-  }
-  .offset-sm-7 {
-    margin-left: 58.333333%;
-  }
-  .offset-sm-8 {
-    margin-left: 66.666667%;
-  }
-  .offset-sm-9 {
-    margin-left: 75%;
-  }
-  .offset-sm-10 {
-    margin-left: 83.333333%;
-  }
-  .offset-sm-11 {
-    margin-left: 91.666667%;
-  }
-}
-
-@media (min-width: 768px) {
-  .col-md {
-    -ms-flex-preferred-size: 0;
-    flex-basis: 0;
-    -webkit-box-flex: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    max-width: 100%;
-  }
-  .col-md-auto {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 auto;
-    flex: 0 0 auto;
-    width: auto;
-    max-width: none;
-  }
-  .col-md-1 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 8.333333%;
-    flex: 0 0 8.333333%;
-    max-width: 8.333333%;
-  }
-  .col-md-2 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 16.666667%;
-    flex: 0 0 16.666667%;
-    max-width: 16.666667%;
-  }
-  .col-md-3 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 25%;
-    flex: 0 0 25%;
-    max-width: 25%;
-  }
-  .col-md-4 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 33.333333%;
-    flex: 0 0 33.333333%;
-    max-width: 33.333333%;
-  }
-  .col-md-5 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 41.666667%;
-    flex: 0 0 41.666667%;
-    max-width: 41.666667%;
-  }
-  .col-md-6 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 50%;
-    flex: 0 0 50%;
-    max-width: 50%;
-  }
-  .col-md-7 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 58.333333%;
-    flex: 0 0 58.333333%;
-    max-width: 58.333333%;
-  }
-  .col-md-8 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 66.666667%;
-    flex: 0 0 66.666667%;
-    max-width: 66.666667%;
-  }
-  .col-md-9 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 75%;
-    flex: 0 0 75%;
-    max-width: 75%;
-  }
-  .col-md-10 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 83.333333%;
-    flex: 0 0 83.333333%;
-    max-width: 83.333333%;
-  }
-  .col-md-11 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 91.666667%;
-    flex: 0 0 91.666667%;
-    max-width: 91.666667%;
-  }
-  .col-md-12 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 100%;
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-
-.table {
-  width: 100%;
-  max-width: 100%;
-  margin-bottom: 1rem;
-  background-color: transparent;
-}
-
-.table th,
-.table td {
-  padding: 0.75rem;
-  vertical-align: top;
-  border-top: 1px solid #dee2e6;
-}
-
-.table thead th {
-  vertical-align: bottom;
-  border-bottom: 2px solid #dee2e6;
-}
-
-.table tbody + tbody {
-  border-top: 2px solid #dee2e6;
-}
-
-.table .table {
-  background-color: #fff;
-}
-
-.table-sm th,
-.table-sm td {
-  padding: 0.1.5rem;
-}
-
-.table-bordered {
-  border: 1px solid #050b11;
-}
-
-.table-bordered th,
-.table-bordered td {
-  border: 1px solid #dee2e6;
-}
-
-.table-bordered thead th,
-.table-bordered thead td {
-  border-bottom-width: 2px;
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.table-hover tbody tr:hover {
-  background-color: rgba(0, 0, 0, 0.075);
-}
-
-.table-primary,
-.table-primary > th,
-.table-primary > td {
-  background-color: #b8daff;
-}
-
-.table-hover .table-primary:hover {
-  background-color: #9fcdff;
-}
-
-.table-hover .table-primary:hover > td,
-.table-hover .table-primary:hover > th {
-  background-color: #9fcdff;
-}
-
-.table-secondary,
-.table-secondary > th,
-.table-secondary > td {
-  background-color: #d6d8db;
-}
-
-.table-hover .table-secondary:hover {
-  background-color: #c8cbcf;
-}
-
-.table-hover .table-secondary:hover > td,
-.table-hover .table-secondary:hover > th {
-  background-color: #c8cbcf;
-}
-
-.table-success,
-.table-success > th,
-.table-success > td {
-  background-color: #c3e6cb;
-}
-
-.table-hover .table-success:hover {
-  background-color: #b1dfbb;
-}
-
-.table-hover .table-success:hover > td,
-.table-hover .table-success:hover > th {
-  background-color: #b1dfbb;
-}
-
-.table-info,
-.table-info > th,
-.table-info > td {
-  background-color: #bee5eb;
-}
-
-.table-hover .table-info:hover {
-  background-color: #abdde5;
-}
-
-.table-hover .table-info:hover > td,
-.table-hover .table-info:hover > th {
-  background-color: #abdde5;
-}
-
-.table-warning,
-.table-warning > th,
-.table-warning > td {
-  background-color: #ffeeba;
-}
-
-.table-hover .table-warning:hover {
-  background-color: #ffe8a1;
-}
-
-.table-hover .table-warning:hover > td,
-.table-hover .table-warning:hover > th {
-  background-color: #ffe8a1;
-}
-
-.table-danger,
-.table-danger > th,
-.table-danger > td {
-  background-color: #f5c6cb;
-}
-
-.table-hover .table-danger:hover {
-  background-color: #f1b0b7;
-}
-
-.table-hover .table-danger:hover > td,
-.table-hover .table-danger:hover > th {
-  background-color: #f1b0b7;
-}
-
-.table-light,
-.table-light > th,
-.table-light > td {
-  background-color: #fdfdfe;
-}
-
-.table-hover .table-light:hover {
-  background-color: #ececf6;
-}
-
-.table-hover .table-light:hover > td,
-.table-hover .table-light:hover > th {
-  background-color: #ececf6;
-}
-
-.table-dark,
-.table-dark > th,
-.table-dark > td {
-  background-color: #c6c8ca;
-}
-
-.table-hover .table-dark:hover {
-  background-color: #b9bbbe;
-}
-
-.table-hover .table-dark:hover > td,
-.table-hover .table-dark:hover > th {
-  background-color: #b9bbbe;
-}
-
-.table-active,
-.table-active > th,
-.table-active > td {
-  background-color: rgba(0, 0, 0, 0.075);
-}
-
-.table-hover .table-active:hover {
-  background-color: rgba(0, 0, 0, 0.075);
-}
-
-.table-hover .table-active:hover > td,
-.table-hover .table-active:hover > th {
-  background-color: rgba(0, 0, 0, 0.075);
-}
-
-
-@media (max-width: 575.98px) {
-  .table-responsive-sm {
-    display: block;
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
-  }
-  .table-responsive-sm > .table-bordered {
-    border: 0;
-  }
-}
-
-@media (max-width: 767.98px) {
-  .table-responsive-md {
-    display: block;
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
-  }
-  .table-responsive-md > .table-bordered {
-    border: 0;
-  }
-}
-
-@media (max-width: 991.98px) {
-  .table-responsive-lg {
-    display: block;
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
-  }
-  .table-responsive-lg > .table-bordered {
-    border: 0;
-  }
-}
-
-@media (max-width: 1199.98px) {
-  .table-responsive-xl {
-    display: block;
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
-  }
-  .table-responsive-xl > .table-bordered {
-    border: 0;
-  }
-}
-
-.table-responsive {
-  display: block;
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  -ms-overflow-style: -ms-autohiding-scrollbar;
-}
-
-.table-responsive > .table-bordered {
-  border: 0;
+  font-size: 0.9rem;
 }
 
 .w-25 {
@@ -776,13 +166,6 @@ h6, .h6 {
   height: 100% !important;
 }
 
-.mw-100 {
-  max-width: 100% !important;
-}
-
-.mh-100 {
-  max-height: 100% !important;
-}
 
 .m-0 {
   margin: 0 !important;
@@ -1096,10 +479,7 @@ h6, .h6 {
   margin-left: auto !important;
 }
 
-@media (min-width: 576px) {
-  .m-sm-0 {
-    margin: 0 !important;
-  }
+
   .mt-sm-0,
   .my-sm-0 {
     margin-top: 0 !important;
@@ -1313,56 +693,8 @@ h6, .h6 {
   .py-sm-5 {
     padding-top: 3rem !important;
   }
-  .pr-sm-5,
-  .px-sm-5 {
-    padding-right: 3rem !important;
-  }
-  .pb-sm-5,
-  .py-sm-5 {
-    padding-bottom: 3rem !important;
-  }
-  .pl-sm-5,
-  .px-sm-5 {
-    padding-left: 3rem !important;
-  }
-  .m-sm-auto {
-    margin: auto !important;
-  }
-  .mt-sm-auto,
-  .my-sm-auto {
-    margin-top: auto !important;
-  }
-  .mr-sm-auto,
-  .mx-sm-auto {
-    margin-right: auto !important;
-  }
-  .mb-sm-auto,
-  .my-sm-auto {
-    margin-bottom: auto !important;
-  }
-  .ml-sm-auto,
-  .mx-sm-auto {
-    margin-left: auto !important;
-  }
-}
 
-@media (min-width: 768px) {
-  .m-md-0 {
-    margin: 0 !important;
-  }
-  .mt-md-0,
-  .my-md-0 {
-    margin-top: 0 !important;
-  }
-  .mr-md-0,
-  .mx-md-0 {
-    margin-right: 0 !important;
-  }
-  .mb-md-0,
-  .my-md-0 {
-    margin-bottom: 0 !important;
-  }
-  .ml-md-0,
+
   .mx-md-0 {
     margin-left: 0 !important;
   }
@@ -1586,515 +918,9 @@ h6, .h6 {
   .mx-md-auto {
     margin-right: auto !important;
   }
-  .mb-md-auto,
-  .my-md-auto {
-    margin-bottom: auto !important;
-  }
-  .ml-md-auto,
-  .mx-md-auto {
-    margin-left: auto !important;
-  }
-}
 
-@media (min-width: 992px) {
-  .m-lg-0 {
-    margin: 0 !important;
-  }
-  .mt-lg-0,
-  .my-lg-0 {
-    margin-top: 0 !important;
-  }
-  .mr-lg-0,
-  .mx-lg-0 {
-    margin-right: 0 !important;
-  }
-  .mb-lg-0,
-  .my-lg-0 {
-    margin-bottom: 0 !important;
-  }
-  .ml-lg-0,
-  .mx-lg-0 {
-    margin-left: 0 !important;
-  }
-  .m-lg-1 {
-    margin: 0.25rem !important;
-  }
-  .mt-lg-1,
-  .my-lg-1 {
-    margin-top: 0.25rem !important;
-  }
-  .mr-lg-1,
-  .mx-lg-1 {
-    margin-right: 0.25rem !important;
-  }
-  .mb-lg-1,
-  .my-lg-1 {
-    margin-bottom: 0.25rem !important;
-  }
-  .ml-lg-1,
-  .mx-lg-1 {
-    margin-left: 0.25rem !important;
-  }
-  .m-lg-2 {
-    margin: 0.5rem !important;
-  }
-  .mt-lg-2,
-  .my-lg-2 {
-    margin-top: 0.5rem !important;
-  }
-  .mr-lg-2,
-  .mx-lg-2 {
-    margin-right: 0.5rem !important;
-  }
-  .mb-lg-2,
-  .my-lg-2 {
-    margin-bottom: 0.5rem !important;
-  }
-  .ml-lg-2,
-  .mx-lg-2 {
-    margin-left: 0.5rem !important;
-  }
-  .m-lg-3 {
-    margin: 1rem !important;
-  }
-  .mt-lg-3,
-  .my-lg-3 {
-    margin-top: 1rem !important;
-  }
-  .mr-lg-3,
-  .mx-lg-3 {
-    margin-right: 1rem !important;
-  }
-  .mb-lg-3,
-  .my-lg-3 {
-    margin-bottom: 1rem !important;
-  }
-  .ml-lg-3,
-  .mx-lg-3 {
-    margin-left: 1rem !important;
-  }
-  .m-lg-4 {
-    margin: 1.5rem !important;
-  }
-  .mt-lg-4,
-  .my-lg-4 {
-    margin-top: 1.5rem !important;
-  }
-  .mr-lg-4,
-  .mx-lg-4 {
-    margin-right: 1.5rem !important;
-  }
-  .mb-lg-4,
-  .my-lg-4 {
-    margin-bottom: 1.5rem !important;
-  }
-  .ml-lg-4,
-  .mx-lg-4 {
-    margin-left: 1.5rem !important;
-  }
-  .m-lg-5 {
-    margin: 3rem !important;
-  }
-  .mt-lg-5,
-  .my-lg-5 {
-    margin-top: 3rem !important;
-  }
-  .mr-lg-5,
-  .mx-lg-5 {
-    margin-right: 3rem !important;
-  }
-  .mb-lg-5,
-  .my-lg-5 {
-    margin-bottom: 3rem !important;
-  }
-  .ml-lg-5,
-  .mx-lg-5 {
-    margin-left: 3rem !important;
-  }
-  .p-lg-0 {
-    padding: 0 !important;
-  }
-  .pt-lg-0,
-  .py-lg-0 {
-    padding-top: 0 !important;
-  }
-  .pr-lg-0,
-  .px-lg-0 {
-    padding-right: 0 !important;
-  }
-  .pb-lg-0,
-  .py-lg-0 {
-    padding-bottom: 0 !important;
-  }
-  .pl-lg-0,
-  .px-lg-0 {
-    padding-left: 0 !important;
-  }
-  .p-lg-1 {
-    padding: 0.25rem !important;
-  }
-  .pt-lg-1,
-  .py-lg-1 {
-    padding-top: 0.25rem !important;
-  }
-  .pr-lg-1,
-  .px-lg-1 {
-    padding-right: 0.25rem !important;
-  }
-  .pb-lg-1,
-  .py-lg-1 {
-    padding-bottom: 0.25rem !important;
-  }
-  .pl-lg-1,
-  .px-lg-1 {
-    padding-left: 0.25rem !important;
-  }
-  .p-lg-2 {
-    padding: 0.5rem !important;
-  }
-  .pt-lg-2,
-  .py-lg-2 {
-    padding-top: 0.5rem !important;
-  }
-  .pr-lg-2,
-  .px-lg-2 {
-    padding-right: 0.5rem !important;
-  }
-  .pb-lg-2,
-  .py-lg-2 {
-    padding-bottom: 0.5rem !important;
-  }
-  .pl-lg-2,
-  .px-lg-2 {
-    padding-left: 0.5rem !important;
-  }
-  .p-lg-3 {
-    padding: 1rem !important;
-  }
-  .pt-lg-3,
-  .py-lg-3 {
-    padding-top: 1rem !important;
-  }
-  .pr-lg-3,
-  .px-lg-3 {
-    padding-right: 1rem !important;
-  }
-  .pb-lg-3,
-  .py-lg-3 {
-    padding-bottom: 1rem !important;
-  }
-  .pl-lg-3,
-  .px-lg-3 {
-    padding-left: 1rem !important;
-  }
-  .p-lg-4 {
-    padding: 1.5rem !important;
-  }
-  .pt-lg-4,
-  .py-lg-4 {
-    padding-top: 1.5rem !important;
-  }
-  .pr-lg-4,
-  .px-lg-4 {
-    padding-right: 1.5rem !important;
-  }
-  .pb-lg-4,
-  .py-lg-4 {
-    padding-bottom: 1.5rem !important;
-  }
-  .pl-lg-4,
-  .px-lg-4 {
-    padding-left: 1.5rem !important;
-  }
-  .p-lg-5 {
-    padding: 3rem !important;
-  }
-  .pt-lg-5,
-  .py-lg-5 {
-    padding-top: 3rem !important;
-  }
-  .pr-lg-5,
-  .px-lg-5 {
-    padding-right: 3rem !important;
-  }
-  .pb-lg-5,
-  .py-lg-5 {
-    padding-bottom: 3rem !important;
-  }
-  .pl-lg-5,
-  .px-lg-5 {
-    padding-left: 3rem !important;
-  }
-  .m-lg-auto {
-    margin: auto !important;
-  }
-  .mt-lg-auto,
-  .my-lg-auto {
-    margin-top: auto !important;
-  }
-  .mr-lg-auto,
-  .mx-lg-auto {
-    margin-right: auto !important;
-  }
-  .mb-lg-auto,
-  .my-lg-auto {
-    margin-bottom: auto !important;
-  }
-  .ml-lg-auto,
-  .mx-lg-auto {
-    margin-left: auto !important;
-  }
-}
 
-@media (min-width: 1200px) {
-  .m-xl-0 {
-    margin: 0 !important;
-  }
-  .mt-xl-0,
-  .my-xl-0 {
-    margin-top: 0 !important;
-  }
-  .mr-xl-0,
-  .mx-xl-0 {
-    margin-right: 0 !important;
-  }
-  .mb-xl-0,
-  .my-xl-0 {
-    margin-bottom: 0 !important;
-  }
-  .ml-xl-0,
-  .mx-xl-0 {
-    margin-left: 0 !important;
-  }
-  .m-xl-1 {
-    margin: 0.25rem !important;
-  }
-  .mt-xl-1,
-  .my-xl-1 {
-    margin-top: 0.25rem !important;
-  }
-  .mr-xl-1,
-  .mx-xl-1 {
-    margin-right: 0.25rem !important;
-  }
-  .mb-xl-1,
-  .my-xl-1 {
-    margin-bottom: 0.25rem !important;
-  }
-  .ml-xl-1,
-  .mx-xl-1 {
-    margin-left: 0.25rem !important;
-  }
-  .m-xl-2 {
-    margin: 0.5rem !important;
-  }
-  .mt-xl-2,
-  .my-xl-2 {
-    margin-top: 0.5rem !important;
-  }
-  .mr-xl-2,
-  .mx-xl-2 {
-    margin-right: 0.5rem !important;
-  }
-  .mb-xl-2,
-  .my-xl-2 {
-    margin-bottom: 0.5rem !important;
-  }
-  .ml-xl-2,
-  .mx-xl-2 {
-    margin-left: 0.5rem !important;
-  }
-  .m-xl-3 {
-    margin: 1rem !important;
-  }
-  .mt-xl-3,
-  .my-xl-3 {
-    margin-top: 1rem !important;
-  }
-  .mr-xl-3,
-  .mx-xl-3 {
-    margin-right: 1rem !important;
-  }
-  .mb-xl-3,
-  .my-xl-3 {
-    margin-bottom: 1rem !important;
-  }
-  .ml-xl-3,
-  .mx-xl-3 {
-    margin-left: 1rem !important;
-  }
-  .m-xl-4 {
-    margin: 1.5rem !important;
-  }
-  .mt-xl-4,
-  .my-xl-4 {
-    margin-top: 1.5rem !important;
-  }
-  .mr-xl-4,
-  .mx-xl-4 {
-    margin-right: 1.5rem !important;
-  }
-  .mb-xl-4,
-  .my-xl-4 {
-    margin-bottom: 1.5rem !important;
-  }
-  .ml-xl-4,
-  .mx-xl-4 {
-    margin-left: 1.5rem !important;
-  }
-  .m-xl-5 {
-    margin: 3rem !important;
-  }
-  .mt-xl-5,
-  .my-xl-5 {
-    margin-top: 3rem !important;
-  }
-  .mr-xl-5,
-  .mx-xl-5 {
-    margin-right: 3rem !important;
-  }
-  .mb-xl-5,
-  .my-xl-5 {
-    margin-bottom: 3rem !important;
-  }
-  .ml-xl-5,
-  .mx-xl-5 {
-    margin-left: 3rem !important;
-  }
-  .p-xl-0 {
-    padding: 0 !important;
-  }
-  .pt-xl-0,
-  .py-xl-0 {
-    padding-top: 0 !important;
-  }
-  .pr-xl-0,
-  .px-xl-0 {
-    padding-right: 0 !important;
-  }
-  .pb-xl-0,
-  .py-xl-0 {
-    padding-bottom: 0 !important;
-  }
-  .pl-xl-0,
-  .px-xl-0 {
-    padding-left: 0 !important;
-  }
-  .p-xl-1 {
-    padding: 0.25rem !important;
-  }
-  .pt-xl-1,
-  .py-xl-1 {
-    padding-top: 0.25rem !important;
-  }
-  .pr-xl-1,
-  .px-xl-1 {
-    padding-right: 0.25rem !important;
-  }
-  .pb-xl-1,
-  .py-xl-1 {
-    padding-bottom: 0.25rem !important;
-  }
-  .pl-xl-1,
-  .px-xl-1 {
-    padding-left: 0.25rem !important;
-  }
-  .p-xl-2 {
-    padding: 0.5rem !important;
-  }
-  .pt-xl-2,
-  .py-xl-2 {
-    padding-top: 0.5rem !important;
-  }
-  .pr-xl-2,
-  .px-xl-2 {
-    padding-right: 0.5rem !important;
-  }
-  .pb-xl-2,
-  .py-xl-2 {
-    padding-bottom: 0.5rem !important;
-  }
-  .pl-xl-2,
-  .px-xl-2 {
-    padding-left: 0.5rem !important;
-  }
-  .p-xl-3 {
-    padding: 1rem !important;
-  }
-  .pt-xl-3,
-  .py-xl-3 {
-    padding-top: 1rem !important;
-  }
-  .pr-xl-3,
-  .px-xl-3 {
-    padding-right: 1rem !important;
-  }
-  .pb-xl-3,
-  .py-xl-3 {
-    padding-bottom: 1rem !important;
-  }
-  .pl-xl-3,
-  .px-xl-3 {
-    padding-left: 1rem !important;
-  }
-  .p-xl-4 {
-    padding: 1.5rem !important;
-  }
-  .pt-xl-4,
-  .py-xl-4 {
-    padding-top: 1.5rem !important;
-  }
-  .pr-xl-4,
-  .px-xl-4 {
-    padding-right: 1.5rem !important;
-  }
-  .pb-xl-4,
-  .py-xl-4 {
-    padding-bottom: 1.5rem !important;
-  }
-  .pl-xl-4,
-  .px-xl-4 {
-    padding-left: 1.5rem !important;
-  }
-  .p-xl-5 {
-    padding: 3rem !important;
-  }
-  .pt-xl-5,
-  .py-xl-5 {
-    padding-top: 3rem !important;
-  }
-  .pr-xl-5,
-  .px-xl-5 {
-    padding-right: 3rem !important;
-  }
-  .pb-xl-5,
-  .py-xl-5 {
-    padding-bottom: 3rem !important;
-  }
-  .pl-xl-5,
-  .px-xl-5 {
-    padding-left: 3rem !important;
-  }
-  .m-xl-auto {
-    margin: auto !important;
-  }
-  .mt-xl-auto,
-  .my-xl-auto {
-    margin-top: auto !important;
-  }
-  .mr-xl-auto,
-  .mx-xl-auto {
-    margin-right: auto !important;
-  }
-  .mb-xl-auto,
-  .my-xl-auto {
-    margin-bottom: auto !important;
-  }
-  .ml-xl-auto,
-  .mx-xl-auto {
-    margin-left: auto !important;
-  }
-}
+
 
 .text-justify {
   text-align: justify !important;
@@ -2122,41 +948,8 @@ h6, .h6 {
   text-align: center !important;
 }
 
-@media (min-width: 576px) {
-  .text-sm-left {
-    text-align: left !important;
-  }
-  .text-sm-right {
-    text-align: right !important;
-  }
-  .text-sm-center {
-    text-align: center !important;
-  }
-}
 
-@media (min-width: 768px) {
-  .text-md-left {
-    text-align: left !important;
-  }
-  .text-md-right {
-    text-align: right !important;
-  }
-  .text-md-center {
-    text-align: center !important;
-  }
-}
 
-@media (min-width: 992px) {
-  .text-lg-left {
-    text-align: left !important;
-  }
-  .text-lg-right {
-    text-align: right !important;
-  }
-  .text-lg-center {
-    text-align: center !important;
-  }
-}
 
 
 .text-lowercase {
@@ -2192,7 +985,7 @@ h6, .h6 {
 }
 
 .text-primary {
-  color: #007bff !important;
+  color: #0f3f74 !important;
 }
 
 a.text-primary:hover, a.text-primary:focus {
@@ -2317,30 +1110,15 @@ a.text-dark:hover, a.text-dark:focus {
     size: a3;
   }
   body {
-    min-width: 992px !important;
+   width: 992px !important;
   }
   .container {
-    min-width: 992px !important;
+    width: 992px !important;
   }
-  .navbar {
-    display: none;
-  }
-  .badge {
-    border: 1px solid #000;
-  }
-  .table {
-    border-collapse: collapse !important;
-  }
-  .table td,
-  .table th {
-    background-color: #fff !important;
-  }
-  .table-bordered th,
-  .table-bordered td {
-    border: 1px solid #ddd !important;
-  }
+
+
+
 }
-}}
 </style>
 
 </head>
@@ -2348,130 +1126,146 @@ a.text-dark:hover, a.text-dark:focus {
 
 
 
-                <div style="width: 100%; display:block; justify-content:space-between">
-                <div style="width: 15%">
-                    <img src="public/img/logo.png" class="img-thumbnail  " alt="logo" width="100" height="100">
-                </div>
-                <div style="width: 70%">
-                <h3 class="text-primary text-uppercase">{{$school->name}},
-                </h3>
-                <h6>{{$school->contact_address}},&nbsp; {{$school->state}}</h6>
-                <h6>P:&nbsp; {{$school->phone}}. &nbsp; E: {{$school->email}}</h6>
-                <h6 class="text-danger">URL:&nbsp; {{$school->website}}.</h6>
+                <div >
+                    <div>
+                    <table class="table "  style="100%">
+                        <tr>
+                            <td style="width: 10%"> <img src="{{ public_path('/img/schools/'.$school->logo) }}" class="img-thumbnail pr-2 " alt="logo" width="30" height="30" onerror="this.style.display='none'">
+                        </td>
+                             <td  style="width: 70%" class="pr-2 ">
+                                 <h5 class="text-primary text-uppercase pl-3">{{$school->name}},
+                     </h5>
+                <h6 class="pl-3">{{$school->contact_address}},&nbsp; {{$school->state}}</h6>
+                <h6 class="pl-3">P:&nbsp; {{$school->phone}}. &nbsp; E: {{$school->email}}</h6>
+                <h6 class="text-danger pl-3">URL:&nbsp; {{$school->website}}.</h6>
+                     </td>
+                              <td style="width: 20%">
+                                   <h6 class="pl-2 text-danger">Results Sheet</h6>
+                              </td>
+                        </tr>
+                    </table>
 
-                </div>
-                <div  style="width: 15%">
-                <h6 class="float-right">Results Sheet</h6>
-                </div>
-                </div>
+</div>
 
-
-
-                <div class="row col-sm-12">
-                <div class="row col-sm-6 ">
-                <h6><b>Name:</b>&nbsp; {{$summary->student->surname}}&nbsp; {{$summary->student->first_name}} &nbsp; {{$summary->student->middle_name?$summary->student->middle_name:''}}</h6>
+<div class="py-2">
+<table class="table">
+    <tr>
+<td style="width: 53%">
+    <h6><b>Name:</b>&nbsp; {{$summary->student->surname}}&nbsp; {{$summary->student->first_name}} &nbsp; {{$summary->student->middle_name?$summary->student->middle_name:''}}</h6>
                 <h6><b>class:&nbsp;</b> {{$report->levels->level_name}}&nbsp;{{$arm->name}}</h6>
                 <h6><b>Gender:&nbsp;</b> {{$summary->student->gender?$summary->student->gender:'-----------'}} </h6>
-                <h6 ><b class="text-primary">Position In Class:</b>&nbsp; {{$summary->arm_position?$summary->arm_position:'-----------'}} Out Of {{$summary->total_students}}</h6>
-                <hr>
-                <!-- <h5 ><b>Portal ID:</b>&nbsp; </h5> -->
-                </div>
-                <div class="row col-sm-3">
-                <h5 class="text-primary text-uppercase  "><b>&nbsp;</b> {{$report->header?$report->header:''}}</h6>
-                <hr class="text-danger">
+                <h6><b>Dob:&nbsp;</b> {{$summary->student->dob?$summary->student->dob:'-----------'}} </h6>
+
+</td>
+
+<td style="width: 30%">
+
+                <h6 class="text-primary text-uppercase  "><b>&nbsp;</b> {{$report->header?$report->header:''}}</h6>
+                <hr class="text-primary" style="line-height:0.5px">
                 <h6 ><b>Term:&nbsp;</b> {{$report->terms->name}}</h6>
                 <h6><b>Session:&nbsp;</b> {{$report->sessions->name}} </h6>
                 <h6 ><b>Next Term Begins:&nbsp;</b> {{$report->term_start?$report->term_start:'---------'}}</h6>
 
-                </div>
-
-                </div>
-
-
-                <div style="width: 100%">
-                <table >
-                <thead>
-                <tr>
-                <td>S/N</td>
-                <td>Subject</td>
-                <td>Class <br>Work[2%]</td>
-                <td>Assignment<br>[2%]</td>
-                <td>Class<br>Test[5%]</td>
-                <td>Notes<br>[1%]</td>
-                <td>Weighted<br>Score[5%]</td>
-                <td>Mid-Term<br>[25%]</td>
-                <td>Exams<br>[70%]</td>
-                <td>Total<br>[100%]</td>
-                <td > Average <br>Score</td>
-                <td >Position</td>
-                <td>Teacher's<br>Comment</td>
-                <!-- <th>Narration</th> -->
-                <!-- <th class="text-center " v-show="isAHScore"><div><span>HIGHEST<br> SCORE</span></div></th>
-                <th class="text-center" v-show="isASLScore"><div><span>LOWEST <br> SCORE</span></div></th> -->
+</td>
+<td style="width: 15%">
+<img src="{{ public_path('/img/profile/'.$user->photo) }}" class=" pl-2 img-thumbnail" style="border-radius: 5px;" alt="logo" width="30" height="30">
 
 
-                </tr>
-                </thead>
+</td>
+    </tr>
+</table>
+</div>
+      @switch($report->type)
+        @case('terminal')
+           @include('madonna-terminal')
+        @break
+         @case('mid_term')
+           @include('madonna-midterm')
+        @break
+         @case('default-result')
+           @include('default-terminal')
+        @break
+         @case('mock')
+           @include('madonna-mock')
+        @break
+          @case('annual')
+           @include('madonna-annual')
+        @break
 
-                <tbody class="text-bold text-uppercase">
+        @default
+           <h3>No Termplate Selected</h3>
+    @endswitch
 
-                    @foreach ($scores as $score)
-                <tr  class="text-bold text-uppercase">
-                <td>{{1}}</td>
-                <td>{{$score->subjects?$score->subjects->name:''}}</td>
-                <td>{{$score->test1}}</td>
-                <td>{{$score->test2}}</td>
-                <td>{{$score->test3}}</td>
-                <td>{{$score->note}}</td>
-                <td>{{$score->weighted_score}}</td>
-                <td>{{$score->mid_term}}</td>
-                <td>{{$score->exams}}</td>
-                <td>{{$score->total}}</td>
-                <td>{{$score->arm_avg_score?$score->arm_avg_score:'-'}}</td>
-                <td>{{$score->arm_subj_position?$score->arm_subj_position:'-'}}</td>
-                <td>{{$score->grade?$score->grade:'-'}}</td>
-
-
-
+               <div class="container">
+                <table class="table" style="width: 100%; align-content:top;">
+                 <tr>
+                 <td style="width: 30%">
+                   <table class="table table-bordered" style="width: 100%">
+                      <tr>
+                 <td colspan="2" class="text-center text-primary"> PART B-AFFECTIVE </td>
 
                 </tr>
-                @endforeach
-
-                </tbody>
-
-
-                </table>
-                <div class="text-center text-bold text-primary container"> RESULTS SUMMARY</div>
-                <hr class="text-bold">
-                <div class="row col-md-12   bg-primary">
-                 <div class="col-md-3"><b>Total score:</b>&nbsp;&nbsp;{{$summary->total_scores}}</div>
-                 <div class="col-md-3"><b>Average score:</b>&nbsp;&nbsp;{{$summary->average_scores	}}</div>
-                 <div class="col-md-3"><b>Cummulative Avg score:</b>&nbsp;&nbsp;{{$summary->cummulative_average}}</div>
-                 <div class="col-md-3"><b>Grade:</b>&nbsp;&nbsp;{{$summary->grade}}</div>
-
-                  </div>
-                  <hr  class="text-bold">
-                </div>
-
-                <div class="col-sm-12 row " >
-                <div class="col-sm-3">
-                    <table class="table table-bordered table-sm  table-striped" >
-                <tr>
-                 <th colspan="2"  class="text-uppercase text-center text-primary text-bold">PART B-AFFECTIVE</th>
-                 </tr>
-                 <tbody> @foreach ($LDomain as $ldomain)
-                     <tr>
-                         @if ( $ldomain->ldomain==='Skill')
-
-
+                <tr><td>GRADE</td><td>DEGREE</td>
+                </tr>
+                     @foreach ($LDomain as $ldomain)
+                    @if($ldomain->ldomain->type==="Behavioural")
+                    <tr>
                      <td >{{$ldomain->ldomain->domain}}</td>
                      <td >{{$ldomain->grade}}</td>
                      @endif
-                     </tr>@endforeach
-                 </tbody>
+                     </tr>
+                     @endforeach
+                   </table>
+                   </td>
+                   <td style="width: 30%">
+                   <table class="  table-bordered" style="width: 100%">
+
+                     <tr>
+                <td colspan="2" class="text-center text-primary">PART C-PSYCHOMOTOR</td>
+
+                </tr>
+                <tr><td>Domain</td><td>Grade</td></tr>
+
+                     @foreach ($LDomain as $ldomain)
+
+
+                    @if( $ldomain->ldomain->type==="Skill")
+                     <tr>
+                     <td >{{$ldomain->ldomain->domain}}</td>
+                     <td >{{$ldomain->grade}}</td>
+                     @endif
+                     </tr>
+                     @endforeach
+                   </table>
+                 </td>
+
+
+
+                 <td style="width: 38%">
+               <table class=" table-bordered" style="width: 100%">
+                <tr>
+                <td colspan="3" class="text-center text-primary">GRADING KEYS</td>
+
+                </tr>
+                <tr><td>SCORES</td><td>GRADE</td><td>DEGREE</td></tr>
+               @foreach ( $gradings as $grade )
+               <tr>
+          <td>{{$grade->lower_bound}} - {{$grade->upper_bound}}</td>
+          <td>{{$grade->grade}}</td><td>{{$grade->narration}}</td>
+                  </tr>
+               @endforeach
+
+
+                </table>
+
+                </td>
+
+                </tr>
                     </table>
-                </div>
-                <div class="col-md-3">
+               </div>
+
+
+
                 {{-- <table class="table table-bordered table-sm " >
                 <tr >
                  <th colspan="2"  class="text-uppercase text-center text-primary text-bold">PART C-PSYCHOMOTOR</th>
@@ -2484,9 +1278,7 @@ a.text-dark:hover, a.text-dark:focus {
                      </tr>
                  </tbody>
                     </table> --}}
-                </div>
 
-                <div class="  col-md-3  " >
                 {{-- <table class=" table table-bordered table-sm  text-uppercase myTable table-striped" width="100%">
                 <tr>
                 <th colspan="3" class="text-center text-primary" >Grading Key</th>
@@ -2500,43 +1292,28 @@ a.text-dark:hover, a.text-dark:focus {
                 </tr>
                 </tbody>
                 </table> --}}
-                </div>
-                <div class="  col-md-3  " >
-                <table class=" table  table-sm  text-uppercase table-striped" width="100%">
-                <tr>
-                <th colspan="2" class="text-center text-primary" >Grading Key</th>
 
-                </tr>
-                <tr><th>GRADE</th><th>DEGREE</th></tr>
-                <tbody>
-                <tr>
-                <td>5</td><td>Excellent </td>
-                </tr><tr>
-                <td>4</td><td>High </td>
-                </tr><tr>
-                <td>3</td><td>Acceptable </td>
-                </tr>
-                <tr>
-                <td>2</td><td>Minimal </td>
-                </tr><tr>
-                <td>1</td><td>No Regard</td>
-                </tr>
-                </tbody>
+
+<div class="py-2" >
+
+                <table style="width: 100%" class="  table py-2  ">
+                    <tr>
+               <td style="width: 50%">
+            <b>Principal's Comment:&nbsp;{{$principal_comment?$principal_comment:$summary->narration}}</b></td>
+                <td style="width: 50%">
+                <b> Tutor's Comment:&nbsp;{{$staff_comment?$staff_comment:''}}</b>
+            </td>
+                    </tr>
                 </table>
-                </div>
-                </div>
 
-                <div class="  row ">
-                <div class=" row col-sm-6"><span><b>Principal's Comment:&nbsp;</b>{{$principal_comment?$principal_comment:$summary->narration}}</span></div>
-                <div  class=" row col-sm-6 "><span><b>Form Tutor's Comment:&nbsp;</b >{{$staff_comment?$staff_comment:''}}</span></div>
-
+</div>
                 </div>
                 <center>
-                <div class=" text-center"><span><b>Authorized Signature:&nbsp;</b ><img :src="`/img/signatures/{{$signature->photo}}`" class="ml-2 img-result " width="60" height="50" onerror="this.style.display='none'"></span></div>
+                <div class=" text-center py-2"><span><b>Authorized Signature:&nbsp;</b ><img src="{{public_path('img/signatures/'.$signature->photo)}}" class="ml-2 img-result " width="30px" height="30px" onerror="this.style.display='none'"></span></div>
                 </center>
 
 
-
+</div>
         <!-- /.row -->
     <!-- /.container-fluid -->
 

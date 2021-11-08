@@ -85,7 +85,7 @@ export default new Router({
     { path: '/subdomain/:id', component: require('./components/creche/Subdomains.vue').default },
     { path: '/creche_ratings', component: require('./components/creche/Rating.vue').default },
     { path: '/creche_comment', component: require('./components/creche/CrecheScores.vue').default },
-
+      { path: '/subject_tracker', component: require('./components/students/Tracker.vue').default },
     { path: '/backup', component: require('./components/results/Backup.vue').default },
     { path: '/not-found', component: require('./components/NotFound.vue').default }
 

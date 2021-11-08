@@ -13,10 +13,12 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('auth/login','API\AuthController@login');
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/posts/{post}/comments', 'CommentController@index');
 Route::middleware('auth:api')->group(function(){
- Route::post('/posts/{post}/comment', 'CommentController@store');
+Route::post('/posts/{post}/comment', 'CommentController@store');
 // users routes
 Route::apiResources(['user' => 'API\UserController']);
 Route::apiResources(['event' => 'API\EventController']);
@@ -99,6 +101,7 @@ Route::get('teacher_subjects/{id}', 'API\TeachersController@loadSubjects');
  Route::post('primary_scores','API\PrimaryController@store');
  Route::post('importExcel','API\ScoreController@importExcel');
  Route::post('load_students', 'API\ScoreController@loadStudents');
+  Route::post('load_performance', 'API\ScoreController@loadPerformance');
  Route::post('deleteScores', 'API\ScoreController@deleteScores');
  Route::get('load_report', 'API\ScoreController@index');
  Route::get('score_template/{report_id}/{subject_id}','API\ScoreController@score_template');

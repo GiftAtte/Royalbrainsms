@@ -122,6 +122,11 @@ export default {
         type: 'link',
         txt: 'Performance Tracker',
         link: '/chart',
+        },
+      {
+        type: 'link',
+        txt: 'Subject Performance',
+        link: '/subject_tracker',
       },
       {
           type: 'link',
@@ -181,6 +186,11 @@ export default {
         type: 'link',
         txt: 'Performance Tracker',
         link: '/chart',
+        },
+       {
+        type: 'link',
+        txt: 'Subject Performance',
+        link: '/subject_tracker',
       },
       {
         type: 'link',
@@ -507,6 +517,11 @@ export default {
           txt: 'Performance Tracker',
           link: '/chart',
         },
+        {
+        type: 'link',
+        txt: 'Subject Performance',
+        link: '/subject_tracker',
+      },
         {
             type: 'link',
             txt: 'Assignment-Notes',

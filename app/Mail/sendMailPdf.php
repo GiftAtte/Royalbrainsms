@@ -9,14 +9,15 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendMailPdf extends Mailable
 {
-    use Queueable, SerializesModels;
+    use SerializesModels;
     public $data;
+    public $pdf;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($data,$pdf=null)
+    public function __construct($data,$pdf)
     {
         $this->data = $data;
         $this->pdf=$pdf;
@@ -29,16 +30,16 @@ class SendMailPdf extends Mailable
      */
     public function build()
     {
-      
-            
-         return $this->from('results@cedarwoodschools.com')
+
+
+         return $this->from('results@mmcisch.com')
         ->subject($this->data['subject'])
         ->view('Mail.email')
         ->with('data', $this->data)
         ->attachData($this->pdf->output(),'results.pdf');
-    
-    }     
-        
+
+    }
+
     }
 
 

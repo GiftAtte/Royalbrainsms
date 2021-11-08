@@ -7,7 +7,7 @@ use App\LoginDetail;
 use Illuminate\Support\Facades\Hash;
 use App\School;
 use App\User;
-class StudentObserver 
+class StudentObserver
 {
     /**
      * Handle the student "created" event.
@@ -24,7 +24,7 @@ class StudentObserver
         $name=$student->surname.' '.$student->first_name.' '.$student->middle_name;
         $email=strtolower($portal_id.'@'.$school->short_name.'.com');
         $password=$this->generateRandomString();
-User::updateOrCreate(['email'=>$email],[
+$user=User::updateOrCreate(['email'=>$email],[
 'student_id' =>$student->id,
 'name'=> $name,
 'email'=> $email,
@@ -38,6 +38,7 @@ User::updateOrCreate(['email'=>$email],[
 
 
 ]);
+$user->createToken('authToken')->accessToken;
 LoginDetail::updateOrCreate(['email'=>$email],[
     'name'=>$name,
     'email'=> $email,

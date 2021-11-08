@@ -300,7 +300,7 @@ if(!empty($id)){
         foreach($students as $student){
              //$user =new User();
 
-           $id= Student::create([
+           $data=[
 
                     'surname' => $student['surname'],
                     'first_name' => $student['first_name'],
@@ -318,8 +318,16 @@ if(!empty($id)){
                               'arm_id'     =>$student['arm_id'],
                                'reg_date'=>$student['reg_date'],
                                'school_id'=>$school->id,
-                ])->id;
+                ];
 
+
+
+                    if($student['id']>0){
+                        $studentData=Student::findOrFail($student['id']);
+                         $studentData->update($data);
+                    }else{
+                        Student::create($data);
+                    }
             //    $level=Level::findOrFail($student['class_id']);
 
             //      Level_history::updateOrCreate(['student_id'=>$id, 'level_id'=>$student['class_id']],[

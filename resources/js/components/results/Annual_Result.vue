@@ -54,12 +54,11 @@
 <h5><b>class:&nbsp;</b> {{report.levels.level_name}}&nbsp;{{arm.name}}</h5>
 <h5><b>Gender:&nbsp;</b> {{summary.student.gender?summary.student.gender:'-----------'}} </h5>
 <h5 ><b>Dob:</b>&nbsp; {{summary.student.dob?summary.student.dob:'-----------'}}</h5>
-<h5 ><b>Portal ID:</b>&nbsp; {{user.portal_id}}</h5>
+<h5 ><b>Position:</b>&nbsp; {{summary.annual_position}}&nbsp;out of&nbsp;<b> {{summary.totalstudents_overall?summary.totalstudents_overall:''}}</b> </h5>
 </div>
 <div class="col-md-6">
-<h4 class="text-primary text-uppercase  "><b>&nbsp;</b> {{report.header?report.header:''}}</h4>
+<h4 class="text-primary text-uppercase  "><b>&nbsp;</b> ANNUAL RESULTS</h4>
 <hr class="text-danger mb-1">
-<h5 ><b>Term:&nbsp;</b> {{report.terms.name}}</h5>
 <h5><b>Session:&nbsp;</b> {{report.sessions.name}} </h5>
 <h5 ><b>Next Term Begins:&nbsp;</b> {{report.term_start?report.term_start:'---------'}}</h5>
 
@@ -69,7 +68,7 @@
 
 </div>
 <div class="  table-responsive py-2"  >
-<table class="table table-bordered text-capitalize   text-nowrap">
+<table class="table table-bordered text-capitalize  table-sm">
 <thead>
 <tr class="text-uppercase text-center">
 <th>S/N</th>
@@ -161,8 +160,8 @@
 
  <tbody>
      <tr v-for="ldomain in LDomain" :key="ldomain.id">
-     <td v-if="ldomain.ldomain.type==='Skill'">{{ldomain.ldomain.domain}}</td>
-     <td v-if="ldomain.ldomain.type==='Skill'">{{ldomain.grade}}</td>
+     <td v-if="ldomain.ldomain.type==='Skill'">{{ldomain.ldomain?ldomain.ldomain.domain:''}}</td>
+     <td v-if="ldomain.ldomain.type==='Skill'">{{ldomain.grade?ldomain.grade:''}}</td>
      </tr>
  </tbody>
     </table>

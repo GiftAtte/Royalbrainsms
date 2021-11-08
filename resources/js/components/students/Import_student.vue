@@ -26,7 +26,9 @@
       Import
       </div>
     </div>
-<h5 class="header text-danger text-uppercase">Select cvs file and click upload</h5>
+<h5 class="header text-primary text-uppercase">Select cvs for import</h5>
+
+
 </div>
 <div class="card-body">
         <loading :active.sync="isLoading"
@@ -39,7 +41,7 @@
 <vue-csv-import
     v-model="csv"
     url="api/import_students"
-    :map-fields="['surname','first_name','middle_name','dob', 'gender','phone','class_id','reg_date','roll_no','blood_group',
+    :map-fields="['id','surname','first_name','middle_name','dob', 'gender','phone','class_id','reg_date','roll_no','blood_group',
                   'arm_id','contact_address','nationality','state','lga','school_id']"
       :callback="afterImport"
       :catch="errImport"
@@ -70,7 +72,7 @@
     </template>
 
     <template slot="next" slot-scope="{load}">
-        <button class="btn btn-primary" @click.prevent="load">load student!</button>
+        <button class="btn btn-success" @click.prevent="load">load student!</button>
     </template>
 
     <template slot="submit" slot-scope="{submit}">

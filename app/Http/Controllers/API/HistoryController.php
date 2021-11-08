@@ -179,7 +179,7 @@ class HistoryController extends Controller
                 Level_history::create([
                     'student_id'=>$student['student_id'],
                     'name' => $student['student_name'],
-                    'level_id' => $student['level_id'],
+                    'level_id' => $student['current_levelId'],
                     'arm_id'=>$student['arm_id'],
                     'level_name' => 'level',
                     'school_id'=>$school_id,
@@ -196,7 +196,7 @@ class HistoryController extends Controller
         }
 
         $level=Level::findOrFail($current_levelId);
-        $level->is_history=0;
+        $level->is_history=1;
         $level->save();
     }
 // for history

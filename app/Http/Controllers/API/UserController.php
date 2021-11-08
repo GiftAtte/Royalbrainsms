@@ -224,16 +224,17 @@ class UserController extends Controller
     }
      public function dashboard($id){
         //  $this->authorize('isAdmin');
-       return $user_count=count(User::where('school_id',$id)->get());
+       // $id=auth('api')->user()->school_id;
+       $user_count=count(User::where('school_id',$id)->get());
         $student_count=count(Student::where('school_id',$id)->get());
         $staff_count=count(Staff::where('school_id',$id)->get());
         $level_count=count(Level::where('school_id',$id)->get());
-        return response()->json(
+        return
             ['user_count'=>$user_count,
             'student_count'=>$student_count,
             'staff_count'=>$staff_count,
             'level_count'=>$level_count,
-            'message'=>"user counted successfully"]);
+            'message'=>"user counted successfully"];
 
     }
 

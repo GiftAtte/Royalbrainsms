@@ -87,10 +87,11 @@ v-show="$gate.isAdmin()"
 </td>
                     <td class="row" v-show="$gate.isStudent()">
 
-                      <router-link v-if="report.is_ready>0"  class="btn btn-success btn-sm" v-show="report.activation_status" :to="`result/${report.id}/${isStudent}`" title="view report card" tag="a" exact><i class="fa fa-eye "></i> &nbsp;View Reult</router-link>
-                      <button v-else disabled class="btn btn-danger btn-sm" v-show="report.activation_status" href="#`" title="Result not ready" ><i class="fa fa-eye "></i> &nbsp; Not ready </button>
+                       <router-link v-if="report.is_ready>0"  class="btn btn-success btn-sm" v-show="report.activation_status" :to="`result/${report.id}/${isStudent}`" title="view report card" tag="a" exact><i class="fa fa-eye "></i> &nbsp;View Reult</router-link>
+                       <button v-else disabled class="btn btn-danger btn-sm" v-show="report.activation_status" href="#`" title="Result not ready" ><i class="fa fa-eye "></i> &nbsp; Not ready </button>
                        <button  @click="showActivationModal(report.id)" v-show="!report.activation_status" class="btn btn-sm btn-danger" :title="report.is_ready?'enter activation code':'result not ready'"> Activation Key?</button>
 
+                       <router-link v-if="report.term_id===3&&report.activation_status &&report.type==='terminal'"    :to="`/result/${report.id}/${isStudent}/annual`"  tag="a" exact class=" btn btn-primary ml-2  btn-sm">view Annual Report</router-link>
 
 
                     </td>

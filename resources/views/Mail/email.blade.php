@@ -5,31 +5,31 @@
 
 @section('content')
 
-<div  style="bg:grey">
-	        
+<div  class="bg-color:navy">
+
                 <div class=" row">
-                   
+
                 <center style="bg:white">
-                    <img src="{{ asset( 'img/logo.jpg')}}" height="200px" width="200px" class="img-thumbnail img-rounded"  alt="image">
-                    <h5 class="text-danger">                       {{ trans('app.school_address') }}          </h5>
-                    
-                    <h5>                       {{ trans('app.school_town') }}         </h5>
-                   
+                   <img src="{{ asset('/img/schools/'.$data['school']->logo) }}" class="img-thumbnail pr-2 " alt="logo" width="30" height="30">
+                    <h5 class="text-danger">                {{$data['school']->name }}      </h5>
+
+                    <h5>                {{ $data['school']->contact_address}},&nbsp; {{$data['school']->state}}        </h5>
+
                 </center>
                 </div>
-              
+
                 <div class="col-xs-2">
-                   
+
                 </div>
               </div>
-        
+
 <p>Dear  {{ $data['name'] }}</p>
 <h2>{{$data['subject']}}</h2>
 <p> {!! $data['message'] !!}
 
-   
+
     </div>
 
 <!-- /.row -->
-    
+
 @endsection

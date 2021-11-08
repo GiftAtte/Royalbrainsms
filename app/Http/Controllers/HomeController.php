@@ -32,6 +32,8 @@ use App\Markcheck;
 use App\Imports\MarksImport;
 use App\Teachersubject;
 use PDF;
+use App\Mail\SendMailPdf;
+use Illuminate\Support\Facades\Mail;
 class HomeController extends Controller
 {
     /**
@@ -68,17 +70,20 @@ class HomeController extends Controller
     }
 
 
-    public function pdfdownload($id,$report_id)
+    public function pdfdownload($id,$report_id,$email=null)
 
     { // $items = DB::table("items")->get();
 
         $scores= $this->studenResult($report_id,$id) ;
+        //return $Totals=collect($scores['pastTotal']);
+
+      // return $LDomain=$this->learningDomain($id,$report_id);
           view()->share([
              'school'=>$scores['school'],
              'scores'=>$scores['scores'],
              'summary'=>$scores['summary'],
-             'user'=>$scores['user'],'
-             pastTotal'=>$scores['pastTotal'],
+             'user'=>$scores['user'],
+              'Totals'=>collect($scores['pastTotal']),
                'comment'=>$scores['comment'],
                'principal_comment'=>$scores['principal_comment']?$scores['principal_comment']:'',
                'signature'=>$scores['signature'],
@@ -92,12 +97,41 @@ class HomeController extends Controller
          //return$scores['school'];
     // return view('result');
 
+ $pdf = PDF::loadView('result');
+$student=Student::findOrFail($id);
+if($email>0)
+{
 
-            $pdf = PDF::loadView('result');
-            return $pdf->download('results.pdf');
+   // $parentsEmail= User::where('parents_id',$student->parents_id)->first();
+    $message="We are happy to send to you {$student->first_name} {$student->surname} results. Please check the attachment for details. Thanks for being our parent";
+    $subject="{$student->first_name} {$student->surname} Results";
 
+   // return $parentsEmail;
+   $data = array(
+            'name'   => $student->first_name,
+            'message'   =>$message,
+            'subject'=> $subject,
+            'school'=>$scores['school']
 
-    }
+        );
+        if(!empty($student->femail)){
+    Mail::to($student->femail)->send(new SendMailPdf($data,$pdf));
+
+    return back()->withSuccess("Results Sents successfully to {$student->femail}");
+}
+else{
+    $data['message']='No Fathers email Results found';
+ Mail::to('attegift@gmail.com')->send(new SendMailPdf($data,$pdf));
+    return back()->withErrors("No Fathers email Results found");
+}
+
+}
+else{
+return $pdf->download($student->first_name.' '.$student->surname.'.pdf');
+}
+ //$pdf = PDF::loadHTML($html);
+}
+
 
 
 
@@ -114,10 +148,9 @@ public function studenResult( $report_id, $student_id=null)
         $comment=Result_activation::where([['report_id',$report_id],['student_id',$student_id]])->first();
       $report=Report::with(['levels','sessions','terms'])->where('id',$report_id)->first();
 
-    $pastTotal=Mark::select('annual_score','subject_id','term_id')
+  $pastTotal=Mark::select('total as annual_score','subject_id','term_id','report_id')
          ->where([['student_id',$student_id],['level_id',$report->level_id]
-         ])->whereNotIn('report_type',['mid_term'])->distinct('term_id')->get();
-
+         ])->whereNotIn('report_type',['mid_term','default-midterm'])->distinct(['term_id','subject_id'])->get();
           $pastTotalarray=[];
           foreach ($pastTotal as $total ) {
 
@@ -141,7 +174,7 @@ public function studenResult( $report_id, $student_id=null)
     if($summary){
         $principal_comment=$this->principalComment($summary?$summary->average_scores:0);
        $staff_comment=$this->staffComment($student_id,$report_id);
-        $LDomain=$this->learningDomain($student_id,$report_id);
+       $LDomain=$this->learningDomain($student_id,$report_id);
 
         return [ 'school'=>$school,'scores'=>$scores,'summary'=>$summary,'user'=>$user,'pastTotal'=>$pastTotalarray,
     'comment'=>$comment,'principal_comment'=>$principal_comment,'signature'=>$principal_sign, 'staff_comment'=>$staff_comment,
