@@ -78,7 +78,7 @@
     'normal' => $rootDir . '/lib/fonts/DejaVuSerif',
   ),
   'source sans pro' => array(
-    'italic' => $fontDir . '/source_sans_pro_italic_120f826d42ce02c5331340b891f821ef',
+    'italic' => $fontDir . '/source_sans_pro_italic_d4e9fac0d3244ad3bc9607f6bc2cac47',
     '300' => $fontDir . '/source_sans_pro_300_891cae020a7dc5d2aa8254f4fb770830',
     'normal' => $fontDir . '/source_sans_pro_normal_b93742b4fdc85f7c597b89467e1a88ee',
     'bold' => $fontDir . '/source_sans_pro_bold_0e2949c92ad09533088db418daa0361a',
