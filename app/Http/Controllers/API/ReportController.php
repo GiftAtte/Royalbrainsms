@@ -73,6 +73,7 @@ if($user->type==='tutor'){
             'gradinggroup_id'=>'required|integer',
 
         ]);
+       // return $request->all();
         return Report::create($request->all());
     }
 

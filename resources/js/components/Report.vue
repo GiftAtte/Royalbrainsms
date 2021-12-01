@@ -274,6 +274,32 @@ v-show="$gate.isAdmin()"
                   </select>
              <has-error :form="form" field="gradinggroup_id"></has-error>
                  </div>
+                 <div class="form-group">
+                     <label>CA2</label>
+                     <toggle-button
+                         :label="true"
+                         id="ca2"
+                         :labels="{checked: 'ON', unchecked: 'OFF'}"
+                         v-model="form.isCa2"
+                         :color="'green'"
+                         :sync="true"
+
+
+                         />
+                 </div>
+                   <div class="form-group">
+                     <label>CA3</label>
+                     <toggle-button
+                         :label="true"
+                         id="ca3"
+                         :labels="{checked: 'ON', unchecked: 'OFF'}"
+                         v-model="form.isCa3"
+                         :color="'green'"
+                         :sync="true"
+
+
+                         />
+                 </div>
 
                 </div>
                 <div class="modal-footer">
@@ -415,7 +441,9 @@ v-show="$gate.isAdmin()"
                     header:'',
                     gradinggroup_id:'',
                     isCummulative:0,
-                    school_id:window.user.school_id
+                    school_id:window.user.school_id,
+                    isCa2:false,
+                    isCa3:false
 
 
                 }),
@@ -478,6 +506,7 @@ v-show="$gate.isAdmin()"
                 this.form.reset();
                 $('#addNew').modal('show');
                 this.form.fill(level);
+              console.log([this.form.isCa2,this.form.isCa3])
             },
             newModal(){
                 this.editmode = false;
