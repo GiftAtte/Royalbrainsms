@@ -324,7 +324,7 @@
                         :id="`exams${index}`"
                         :value="score.exams"
                         type="number"
-                        placeholder="Mid-Term Test/Exams"
+                        placeholder="Exam"
                         max="100"
                         min="0"
                         step="0.01"
