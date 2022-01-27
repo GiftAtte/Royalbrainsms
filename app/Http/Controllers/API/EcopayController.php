@@ -25,12 +25,14 @@ class EcopayController extends Controller
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-            'apikey' => env('NEOVAST_API_KEY'),
-            'ClientId' => env('NEOVAST_CLIENT_ID'),
+            'apikey' => "test123",
+            'ClientId' => "neovast",
         ])
-            ->$method(env('NEOVAST_URL') . $url, $body);
+            ->$method("http://neovastltd.com/demo_environment/". $url, $body);
         return $response->json();
     }
+
+
     /**
      * Display a listing of the resource.
      *
