@@ -2,7 +2,7 @@
 window._ = require('lodash');
 window.Popper = require('popper.js').default;
 
-import{ init } from 'emailjs-com';
+import { init } from 'emailjs-com';
 init("user_oJ72BF49hV8qMCMISA5OE");
 
 /**
@@ -17,12 +17,12 @@ try {
     require('bootstrap');
     require('admin-lte');
     require('icheck-bootstrap');
-    require('datatables.net-bs4');
+
     require('../js/styles/summernote')
-    window.dt = require( 'datatables.net' )();
 
 
-} catch (e) {}
+
+} catch (e) { }
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

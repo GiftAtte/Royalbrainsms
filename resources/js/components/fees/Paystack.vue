@@ -5,13 +5,13 @@
       <div class="container-fluid navy" >
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Paystack Keys</h1>
+            <h1 class="m-0 text-dark">Platform API Keys</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
 
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Paystack</li>
+              <li class="breadcrumb-item active">API key</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -40,8 +40,9 @@
                   <tbody>
                     <tr>
                         <th>S/ID</th>
-                         <th>Bank</th>
-                        <th>Key</th>
+                         <th>Bank-Platform</th>
+                        <th>Paystack Key/Client ID</th>
+                        <th>Client ID</th>
 
                         <th>Date Created</th>
                         <th>Modify</th>
@@ -53,6 +54,7 @@
                     <td>{{pkey.id}}</td>
                     <td>{{pkey.bank}}</td>
                     <td>{{pkey.paystack_key}}  </td>
+                    <td>{{pkey.clientId}}  </td>
                     <td>{{pkey.created_at|myDate}}</td>
                     <td>
                         <a href="#" @click="editModal(pkey)">
@@ -101,11 +103,18 @@
                 <has-error :form="form" field="bank"></has-error>
                  </div>
                 <div class="form-group">
-                <input type="text" name="name" placeholder="Enter Paystack key" id="paystack_key"
+                <input type="text" name="name" placeholder="Enter API key" id="paystack_key"
                    class="form-control" :class="{ 'is-invalid': form.errors.has('name') }"
                    v-model="form.paystack_key" >
                 <has-error :form="form" field="paystack_key"></has-error>
                  </div>
+                 <div class="form-group">
+                <input type="text" name="name" placeholder="Enter ClientId" id="clientId"
+                   class="form-control" :class="{ 'is-invalid': form.errors.has('clientId') }"
+                   v-model="form.clientId" >
+                <has-error :form="form" field="clientId"></has-error>
+                 </div>
+
 
 
 
@@ -147,6 +156,7 @@
                     id : '',
                     bank:'',
                     paystack_key:'',
+                    clientId:'',
                     school_id:''
 
 

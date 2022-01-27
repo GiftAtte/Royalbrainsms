@@ -1,0 +1,25 @@
+# POST  http://neovastltd.com/demo_environment/newAccounts.php
+# Content-Type: application/json
+# apikey: test123
+# clientId:"neovast"
+
+# {
+# "merchant_id": 10003,
+# "full_name": "Gift Atte",
+# "phone": "08063611790",
+# "address": "Woji",
+# "email":"attegift@gmail.com",
+# "city":"Port HArcourt",
+# }
+
+
+# ###
+POST http://neovastltd.com/demo_environment/fundVirtualAccounts.php
+Content-Type: application/json
+apiKey: test123
+clientId:"neovast"
+
+{
+"virtualAccountNumber": "4531470213",
+"amount": "80000"
+}

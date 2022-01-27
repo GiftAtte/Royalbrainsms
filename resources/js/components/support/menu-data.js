@@ -329,8 +329,8 @@ export default {
 
         {
           type: 'link',
-          txt: 'Manage Paystack',
-          link: '/paystack_key',
+          txt: 'Manage Payment API',
+          link: '/payment_api',
        },
         {
           type: 'link',
@@ -545,7 +545,17 @@ export default {
           txt: 'Fee Group',
           link: '/feegroup',
         },
+        {
+            type: 'link',
+            txt: 'E-Wallet',
+            link: '/ewallets',
+        },
 
+{
+            type: 'link',
+            txt: 'Bills',
+            link: '/bills',
+        },
 
 
 

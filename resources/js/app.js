@@ -17,7 +17,9 @@ import tinymce from 'vue-tinymce-editor'
 import VueImageLoader from '@kevindesousa/vue-image-loader'
 import VueChatScroll from 'vue-chat-scroll'
 import VueCoreVideoPlayer from 'vue-core-video-player'
+import VuePerfectPrint from 'vue-perfect-print'
 
+Vue.use(VuePerfectPrint);
 Vue.use(VueCoreVideoPlayer)
 Vue.use(VueChatScroll)
 Vue.use(VueImageLoader)

@@ -35,7 +35,8 @@
         :can-cancel="false"
         :on-cancel="onCancel"
         color="blue"
-        :is-full-page="fullPage"></loading>
+        :is-full-page="fullPage">
+        </loading>
  <export-excel
  v-show="isSubject"
        class="btn btn-primary"

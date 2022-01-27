@@ -116,7 +116,7 @@
       </li>
 
 
-<li v-show="$gate.isAdminOrTutorOrStudent()">
+<li v-show="$gate.isAdminOrTutor()">
         <a
         href="#"
         @click.prevent="updateMenu('fees')"

@@ -286,11 +286,8 @@
 </template>
 
 <script>
-import DataTable from "vue-materialize-datatable";
     export default {
-        components:{
-            datatable: DataTable
-        },
+
         props: ['post-route'],
         computed:{
     school(){   return this.$store.state.school

@@ -52,8 +52,8 @@ class StudentController extends Controller
         if(!empty($level_id)&&!empty($arm_id)){
 
             return Student::with(['levels','arm'])->where([['class_id',$level_id],['arm_id',$arm_id]])
-              ->join('users','students.id','=','users.student_id')
-            ->select('students.*', 'users.id as userId', 'users.isActive as isActive')
+            ->join('users','students.id','=','users.student_id')
+            ->select('students.*', 'users.id as userId', 'users.isActive as isActive','users.email as email')
             //->latest()->paginate(50)
             ->orderby('surname')->paginate(50);
         }
@@ -63,14 +63,14 @@ class StudentController extends Controller
           $arm=Has_arm::where('staff_id',$user->staff_id)->whereNotIn('level_id',$historyLevel)->first();
             return Student::with(['levels','arm'])->where([['school_id',$user->school_id],['class_id',$arm->level_id],['arm_id',$arm->arms_id]])
                 ->join('users','students.id','=','users.student_id')
-            ->select('students.*', 'users.id as userId', 'users.isActive as isActive')
+            ->select('students.*', 'users.id as userId', 'users.isActive as isActive','users.email as email')
             //->latest()->paginate(50)
             ->orderby('surname')->paginate(50);
         }
         if($user->type==='admin'||$user->type==='superadmin'){
             return Student::with(['levels','arm'])->where('students.school_id',auth('api')->user()->school_id)
             ->join('users','students.id','=','users.student_id')
-            ->select('students.*', 'users.id as userId', 'users.isActive as isActive')
+            ->select('students.*', 'users.id as userId', 'users.isActive as isActive','users.email as email')
             //->latest()->paginate(50)
             ->orderby('surname')->paginate(50);
         }
@@ -376,23 +376,60 @@ public function exportLogin(){
    return response()->json(['student_login'=>$student_login,'staff_login'=>$staff_login,'num_student'=>$num_students,'num_staff'=>$num_staff]);
         }
 
-        public function exportLogins($level_id,$arm_id){
+        public function exportLogins($level_id,$arm_id,$isAccountNumbers=null){
+        $student_login=null;
 
+               if(!empty($isAccountNumbers)){
+            $student_login = DB::table('students')->where([['students.class_id', $level_id], ['students.arm_id', $arm_id]])
+                ->leftJoin('arms', 'students.arm_id', '=', 'arms.id')
+                ->join('levels', 'students.class_id', '=', 'levels.id')
+                ->join('login_details', 'students.id', '=', 'login_details.student_id')
+                ->crossJoin('users', 'students.id', '=', 'users.student_id')
+                ->select(
+                    'students.id',
+                    'students.surname',
+                    'students.first_name',
+                    'students.middle_name',
+                     'students.bankName',
+                    'students.accountNumber',
 
+                    'levels.level_name',
 
+                )
+                ->orderby('students.surname')
+                ->orderby('levels.level_name')
 
-            $student_login=DB::table('students')->where([['students.class_id',$level_id],['students.arm_id',$arm_id]])
-            ->leftJoin('arms','students.arm_id','=','arms.id')
-            ->join('levels','students.class_id','=','levels.id')
-            ->join('login_details','students.id','=','login_details.student_id')
-            ->crossJoin('users','students.id','=','users.student_id')
-            ->select('students.id','students.surname' ,'students.first_name' ,'students.middle_name','login_details.email','login_details.password','students.class_id',
-            'levels.level_name','users.portal_id','users.photo','login_details.created_at','arms.name as arm','users.id as userId','users.isActive as isActive')
-            ->orderby('students.surname')
-            ->orderby('levels.level_name')
-            ->orderby('arm')
+                ->get();
+               }
+else{
+            $student_login = DB::table('students')->where([['students.class_id', $level_id], ['students.arm_id', $arm_id]])
+                ->leftJoin('arms', 'students.arm_id', '=', 'arms.id')
+                ->join('levels', 'students.class_id', '=', 'levels.id')
+                ->join('login_details', 'students.id', '=', 'login_details.student_id')
+                ->crossJoin('users', 'students.id', '=', 'users.student_id')
+                ->select(
+                    'students.id',
+                    'students.surname',
+                    'students.first_name',
+                    'students.middle_name',
+                    'login_details.email',
+                    'login_details.password',
+                    'students.class_id',
+                    'levels.level_name',
+                    'users.portal_id',
+                    'users.photo',
+                    'login_details.created_at',
+                    'arms.name as arm',
+                    'users.id as userId',
+                    'users.isActive as isActive'
+                )
+                ->orderby('students.surname')
+                ->orderby('levels.level_name')
+                ->orderby('arm')
 
-            ->get();
+                ->get();
+}
+
             $staff_login=DB::table('login_details')->whereNotNull('staff_id')->where('school_id',auth('api')->user()->school_id)
              ->select('name','email','password','staff_id','portal_id','created_at')->orderby('level_id')->get();
              $num_students=count($staff_login);

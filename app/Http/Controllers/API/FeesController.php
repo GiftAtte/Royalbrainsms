@@ -207,10 +207,12 @@ class FeesController extends Controller
 
 
 
+
         ]);
        return Paystack::create([
            'paystack_key'=>$request->paystack_key,
            'bank'=>$request->bank,
+           'clientId'=>$request->clientId,
            'school_id'=>auth('api')->user()->school_id,
 
        ]);

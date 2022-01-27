@@ -41,6 +41,11 @@ return $this->hasOne('App\Level','id','class_id');
 public function arm(){
 return $this->belongsTo('App\Arm','arm_id','id');
 }
+
+    public function schools()
+    {
+        return $this->belongsTo('App\School', 'school_id', 'id');
+    }
 public function users(){
     return $this->hasOne('App\User');
     }

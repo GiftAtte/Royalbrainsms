@@ -1,294 +1,453 @@
 <template>
- <div>
-<div class="content-header">
-
-      <div class="container-fluid navy" >
+  <div>
+    <div class="content-header">
+      <div class="container-fluid navy">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Echopay</h1>
-          </div><!-- /.col -->
+            <h1 class="m-0 text-dark">E-Wallet</h1>
+          </div>
+          <!-- /.col -->
           <div class="col-sm-6">
-
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">echoPay</li>
+              <li class="breadcrumb-item active">E-Wallet</li>
             </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
     </div>
 
+    <div class="content col-md-12" v-if="$gate.isTutorOrAdmin()">
 
-
-
-        <div class="content" v-if="$gate.isAdmin()">
-          <div class="col-12">
-            <div class="card card-navy card-outline">
-              <div class="card-header">
-                <div class="row float-right">
-
-
-                <div class="card-tools">
-
-               <button class="btn btn-success btn-sm float-right m-2" @click="newModal">Add New <i class="fas fa-user-plus fa-fw"></i></button>
-                </div>
-                 </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body table-responsive">
-                <table class="table table-hover">
-                  <tbody>
-                    <tr>
-                        <th>S/ID</th>
-                         <th>Bank</th>
-                        <th>Key</th>
-
-                        <th>Date Created</th>
-                        <th>Modify</th>
-                  </tr>
-
-
-                  <tr v-for="pkey in payStack" :key="pkey.id">
-
-                    <td>{{pkey.id}}</td>
-                    <td>{{pkey.bank}}</td>
-                    <td>{{pkey.paystack_key}}  </td>
-                    <td>{{pkey.created_at|myDate}}</td>
-                    <td>
-                        <a href="#" @click="editModal(pkey)">
-                            <i class="fa fa-edit blue"></i>
-                        </a>
-                        /
-                        <a href="#" @click="deletePaystack(pkey.id)">
-                            <i class="fa fa-trash red"></i>
-                        </a>
-
-                    </td>
-
-                  </tr>
-                </tbody></table>
-              </div>
-              <!-- /.card-body -->
-              <div class="card-footer">
-                  <pagination :data="sessions" @pagination-change-page="getResults"></pagination>
-              </div>
+      <div class="card card-navy card-outline">
+           <Loading
+      :active.sync="isLoading"
+      :can-cancel="false"
+      :on-cancel="onCancel"
+      color="green"
+      :is-full-page="fullPage"
+    >
+    </Loading>
+        <div class="card-header">
+          <div class="row">
+            <div class="col-md-2">
+              <select
+                name="class_id"
+                id="level"
+                :class="{ 'is-invalid': form.errors.has('class_id') }"
+                class="form-control"
+                v-model="level_id"
+                @change="checkArm"
+              >
+                <option value selected>Select Class/Level</option>
+                <option
+                  v-for="level in levels"
+                  :key="level.id"
+                  :value="level.id"
+                >
+                  {{ level.level_name }}
+                </option>
+              </select>
+              &nbsp; &nbsp;
             </div>
-            <!-- /.card -->
+
+            <div v-show="hasArm" class="col-md-2">
+              <select
+                name="arm_id"
+                id="arm_id"
+                :class="{ 'is-invalid': form.errors.has('arm_id') }"
+                class="form-control"
+                v-model="arm_id"
+                @change="loadStudents"
+              >
+                <option value selected>Select Class Arm</option>
+                <option v-for="arm in arms" :key="arm.id" :value="arm.id">
+                  {{ arm.name }}
+                </option>
+              </select>
+              <has-error :form="form" field="arm_id"></has-error>
+            </div>
+            <div v-show="hasArm">
+              <export-excel class="btn btn-primary" :data="student_login">
+                Download Account Numbers
+                <i class="fa fa-download"></i>
+              </export-excel>
+            </div>
           </div>
         </div>
+        <!-- /.card-header -->
+        <div class="card-body table-responsive">
+          <table class="table table-hover">
+            <tbody>
+              <tr>
+                <th>
+                  Select All&nbsp;<input
+                    type="checkbox"
+                    @click="selectAll"
+                    v-model="allSelected"
+                    :checked="isSelectAll"
+                  />
+                </th>
+                <th>S/ID</th>
+                <th colspan="2">Account Names</th>
 
-        <div v-if="!$gate.isAdmin()">
-            <not-found></not-found>
+                <th>Levels</th>
+                <th>Arm</th>
+                <th>Account Number</th>
+
+                <th>Enrolement Status</th>
+              </tr>
+
+              <tr v-for="student in students.data" :key="student.id">
+                <td width="20">
+                  <input
+                    :id="`student${student.id}`"
+                    type="checkbox"
+                    @click="select(student.id)"
+                    :checked="isChecked"
+                  />
+                </td>
+                <td>{{ student.id }}</td>
+
+                <td colspan="2">
+                  <router-link
+                    :to="`student_profile/${student.id}`"
+                    tag="a"
+                    exact
+                  >
+                    {{ student.surname }}, &nbsp;{{
+                      student.first_name
+                    }}
+                    &nbsp;{{ student.middle_name ? student.middle_name : "" }}
+                  </router-link>
+                </td>
+                <td>{{ student.levels ? student.levels.level_name : "" }}</td>
+                <td>{{ student.arm ? student.arm.name : "" }}</td>
+
+                <td>
+                  {{
+                    student.accountNumber
+                      ? student.accountNumber
+                      : "Not enrolled"
+                  }}
+                </td>
+                <td>
+                  <button
+                    class="btn btn-success btn-sm"
+                    @click="enrollForAccountNumber(student)"
+                    :disabled="student.accountNumber"
+                  >
+                    Generate Account
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-<!-- Arms Modal -->
-<div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-                    <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New</h5>
-                    <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update Key's Info</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-
-                </div>
-       <form @submit.prevent="editmode ? updatePaystack() : createPaystack()">
-      <div class="modal-body">
-<form action="http://echopay.ng/eschool/prepayment" method="post">
-<div class="row justify-content-center">
-<input type="hidden" id="firstName" class="form-control" name="firstName" value="John" />
-<input type="hidden" id="lastName" class="form-control" name="lastName" value="Doe" />
-<input type="hidden" id="Amount" class="form-control" name="Amount" max="1000000" value="496" />
-<input type="hidden" id="RegNo" class="form-control" name="RegNo" value="123ABC" />
-<input type="hidden" id="Email" class="form-control" name="Email" value="info@eChoPay.com.ng" />
-<input type="hidden" id="sess1" class="form-control" name="sess1" max="1000000" value="1" />
-<input type="hidden" id="sess2" class="form-control" name="sess2" max="1000000" value="2" />
-<input type="hidden" id="level" class="form-control" name="level" max="10" value="1" />
-<input type="hidden" id="notification_url" class="form-control" name="notification_url" value="https://www.mywebsite/LogNotification.php" />
-<input type="hidden" id="txnRef" class="form-control" name="txnRef" value="184048633031" />
-<input type="hidden" id="SchoolId" class="form-control" name="SchoolId" value="xxxxxxx" />
-<input type="hidden" id="FeeDescription" class="form-control" name="FeeDescription" value="AmissionAcceptance Fee" />
-<input type="hidden" id="Faculty" class="form-control" name="Faculty" placeholder="Faculty" value="Arts" />
-<input type="hidden" id="Department" class="form-control" name="Department" value="Law" />
-<input type="hidden" id="redirect_url" class="form-control" name="redirect_url" value="https://www.mywebsite/redirect.php"/>
-<input type="hidden" id="AccessKey" class="form-control" name="AccessKey" value="xxxxxxxxxxxxxxxxxxxxxxx" />
-<p><button type="submit" class="btn">Proceed to Payment</button></p> </div>
-
-
-
-
-
+        <!-- /.card-body -->
+        <div class="card-footer">
+          <pagination
+            :data="students"
+            @pagination-change-page="getResults"
+          ></pagination>
         </div>
-
-            <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
-                    <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
-           </div>
-</form>
-</div>
-</div>
-</div>
-
-    <!-- Level Modal -->
-
-
-
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer">
+        <button
+          v-show="isStudentId"
+          class="btn btn-md btn-success"
+          @click="generateBulkAccount"
+        >
+          <i class="fas fa-user-plus fa-fw"></i> Add Wallet
+        </button>
+      </div>
     </div>
+    <!-- /.card -->
+
+    <div v-if="!$gate.isAdminOrTutor()">
+      <not-found></not-found>
+    </div>
+  </div>
 </template>
 
 <script>
- import {mapState} from "vuex";
-    export default {
+import Loading from "vue-loading-overlay";
+export default {
+  props: ["post-route"],
+  components:Loading,
+  computed: {
+    school() {
+      return this.$store.state.school;
+    },
+  },
+  data() {
+    return {
+         isLoading:true,
+        fullPage: true,
+      editmode: false,
+      students: [],
+      levels: {},
+      accountDetails: "",
+      isSelectAll: false,
+      arms: {},
+      hasArm: false,
+      selected: [],
+      generatedAccounts: [],
+      allSelected: false,
+      level_id: "",
+      arm_id: "",
+      studentIds: [],
+      isChecked: false,
+      isStudentId: false,
+      student_login: "",
+      importFile: "api/importUser",
+      form: new Form({
+        id: "",
+        arm_id: "",
+        surname: "",
+        first_name: "",
+        middle_name: "",
+        dob: "",
+        phone: "",
+        gender: "",
+        dob: "",
+        class_id: "",
+        school_id: window.user.school_id,
+      }),
+    };
+  },
+  mounted() {
+    axios.get("api/arms").then((res) => {
+      this.arms = res.data;
+      // this.id=id;
+    });
+  },
+  methods: {
+    getResults(page = 1) {
+      axios.get("api/student?page=" + page).then((response) => {
+        this.students = response.data;
+      });
+    },
+    updateStudent() {
+      this.$Progress.start();
+      // console.log('Editing data');
+      this.form
+        .put("/api/student_update/" + this.form.id)
+        .then(() => {
+          // success
+          $("#addNew").modal("hide");
+          swal.fire("Updated!", "Information has been updated.", "success");
+          this.$Progress.finish();
+          Fire.$emit("AfterCreate");
+        })
+        .catch(() => {
+          this.$Progress.fail();
+        });
+    },
+    editForm(student) {
+      this.editmode = true;
+      // Fire.$emit('AfterCreate');
+      this.form.reset();
+      $("#addNew").modal("show");
+      this.form.fill(student);
+    },
 
+    loadLevels() {
+      if (this.$gate.isAdminOrTutor()) {
+        axios.get("api/get_levels").then(({ data }) => {
+          this.levels = data;
+          // console.log(this.levels);
+        });
+      }
+    },
+    loadStudents() {
+      if (this.$gate.isAdminOrTutor()) {
+        axios
+          .get("/api/students/" + this.level_id + "/" + this.arm_id)
+          .then(({ data }) => (this.students = data));
+      }
+      this.downloadLogin();
+    },
 
-        data() {
-            return {
-                editmode: false,
-                payStack:'',
+    createStudent() {
+      this.$Progress.start();
 
+      this.form
+        .post("api/student")
+        .then((res) => {
+          Fire.$emit("AfterCreate");
+          $("#addNew").modal("hide");
 
-                sessions:{},
-                selected_file:'',
-                  activate:false,
-                  form: new Form({
-                    id : '',
-                    bank:'',
-                    paystack_key:'',
-                    school_id:''
+          toast.fire({
+            type: "success",
+            title: "Student Created in successfully",
+          });
+          //console.log(res)
+          this.$Progress.finish();
+        })
+        .catch((err) => {
+          toast.fire({
+            type: "fail",
+            title: err,
+          });
+          this.$Progress.fail();
+        });
+    },
 
+    checkArm() {
+      var e = document.querySelector("#level");
+      var id = e.options[e.selectedIndex].value;
+      console.log(id);
+      axios
+        .get(`api/check_arm/${id}`)
+        .then((res) => {
+          if (res.data > 0) {
+            this.hasArm = true;
+            //  this.downloadLogin();
+          } else {
+            this.hasArm = false;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
 
-                }),
+    selectAll() {
+      this.studentIds = [];
+      if (this.isChecked) {
+        this.isChecked = false;
 
-            }
-        },
-
-        methods: {
-            getResults(page = 1) {
-                        axios.get('api/academic_session?page=' + page)
-                            .then(response => {
-                                this.paystck = response.data;
-                            });
-                },
-            updatePaystack(){
-                 if(this.$gate.isAdmin()){
-                this.$Progress.start();
-                // console.log('Editing data');
-                this.form.put('/api/paystack')
-                .then(() => {
-                    // success
-                    $('#addNew').modal('hide');
-                     swal.fire(
-                        'Updated!',
-                        'Session has been updated.',
-                        'success'
-                        )
-                        this.$Progress.finish();
-                         Fire.$emit('AfterCreate');
-                })
-                .catch(() => {
-                    this.$Progress.fail();
-                });
-
-            }},
-
-
-            editModal(paystck){
-                this.editmode = true;
-                this.form.reset();
-                $('#addNew').modal('show');
-                this.form.fill(paystck);
-            },
-            newModal(){
-                this.editmode = false;
-                this.form.reset();
-                $('#addNew').modal('show');
-            },
-
-            createPaystack(){
-                 if(this.$gate.isAdmin()){
-                 this.$Progress.start();
-
-                this.form.post('api/paystack')
-                .then(()=>{
-                    Fire.$emit('AfterCreate');
-                    $('#addNew').modal('hide')
-
-                    toast.fire({
-                        type: 'success',
-                        title: 'Session Created in successfully'
-                        })
-                    this.$Progress.finish();
-                     $('#addNew').modal('hide');
-                      Fire.$emit('AfterCreate');
-                })
-                .catch(()=>{
-
-                })
-                  }
-            },
-
-            deletePaystack(id){
-
-                  if(this.$gate.isAdmin()){
-                swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-
-                        // Send request to the server
-                         if (result.value) {
-                                this.form.delete('/api/paystack/'+id).
-                                then(()=>{
-                                        swal.fire(
-                                        'Deleted!',
-                                        'paystack has been deleted.',
-                                        'success'
-                                        )
-                                    Fire.$emit('AfterCreate');
-                                }).catch(()=> {
-                                    swal.fire("Failed!", "There was something wronge.", "warning");
-                                });
-                         }
-                    })
-
-            }
-            },
-         loadPaystack(){
-
-                if(this.$gate.isAdmin()){
-                    axios.get("/api/paystack").then(res  => this.payStack = res.data);
-                }
-
-
-
+        return this.checkStudentId();
+      }
+      const students = this.students.data;
+      this.isChecked = true;
+      if (!this.allSelected) {
+        for (let index = 0; index < students.length; index++) {
+          this.studentIds.push(students[index].id);
+          this.checkStudentId();
+          this.allSelected = true;
         }
-
-        },
-        created() {
-            Fire.$on('searching',() => {
-                let query = this.$parent.search;
-                axios.get('api/findSchool?q=' + query)
-                .then((data) => {
-                    this.levels = data.data
-                })
-                .catch(() => {
-
-                })
-            })
-           this.loadPaystack();
-
-           Fire.$on('AfterCreate',() => {
-               this.loadPaystack();
-           });
-        //    setInterval(() => this.loadUsers(), 3000);
-
+        //  console.log(this.studentIds)
+        this.checkStudentId();
+      }
+    },
+    select(id) {
+      if (this.allSelected) {
+        const index = this.studentIds.indexOf(id);
+        if (index > -1) {
+          this.studentIds.splice(index, 1);
+          this.checkStudentId();
+        } else {
+          this.studentIds.push(id);
+          this.checkStudentId();
         }
+      } else {
+        const index = this.studentIds.indexOf(id);
+        if (index > -1) {
+          this.studentIds.splice(index, 1);
+          this.checkStudentId();
+        } else {
+          this.studentIds.push(id);
+          this.checkStudentId();
+        }
+      }
 
-    }
+      this.checkStudentId();
+      console.log(this.studentIds);
+    },
+    checkStudentId() {
+      let studentLength = this.studentIds.length;
+      if (this.studentIds.length > 0) {
+        this.isStudentId = true;
+      } else {
+        this.isStudentId = false;
+      }
+
+      if (this.studentIds.length === this.students.length) {
+        this.isSelectAll = true;
+      } else {
+        this.isSelectAll = false;
+      }
+    },
+
+    setActivation(id) {
+      axios.put("/api/account_enrollment/" + id).then((res) => {});
+    },
+    downloadLogin() {
+      axios
+        .get(`/api/login_export/${this.level_id}/${this.arm_id}/isAccount`)
+        .then((res) => {
+          this.student_login = res.data.student_login;
+        });
+    },
+
+    enrollForAccountNumber(student) {
+      //   console.log(this.studentIds);
+      const formData = new FormData();
+      formData.append("merchant_id", "10003");
+      formData.append("full_name", `${student.surname}, ${student.first_name}`);
+      formData.append("address", this.school.name);
+      formData.append("phone", "08063611790");
+      formData.append(
+        "email",
+        student.femail ? student.femail : "attegift@gmail.com"
+      );
+      formData.append("city", this.school.state);
+      formData.append("apikey", "test123");
+      formData.append("clientId", "neovast");
+      formData.append("studentId", student.id);
+
+      axios.post("api/getAccount", formData).then((res) => {
+        Fire.$emit("AfterCreate");
+        console.log(res.data);
+      });
+    },
+    generateBulkAccount() {
+      const formData = new FormData();
+      formData.append("accountDetails", this.studentIds);
+    this.$Progress.start()
+      axios
+        .post("api/generateBulkAccountNumbers", formData)
+        .then((response) => {
+
+             swal.fire("Updated!", "account numbers generated successfully.", "success");
+              Fire.$emit("AfterCreate");
+              this.$Progress.end()
+        })
+        .catch((err) => {
+            this.resetLoading()
+        });
+    },
+     setLoading(){
+             this.isLoading=true
+           },
+           resetLoading(){
+             this.isLoading=false
+           }
+  },
+  created() {
+    Fire.$on("searching", () => {
+      let query = this.$parent.search;
+      axios
+        .get("api/findStudent?q=" + query)
+        .then((data) => {
+          this.students = data.data;
+          //  console.log(this.students)
+        })
+        .catch(() => {});
+    });
+    this.loadStudents();
+    this.loadLevels();
+
+    Fire.$on("AfterCreate", () => {
+      this.loadStudents();
+    });
+    //setInterval(() => this.loadUsers(), 3000);
+  },
+};
 </script>

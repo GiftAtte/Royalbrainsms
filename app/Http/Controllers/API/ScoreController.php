@@ -224,92 +224,92 @@ $this->computeSummary($request->report_id,$request->arm_id);
     }
 // import scores
 
-public function import(Request $request)
-{
+// public function import(Request $request)
+// {
 
 
 
-        $subject_id=null;
-         $report_id=null;
-         $is_history=false;
-         $check_history=intval($request->csv[0]['is_history']);
-         if($check_history>0){
-             $is_history=true;
-         }
+//         $subject_id=null;
+//          $report_id=null;
+//          $is_history=false;
+//          $check_history=intval($request->csv[0]['is_history']);
+//          if($check_history>0){
+//              $is_history=true;
+//          }
 
 
-        //return  $student_id;
-        foreach($students as $student){
-         // return $student;
-         $subject_id=$student['subject_id'];
-          $report_id=$student['report_id'];
-          $report=Report::findOrFail($report_id);
-          $level_id=$report->level_id;
-          $term_id=$report->term_id;
-          $subject_type=Level_sub::where([['level_id',$level_id],['subject_id',$student['subject_id']]])->first();
+//         //return  $student_id;
+//         foreach($students as $student){
+//          // return $student;
+//          $subject_id=$student['subject_id'];
+//           $report_id=$student['report_id'];
+//           $report=Report::findOrFail($report_id);
+//           $level_id=$report->level_id;
+//           $term_id=$report->term_id;
+//           $subject_type=Level_sub::where([['level_id',$level_id],['subject_id',$student['subject_id']]])->first();
 
-        // computing sum and grading
-      //return[$student['test1'],$student['test2'],$student['exams']];
-        $total=$this->sum($student['test1'],$student['test2'],['test3'],$student['exams']);
-         $gradding=$this->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
+//         // computing sum and grading
+//       //return[$student['test1'],$student['test2'],$student['exams']];
+//         $total=$this->sum($student['test1'],$student['test2'],['test3'],$student['exams']);
+//          $gradding=$this->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
 
-            return $gradding;
-                $student_arm=null;
-                if($is_history>0){
+//             return $gradding;
+//                 $student_arm=null;
+//                 if($is_history>0){
 
-               $student_arm=Level_history::where([['student_id',$student['student_id']],['level_id',$report->level_id]])->first();
-                }else{
+//                $student_arm=Level_history::where([['student_id',$student['student_id']],['level_id',$report->level_id]])->first();
+//                 }else{
 
-         $student_arm=Student::findOrFail($student['student_id']);
-                }
-                       Mark::where([['report_id',$report_id], ['student_id', $student['student_id']],['subject_id',$subject_id]])->delete();
+//          $student_arm=Student::findOrFail($student['student_id']);
+//                 }
+//                        Mark::where([['report_id',$report_id], ['student_id', $student['student_id']],['subject_id',$subject_id]])->delete();
 
-         Mark::create(
-            [
-
-
-            'student_id'=>$student['student_id'],
-            'report_id'=>$report_id,
-            'level_id'=>$report->level_id,
-            'subject_id'=>$subject_id,
-                  'test1'=>$student['test1'],
-                  'test2'=>$student['test2'],
-                  'test3'=>$student['test3'],
-                  'exams'=>$student['exams'],
-                  'total'=>$total,
-                  'grade'=>$gradding['grade'],
-                  'narration'=>$gradding['narration'],
-                   'arm_id'   =>$student_arm->arm_id,
-                   'term_id' =>$term_id,
-                   'credit_point'=>$gradding['credit_point'],
-                   'type'=>$subject_type->type
+//          Mark::create(
+//             [
 
 
-        ]);
+//             'student_id'=>$student['student_id'],
+//             'report_id'=>$report_id,
+//             'level_id'=>$report->level_id,
+//             'subject_id'=>$subject_id,
+//                   'test1'=>$student['test1'],
+//                   'test2'=>$student['test2'],
+//                   'test3'=>$student['test3'],
+//                   'exams'=>$student['exams'],
+//                   'total'=>$total,
+//                   'grade'=>$gradding['grade'],
+//                   'narration'=>$gradding['narration'],
+//                    'arm_id'   =>$student_arm->arm_id,
+//                    'term_id' =>$term_id,
+//                    'credit_point'=>$gradding['credit_point'],
+//                    'type'=>$subject_type->type
 
 
-
-    }
-   // updating the marks table with subject positioning
-   Markcheck::create([
-       'report_id'=>$report_id,
-       'subject_id'=>$subject_id,
-       'school_id'=>auth('api')->user()->school_id
-
-
-   ]);
-
-   CheckResult::create([
-    'report_id'=>$report_id,
-    'is_history'=>$is_history,
-      'school_id'=>auth('api')->user()->school_id
-
-]);
+//         ]);
 
 
 
-return ['message'=>'success'];
-}
+//     }
+//    // updating the marks table with subject positioning
+//    Markcheck::create([
+//        'report_id'=>$report_id,
+//        'subject_id'=>$subject_id,
+//        'school_id'=>auth('api')->user()->school_id
+
+
+//    ]);
+
+//    CheckResult::create([
+//     'report_id'=>$report_id,
+//     'is_history'=>$is_history,
+//       'school_id'=>auth('api')->user()->school_id
+
+// ]);
+
+
+
+// return ['message'=>'success'];
+// }
 
 
 
@@ -1202,7 +1202,7 @@ if($report->type==='terminal' && $report->term_id===3){
 
     }
     if($report->term_id===3){
-       $this->cummulativePerformance($request->report_id,$subject_id);
+       $this->cummulativePerformance($request->report_id,$subject_id,'terminal');
     }
 
 

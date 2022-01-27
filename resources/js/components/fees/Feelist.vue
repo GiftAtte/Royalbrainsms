@@ -33,12 +33,12 @@
 <div class="card-body">
 
 
-                   
+
               <div class="card-header">
                 <button class="btn btn-primary float-left pl-2" @click="printResults"><i class="fa fa-print"></i>Print List</button>
                 </div>
-<div v-show="isResults" class="card-body " id="section-to-print"  ref="generatePDF">
-<table class="table table-hover table-sm table-bordered">
+<div v-show="isResults" class="card-body table-responsive" id="section-to-print"  ref="generatePDF">
+<table class="table table-hover table-sm ">
 <thead>
 <tr>
 
@@ -55,13 +55,14 @@
 <th>
 Balance
 </th>
-<th colspan="2" class="text-center" >Make Payment/Status</th>
+<th >wallet Balance</th>
+<th colspan="3" class="text-center" >Make Payment/Status</th>
 
 
 </tr>
 </thead>
 <tbody>
-<tr v-for="(activation,index) in Activation_status">
+<tr v-for="(activation,index) in Activation_status" :key="index">
 
 <td>{{activation.name}}
  <input type="hidden" :id="`student_id${index}`" :value="activation.student_id">
@@ -70,12 +71,18 @@ Balance
  <td>{{report.discount?(report.discount/100*amount):0.00}}({{report.discount}}%)</td>
  <td>{{activation.amount_paid}}</td>
  <td>{{round(amount-(activation.amount_paid+(report.discount/100*amount)))}}</td>
+<td>{{activation.accountBalance?Number(activation.accountBalance).toFixed(2):'0.00'}}</td>
 <td class="text-center">
   <router-link v-if="(amount-(activation.amount_paid+(report.discount/100*amount)))>0" :to="`/fee_description/${form.feegroup_id}/${activation.student_id}`"  tag="a" exact class="btn btn-sm btn-danger">pay with card</router-link>
  <a href="#"  v-else class="btn btn-success btn-sm" disabled>--fee cleared--</a>
  </td>
  <td class="text-center">
    <a v-if="(amount-(activation.amount_paid+(report.discount/100*amount)))>0" href="#" @click="newModal(activation.student_id,activation.name,amount-(activation.amount_paid+(report.discount/100*amount)))"  class="btn btn-danger btn-sm" disabled>pay manually</a>
+   <a href="#"  v-else class="btn btn-success btn-sm" disabled="true">----fee Paid----</a>
+   </td>
+
+   <td class="text-center">
+   <a v-if="(amount-(activation.amount_paid+(report.discount/100*amount)))>0" href="#" @click="billAccount(activation.accountNumber,bill.neovastId,bill.amount,bill.feegroup_id)"  class="btn btn-danger btn-sm" disabled>pay from wallet</a>
    <a href="#"  v-else class="btn btn-success btn-sm" disabled="true">----fee Paid----</a>
    </td>
 </tr>
@@ -131,14 +138,17 @@ Balance
 </template>
 
 <script>
+import Wallet from '../students/Wallet.vue';
 
 
     export default {
+  components: { Wallet },
 
 
         data(){
 
             return{
+                bill:'',
                  name:'',
                 Activation_status:[],
                 reports:{},
@@ -152,7 +162,8 @@ Balance
                 isStudentId:false,
                 amount:'',
                 report:'',
-                
+                walletInfo:'',
+
 form:new Form({
     group_id:'',
      student_id:[],
@@ -213,7 +224,7 @@ makePayment: function(response){
           //this.PayForm.amount=response.amount
           // this.payForm.fee=this.discounted_amount
          // this.payForm.student_id=this.student_id
-          
+
     console.log(response)
         this.payForm.post('/api/fee_pay')
                 .then(()=>{
@@ -239,8 +250,20 @@ $('#addNew').modal('hide');
              this.Activation_status=result.data.description;
              this.amount=result.data.amount
              this.report=result.data.report
-
+             this.bill=result.data.bill
+             this.walletInfo=result.data.walletInfo;
              this.isResults=true;
+  //console.log(this.this.Activation_status)
+         for(let student of this.Activation_status){
+             for(let wInfo of this.walletInfo){
+                 if(student.id===wInfo.studentId){
+                     JSON.parse(JSON.stringify(student))
+                     student.accountBalance=wInfo.balance
+                 }
+             }
+         }
+
+            console.log('scdvdv',this.Activation_status)
              this.$Progress.finish();
 
 
@@ -254,7 +277,7 @@ $('#addNew').modal('hide');
 
             this.form.student_id=[];
             this.form.activation_status=[];
-            
+
 
 
             this.form.number_of_students=0;
@@ -263,7 +286,7 @@ $('#addNew').modal('hide');
            var student_id=document.querySelector(`#student_id${index}`).value
             this.form.student_id.push(student_id)
 
-           
+
 
           if(document.querySelector(`#student${index}`).checked){
            this.form.activation_status.push(true);
@@ -379,13 +402,23 @@ else{
                      }else{
                          this.isSelectAll=false;
                      }
+        },
+        billAccount(accountNumber,billId,amount,feegroupId){
+                   axios.post(`/api/billAccount/${accountNumber}/${billId}/${amount}/${feegroupId}`)
+                   .then(res=>{
+                       toast.fire({
+                        type: 'success',
+                        title: 'Bill paid successfully'
+                        })
+                        Fire.$emit('afterCreated')
+                   })
         }
 
 
 
     },
     created() {
-             
+
           this.loadActivation();
 this.form.feegroup_id=this.$route.params.feegroup_id
            Fire.$on('AfterCreate',() => {

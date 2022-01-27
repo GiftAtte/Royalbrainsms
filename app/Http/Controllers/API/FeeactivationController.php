@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Bill;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\StudentFees;
@@ -23,6 +24,7 @@ class FeeactivationController extends Controller
 
     public function loadActivation($feegroup_id)
     {
+        $Ecopay=new EcopayController();
       $report=Fee_group::findOrFail($feegroup_id);
          $amount=Fee_description::where('feegroup_id',$feegroup_id)->sum('amount');
       $description= \DB::table('students')->where('class_id',$report->level_id)
@@ -30,11 +32,32 @@ class FeeactivationController extends Controller
         {
             $join->on('student_fees.student_id', '=', 'students.id')
             ->where('student_fees.feegroup_id',$feegroup_id);
-        })->select(\DB::raw('CONCAT(students.surname," ", students.first_name)as name,
-         students.id as student_id, student_fees.activation_status as activation_status,student_fees.amount as amount_paid'))
+        })->select(\DB::raw('CONCAT(students.surname," ", students.first_name)as name, students.id as id,
+         students.accountNumber as accountNumber, students.id as student_id, student_fees.activation_status as activation_status,student_fees.amount as amount_paid'))
          ->distinct('students.id')->orderBy('name')
         ->get();
-        return['description'=>$description,'amount'=>$amount,'report'=>$report];
+
+        $bill=Bill::where('feegroup_id',$feegroup_id)->first();
+
+        $accountNumbers=collect($description)
+       ->whereNotNull('accountNumber')
+       ->pluck('id');
+         $walletDetails=[];
+         if(count($accountNumbers) > 0){
+       for($i=0;$i<count($accountNumbers);++$i){
+           $account=$Ecopay->getAccountBalance($accountNumbers[$i]);
+            array_push($walletDetails, ['studentId'=> $accountNumbers[$i],'balance'=>$account['balance']]);
+        }
+    }
+
+
+        return[
+        'description'=>$description,
+        'amount'=>$amount,
+        'report'=>$report,
+        'bill'=>$bill,
+            'walletInfo'=>$walletDetails
+    ];
     }
     public function pay(Request $request)
     {
@@ -52,7 +75,7 @@ class FeeactivationController extends Controller
             $firstpay= $partial->amount;
             $partial->delete()    ;
         }
-                                                                                    
+
      StudentFees::create(
          [
           'student_id'=>$student_id,
@@ -62,33 +85,33 @@ class FeeactivationController extends Controller
            'transaction_id'=>$request->transaction_id,
            'reference_id'=>$request->reference_id,
            'message'=>$request->message,
-           
 
 
-      ]);  
+
+      ]);
       $balance=0;
       $feegroup=Fee_group::findOrFail($request->feegroup_id);
       $amount=Fee_description::where('feegroup_id',$request->feegroup_id)->sum('amount');
-      
+
       $partial=StudentFees::where([['student_id',$student_id],['feegroup_id',$request->feegroup_id]])
       ->first();
       if($feegroup->discount>0){
          $balance= ($amount-($feegroup->discount/100)*$amount)-$partial->amount;
-         
+
           if($balance<=0)
-      {     
+      {
         $partial->activation_status=1;
         $partial->save();
-       } 
+       }
       }else{
       if(($amount-$partial->amount)<=0)
-      {     
+      {
         $partial->activation_status=1;
         $partial->save();
        }else{
            $partial->activation_status=0;
         $partial->save();
-       } 
+       }
 
 }
    return 'success';
@@ -114,7 +137,7 @@ class FeeactivationController extends Controller
             //  'transaction_id'=>$request->transaction_id[$i],
             //  'refernce_id'=>$request->reference_id[$i],
             //  'message'=>$request->message[$i],
-             
+
 
 
         ]);
