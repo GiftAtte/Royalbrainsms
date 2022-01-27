@@ -310,6 +310,18 @@ export default {
           }
         });
     },
+
+    loadFees(){
+
+                if(this.$gate.isAdminOrTutorOrStudent()){
+                    axios.get("api/fees").then( response  => {
+
+                      this.reports = response.data
+
+                      });
+
+                }
+            },
     loadBills() {
       if (this.$gate.isAdminOrTutorOrStudent()) {
         axios.get("/api/getAllBills").then((response) => {
