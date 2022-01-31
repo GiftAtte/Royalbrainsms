@@ -166,7 +166,7 @@ class EcopayController extends Controller
 
     public function getAllBills()
     {
-        return Bill::all();
+        return Bill::where('school_id',auth('api')->user()->school_id)->get();
     }
 
 
