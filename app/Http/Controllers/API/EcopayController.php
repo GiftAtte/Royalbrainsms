@@ -155,6 +155,7 @@ class EcopayController extends Controller
             "title" => $req->title,
             "feegroup_id" => $req->feegroup_id,
             "amount" => $req->amount,
+            "school_id"=>auth('api')->user()->school_id,
             "neovastId" => $res['billId']
         ]);
     }
