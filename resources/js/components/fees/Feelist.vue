@@ -41,7 +41,7 @@
 <table class="table table-hover table-sm ">
 <thead>
 <tr>
-
+<th>Invoice</th>
 <th>Name</th>
 <th>
  Amount
@@ -63,8 +63,11 @@ Balance
 </thead>
 <tbody>
 <tr v-for="(activation,index) in Activation_status" :key="index">
+<td class="text-center">
+  <router-link  :to="`/fee_description/${form.feegroup_id}/${activation.student_id}`"  tag="a" exact class="btn btn-sm btn-default"><i title="print invoice" class="fa fa-print"></i></router-link>
 
-<td>{{activation.name}}
+ </td>
+<td >{{activation.name}}
  <input type="hidden" :id="`student_id${index}`" :value="activation.student_id">
  </td>
  <td>{{amount}}</td>
@@ -86,7 +89,19 @@ Balance
    <a href="#"  v-else class="btn btn-success btn-sm" disabled="true">----fee Paid----</a>
    </td>
 </tr>
-
+<b>SUMMARY</b>
+<tr>
+    <th colspan="3">EXPECTED INCOME</th>
+    <th colspan="2">
+        {{ expectedIncome }}
+    </th>
+    <th colspan="3">
+       INCOME RECIEVED
+    </th>
+<th colspan="2">
+    {{ incomeRecieved }}
+    </th>
+</tr>
 </tbody>
 </table>
 <div class="card-footer action"><button class="btn btn-success">Activate Payment</button></div>
@@ -163,7 +178,8 @@ import Wallet from '../students/Wallet.vue';
                 amount:'',
                 report:'',
                 walletInfo:'',
-
+                expectedIncome:0,
+                incomeRecieved:0,
 form:new Form({
     group_id:'',
      student_id:[],
@@ -253,7 +269,8 @@ $('#addNew').modal('hide');
              this.bill=result.data.bill
              this.walletInfo=result.data.walletInfo;
              this.isResults=true;
-  //console.log(this.this.Activation_status)
+             this.expectedIncome=result.data.expectedIncome
+             this.incomeRecieved=this.computeAmountPaid(this.Activation_status)
          for(let student of this.Activation_status){
              for(let wInfo of this.walletInfo){
                  if(student.id===wInfo.studentId){
@@ -412,6 +429,13 @@ else{
                         })
                         Fire.$emit('afterCreated')
                    })
+        },
+        computeAmountPaid(info){
+            var sum=0;
+            for(let item of info){
+              sum +=item.amount_paid
+            }
+            return sum;
         }
 
 

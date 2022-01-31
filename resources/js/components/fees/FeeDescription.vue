@@ -350,13 +350,14 @@ export default {
       isStudent: false,
       student: "",
       reports: [],
-      amount_paid: 0,
+      amount_paid: {},
       isPaid: false,
       payment_details: "",
       total: "",
       student_id: "",
       discounted_amount: 0.0,
       user: window.user,
+      expectedIncome:'',
       paystackkey: "", //paystack public key
       email: window.user.email, // Customer email
       amount: 0, // in kobo
@@ -479,6 +480,8 @@ export default {
             this.PayForm.amount = response.data.discounted_amount;
             let payment_details = response.data.payment_details;
             this.payment_details = payment_details;
+           // this.amount_paid=response.data.amount_paid
+           // console.log()
             if (payment_details && payment_details.activation_status > 0) {
               this.isPaid = true;
             } else {
@@ -488,6 +491,7 @@ export default {
             this.levels = response.data.feegroup;
             // console.log(this.levels.paystacks.paystack_key)
             this.discounted_amount = response.data.discounted_amount;
+            this.expectedIncome=response.expectedIncome
           });
       }
     },
@@ -570,7 +574,7 @@ export default {
                      width:44mm; font-family: "Times New Roman", Times, serif;">
 <center>
                     <h3 >Fee Payment Reciept</h3>
-
+                     Reciept No: ${this.amount_paid?this.amount_paid.id:'--'}
                     </center>
                     <table style="font-size:10px;width:80%; font-family: " serif;">
                     <tr>
@@ -628,7 +632,7 @@ URL:&nbsp; ${this.school.website}.
                        <td></td>
                        <td>${
                          this.amount_paid
-                           ? this.amount_paid.amount.toFixed(2)
+                           ? Number(this.amount_paid.amount).toFixed(2)
                            : "0.00"
                        }</td>
                        </tr>

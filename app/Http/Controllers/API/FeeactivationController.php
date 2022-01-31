@@ -49,14 +49,15 @@ class FeeactivationController extends Controller
             array_push($walletDetails, ['studentId'=> $accountNumbers[$i],'balance'=>$account['balance']]);
         }
     }
-
-
+//xpectedIncome=Fee_description::whereIn('feegroup_id',[$feegroup_id])->sum('amount');
+        $expectedIncome= $amount*count($description);
         return[
         'description'=>$description,
         'amount'=>$amount,
         'report'=>$report,
         'bill'=>$bill,
-            'walletInfo'=>$walletDetails
+        'walletInfo'=>$walletDetails,
+        "expectedIncome"=>  $expectedIncome
     ];
     }
     public function pay(Request $request)
