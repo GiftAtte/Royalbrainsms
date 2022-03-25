@@ -29,6 +29,8 @@ use App\Markcheck;
 use App\Imports\MarksImport;
 use App\Teachersubject;
 use App\CrechestudentDomain;
+use App\PrincipalComent;
+use Exception;
 //use App\CrechestudentDomain;
 use Maatwebsite\Excel\Facades\Excel;
 ini_set('max_execution_time', '1000');
@@ -837,11 +839,12 @@ public function studenResult( $report_id, $student_id=null)
 
         $comment=Result_activation::where([['report_id',$report_id],['student_id',$student_id]])->first();
       $report=Report::with(['levels','sessions','terms'])->where('id',$report_id)->first();
-           // MADONNA ANNUAL
+          // MADONNA ANNUAL
     // $pastTotal=Mark::whereIn('level_id',[$report->level_id])->where('student_id',$student_id)
     //           ->whereNotIn('report_type',['mid_term','default-midterm','default-result'])
     //              ->select('annual_score','subject_id','term_id','total')->distinct('term_id')->get();
-//Thinks School Annual
+
+                 //Thinks School Annual
          $pastTotal=Mark::select('total as annual_score','subject_id','term_id','report_id')
          ->where([['student_id',$student_id],['level_id',$report->level_id]
          ])->whereNotIn('report_type',['mid_term','default-midterm'])->whereNotIn('term_id',[4,3])->distinct(['term_id','subject_id'])->get();
@@ -887,8 +890,9 @@ if($report->type==='creche'){
     ->distinct('subject_id')->get();
 
 
-      $principal_comment=$this->principalComment($summary?$summary->average_scores:0,$report->gradinggroup_id);
+      //$principal_comment=$this->principalComment($summary?$summary->average_scores:0,$report->gradinggroup_id);
        $staff_comment=$this->staffComment($student_id,$report_id);
+       $principal_comment=$this->getManualPrincipalComment($student_id,$report_id);
         $LDomain=$this->learningDomain($student_id,$report_id);
 
         return response()->json(['principal_comment'=>$principal_comment,'scores'=>$scores,'summary'=>$summary,'user'=>$user,'pastTotal'=>$collect,
@@ -920,7 +924,19 @@ public function principalComment($average,$gradinggroup_id){
 
 
 
-    public function staffComment($student_id,$report_id){
+    public function getManualPrincipalComment($student_id,$report_id){
+
+        $comment=PrincipalComent::with('comments')->where([['student_id',$student_id],['report_id',$report_id]])
+        ->first();
+         if($comment&&$comment->comments){
+        return $comment->comments->comment;
+         }
+         else {
+             return '';
+         }
+        }
+
+public function staffComment($student_id,$report_id){
 
         $comment=TeachersComment::with('comments')->where([['student_id',$student_id],['report_id',$report_id]])
         ->first();
@@ -931,6 +947,7 @@ public function principalComment($average,$gradinggroup_id){
              return '';
          }
         }
+
 
         public function learningDomain($student_id,$report_id){
             return Assessment::with('Ldomain')->where([['report_id',$report_id],['student_id',$student_id]])->get();

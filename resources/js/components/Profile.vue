@@ -202,9 +202,9 @@
         created() {
 
            if(this.$route.params.id){
-            axios.get("/api/user_profile/"+this.$route.params.id)
+            axios.get(`/api/user_profile/${this.$route.params.id}/${this.$route.params.userType}`)
             .then(({ data }) => {
-                console.log(data)
+               // console.log(data)
                 this.form.fill(data)
 
             })

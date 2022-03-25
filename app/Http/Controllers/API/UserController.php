@@ -141,14 +141,13 @@ class UserController extends Controller
     }
 
 
-    public function profile($id=null)
+    public function profile($id=null,$type=null)
     {
         if(!empty($id)){
 
-            $user=User::where('student_id',$id)->first();
-            if($user){
-                if($user->type=='student')
-                return $user;
+
+            if($type==="student"){
+            return User::where('student_id',$id)->first();
             }else{
             return User::where('staff_id',$id)->first();
             }

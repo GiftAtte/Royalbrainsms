@@ -961,6 +961,24 @@
                       </div>
                       <div class="form-group row">
                         <label for="phone" class="col-sm-2 control-label"
+                          >Contact Address</label
+                        >
+                        <div class="col-sm-10">
+                          <input
+                            type="text"
+                            v-model="form.contact_adress"
+                            class="form-control"
+                            name="contact_adress"
+                            placeholder="contact_adress"
+                            :class="{
+                              'is-invalid': form.errors.has('contact_adress'),
+                            }"
+                          />
+                          <has-error :form="form" field="contact_adress"></has-error>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="phone" class="col-sm-2 control-label"
                           >Email</label
                         >
                         <div class="col-sm-10">

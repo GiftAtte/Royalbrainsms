@@ -14,7 +14,7 @@ export default new Router({
         { path: '/dashboard', component: require('./components/Dashboard.vue').default },
         { path: '/developer', component: require('./components/Developer.vue').default },
         { path: '/users', component: require('./components/Users.vue').default },
-        { path: '/staff_profile/:id?', component: require('./components/staff/Staff_profile.vue').default },
+        { path: '/staff_profile/:id?/:userType?', component: require('./components/staff/Staff_profile.vue').default },
         { path: '/staff', component: require('./components/Employee.vue').default },
         { path: '/chart', component: require('./components/students/Chart.vue').default },
         { path: '/students', component: require('./components/students/Student_list.vue').default },
@@ -22,7 +22,7 @@ export default new Router({
         { path: '/levels/:id', component: require('./components/students/Arms.vue').default },
         { path: '/subjects', component: require('./components/subject/Subject.vue').default },
         { path: '/level_subjects', component: require('./components/subject/Level_subjects.vue').default },
-        { path: '/student_profile/:id?', component: require('./components/students/Student_profile.vue').default },
+        { path: '/student_profile/:id?/:userType?', component: require('./components/students/Student_profile.vue').default },
         { path: '/result_list/:id', component: require('./components/results/Result_list.vue').default },
         { path: '/result/:report_id/:student_id?/:annual?', component: require('./components/results/Result.vue').default },
         { path: '/manage_progress', component: require('./components/results/Promotion.vue').default },
@@ -90,7 +90,9 @@ export default new Router({
         { path: '/not-found', component: require('./components/NotFound.vue').default },
         { path: '/ewallets', component: require('./components/fees/Echopay.vue').default },
         { path: '/bills', component: require('./components/fees/Bills.vue').default },
-        { path: '/transactions/:accountNumber', component: require('./components/fees/Transactions.vue').default }
+        { path: '/transactions/:accountNumber', component: require('./components/fees/Transactions.vue').default },
+        { path: '/principalComments', component: require('./components/staff/PrincipalCommentBank.vue').default },
+        { path: '/principalComment', component: require('./components/staff/PrincipalComments.vue').default }
 
 
 

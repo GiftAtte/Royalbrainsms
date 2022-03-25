@@ -22,7 +22,7 @@ Route::middleware('auth:api')->group(function () {
     // users routes
     Route::apiResources(['user' => 'API\UserController']);
     Route::apiResources(['event' => 'API\EventController']);
-    Route::get('user_profile/{id?}', 'API\UserController@profile');
+    Route::get('user_profile/{id?}/{type?}', 'API\UserController@profile');
     Route::get('count/{id?}', 'API\UserController@dashboard');
     Route::post('importUsers', 'API\UserController@import');
     Route::get('findUser', 'API\UserController@search');
@@ -269,4 +269,11 @@ Route::middleware('auth:api')->group(function () {
     Route::post('billAccounts', 'API\EcopayController@billAccounts');
     Route::post('billAccount/{accountNumber}/{billId}/{amount}/{feegroupId}', 'API\EcopayController@billAccount');
     Route::delete('bill/{id}', 'API\EcopayController@deleteBill');
+    Route::apiResources(['principalComments' => 'API\PrincipalcommentController']);
+    Route::post('load_principal_comments', 'API\PrincipalcommentController@loadComments');
+    Route::post('principal_comment', 'API\PrincipalcommentController@assignComment');
+Route::get('getAllComments', 'API\PrincipalcommentController@getAllComments');
+
+
+
 });

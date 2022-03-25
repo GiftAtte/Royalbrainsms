@@ -66,7 +66,7 @@
 
                     <td class="row ">
 
-                    <router-link :to="`staff_profile/${employee.id}`"  tag="a" exact><i class="fa fa-eye blue"></i></router-link>
+                    <router-link :to="`staff_profile/${employee.id}/staff`"  tag="a" exact><i class="fa fa-eye blue"></i></router-link>
                          /
                         <a href="#" @click="editModal(employee)" class="pl-2">
                             <i class="fa fa-edit blue"></i>
