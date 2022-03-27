@@ -67,6 +67,17 @@ export default {
             type: "link",
             txt: "Level History",
             link: "/level_history"
+        },
+        {
+            type: "link",
+            txt: "Download Login Details",
+            link: "/exports"
+        },
+
+        {
+            type: "link",
+            txt: "Upload  Zipe Images",
+            link: "/photos"
         }
     ],
 
@@ -213,23 +224,13 @@ export default {
             txt: "Activation Keys",
             link: "/activation_keys"
         },
-        // {
-        //     type: "link",
-        //     txt: "Download Login Details",
-        //     link: "/exports"
-        // },
 
-        // {
-        //     type: "link",
-        //     txt: "Upload  Zipe Images",
-        //     link: "/photos"
-        // },
         {
             type: "link",
             txt: "Principal" + "'s Comments_Bank",
             link: "/principalComments"
         },
-      
+
         {
             type: "link",
             txt: "Manual Principal" + "'s Comments",
