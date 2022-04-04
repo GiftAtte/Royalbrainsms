@@ -1152,19 +1152,23 @@ a.text-dark:hover, a.text-dark:focus {
     <tr>
 <td style="width: 53%">
     <h6><b>Name:</b>&nbsp; {{$summary->student->surname}}&nbsp; {{$summary->student->first_name}} &nbsp; {{$summary->student->middle_name?$summary->student->middle_name:''}}</h6>
-                <h6><b>class:&nbsp;</b> {{$report->levels->level_name}}&nbsp;{{$arm->name}}</h6>
-                <h6><b>Gender:&nbsp;</b> {{$summary->student->gender?$summary->student->gender:'-----------'}} </h6>
-                <h6><b>Dob:&nbsp;</b> {{$summary->student->dob?$summary->student->dob:'-----------'}} </h6>
+                <h6><b>Class:&nbsp;</b> {{$report->levels->level_name}}&nbsp;{{$arm->name}}</h6>
+                <h6><b>Gender:&nbsp;</b> :{{'-----------'}} </h6>
+                <h6><b>DOB:&nbsp;</b> :{{'-----------'}} </h6>
+
+                 {{-- <h6><b>Gender:&nbsp;</b> {{$summary->student->gender?$summary->student->gender:'-----------'}} </h6>
+                <h6><b>Dob:&nbsp;</b> {{$summary->student->dob?$summary->student->dob:'-----------'}} </h6> --}}
 
 </td>
 
 <td style="width: 30%">
-
+<center>
                 <h6 class="text-primary text-uppercase  "><b>&nbsp;</b> {{$report->header?$report->header:''}}</h6>
                 <hr class="text-primary" style="line-height:0.5px">
+</center>
                 <h6 ><b>Term:&nbsp;</b> {{$report->terms->name}}</h6>
                 <h6><b>Session:&nbsp;</b> {{$report->sessions->name}} </h6>
-                <h6 ><b>Next Term Begins:&nbsp;</b> {{$report->term_start?$report->term_start:'---------'}}</h6>
+                <h6 ><b>Next Term :&nbsp;</b> {{$report->term_start?$report->term_start:'---------'}}</h6>
 
 </td>
 <td style="width: 15%">
@@ -1202,7 +1206,7 @@ a.text-dark:hover, a.text-dark:focus {
                  <td style="width: 30%">
                    <table class="table table-bordered" style="width: 100%">
                       <tr>
-                 <td colspan="2" class="text-center text-primary"> PART B-AFFECTIVE </td>
+                 <td colspan="2" class="text-center text-primary"> AFFECTIVE </td>
 
                 </tr>
                 <tr><td>GRADE</td><td>DEGREE</td>
@@ -1221,7 +1225,7 @@ a.text-dark:hover, a.text-dark:focus {
                    <table class="  table-bordered" style="width: 100%">
 
                      <tr>
-                <td colspan="2" class="text-center text-primary">PART C-PSYCHOMOTOR</td>
+                <td colspan="2" class="text-center text-primary">PSYCHOMOTOR</td>
 
                 </tr>
                 <tr><td>Domain</td><td>Grade</td></tr>
@@ -1297,11 +1301,18 @@ a.text-dark:hover, a.text-dark:focus {
 <div class="py-2" >
 
                 <table style="width: 100%" class="  table py-2  ">
+                <tr>
+               <td style="width: 100%"> <br/>
+                 <b>Tutor's Comment:&nbsp;{{""}}</b>
+                  <hr style="font-weight: normal">
+                </td>
+
+                    </tr>
                     <tr>
-               <td style="width: 50%">
-            <b>Principal's Comment:&nbsp;{{$principal_comment?$principal_comment:$summary->narration}}</b></td>
-                <td style="width: 50%">
-                <b> Tutor's Comment:&nbsp;{{$staff_comment?$staff_comment:''}}</b>
+                    <td style="width: 100%" >
+                        <br/>
+                <b> Principal's Comment:&nbsp;{{$staff_comment?$staff_comment:""}}</b>
+                 <hr style="font-weight: normal">
             </td>
                     </tr>
                 </table>

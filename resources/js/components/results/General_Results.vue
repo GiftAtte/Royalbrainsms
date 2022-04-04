@@ -196,7 +196,7 @@
 <div class="col-md-6">
     <table class="table table-bordered table-sm font-weight-bold  table-striped" >
 <tr >
- <th colspan="2"  class="text-uppercase text-center text-danger text-bold">Behavioural Assesment</th>
+ <th colspan="2"  class="text-uppercase text-center text-danger text-bold">AFFECTIVE</th>
  </tr>
  <tbody>
      <tr v-for="ldomain in LDomain" :key="ldomain.id">
@@ -209,7 +209,7 @@
 <div class="col-md-6">
 <table class="table table-bordered table-sm table-striped" >
 <tr >
- <th colspan="2"  class="text-uppercase text-center text-danger text-bold">Skill Assesment</th>
+ <th colspan="2"  class="text-uppercase text-center text-danger text-bold">PSYCHOMOTOR</th>
  </tr>
 
  <tbody>

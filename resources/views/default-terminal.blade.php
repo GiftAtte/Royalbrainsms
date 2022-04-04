@@ -17,10 +17,12 @@
                 @else
                 <td>Total</td>
                  @endif
+                 <td>Lowest <br/>Score</td>
+                 <td>Highest <br/>Score</td>
                 <td>Class Avg</td>
                 <td>Grade</td>
                 <td>Comment</td>
-                <td>Subj. Position</td>
+
 
                 <!-- <th>Narration</th> -->
                 <!-- <th class="text-center " v-show="isAHScore"><div><span>HIGHEST<br> SCORE</span></div></th>
@@ -55,17 +57,22 @@
 <td>{{$score->total?$score->total:'-'}}</td>
 <td>{{$score->grand_total?$score->grand_total:'-'}}</td>
 <td>{{$score->average?$score->average:'-'}}</td>
+<td>{{$score->arm_min_score?$score->arm_min_score:'-'}}</td>
+<td>{{$score->arm_max_score?$score->arm__score:'-'}}</td>
 <td>{{$score->arm_avg_score?$score->arm_avg_score:'-'}}</td>
 <td>{{$score->cummulative_grade?$score->cummulative_grade:'-'}}</td>
 <td>{{$score->cummulative_narration?$score->cummulative_narration:'-'}}</td>
 @else
 <td>{{$score->total?$score->total:'-'}}</td>
-<td>{{$score->arm_avg_score?$score->arm_avg_score:'-'}}</td>
+ <td>{{$score->arm_min_score?$score->arm_min_score:'-'}}</td>
+ <td>{{$score->arm_max_score?$score->arm__score:'-'}}</td>
+ <td>{{$score->arm_avg_score?$score->arm_avg_score:'-'}}</td>
 <td>{{$score->cummulative_grade?$score->cummulative_grade:'-'}}</td>
 <td>{{$score->narration?$score->narration:'-'}}</td>
 @endif
-<td>{{$score->arm_subj_position?$score->arm_subj_position:'-'}}</td>
-                </tr>
+{{-- <td>{{$score->arm_subj_position?$score->arm_subj_position:'-'}}</td> --}}
+
+</tr>
 {{-- <td v-show="!isThird_term ||!isCummulative">{{score.grade?score.grade:'-'}}</td>
 <td v-show="!isThird_term ||!isCummulative">{{score.narration?score.narration:'-'}}</td> --}}
 
