@@ -65,7 +65,7 @@
 @else
 <td>{{$score->total?$score->total:'-'}}</td>
  <td>{{$score->arm_min_score?$score->arm_min_score:'-'}}</td>
- <td>{{$score->arm_max_score?$score->arm__score:'-'}}</td>
+ <td>{{$score->arm_max_score?$score->arm_max_score:'-'}}</td>
  <td>{{$score->arm_avg_score?$score->arm_avg_score:'-'}}</td>
 <td>{{$score->cummulative_grade?$score->cummulative_grade:'-'}}</td>
 <td>{{$score->narration?$score->narration:'-'}}</td>
