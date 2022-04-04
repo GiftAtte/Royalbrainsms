@@ -127,7 +127,7 @@ else{
 
 }
 else{
-return $pdf->download($student->surname.'.pdf');
+return $pdf->download($student->first_name.' '.$student->surname.'.pdf');
 }
  //$pdf = PDF::loadHTML($html);
 }
