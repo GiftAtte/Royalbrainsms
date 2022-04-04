@@ -287,7 +287,7 @@
  <tbody>
 
  <tr>
- <td>CA</td><td>Contineous Assesment</td>
+ <td>CA</td><td>Continuous Assessment</td>
  </tr>
  <tr>
  <td>CS Position</td><td>Class Subject Position</td>
