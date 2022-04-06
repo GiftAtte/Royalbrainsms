@@ -26,7 +26,7 @@ class ActivationController extends Controller
     {
       $report=Report::findOrFail($report_id);
        $studentsA=[];
-     $students=Mark::whereIn('report_id',[$report_id])->where('arm_id',$arm_id)->distinct('student_id')->pluck('student_id')
+     $students=Student::whereIn('class_id',[$report->level_id])->where('arm_id',$arm_id)->pluck('id')
      ->toArray();
 
 
