@@ -42,7 +42,7 @@ class ReportController extends Controller
       $combinedLevel=[];
      $history=Mark::where('student_id',$user->student_id)->distinct('level_id')->pluck('level_id');
      $currentLevel=Student::where('id',$user->student_id)->pluck('class_id');
-if($history){
+if(count($history)>0){
   $combinedLevel=$history;
 }
  //$combinedLevel= $currentLevel;
