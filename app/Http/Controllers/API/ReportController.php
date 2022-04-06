@@ -41,7 +41,9 @@ class ReportController extends Controller
         if($user->type==='student'){
 
      $history=Mark::where('student_id',$user->student_id)->distinct('level_id')->pluck('level_id');
-       return Report::whereIn('level_id',$history)
+     $currentLevel=Student::where('id',$user->student_id)->pluck('class_id');
+      array_push($history, $currentLevel[0]);
+     return Report::whereIn('level_id',$history)
                   ->with('levels')
                   ->leftJoin('result_activations',function($join) use($user){
                       $join->on('result_activations.report_id','=','reports.id')
