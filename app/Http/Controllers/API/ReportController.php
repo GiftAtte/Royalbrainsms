@@ -40,14 +40,16 @@ class ReportController extends Controller
         $user=auth('api')->user();
         if($user->type==='student'){
       $combinedLevel=[];
-     $history=Mark::where('student_id',$user->student_id)->distinct('level_id')->pluck('level_id');
+     $history=Mark::where('student_id',$user->student_id)->distinct('level_id')->pluck('level_id')->toArray();
      $currentLevel=Student::where('id',$user->student_id)->pluck('class_id');
 if(count($history)>0){
   $combinedLevel=$history;
 }
+
  //$combinedLevel= $currentLevel;
 
-     array_push($combinedLevel->toArray(), $currentLevel[0]);
+     array_push($combinedLevel, $currentLevel[0]);
+
      return Report::whereIn('level_id',$combinedLevel)
                   ->with('levels')
                   ->leftJoin('result_activations',function($join) use($user){
