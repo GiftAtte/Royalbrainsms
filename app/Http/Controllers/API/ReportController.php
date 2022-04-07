@@ -47,7 +47,7 @@ if(count($history)>0){
 }
  //$combinedLevel= $currentLevel;
 
-     array_push($combinedLevel, $currentLevel[0]);
+     array_push($combinedLevel->toArray(), $currentLevel[0]);
      return Report::whereIn('level_id',$combinedLevel)
                   ->with('levels')
                   ->leftJoin('result_activations',function($join) use($user){
