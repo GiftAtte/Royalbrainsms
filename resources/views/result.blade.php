@@ -1316,7 +1316,7 @@ a.text-dark:hover, a.text-dark:focus {
                     <tr>
                     <td style="width: 100%" >
                         <br/>
-                <b> Principal's Comment:&nbsp;{{$staff_comment?$staff_comment:""}}</b>
+                <b> Principal's Comment:&nbsp;{{$principal_comment?$principal_comment:""}}</b>
                  <hr style="font-weight: normal">
             </td>
                     </tr>
