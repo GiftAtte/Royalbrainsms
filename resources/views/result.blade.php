@@ -1179,7 +1179,9 @@ a.text-dark:hover, a.text-dark:focus {
     </tr>
     <tr>
         <td rowspan="2">
+            <h6>
          Class Position:  {{$summary->arm_position}} &nbsp; out of&nbsp;{{$summary->total_students}}
+</h6>
         </td>
     </tr>
 </table>
