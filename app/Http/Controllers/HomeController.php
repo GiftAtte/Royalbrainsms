@@ -197,7 +197,7 @@ public function studenResult( $report_id, $student_id=null)
 
 
   $level_sub=Level_sub::where('level_id',$report->level_id)->pluck('subject_id');
-      //Mark::where('report_id',$report_id)->whereNotIn('subject_id',$level_sub)->distinct('subject_id')->delete();
+      Mark::where('report_id',$report_id)->whereNotIn('subject_id',$level_sub)->distinct('subject_id')->delete();
     $student=Student::findOrFail($student_id);
      $arm=Arm::findOrFail($student->arm_id);
     // $this->resultSummary($report_id, $student_id,$student->arm_id);
