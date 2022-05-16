@@ -131,10 +131,10 @@
 <td v-if="!report.isCummulative">{{score.arm_avg_score?score.arm_avg_score:''}}</td>
 <td v-if="report.isArmPosition">{{score.arm_subj_position?score.arm_subj_position:''}}</td>
 
-<td v-show="isCSPosition">{{score.class_subj_position?score.class_subj_position:''}}</td>
+<!-- <td v-show="isCSPosition">{{score.class_subj_position?score.class_subj_position:''}}</td>
 <td v-show="isCSHScore">{{score.max_class_score?score.max_class_score:''}}</td>
 <td v-show="isCSLScore">{{score.min_class_score?score.min_class_score:''}}</td>
-<td v-show="isCAScore">{{score.class_avg_score?score.class_avg_score:''}}</td>
+<td v-show="isCAScore">{{score.class_avg_score?score.class_avg_score:''}}</td> -->
 
 
 </tr>
@@ -150,7 +150,7 @@
 <td v-if="report.isCa2">{{score.test2}}</td>
 <td v-if="report.isCa3">{{score.test3}}</td>
 <td>{{score.exams?score.exams:''}}</td>
-<td  v-show="isMidterm">{{score.mid_term?score.mid_term:''}}</td>
+<!-- <td  v-show="isMidterm">{{score.mid_term?score.mid_term:''}}</td> -->
 <td>{{score.total?score.total:'-'}}</td>
 <td v-if="report.isCummulative" >
     {{getPastTotal(score.subject_id,1)}}
@@ -179,7 +179,13 @@
 <td v-show="isCAScore">{{score.class_avg_score}}</td> -->
 
 </tr>
+<tr>
+    <td colspan="14">
+<subject-dropped :scores="subjectsDropped" />
+    </td>
+</tr>
 </tbody>
+
 
 
 </table>
@@ -290,6 +296,7 @@ import Attendance from './Attendance.vue';
                  isCummulative:false,
                  isMidterm:false,
                  attendance:{},
+                 subjectsDropped:''
 
             }
         },
@@ -521,6 +528,7 @@ getPastTotal(subject_id,term_id){
                   this.noneAcademic=result.data.noneAcademic
                  this.LDomain=result.data.LDomain
                   this.attendance=result.data.attendance
+                  this.subjectsDropped=result.data.subjectDropt
 
                  this.$Progress.finish()
             }).catch((err) => {
@@ -557,6 +565,7 @@ getPastTotal(subject_id,term_id){
                     this.LDomain=result.data.LDomain
                  this.noneAcademic=result.data.noneAcademic
                  this.attendance=result.data.attendance
+                 this.subjectsDropped=result.data.subjectDropt
                  this.$Progress.finish()
                  // console.log(this.signature);
                //console.log(this.report);

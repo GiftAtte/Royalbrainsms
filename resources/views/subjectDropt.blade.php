@@ -6,7 +6,7 @@
     <thead>
         <tr>
             <th colspan="14"><h6 class="text-primary"><div class="text-center text-bold text-primary">
-         SUBJECTS NOT OFFERED THIS TERM</div></th>
+         DROPPED SUBJECTS</div></th>
         </tr>
     </thead>
     <tbody>

@@ -843,8 +843,8 @@ public function studenResult( $report_id, $student_id=null)
           }
 
       }
-
-
+      
+             
         $comment=Result_activation::where([['report_id',$report_id],['student_id',$student_id]])->first();
       $attendance=Attendance::where([['student_id',$student_id],['report_id',$report_id]])->first();
           // MADONNA ANNUAL
@@ -870,7 +870,12 @@ public function studenResult( $report_id, $student_id=null)
 
   $level_sub=Level_sub::where('level_id',$report->level_id)->pluck('subject_id');
       //Mark::where('report_id',$report_id)->whereNotIn('subject_id',$level_sub)->distinct('subject_id')->delete();
-    $student=Student::findOrFail($student_id);
+    
+      $subjectDropt=null;
+    if($report->isCummulative){
+              $subjectDropt=$this->getSubjectDroped($report,$student_id,$level_sub);
+    }  
+      $student=Student::findOrFail($student_id);
      $arm=Arm::findOrFail($student->arm_id);
     // $this->resultSummary($report_id, $student_id,$student->arm_id);
     $user=User::with(['students','school'])->where('student_id',$student_id)->first();
@@ -905,7 +910,7 @@ public function studenResult( $report_id, $student_id=null)
         return response()->json(['principal_comment'=>$principal_comment,'scores'=>$scores,'summary'=>$summary,'user'=>$user,
          'pastTotal'=>$collect,'attendance'=>$attendance,
          'comment'=>$comment,'signature'=>$principal_sign, 'staff_comment'=>$staff_comment, 'crecheComment'=>$creche['crecheComment'],
-         'report'=>$report,'arm'=>$arm,'gradings'=>$grading,'noneAcademic'=>$noneAcademic,'LDomain'=>$LDomain]);
+         'report'=>$report,'arm'=>$arm,'gradings'=>$grading,'noneAcademic'=>$noneAcademic,'LDomain'=>$LDomain,'subjectDropt'=>$subjectDropt]);
 
 
 
@@ -1361,4 +1366,35 @@ public function getRanking($scoresCollection,$total){
 
 
     }
+
+
+    
+  public function getSubjectDroped($report,$student_id,$level_sub){
+       
+          $allMarks=Mark::with('subjects')
+                      ->whereIn('subject_id',$level_sub)
+                      ->whereIn('student_id',[$student_id]);
+                      $currentSubjects=$allMarks->whereIn('report_id',[$report->id])->pluck('subject_id');
+                        $subjectDropt=Mark::whereNotIn('report_id',[$report->id])
+                                       ->whereNotIn('subject_id',$currentSubjects)
+                                       ->whereNotIn('total',[0])
+                                       ->where([['student_id',$student_id],['level_id',$report->level_id]])
+                                      ->with('subjects')
+                                     ->select('subject_id','total','cummulative_avg')
+                                      //->sum('total');
+                                      ->get();
+                                      if(!empty($subjectDropt)){
+                                          $subjectDroptArr=[];
+                                         $subjectIDs=collect($subjectDropt)->unique('subject_id')->all();
+                                          foreach($subjectIDs as $ubjectId){
+                                             $average=collect($subjectDropt)->where('subject_id',$ubjectId['subject_id'])->avg('total');
+                                           $grandTotal=collect($subjectDropt)->where('subject_id',$ubjectId['subject_id'])->sum('total');
+                                             array_push($subjectDroptArr,['subject'=>$ubjectId->subjects->name,'average'=>$average,'grandTotal'=>$grandTotal]);
+
+                                          }
+
+                                       $subjectDropt=$subjectDroptArr;
+                                      }
+                         return $subjectDropt;
+                      }
 }

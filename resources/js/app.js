@@ -237,6 +237,10 @@ Vue.component(
     "comments-with-scores",
     require("./components/results/CommentWithScores.vue").default
 );
+Vue.component(
+    "subjects-dropped",
+    require("./components/results/SubjectDropt.vue").default
+);
 
 
 
