@@ -25,6 +25,7 @@
                  @if ($report->isMinScore)
                  <td>Lowest <br/>Score</td>
                  @endif
+               
                 <td>Grade</td>
                 @if ($report->isSubjectPosition)
                  <td>Subject<br/>Position</td>
@@ -88,7 +89,62 @@
                  @endphp
                 @endforeach
 @if (count($noneAcademic)>0)
-    @include('noneaccademics')
+   
+
+
+                 @php
+                     $count=1;
+                 @endphp
+ @foreach($noneAcademic as $score)
+                <tr>
+
+<td>{{$count}}</td>
+<td>{{$score->subjects?$score->subjects->name:'-'}}</td>
+<td>{{$score->test1?$score->test1:'-'}}</td>
+@if ($report->isCa2)
+<td>{{$score->test2?$score->test2:'-'}}</td>
+@endif
+@if ($report->isCa3)
+<td>{{$score->test3?$score->test3:'-'}}</td>
+@endif
+<td>{{$score->exams?$score->exams:'-'}}</td>
+
+@foreach($Totals as $total)
+@if($total['subject_id']===$score->subject_id && $total['term_id']===1)
+<td>{{$total['total']?$total['total']:'-'}}</td>
+@endif
+@endforeach
+
+@foreach ($Totals as $total)
+@if($total['subject_id']===$score->subject_id && $total['term_id']===2)
+<td>{{$total['total']?$total['total']:'-'}}</td>
+@endif
+@endforeach
+
+<td>{{$score->total?$score->total:'-'}}</td>
+<td>{{$score->grand_total?$score->grand_total:'-'}}</td>
+<td>{{$score->cummulative_avg?$score->cummulative_avg:'-'}}</td>
+ @if ($report->isMaxScore)
+<td>{{$score->arm_max_score?$score->arm_max_score:'-'}}</td>
+ @endif
+@if ($report->isMinScore)
+<td>{{$score->arm_min_score?$score->arm_min_score:'-'}}</td>
+@endif
+<td>{{$score->cummulative_grade?$score->cummulative_grade:'-'}}</td>
+@if ($report->isSubjectPosition)
+<td>{{$score->arm_subj_position?$score->arm_subj_position:'-'}}</td>
+@endif
+<td>{{$score->cummulative_narration?$score->cummulative_narration:'-'}}</td>
+
+
+
+</tr>
+
+                @php
+                     $count=$count+1;
+                 @endphp
+                @endforeach
+
 @endif
 @if (count($subjectDropt)>0)
          <tr>
