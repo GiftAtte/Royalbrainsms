@@ -72,14 +72,14 @@
 <th>S/N</th>
 <th>Subject</th>
 <th v-if="!report.isCa2">CA</th>
-<th v-if="report.isCa2">1st CA</th>
-<th v-if="report.isCa2">2nd CA</th>
-<th v-if="report.isCa3">3rd CA</th>
-<th>Exams</th>
+<th v-if="report.isCa2">1st CA <br/>{{report.ca1Percent?`[${report.ca1Percent}]`:''}}</th>
+<th v-if="report.isCa2">2nd CA <br/>{{report.ca2Percent?`[${report.ca2Percent}]`:''}}</th>
+<th v-if="report.isCa3">3rd CA <br/>{{report.ca3Percent?`[${report.ca3Percent}]`:''}}</th>
+<th>Exams <br/>{{report.examPercent?`[${report.examPercent}]`:''}}</th>
 <th v-show="isMidterm">Mid Term</th>
-<th>Total</th>
-<th v-if="report.isCummulative" >1st Term</th>
-<th v-if="report.isCummulative" >2nd Term</th>
+<th>Total <br/>[100%]</th>
+<th v-if="report.isCummulative" >1st Term <br/>{{report.ca1Percent?`[${report.ca1Percent}]`:''}} </th>
+<th v-if="report.isCummulative" >2nd Term<br/>{{report.ca2Percent?`[${report.ca2Percent}]`:''}}</th>
 <th v-if="report.isCummulative" >Grand Total</th>
 <th v-if="report.isCummulative"  >C.Avg</th>
 
