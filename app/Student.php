@@ -32,6 +32,7 @@ class Student extends Model
     'disability',
     'admission_date',
     'admission_level',
+    'is_new'
 
 ];
 
@@ -49,6 +50,11 @@ return $this->belongsTo('App\Arm','arm_id','id');
 public function users(){
     return $this->hasOne('App\User');
     }
+
+    public function parents(){
+    return $this->belongsTo('App\Parents','parent_id','id');
+    }
+
 
 
 

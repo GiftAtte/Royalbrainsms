@@ -18,6 +18,7 @@ use App\Subject;
 use App\Level_sub;
 use App\Level;
 use App\Assessment;
+use App\Attendance;
 use App\CheckResult;
 use App\Staff_comment;
 use App\TeachersComment;
@@ -57,6 +58,17 @@ class HomeController extends Controller
     }
     public function download($id)
     {   $user=Auth()->user();
+
+          if($user->type==='student'){
+              //return $user->student_id;
+              return $this->pdfdownload($user->student_id,$id);
+          }
+          if($user->type==='parent'){
+            $report=Report::findOrFail($id);
+            $student_id=Student::where([['class_id',$report->level_id],['parent_id',$user->parent_id]])->first()->id;
+          return $this->pdfdownload($student_id,$id);
+    }
+
         $report=Report::findOrFail($id);
         $stu= Mark::where('report_id',$id)->distinct('student_id')->pluck('student_id');
         if($user->type==='tutor'){
@@ -74,7 +86,7 @@ class HomeController extends Controller
 
     { // $items = DB::table("items")->get();
 
-        $scores= $this->studenResult($report_id,$id) ;
+  $scores= $this->studenResult($report_id,$id) ;
         //return $Totals=collect($scores['pastTotal']);
 
       // return $LDomain=$this->learningDomain($id,$report_id);
@@ -93,6 +105,8 @@ class HomeController extends Controller
                 'gradings'=>$scores['gradings'],
                 'LDomain'=>$scores['LDomain'],
                 'noneAcademic'=>$scores['noneAcademic'],
+                'attendance'=>$scores['attendance'],
+                'subjectDropt'=>$scores['subjectDropt'],
                 ]);
          //return$scores['school'];
     // return view('result');
@@ -127,7 +141,7 @@ else{
 
 }
 else{
-return $pdf->download($student->first_name.' '.$student->surname.'.pdf');
+return  $pdf->download($student->first_name.' '.$student->surname.'.pdf');
 }
  //$pdf = PDF::loadHTML($html);
 }
@@ -138,47 +152,125 @@ return $pdf->download($student->first_name.' '.$student->surname.'.pdf');
 public function studenResult( $report_id, $student_id=null)
 {
  // return Mark:: where([['subject_id',98],['level_id',28]])->whereNotIn('report_id',[140,141,22])->get();
-    $principal_sign=User::where([['type','principal'],['school_id',auth()->user()->school_id]])->select('photo')->first();
+        $principal_sign=User::where([['type','principal'],['school_id',auth()->user()->school_id]])->select('photo')->first();
          $school=School::findOrFail(auth()->user()->school_id);
-    if($student_id===null){
-       //   $student_id=auth('api')->user()->student_id;
-      }
-
+         $pastTotalarray=[];
+      if($student_id===null){
+          $student_id=auth()->user()->student_id;
+        }
+       $attendance=Attendance::where([['student_id',$student_id],['report_id',$report_id]])->first();
         $student=Student::findOrFail($student_id);
         $comment=Result_activation::where([['report_id',$report_id],['student_id',$student_id]])->first();
-      $report=Report::with(['levels','sessions','terms'])->where('id',$report_id)->first();
+        $report=Report::with(['levels','sessions','terms'])->where('id',$report_id)->first();
 
-  $pastTotal=Mark::select('total as annual_score','subject_id','term_id','report_id')
-         ->where([['student_id',$student_id],['level_id',$report->level_id]
-         ])->whereNotIn('report_type',['mid_term','default-midterm'])->distinct(['term_id','subject_id'])->get();
-          $pastTotalarray=[];
+            $level_sub=Level_sub::where('level_id',$report->level_id)
+                       ->pluck('subject_id')
+                       ->toArray();
+
+             $allMarks=Mark::with('subjects')
+                      ->whereIn('subject_id',$level_sub)
+                      ->whereIn('student_id',[$student_id]);
+                      //->whereNotIn('grand_total',[0]);
+
+                      $subjectDropt=null;
+                      if($report->isCummulative){
+
+                      $currentSubjects=$allMarks->whereIn('report_id',[$report_id])->pluck('subject_id');
+                        $subjectDropt=Mark::whereNotIn('report_id',[$report_id])
+                                       ->whereNotIn('subject_id',$currentSubjects)
+                                       ->whereNotIn('total',[0])
+                                       ->where([['student_id',$student_id],['level_id',$report->level_id]])
+                                      ->with('subjects')
+                                     ->select('subject_id','total','cummulative_avg')
+                                      //->sum('total');
+                                      ->get();
+                                      if(!empty($subjectDropt)){
+                                          $subjectDroptArr=[];
+                                         $subjectIDs=collect($subjectDropt)->unique('subject_id')->all();
+                                          foreach($subjectIDs as $ubjectId){
+                                             $average=collect($subjectDropt)->where('subject_id',$ubjectId['subject_id'])->avg('total');
+                                           $grandTotal=collect($subjectDropt)->where('subject_id',$ubjectId['subject_id'])->sum('total');
+                                             array_push($subjectDroptArr,['subject'=>$ubjectId->subjects->name,'average'=>$average,'grandTotal'=>$grandTotal]);
+
+                                          }
+
+                                       $subjectDropt=$subjectDroptArr;
+                                      }
+
+                      }
+
+         $pastTotal=Mark::with('subjects')
+                      ->whereIn('subject_id',$level_sub)
+                      ->whereIn('student_id',[$student_id])
+                         ->select('total as annual_score','subject_id','term_id','report_id')
+                           ->whereNotIn('report_type',['mid_term','default-midterm'])
+                           ->distinct(['term_id','subject_id'])
+                          // ->select()
+                           ->get();
+
           foreach ($pastTotal as $total ) {
 
               array_push($pastTotalarray,['subject_id'=>$total->subject_id,'term_id'=>$total->term_id,'total'=>$total->annual_score]);
               # code...
           }
 
-  $level_sub=Level_sub::where('level_id',$report->level_id)->pluck('subject_id');
-      Mark::where('report_id',$report_id)->whereNotIn('subject_id',$level_sub)->distinct('subject_id')->delete();
+
 
      $arm=Arm::findOrFail($student->arm_id);
     // $this->resultSummary($report_id, $student_id,$student->arm_id);
-    $user=User::with(['students','school'])->where('student_id',$student_id)->first();
-    $grading=Grading::whereIn('group_id',[$report->gradinggroup_id])->where('school_id',$user->school_id)->get();
-    $summary=Result::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
-   $scores=Mark::whereNotIn('total',[0])->with('subjects')->where([['report_id',$report_id],
-    ['student_id',$student_id],['type','Academic']])->distinct('subject_id')->get();
-    $noneAcademic=Mark::whereNotIn('total',[0])->whereNotIn('class_avg_score',[0])->with('subjects')->where([['report_id',$report_id],
-    ['student_id',$student_id],['type','None Academic']])->get();
+    $user=User::with(['students','school'])
+               ->where('student_id',$student_id)
+               ->first();
+
+    $grading=Grading::whereIn('group_id',[$report->gradinggroup_id])
+                     ->where('school_id',$user->school_id)
+                     ->get();
+
+    $summary=Result::with(['student'])
+            ->where([['report_id',$report_id],['student_id',$student_id]])
+            ->first();
+
+    $scores=$allMarks->whereNotIn('total',[0])->where([['report_id',$report_id],['type','Academic']])
+                    ->distinct('subject_id')
+                    ->select()
+                    ->get();
+
+   $noneAcademic=Mark::whereIn('report_id',[$report_id])->with('subjects')
+    ->where([['student_id',$student_id],['type','None Academic']])->whereNotIn('total',[0])
+    ->distinct('subject_id')->get();
+
+                         // if($report->isCummulative){
+
+                                                         // ->get();
+
+
+
+
+                         // }
+
 
     if($summary){
         $principal_comment=$this->principalComment($summary?$summary->average_scores:0);
        $staff_comment=$this->staffComment($student_id,$report_id);
        $LDomain=$this->learningDomain($student_id,$report_id);
 
-        return [ 'school'=>$school,'scores'=>$scores,'summary'=>$summary,'user'=>$user,'pastTotal'=>$pastTotalarray,
-    'comment'=>$comment,'principal_comment'=>$principal_comment,'signature'=>$principal_sign, 'staff_comment'=>$staff_comment,
-     'report'=>$report,'arm'=>$arm,'gradings'=>$grading,'noneAcademic'=>$noneAcademic,'LDomain'=>$LDomain];
+        return [
+            'school'=>$school,
+            'scores'=>$scores,
+            'summary'=>$summary,
+            'user'=>$user,
+            'pastTotal'=>$pastTotalarray,
+            'comment'=>$comment,
+            'principal_comment'=>$principal_comment,
+            'signature'=>$principal_sign,
+            'staff_comment'=>$staff_comment,
+            'attendance'=>$attendance,
+            'report'=>$report,'arm'=>$arm,
+            'gradings'=>$grading,
+            'noneAcademic'=>$noneAcademic,
+            'LDomain'=>$LDomain,
+            'subjectDropt'=>$subjectDropt
+        ];
     }else{
         return ['Not_found'=>'No reusult found'];
     }

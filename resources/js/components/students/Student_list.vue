@@ -104,7 +104,8 @@
                     </div>
                 </div>
                 <!-- /.card-header -->
-                <div class="card-body table-responsive ">
+                <div class="card-body  ">
+                    <div class="table-responsive">
                     <table class="table table-hover ">
                         <tbody>
                             <tr>
@@ -217,6 +218,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
@@ -424,8 +426,15 @@
                                 <has-error
                                     :form="form"
                                     field="arm_id"
-                                ></has-error>
+                                ></has-error>    
                             </div>
+                            <div class="form-group">
+                                    <label>New Student</label>
+                                    <input type="checkbox"
+                                    v-model="form.is_new"
+                                    >
+
+                                </div>
                         </div>
                         <div class="modal-footer">
                             <button
@@ -494,6 +503,7 @@ export default {
                 gender: "",
                 dob: "",
                 class_id: "",
+                is_new:0,
                 school_id: window.user.school_id
             }),
             deleteForm: new Form({

@@ -18,18 +18,12 @@
       </div><!-- /.container-fluid -->
     </div>
 
-
-
-
-        <div class="content" v-if="$gate.isAdminOrTutorOrStudent()">
+        <div class="content" v-if="$gate.isAdminOrTutorOrStudentOrParent()">
           <div class="col-12">
             <div class="card card-navy card-outline">
               <div class="card-header">
                 <div class="row float-right">
-
-
                 <div class="card-tools">
-
                <button v-show="$gate.isAdmin()" class="btn btn-success btn-sm float-right m-2" @click="newModal">Add New Fee <i class="fas fa-user-plus fa-fw"></i></button>
                 </div>
                  </div>
@@ -44,23 +38,21 @@
 
                         <th ><div><span>Class/Level </span></div></th>
                           <th >Bank</th>
-                        <th >Discount</th>
-                      
+                        <th >Fee Type</th>
+
                          <th >Due Date</th>
                         <th>Action</th>
                   </tr>
-
-
                   <tr v-for="report in reports.data" :key="report.id">
 
                     <td>{{report.id}}</td>
                     <td>{{report.tittle}}</td>
                     <td>{{report.levels?report.levels.level_name:''}} </td>
                      <td>{{report.paystacks?report.paystacks.bank:''}}</td>
-                     <td>{{report.discount +'%'}}</td>
+                     <td>{{report.fee_type?(report.fee_type):''}}</td>
                      <td>{{report.due_date|myDate}}</td>
-                     <td v-show="$gate.isAdminOrTutor()">
-                         <router-link  :to="`fee_list/${report.id}`" title="view fee list" tag="a" exact><i class="fa fa-eye blue"></i></router-link>
+                     <td>
+                         <router-link v-show="$gate.isAdminOrTutor()"  :to="`fee_list/${report.id}`" title="view fee list" tag="a" exact><i class="fa fa-eye blue"></i></router-link>
                        <a href="#" @click="editModal(report)" v-show="$gate.isAdmin()" class="pl-2">
                             <i class="fa fa-edit blue"></i>
                         </a>
@@ -68,19 +60,11 @@
                         <a href="#" @click="deleteReport(report.id)" v-show="$gate.isAdmin()" class="pl-2">
                             <i class="fa fa-trash red"></i>
                         </a>
-                         
-                   
-                         <router-link  :to="`/fee_description/${report.id}`" title="view fee list" tag="a" exact class="pl-2"> Fee details</router-link>
+                         <router-link v-show="$gate.isAdminOrTutorOrParent()"  :to="`/fee_description/${report.id}`" title="view fee list" tag="a" exact class="pl-2"> Fee details</router-link>
                      </td>
 
-                     
                     <td class="row" v-show="$gate.isStudent()">
                         <router-link  :to="`fee_description/${report.id}`" title="view fee list" tag="a" exact class="pl-2"> Fee details</router-link>
-                       
-                       
-
-
-
                     </td>
                   </tr>
                 </tbody></table>
@@ -94,7 +78,7 @@
           </div>
         </div>
 
-        <div v-if="!$gate.isAdminOrTutorOrStudent()">
+        <div v-if="!$gate.isAdminOrTutorOrStudentOrParent()">
             <not-found></not-found>
         </div>
 <!-- Arms Modal -->
@@ -117,11 +101,25 @@
                             class="form-control" :class="{ 'is-invalid': form.errors.has('title') }"/>
                         <has-error :form="form" field="tittle"></has-error>
                     </div>
+                     <div class="form-group ">
+                     <select
+                    name="feetype"
+                    id="feetype"
                     
+                    class="form-control text-uppercase"
+                    v-model="form.fee_type"
+                    @change="checkFeeType"
+                  >
+                    <option value selected>Select Fee Type</option>
+                    <option
+                      v-for="feeType in feeTypes"
+                      :key="feeType.id"
+                      :value="feeType.value"
+                    >{{feeType.text}}</option>
+                  </select>
                        
-
-                     <div class="form-group">
-
+                 </div>
+                       <div class="form-group" v-show="isClassBase">
                      <select
                     name="level_id"
                     id="level_id"
@@ -138,10 +136,7 @@
                   </select>
 
                  </div>
-
-
-                     
-
+                  
 
                   <div class="form-group">
 
@@ -182,19 +177,19 @@
 
                     <div class="form-group">
 
-                      <input v-model="form.due_date" type="date" name="tittle" 
+                      <input v-model="form.due_date" type="date" name="tittle"
                             placeholder="Due datee"
                             class="form-control" :class="{ 'is-invalid': form.errors.has('title') }"/>
                         <has-error :form="form" field="tittle"></has-error>
                     </div>
                     <div class="form-group">
 
-                      <input v-model="form.discount" type="number" name="discount" 
+                      <input v-model="form.discount" type="number" name="discount"
                             placeholder="discount"
                             class="form-control" :class="{ 'is-invalid': form.errors.has('discount') }"/>
                         <has-error :form="form" field="discount"></has-error>
                     </div>
-                    
+
 
                  <div class="form-group">
                      <select
@@ -228,9 +223,6 @@
 
 
 
-
-
-
 <!-- DetailsModal -->
 
 <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -257,13 +249,9 @@
                       v-model="DetailsForm.amount"
                     >
                       <has-error :form="DetailsForm" field="amount"></has-error>
-               
-               
+
+
                </div>
-                
-
-
-
         </div>
 
         <div class="modal-footer">
@@ -300,16 +288,25 @@
                 isActivationKey:false,
                 isStudent:window.user.student_id,
                 reports:{},
+                isClassBase:false,
+                 feeTypes:[ 
+                       {text:'General Fees', value:'GENERAL-BASED'},
+                       {text:'New Intakes-General', value:'NEW-BASED'},
+                       {text:'New Intakes-Class specific', value:'NEW-CLASS-BASED'},
+                       {text:'Class Specific', value:'CLASS-BASED'},
+                         ],
 
                 form: new Form({
                     id:'',
                     tittle:'',
                     level_id : '',
                     term_id: '',
+                    fee_type:'',
                     session_id:'',
                     due_date:'',
                     paystack_key:'',
-                    discount:''
+                    discount:'',
+
                   
 
 
@@ -364,6 +361,14 @@
                     this.$Progress.fail();
                 });
 
+            },
+
+            checkFeeType(){
+if(this.form.fee_type==="CLASS-BASED"||this.form.fee_type==="NEW-CLASS-BASED"){
+    this.isClassBase=true
+}else{
+     this.isClassBase=false
+}
             },
             editModal(group){
                 this.editmode = true;
@@ -427,11 +432,11 @@
             },
             loadFees(){
 
-                if(this.$gate.isAdminOrTutorOrStudent()){
+                if(this.$gate.isAdminOrTutorOrStudentOrParent()){
                     axios.get("api/fees").then( response  => {
 
                       this.reports = response.data
-                       
+
                       });
 
                 }
@@ -444,7 +449,7 @@
            AddDetails(id){
             $('#detailsModal').modal('show')
             this.DetailsForm.feegroup_id=id;
-            
+
            },
 
 
@@ -522,11 +527,11 @@ createDescription(){
 
 },
 
-    
+
 
         },
         created() {
-          
+
             Fire.$on('searching',() => {
                 let query = this.$parent.search;
                 axios.get('api/findStudent?q=' + query)

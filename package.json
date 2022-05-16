@@ -89,6 +89,7 @@
         "vue-loading-spinner": "^1.0.11",
         "vue-materialize-datatable": "^1.0.3",
         "vue-menu": "^1.0.1",
+        "vue-multiselect-component": "^1.2.0",
         "vue-paystack": "^2.0.4",
         "vue-pdf-reader": "^0.2.9",
         "vue-perfect-print": "^1.0.1",

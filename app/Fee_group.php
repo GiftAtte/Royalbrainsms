@@ -8,7 +8,7 @@ class Fee_group extends Model
 {
     protected $table='fee_groups';
     protected $fillable=['level_id','term_id','session_id','tittle',
-    'school_id','due_date','discount','paystack_key'];
+    'school_id','due_date','discount','paystack_key','fee_type'];
     public function levels()
     {
         return $this->belongsTo('App\Level', 'level_id');
@@ -25,4 +25,8 @@ class Fee_group extends Model
     {
         return $this->belongsTo('App\Paystack', 'paystack_key');
     }
+
+     public function fee_description(){
+         return $this->hasMany('App\Fee_description','feegroup_id','id');
+     }
 }

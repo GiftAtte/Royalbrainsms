@@ -44,3 +44,13 @@
 @endforeach
 </tbody>
 </table>
+
+ <div row>
+                    @if (!empty($subjectDropt)>0)
+@include('subjectDropt')
+                    @endif
+                </div>
+                </div>
+                <div class="pt-2 pb-2">
+                @include('summary')
+                </div>

@@ -29,40 +29,44 @@ class TeachersController extends Controller
     public function store(Request $request)
 
     {   $user = auth('api')->user();
-        $staff_id=null;
-        if($user->type==='admin'||$user->type==='superadmin'){
-            $staff_id=$request->staff_id;
-        }else{
-            $staff_id=$user->staff_id;
-        }
+        $staff_id=$request->staff_id;
+        if(empty($staff_id)){
+          if($user->type==='superadmin'){
+            $staff_id=$user->staff_id||$user->staff_id;
+        
+             }
+            }
 
 
- //return $request->all();
-         $subject=Teachersubject::where([['subject_id',$request->subject_id],
+       $subjectIDs=$request->subjects;
+       foreach($subjectIDs as $subject_id){
+
+         $check=Teachersubject::where([['subject_id',$subject_id],
                                      ['level_id',$request->level_id],['staff_id',$user->id]])->get();
-           // $has_arm=Has_arm::where('staff_id',$user->staff_id)->first();
-          if( count($subject)===0){
-
-              try{
-            return Teachersubject::create([
+  
+           if( count($check)===0){
+    
+                Teachersubject::create([
                 'level_id'=>$request->level_id,
-                'subject_id'=>$request->subject_id,
+                'subject_id'=>$subject_id,
                 'staff_id'      =>$staff_id,
                 'school_id'      =>$user->school_id,
             ]);
-          }catch(Exception $e){
-           return $e;
-          }
+          
         }
-        return ['message'=>'subject exist'];
+      
+    
+    }
+      return [
+          'status_code'=>201,
+          'status'=>'success',
+          'subjects'=>$subjectIDs];
     }
 
 
 
-
-
-    public function delete_list($id)
-    {   Teachersubject::where('id',$id)->delete();
+    public function delete_list(Request $request)
+    {   Teachersubject::whereIn('id',$request->subjectIds)->delete();
        // Level_sub::delete('id',$id);
 
     }

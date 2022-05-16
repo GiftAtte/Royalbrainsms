@@ -20,8 +20,10 @@ class FeesController extends Controller
 
     public function index($student_id=null)
     {
+        
+        
         $user=auth('api')->user();
-
+        
         if($user->type==='student'||!empty($student_id)){
             $current_level=null;
             if(!empty($student_id)){
@@ -33,6 +35,19 @@ class FeesController extends Controller
           $history_level=Level_history::where('student_id',$current_level->id)
                            ->pluck('level_id')->toArray();
                            array_push($history_level,$current_level->class_id);
+
+
+if($user->type==='parent'){
+           $siblings=Student::whereIn('parent_id',[$user->parent_id]);
+            $current_level=$siblings->pluck('class_id')->toArray();
+            $siblingsIds=$siblings->pluck('id')->toArray();
+           $history_level=Level_history::whereIn('student_id',$siblingsIds)
+                          ->pluck('level_id')->toArray();
+                $totalLevels=array_merge($history_level,$current_level);
+           return Fee_group::with(['levels','terms','paystacks'])->whereIn('level_id',$totalLevels)
+                 ->latest()->paginate(20);
+            }
+
 
 
        return Fee_group::with(['levels','terms','paystacks'])->whereIn('level_id',$history_level)
@@ -57,16 +72,17 @@ class FeesController extends Controller
             'tittle' => 'required',
             'session_id' => 'required',
             'term_id' => 'required',
-            'level_id' => 'required',
-            'paystack_key' => 'required',
+            //'paystack_key' => 'required',
+            'fee_type'=>'required'
         ]);
        return Fee_group::create([
            'tittle'=>$request->tittle,
-           'term_id'=>$request->level_id,
+           'term_id'=>$request->term_id,
            'session_id'=>$request->session_id,
            'level_id'=>$request->level_id,
            'due_date'=>$request->due_date,
            'discount'=>$request->discount,
+           'fee_type'=>$request->fee_type,
            'paystack_key'=>$request->paystack_key,
            'school_id'=>auth('api')->user()->school_id,
        ]);
@@ -141,13 +157,14 @@ class FeesController extends Controller
 
         $this->validate($request,[
             'tittle' => 'required|string|max:191',
-            'level_id' => 'required|integer',
+            // 'level_id' => 'required|integer',
             'term_id' => 'required|integer',
             'session_id' => 'required|integer',
-            'paystack_key' => 'required',
+            // 'paystack_key' => 'required',
 
 
         ]);
+       // $request->all();
         $report=Fee_group::findOrFail($request->id);
         $report->update($request->all());
         return ['message'=>'report updated successfully'];

@@ -76,6 +76,22 @@
         </a>
       </li>
 
+<!-- Parents Conner -->
+
+
+<li v-show="$gate.isParent()">
+        <a
+        href="#"
+        @click.prevent="updateMenu('parent')"
+        :class="highlightSection('manage')"
+        >
+          <i class="nav-icon fa fa-user-friends red menu__icon" aria-hidden="true"></i>
+          Parent Conner
+          <i class="fa fa-chevron-right menu__arrow-icon" aria-hidden="true"></i>
+        </a>
+      </li>
+
+
 
          <!-- Form Tutor -->
 <li v-show="$gate.isSubjectOrFormTutor()">
@@ -103,7 +119,7 @@
         </a>
       </li>
 
-   <li v-show="$gate.isAdminOrTutorOrStudent()">
+   <li v-show="$gate.isAdminOrTutorOrStudentOrParent()">
         <a
         href="#"
         @click.prevent="updateMenu('chat')"
@@ -116,7 +132,7 @@
       </li>
 
 
-<li v-show="$gate.isAdminOrTutor()">
+<li v-show="$gate.isAdminOrTutorOrParent()">
         <a
         href="#"
         @click.prevent="updateMenu('fees')"
@@ -155,7 +171,7 @@
       </li>
 
 
-      <li v-if="this.$gate.isAdminOrTutor()">
+      <li v-if="this.$gate.isAdminOrTutorOrParent()">
         <a
         href="#"
         @click.prevent="updateMenu('account')"

@@ -148,7 +148,11 @@ class UserController extends Controller
 
             if($type==="student"){
             return User::where('student_id',$id)->first();
-            }else{
+            }
+            if($type==="parent"){
+                return User::where('parent_id',$id)->first();
+            }
+            else{
             return User::where('staff_id',$id)->first();
             }
         }else{

@@ -72,14 +72,15 @@ export default new Router({
         { path: '/import_history', component: require('./components/students/ImportHistory.vue').default },
         { path: '/history_results', component: require('./components/students/HistoryScores.vue').default },
         { path: '/cbt_review/:exam_id/:student_id?', component: require('./components/cbt/CbtReview.vue').default },
-        { path: '/master/:report_id', component: require('./components/results/Master.vue').default },
+        { path: '/master/:report_id/:arm_id?', component: require('./components/results/Master.vue').default },
         { path: '/grading_group', component: require('./components/grading/Gradinggroup.vue').default },
         { path: '/transcript/:student_id?', component: require('./components/results/Transcript.vue').default },
         { path: '/feegroup', component: require('./components/fees/Feegroup.vue').default },
         { path: '/fee_description/:feegroup_id/:student_id?', component: require('./components/fees/FeeDescription.vue').default },
         { path: '/fee_list/:feegroup_id', component: require('./components/fees/Feelist.vue').default },
         { path: '/payment_api', component: require('./components/fees/Paystack.vue').default },
-        { path: '/subject_teacher', component: require('./components/subject/SubjectTeacher.vue').default },
+        { path: '/feeItems', component: require('./components/fees/FeeItems.vue').default }, 
+        { path: '/subject_teachers', component: require('./components/subject/SubjectTeacher.vue').default },
         { path: '/tutor_comments', component: require('./components/staff/TutorsComment.vue').default },
         { path: '/creche_domain', component: require('./components/creche/Domain.vue').default },
         { path: '/subdomain/:id', component: require('./components/creche/Subdomains.vue').default },
@@ -92,8 +93,13 @@ export default new Router({
         { path: '/bills', component: require('./components/fees/Bills.vue').default },
         { path: '/transactions/:accountNumber', component: require('./components/fees/Transactions.vue').default },
         { path: '/principalComments', component: require('./components/staff/PrincipalCommentBank.vue').default },
-        { path: '/principalComment', component: require('./components/staff/PrincipalComments.vue').default }
-
+        { path: '/principalComment', component: require('./components/staff/PrincipalComments.vue').default },
+        { path: '/parents', component: require('./components/parents/ParentsList.vue').default },
+        { path:'/parents/wallet', component: require('./components/parents/Wallets.vue').default },
+        { path:'/parents/Bill', component: require('./components/parents/Bills.vue').default },
+        { path: '/siblings/:parentId?', component: require('./components/parents/Siblings.vue').default },
+        { path:'/parent_profile/:userType?/:id?', component: require('./components/parents/Profile.vue').default },
+        { path:'/attendance', component: require('./components/attendance/Index.vue').default }
 
 
     ]

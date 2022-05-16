@@ -1,5 +1,5 @@
 <template>
- <div >
+ <div>
 <div class="content-header">
 
       <div class="container-fluid navy" >
@@ -21,11 +21,11 @@
 
 
 
-        <div class="row " v-if="$gate.isAdminOrSubjectTutor()" >
-          <div class="col-12">
-            <div class="card card-navy card-outline col-12">
+        <div class="col-md-12 " v-if="$gate.isAdminOrSubjectTutor()" >
+          <div class="col-md-12">
+            <div class="card card-navy card-outline">
               <div class="card-header ">
-                <div class="row col-12">
+                <div class="row col-md-12">
              <div v-show="$gate.isAdmin()" class="form-group col-md-10" >
                      <select
                     name="class_id"
@@ -66,35 +66,36 @@
                         <has-error :form="form" field="level"></has-error>
                     </div>
                        <div class="card-tools float-right col-md-2">
-                           <button class="btn btn-success btn-sm float-right m-2" @click="set_AddToList">Add Subjects  <i class="fas fa-user-plus fa-fw"></i></button></div>
+                           <button class="btn btn-success btn-sm float-right m-2" @click="AddSubject">Add Subjects  <i class="fas fa-user-plus fa-fw"></i></button>
+                        </div>
 
-                <div class="form-group col-md-10" v-show="addToList">
-                             <select
-                    name="subject_id"
-                    id="subject_id"
-                    :class="{'is-invalid':form.errors.has('subject_id')}"
-                    class="form-control"
-                    v-model="form.subject_id"
-                   @change="AddSubject"
-
-                  >
-                    <option value selected>Select subject to Add to list</option>
-                    <option
-                      v-for="subject in subjects"
-                      :key="subject.id"
-                      :value="subject.subjects.id"
-                    >{{subject.subjects.name}}</option>
-                  </select>
-                        <has-error :form="form" field="subject"></has-error>
+                <div class="form-group col-md-10 ">
+                    <label>Subjects</label>
+                            <multiselect
+                        v-model="form.subjects"
+                        :options="listOptions"
+                       placeholder="Select subjects"
+                       placeholder-as-label="true"
+                        style="color:black"
+                            />
+                      
                     </div>
 
                  </div>
               </div>
               <!-- /.card-header -->
-              <div class="card-body table-responsive ">
+              <div class="card-body ">
                 <table class="table table-hover">
                   <tbody>
                     <tr>
+                        <td>
+                            <input
+                                        type="checkbox"
+                                        @click="selectAll"
+                                        v-model="allSelected"
+                                        :checked="isSelectAll"
+                                    />
+                        </td>
                         <th>S/ID</th>
                         <th>SUBJECT</th>
                         <th>CODE </th>
@@ -104,7 +105,14 @@
 
 
                   <tr  v-for="subject in subjects_list" :key="subject.id"  >
-
+                    <td>
+                                        <input
+                                        :id="`subject${subject.id}`"
+                                        type="checkbox"
+                                        @click="select(subject.id)"
+                                        :checked="isChecked"
+                                         />
+           </td>
                     <td>{{subject.subject_id}}</td>
                     <td >{{subject.subjects?subject.subjects.name:''}}  </td>
 
@@ -123,7 +131,10 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
-
+    <button class="btn btn-danger"
+    @click="deleteSubject_list"
+     v-show="subjectIds.length"
+    >Delete</button>
               </div>
             </div>
             <!-- /.card -->
@@ -133,157 +144,77 @@
         <div v-if="!$gate.isAdminOrTutor()">
             <not-found></not-found>
         </div>
-<!-- Arms Modal -->
-<div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-                    <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New</h5>
-                    <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update subject's Info</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-       <form @submit.prevent="editmode ? updateSubject() : createSubject()">
-      <div class="modal-body">
-
-                <div class="form-group">
-                    <input type="text" name="name" placeholder="Enter Name" id="name"
-                   class="form-control" :class="{ 'is-invalid': form.errors.has('name') }"
-                   v-model="form.name" >
-                <has-error :form="form" field="name"></has-error>
-                 </div>
-
-                 <div class="form-group">
-                    <input type="text" name="code" placeholder="Enter Name"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('code') }"
-                   v-model="form.code"
-                    >
-                <has-error :form="form" field="code"></has-error>
-                 </div>
 
 
-        </div>
 
-            <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
-                    <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
-
-           </div>
-</form>
 </div>
-</div>
-</div>
-
-    <!-- Level Modal -->
-
-
-
-    </div>
+   
 </template>
 
 <script>
+
     export default {
 
         data() {
             return {
                 editmode: false,
                 addToList:false,
-                subjects:{},
+                subjects:[],
                 levels:{},
                 subjects_list:'',
                 selected_file:'',
                 counter:0,
                 Staff:'',
+                listOptions:[],
+                 selected: [],
+                 subjectIds:[],
+            allSelected: false,
+            isChecked: false,
+            isSubjectId:false,
+            isSelectAll:false,
+             deleteForm:new Form({
+                            subjectIds:[]  
+             }),
 
                   form: new Form({
 
                     id : '',
                     level_id:'',
                     subject_id:'',
-                    staff_id:''
+                    staff_id:'',
+                    subjects:[]
 
                 }),
 
             }
         },
-      mounted(){
-        axios.get('/api/get_levels')
-        .then(res=>{this.levels=res.data});
-
-         // this.loadSubjects_list();
-
-
-         axios.get('/api/employees')
-                .then(res=>{
-                    this.Staff=res.data;
-                    })
-                .catch(err=>{})
-
-      },
+    
         methods: {
 
-            updateSubject(){
-                this.$Progress.start();
-                // console.log('Editing data');
-                this.form.put('api/subjects/'+this.form.id)
-                .then(() => {
-                    // success
-                    $('#addNew').modal('hide');
-                     swal.fire(
-                        'Updated!',
-                        'Information has been updated.',
-                        'success'
-                        )
-                        this.$Progress.finish();
-                         Fire.$emit('AfterCreate');
-                })
-                .catch(() => {
-                    this.$Progress.fail();
-                });
-
-            },
-            editModal(subject){
-                this.editmode = true;
-                this.form.reset();
-                $('#addNew').modal('show');
-                this.form.fill(subject);
-            },
-            newModal(){
-                this.editmode = false;
-                this.form.reset();
-                $('#addNew').modal('show');
-            },
-            set_AddToList(){
-           this.addToList=true;
-           Fire.$emit('AfterCreate');
-            },
             AddSubject(){
                 if(this.form.type===''){
                     alert("please select your subject tpye")
                 }else{
                  this.$Progress.start();
-
+                 //console.log(this.form.subjects)
                 this.form.post('api/teacher_subjects')
                 .then(()=>{
-                    Fire.$emit('AfterCreate');
-                   // $('#addNew').modal('hide')
-
+                  
                     toast.fire({
                         type: 'success',
                         title: 'subject added successfully'
                         })
                     this.$Progress.finish();
-
+               
                       Fire.$emit('AfterCreate');
+                      this.form.reset()
                 })
                 .catch(()=>{
 
                 })
                 }
             },
-            deleteSubject_list(id){
+            deleteSubject_list(id=null){
 
 
  if(this.$gate.isAdmin()){
@@ -299,7 +230,9 @@
 
                         // Send request to the server
                          if (result.value) {
-                                axios.delete('api/teacher_subjects/'+id).
+                             if(id) this.subjectIds.push(id);
+                             this.deleteForm.subjectIds=this.subjectIds
+                                this.deleteForm.delete('api/teacher_subjects').
                                 then(()=>{
                                         swal.fire(
                                         'Deleted!',
@@ -307,14 +240,16 @@
                                         'success'
                                         )
                                     Fire.$emit('AfterCreate');
+                                    this.isChecked=false;
+                                    this.isSelectAll=false
                                 }).catch(()=> {
                                     swal.fire("Failed!", "There was something wronge.", "warning");
                                 });
                          }
                     })}
-else{
+                     else{
 
-  swal.fire({
+                    swal.fire({
                     title: 'Are you sure?',
                     text: "Please contact admin to remove this subject from your list!",
                     type: 'info',
@@ -333,7 +268,17 @@ else{
 
                     axios.get("/api/load_subjects/"+this.form.level_id).then( res  => {
                       this.subjects = res.data;
-                           console.log(this.subjects)
+                           console.log(res.data)
+         res.data.forEach(subject => {
+           this.listOptions.push(
+           {
+              id:subject.subjects.id,
+              label:subject.subjects.name,
+              value:subject.subjects.id
+            }
+      )
+  });
+
                           }
                       );
                 }
@@ -354,23 +299,80 @@ else{
 
                this.subjects_list=res.data
  //console.log(res);
-     })
-     .catch(err=>{});
-             }}
+        })
+        .catch(err=>{});
+             }},
+
+
+
+
+
+        selectAll() {
+            this.subjectIds = [];
+            if (this.isChecked) {
+                this.isChecked = false;
+
+                return this.checkSubjectId();
+            }
+            const subjects = this.subjects_list;
+            this.isChecked = true;
+            if (!this.allSelected) {
+                for (let index = 0; index < subjects.length; index++) {
+                    this.subjectIds.push(subjects[index].id);
+                    this.checkSubjectId();
+                    this.allSelected = true;
+                }
+                //  console.log(this.studentIds)
+                this.checkSubjectId();
+            }
+        },
+        select(id) {
+            if (this.allSelected) {
+                const index = this.subjectIds.indexOf(id);
+                if (index > -1) {
+                    this.subjectIds.splice(index, 1);
+                    this.checkSubjectId();
+                } else {
+                    this.subjectIds.push(id);
+                    this.checkSubjectId();
+                }
+            } else {
+                const index = this.subjectIds.indexOf(id);
+                if (index > -1) {
+                    this.subjectIds.splice(index, 1);
+                    this.checkSubjectId();
+                } else {
+                    this.subjectIds.push(id);
+                    this.checkSubjectId();
+                }
+            }
+
+            this.checkSubjectId();
+            console.log(this.subjectIds);
+        },
+        checkSubjectId() {
+            //let studentLength = this.studentIds.length;
+            if (this.subjectIds.length > 0) {
+                this.isSubjectId = true;
+            } else {
+                this.isSubjectId = false;
+            }
+
+            if (this.subjectIds.length === this.subjects_list.length) {
+                this.isSelectAll = true;
+            } else {
+                this.isSelectAll = false;
+            }
+            console.log(this.subjectIds)
+        },
+
+
+
         },
 
 
         created() {
-            Fire.$on('searching',() => {
-                let query = this.$parent.search;
-                axios.get('api/findSubject?q=' + query)
-                .then((data) => {
-                    this.data = data.data
-                })
-                .catch(() => {
-
-                })
-            })
+           
            this.loadSubjects_list();
 
            Fire.$on('AfterCreate',() => {
@@ -378,8 +380,12 @@ else{
              this.loadSubjects_list();
            });
         //    setInterval(() => this.loadUsers(), 3000);
+       axios.get('/api/get_levels')
+        .then(res=>{this.levels=res.data});
 
-axios.get('/api/employees')
+
+
+              axios.get('/api/employees')
                 .then(res=>{
                     this.Staff=res.data;
                     })

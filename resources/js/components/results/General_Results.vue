@@ -7,7 +7,7 @@
 <div  class="card card-navy card-outline">
 <div class="card-header">
 
-    <h5 class="header text-danger text-uppercase float-left">Result sheet for {{summary.student.surname}}&nbsp; {{summary.student.first_name}}, &nbsp; {{report.title}}</h5>
+    <h5 :class="`header text-danger text-uppercase `">Result sheet for {{summary.student.surname}}&nbsp; {{summary.student.first_name}}, &nbsp; {{report.title}}</h5>
     <button v-show="$gate.isAdminOrStudent()" class="btn btn-primary float-right pl-2" @click="printResults"><i class="fa fa-print"></i>Print Result</button>
 
     </div>
@@ -66,72 +66,70 @@
 
 </div>
 <div class="  table-responsive py-3"  >
-<table class="table table-bordered table-sm font-weight-bold  text-nowrap">
+<table class="table table-bordered table-sm font-weight-bold  table-striped">
 <thead>
-<tr>
+<tr class="text-center">
 <th>S/N</th>
 <th>Subject</th>
-<th v-show="!isTest2">CA</th>
-<th v-show="isTest2">1st CA</th>
-<th v-show="isTest2">2nd CA</th>
-<th v-show="isTest3">3rd CA</th>
+<th v-if="!report.isCa2">CA</th>
+<th v-if="report.isCa2">1st CA</th>
+<th v-if="report.isCa2">2nd CA</th>
+<th v-if="report.isCa3">3rd CA</th>
 <th>Exams</th>
 <th v-show="isMidterm">Mid Term</th>
 <th>Total</th>
-<th v-show="isThird_term && isCummulative" >1st Term</th>
-<th v-show="isThird_term && isCummulative" >2nd Term</th>
-<th v-show="isThird_term && isCummulative" >Grand Total</th>
-<th v-show="isThird_term && isCummulative"  >C.Avg</th>
+<th v-if="report.isCummulative" >1st Term</th>
+<th v-if="report.isCummulative" >2nd Term</th>
+<th v-if="report.isCummulative" >Grand Total</th>
+<th v-if="report.isCummulative"  >C.Avg</th>
 
 <th >Grade</th>
 <th>Narration</th>
-<th class="text-center" v-show="isAHScore"><div><span>ASH<br> Score</span></div></th>
-<th class="text-center" v-show="isASLScore"><div><span>ASL <br> Score</span></div></th>
-<th class="text-center" v-show="isASAScore"><div><span>ASA <br> Score</span></div></th>
-<th class="text-center" v-show="isASPosition"><div><span>AS<br>Position</span></div></th>
+<th v-if="report.isMaxScore"><div><span>ASH<br> Score</span></div></th>
+<th v-if="report.isMinScore"><div><span>ASL <br> Score</span></div></th>
+<th v-if="!report.isCummulative">ASA <br> Score</th>
+<th v-if="report.isArmPosition"><div><span>AS<br>Position</span></div></th>
 
-<th class="text-center" v-show="isCSPosition"><div><span>CS<br> Position</span></div></th>
-<th class="text-center" v-show="isCSHScore"><div><span>CSH<br> Score</span></div></th>
-<th class="text-center" v-show="isCSLScore"><div><span>CSL <br> Score</span></div></th>
-<th class="text-center" v-show="isCAScore"><div><span>CSA <br> Score</span></div></th>
+<!-- <th v-show="isCSPosition"><div><span>CS<br> Position</span></div></th>
+<th v-show="isCSHScore"><div><span>CSH<br> Score</span></div></th>
+<th v-show="isCSLScore"><div><span>CSL <br> Score</span></div></th>
+<th v-show="isCAScore"><div><span>CSA <br> Score</span></div></th> -->
 
 
 </tr>
 </thead>
 
 <tbody>
-<tr v-for="(score,index) in scores">
+
+<tr v-for="(score,index) in scores" :key="index">
 <td>{{index+1}}</td>
 <td>{{score.subjects?score.subjects.name:''}}</td>
-<td>{{score.test1?score.test1:'-'}}</td>
-<td v-show="isTest2">{{score.test2}}</td>
-<td v-show="isTest3">{{score.test3}}</td>
-<td>{{score.exams?score.exams:'-'}}</td>
-<td  v-show="isMidterm">{{score.mid_term?score.mid_term:'-'}}</td>
+<td>{{score.test1?score.test1:''}}</td>
+<td v-if="report.isCa2">{{score.test2}}</td>
+<td v-if="report.isCa3">{{score.test3}}</td>
+<td>{{score.exams?score.exams:''}}</td>
+<td  v-show="isMidterm">{{score.mid_term?score.mid_term:''}}</td>
 <td>{{score.total?score.total:'-'}}</td>
-<td v-show="isThird_term && isCummulative" >
-<div v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===1)">
-    {{total.total?total.total:'-'}}
-</div>
+<td v-if="report.isCummulative" >
+    {{getPastTotal(score.subject_id,1)}}
 </td>
-<td v-show="isThird_term && isCummulative" >
-<div v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===2)">
-    {{total.total?total.total:'-'}}
-</div>
+<td v-if="report.isCummulative" >
+{{getPastTotal(score.subject_id,2)}}
 </td>
-<td v-show="isThird_term && isCummulative" >{{score.grand_total?score.grand_total:'-'}}</td>
-<td v-show="isThird_term && isCummulative" >{{score.cummulative_avg?score.cummulative_avg:'-'}}</td>
 
-<td v-show="isThird_term && isCummulative" >{{score.cummulative_grade?score.cummulative_grade:'-'}}</td>
-<td v-show="isThird_term && isCummulative" >{{score.cummulative_narration?score.cummulative_narration:'-'}}</td>
 
-<td v-show="!isThird_term ||!isCummulative">{{score.grade?score.grade:'-'}}</td>
-<td v-show="!isThird_term ||!isCummulative">{{score.narration?score.narration:'-'}}</td>
+<td v-if="report.isCummulative" >{{score.grand_total?score.grand_total:'-'}}</td>
+<td v-if="report.isCummulative" >{{score.cummulative_avg?score.cummulative_avg:'-'}}</td>
+<td v-if="report.isCummulative" >{{score.cummulative_grade?score.cummulative_grade:'-'}}</td>
+<td v-if="report.isCummulative" >{{score.cummulative_narration?score.cummulative_narration:'-'}}</td>
 
-<td v-show="isAHScore">{{score.arm_max_score?score.arm_max_score:'-'}}</td>
-<td v-show="isASLScore">{{score.arm_min_score?score.arm_min_score:'-'}}</td>
-<td v-show="isASAScore">{{score.arm_avg_score?score.arm_avg_score:'-'}}</td>
-<td v-show="isASPosition">{{score.arm_subj_position?score.arm_subj_position:''}}</td>
+<td v-if="!report.isCummulative">{{score.grade?score.grade:''}}</td>
+<td v-if="!report.isCummulative">{{score.narration?score.narration:""}}</td>
+
+<td v-if="report.isMaxScore">{{score.arm_max_score?score.arm_max_score:''}}</td>
+<td v-if="report.isMinScore">{{score.arm_min_score?score.arm_min_score:''}}</td>
+<td v-if="!report.isCummulative">{{score.arm_avg_score?score.arm_avg_score:''}}</td>
+<td v-if="report.isArmPosition">{{score.arm_subj_position?score.arm_subj_position:''}}</td>
 
 <td v-show="isCSPosition">{{score.class_subj_position?score.class_subj_position:''}}</td>
 <td v-show="isCSHScore">{{score.max_class_score?score.max_class_score:''}}</td>
@@ -145,44 +143,40 @@
 <td  colspan="20 " style="border:none"><div class="text-center text-bold text-primary"> NON ACADEMIC SUBJECTS</div></td>
 </tr>
 
-<tr v-for="(score,index) in noneAcademic">
+<tr v-for="(score,index) in noneAcademic" :key="index">
 <td>{{index+1}}</td>
 <td>{{score.subjects?score.subjects.name:''}}</td>
 <td>{{score.test1?score.test1:''}}</td>
-<td v-show="isTest2">{{score.test2}}</td>
-<td v-show="isTest3">{{score.test3}}</td>
+<td v-if="report.isCa2">{{score.test2}}</td>
+<td v-if="report.isCa3">{{score.test3}}</td>
 <td>{{score.exams?score.exams:''}}</td>
 <td  v-show="isMidterm">{{score.mid_term?score.mid_term:''}}</td>
 <td>{{score.total?score.total:'-'}}</td>
-<td v-show="isThird_term && isCummulative" >
-<div v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===1)">
-    {{total.total?total.total:'-'}}
-</div>
+<td v-if="report.isCummulative" >
+    {{getPastTotal(score.subject_id,1)}}
 </td>
-<td v-show="isThird_term && isCummulative" >
-<div v-for="total in Total"  v-if="(total.subject_id===score.subject_id && total.term_id===2)">
-    {{total.total?total.total:'-'}}
-</div>
+<td v-if="report.isCummulative" >
+{{getPastTotal(score.subject_id,2)}}
 </td>
 
 
-<td v-show="isThird_term && isCummulative" >{{score.grand_total?score.grand_total:'-'}}</td>
-<td v-show="isThird_term && isCummulative" >{{score.cummulative_avg?score.cummulative_avg:'-'}}</td>
-<td v-show="isThird_term && isCummulative" >{{score.cummulative_grade?score.cummulative_grade:'-'}}</td>
-<td v-show="isThird_term && isCummulative" >{{score.cummulative_narration?score.cummulative_narration:'-'}}</td>
+<td v-if="report.isCummulative" >{{score.grand_total?score.grand_total:'-'}}</td>
+<td v-if="report.isCummulative" >{{score.cummulative_avg?score.cummulative_avg:'-'}}</td>
+<td v-if="report.isCummulative" >{{score.cummulative_grade?score.cummulative_grade:'-'}}</td>
+<td v-if="report.isCummulative" >{{score.cummulative_narration?score.cummulative_narration:'-'}}</td>
 
-<td v-show="!isThird_term ||!isCummulative">{{score.grade?score.grade:''}}</td>
-<td v-show="!isThird_term ||!isCummulative">{{score.narration?score.narration:""}}</td>
+<td v-if="!report.isCummulative">{{score.grade?score.grade:''}}</td>
+<td v-if="!report.isCummulative">{{score.narration?score.narration:""}}</td>
 
-<td v-show="isAHScore">{{score.arm_max_score?score.arm_max_score:''}}</td>
-<td v-show="isASLScore">{{score.arm_min_score?score.arm_min_score:''}}</td>
-<td v-show="isASAScore">{{score.arm_avg_score?score.arm_avg_score:''}}</td>
-<td v-show="isASPosition">{{score.arm_subj_position?score.arm_subj_position:''}}</td>
+<td v-if="report.isMaxScore">{{score.arm_max_score?score.arm_max_score:''}}</td>
+<td v-if="report.isMinScore">{{score.arm_min_score?score.arm_min_score:''}}</td>
+<td v-if="!report.isCummulative">{{score.arm_avg_score?score.arm_avg_score:''}}</td>
+<td v-if="report.isArmPosition">{{score.arm_subj_position?score.arm_subj_position:''}}</td>
 
-<td v-show="isCSPosition">{{score.class_subj_position?score.class_subj_position:''}}</td>
+<!-- <td v-show="isCSPosition">{{score.class_subj_position?score.class_subj_position:''}}</td>
 <td v-show="isCSHScore">{{score.max_class_score}}</td>
 <td v-show="isCSLScore">{{score.min_class_score}}</td>
-<td v-show="isCAScore">{{score.class_avg_score}}</td>
+<td v-show="isCAScore">{{score.class_avg_score}}</td> -->
 
 </tr>
 </tbody>
@@ -192,83 +186,30 @@
 
 </div>
 
-<div class="col-md-12 row" v-show="isLDomain">
-<div class="col-md-6">
-    <table class="table table-bordered table-sm font-weight-bold  table-striped" >
-<tr >
- <th colspan="2"  class="text-uppercase text-center text-danger text-bold">AFFECTIVE</th>
- </tr>
- <tbody>
-     <tr v-for="ldomain in LDomain" :key="ldomain.id">
-     <td v-if="ldomain.ldomain.type==='Behavioural'">{{ldomain.ldomain.domain}}</td>
-     <td v-if="ldomain.ldomain.type==='Behavioural'">{{ldomain.grade}}</td>
-     </tr>
- </tbody>
-    </table>
-</div>
-<div class="col-md-6">
-<table class="table table-bordered table-sm table-striped" >
-<tr >
- <th colspan="2"  class="text-uppercase text-center text-danger text-bold">PSYCHOMOTOR</th>
- </tr>
 
- <tbody>
-     <tr v-for="ldomain in LDomain" :key="ldomain.id">
-     <td v-if="ldomain.ldomain.type==='Skill'">{{ldomain.ldomain.domain}}</td>
-     <td v-if="ldomain.ldomain.type==='Skill'">{{ldomain.grade}}</td>
-     </tr>
- </tbody>
-    </table>
-</div>
+
+
+
+
+<div  class="row col-md-12 py-1">
+<summary-table
+
+:summary="summary"
+:report="report"
+/>
 
 </div>
 
+<div class="col-md-12 row container"  v-if="report.isLearningDomain">
 
+<learning-domains :LDomain="LDomain" />
 
-<div class="row col-md-12 py-1">
-<div class="col-md-4 " v-show="isRSummary">
- <table class="table table-bordered table-sm font-weight-bold  table-striped" >
- <tr >
- <th colspan="2"  class="text-uppercase text-center text-primary text-bold">Results summary</th>
- </tr>
-
- <tbody>
- <tr>
- <td v-show="isCPosition" >Position In Class</td><td v-show="isCPosition" >{{summary.class_position}}</td>
- </tr>
- <tr>
- <td v-show="isCAPosition" >Position In Arm</td><td v-show="isCAPosition" >{{summary.arm_position}}</td>
- </tr>
- <tr>
- <td>Total score</td><td>{{summary.total_scores}}</td>
- </tr>
- <tr>
- <td>Average score</td><td>{{summary.average_scores	}}</td>
- </tr>
- <tr>
- <td v-show="isThird_term && isCummulative">Cummulative Avg score</td><td v-show="isThird_term && isCummulative">{{summary.cummulative_average	}}</td>
- </tr>
- <tr>
- <td>Grade</td><td>{{summary.grade}}</td>
- </tr>
- <tr>
- <td>Narration<td>{{summary.narration}}</td>
- </tr>
- <tr>
- <td>Total Students in Arm</td><td>{{summary.total_students}}</td>
- </tr>
- <tr>
- <td>Progress status</td><td><b v-show="isThird_term">{{summary.progress_status?summary.progress_status:''}}</b></td>
- </tr>
-
-
- </tbody>
- </table>
 </div>
-<div class="  col-md-4  " v-show="isGFormula">
+<div class="col-md-12 row">
+<div class="  col-md-4  ">
 <table class=" table table-bordered table-sm font-weight-bold  table-striped" width="100%">
 <tr>
-<th colspan="3" class="text-center text-primary" >Grading Key</th>
+<th colspan="3" class="text-center text-primary text-uppercase table-sm" >Grading Key</th>
 </tr>
 
 <tbody>
@@ -278,53 +219,13 @@
 </tbody>
 </table>
 </div>
-<div class=" col-md-4 ">
-<table class="table table-bordered table-sm font-weight-bold  table-striped " width="100%" >
- <tr >
- <th colspan="2"  class="text-uppercase text-center text-bold text-primary">Short Keys</th>
- </tr>
-
- <tbody>
-
- <tr>
- <td>CA</td><td>Continuous Assessment</td>
- </tr>
- <tr>
- <td>CS Position</td><td>Class Subject Position</td>
- </tr>
- <tr>
- <td>SH Score</td><td>Subject Highest Score</td>
- </tr>
- <tr>
- <td>SL Score</td><td>Subject Lowest Score</td>
- </tr>
- <tr>
- <td>CSA Score<td>Class Subject Avg. Score</td>
- </tr>
-
- <tr>
- <td>AS Position</td><td>Arm Subject Position</td>
- </tr>
- <tr>
- <td>ASL Score</td><td>Arm Subject Lowest Score</td>
- </tr>
- <tr>
- <td>ASH Score</td><td>Arm Subject Highest Score</td>
- </tr>
- <tr>
- <td>ASA Score</td><td>Arm Subject Average Score</td>
- </tr>
-
-
- </tbody>
- </table>
-
+<div class="col-md-8">
+<attendance :attendance="attendance"/>
 </div>
 </div>
-<div class="  card-body row ">
-<div v-show="isPComment" class=" row col-6"><span><b>Principal's Comment:&nbsp;</b>{{principal_comment?principal_comment:''}}</span></div>
-<div v-show="isTComment" class=" row col-6 "><span><b>Teacher's Comment:&nbsp;</b >{{staff_comment?staff_comment:''}}</span></div>
-
+<div class="  card-body row">
+<div v-if="report.isPrincipalComment" class=" row col-6"><span><b>Principal's Comment:&nbsp;</b>{{principal_comment?principal_comment:''}}</span></div>
+<div v-if="report.isTeacherComment" class=" row col-6 "><span><b>Teacher's Comment:&nbsp;</b >{{staff_comment?staff_comment:''}}</span></div>
 </div>
 <center>
 <div class=" text-center"><span><b>Authorized Signature:&nbsp;</b ><img :src="`/img/signatures/${signature.photo}`" class="ml-2 img-result " width="100" height="50" onerror="this.style.display='none'"></span></div>
@@ -333,10 +234,10 @@
 
 
 </div>
-
+</div>
 </div>
 
-    </div>
+
 
 </template>
 
@@ -344,7 +245,10 @@
    // import jspdf from "jspdf";
    // import html2canvas from "html2canvas";
     import {mapState} from "vuex";
+import LearningDomain from '../admin/LearningDomain.vue';
+import Attendance from './Attendance.vue';
     export default {
+  components: { LearningDomain, Attendance },
       computed: mapState(['school']),
         data(){
             return {
@@ -353,7 +257,7 @@
                noneAcademic:'',
                user:{},
                comment:'',
-               Total:{},
+               Total:[],
                report:{},
                LDomain:{},
                arm:{},
@@ -384,7 +288,8 @@
                  isPComment:false,
                  isTComment:false,
                  isCummulative:false,
-                 isMidterm:false
+                 isMidterm:false,
+                 attendance:{},
 
             }
         },
@@ -562,8 +467,16 @@ axios.get('/api/result_config')
     comment==='Ungraded'
    }
   return comment
-}
+},
 
+getPastTotal(subject_id,term_id){
+    const total=this.Total.find(total=>total.term_id===term_id && total.subject_id===subject_id)
+       if(total){
+           return total.total
+       }else{
+           return '';
+       }
+}
 
 
 
@@ -607,7 +520,7 @@ axios.get('/api/result_config')
                  this.signature=result.data.signature
                   this.noneAcademic=result.data.noneAcademic
                  this.LDomain=result.data.LDomain
-
+                  this.attendance=result.data.attendance
 
                  this.$Progress.finish()
             }).catch((err) => {
@@ -643,6 +556,7 @@ axios.get('/api/result_config')
                   this.signature=result.data.signature
                     this.LDomain=result.data.LDomain
                  this.noneAcademic=result.data.noneAcademic
+                 this.attendance=result.data.attendance
                  this.$Progress.finish()
                  // console.log(this.signature);
                //console.log(this.report);

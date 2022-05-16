@@ -17,16 +17,18 @@
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
-
+<div v-if="isLoading"> <h1>Loading.......</h1> </div>
         <section slot="pdf-content">
             <annual v-if="isAnnual"></annual>
            <midterm v-show="!isAnnual"   v-if="report.type==='mid_term'"></midterm>
            <terminal v-show="!isAnnual"  v-if="report.type==='terminal'"></terminal>
             <mock v-show="!isAnnual"  v-if="report.type==='mock'"></mock>
-            <primary-midterm v-show="!isAnnual"  v-if="report.type==='primary-midterm'"></primary-midterm>
-            <primary-terminal v-show="!isAnnual"  v-if="report.type==='primary-terminal'"></primary-terminal>
-            <creche-comment  v-if="report.type==='creche'"></creche-comment>
-            <general-results  v-if="report.type==='default-result'||report.type==='default-midterm'"></general-results>
+            <primary-midterm v-show="!isAnnual"  v-if="report.type==='primary-midterm'"/>
+            <primary-terminal v-show="!isAnnual"  v-if="report.type==='primary-terminal'"/>
+            <creche-comment  v-if="report.type==='creche'"/>
+            <comments-with-scores  v-if="report.type==='diamond'"/>
+
+            <general-results  v-if="report.type==='default-result'||report.type==='default-midterm'"/>
 
 
 
@@ -50,7 +52,8 @@ import CrecheComment from './CrecheComment.vue'
             return {
 
                report:'',
-               isAnnual:false
+               isAnnual:false,
+               isLoading:true
 
 
             }
@@ -70,7 +73,7 @@ import CrecheComment from './CrecheComment.vue'
         }},
 
     created(){
-
+    setTimeout(()=>{this.isLoading=false},15000)
  }
     }
 

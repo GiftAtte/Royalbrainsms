@@ -140,7 +140,9 @@ padding: 5px;
       width: auto;
 
     }
-
+    #print .not-printable{
+        display: none;
+    }
     #profile {
         display: none;
     }

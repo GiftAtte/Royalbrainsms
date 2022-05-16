@@ -1,16 +1,16 @@
 @php
     $index=1;
 @endphp
-<table class="table table-bordered  table-sm text-capitalize   text-nowrap">
+<table class="table table-bordered  table-sm text-capitalize   myTable">
 <thead>
 <tr class="text-center">
 <th>S/N</th>
 <th>Subject</th>
 <th>Class <br>Work[2%]</th>
-<th>Assignment<br>[2%]</th>
+<th>Assign<br>[2%]</th>
 <th>Class<br>Test[5%]</th>
 <th>Notes<br>[1%]</th>
-<th>Weighted<br>Score[5%]</th>
+<th>Wted<br>Score[5%]</th>
 <th>Mid-Term<br>[25%]</th>
 <th>Exams<br>[70%]</th>
 <th>Total<br>[100%]</th>
@@ -37,7 +37,9 @@
 <td>{{$score->arm_subj_position}}</td>
 <td>{{$score->grade}}</td>
 </tr>
-
+@php
+    $index=$index+1;
+@endphp
     @endforeach
 
 
@@ -46,18 +48,12 @@
 
 </table>
  </div>
-                <div class="text-center text-bold text-primary container pt-2 ">
-                    <h6 class="p-1 text-danger"> RESULTS SUMMARY</h6></div>
-                <hr class="text-primary">
-                <div>
-                <table class="table" width="100%">
-                    <tr>
-                 <td><b>Total score:&nbsp;{{$summary->total_scores}}</b></td>
-                 <td><b>Average score:&nbsp;{{$summary->average_scores	}}</b></td>
-                 <td><b>Cummulative Avg score:&nbsp;{{$summary->cummulative_average}}</b></td>
-                 <td><b>Grade:&nbsp;{{$summary->grade}}</b></td>
-
-                 </tr>
-                </table>
-                <hr class="text-primary">
-               </div>
+            <div row>
+                    @if (!empty($subjectDropt)>0)
+@include('subjectDropt')
+                    @endif
+                </div>
+                </div>
+                <div class="pt-2 pb-2">
+                @include('summary')
+                </div>

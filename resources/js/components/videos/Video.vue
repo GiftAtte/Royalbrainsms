@@ -24,7 +24,8 @@
                 <div class="card-body row">
 <div class="col-md-8 table-responsive" >
     <div class="player-container">
-    <vue-core-video-player :src="url"
+    <vue-core-video-player
+     :src="url"
     :autoplay="false"
    
     :playeroptions="playerOptions"
@@ -36,12 +37,12 @@
 </div>
 <div class="col-md-4">
 
-<div class="card-body table-responsive">
+                       <div class="card-body table-responsive">
                      <ul class="list-group list-group-unbordered" v-for="video in videos" :key="video.id">
 
 
                          <li class="list-group-item" >
-                        <a :href="`/watch_video/${video.video_path}`" tag="a" @click="playSelected(video.video_path)">
+                        <a :href="`/watch_video/${video.id}`" tag="a" @click="playSelected(video.video_path)">
                          {{video.title}}</a>
                          </li>
                      </ul>
@@ -66,12 +67,13 @@
   // import 'some-videojs-plugin'
 
   export default {
+    
     data() {
       return {
           videos:{},
           HLSCore,
           video_path:'image',
-          url:'/videos/'+this.$route.params.id,
+          url:'',
         playerOptions: {
           // videojs options
           muted: true,
@@ -90,12 +92,24 @@
     computed: {
       player() {
         return this.$refs.videoPlayer.player
-      }
+      },
+    //   videoUrl(){
+    //          return this.getVideo()
+    //      }
     },
+mounted(){
+axios.get(`/api/getVideo/${this.$route.params.id}`)
+         .then(res=>{
+             console.log(res.data.video_path)
+            this.url=res.data.video_path
+          //  return '/videos/'+res.data.video_path
+         })
+},
+
     methods: {
 loadVideos(){
 
-                if(this.$gate.isAdminOrTutorOrStudent()){
+                if(this.$gate.isAdminOrTutorOrStudentOrParent()){
                     axios.get("/api/videos").then( res  => {
                       this.videos = res.data.data;
                            console.log(this.videos)
@@ -104,9 +118,8 @@ loadVideos(){
                 }
 
 
-            },
-        getVideo(selected){
-      location.replace('/login')
+          
+       
     },
            playSelected(selected){
                location.replace('/watch_video/'+selected)
@@ -119,14 +132,14 @@ loadVideos(){
       onPlayerPause(player) {
         // console.log('player pause!', player)
       },
-      // ...player event
-
-      // or listen state event
-      // playerStateChanged(playerCurrentState) {
-      //   // console.log('player current update state', playerCurrentState)
-      // },
-
-      // player is ready
+       getVideo(){
+         axios.get(`/api/getVideo/${this.$route.params.id}`)
+         .then(res=>{
+             console.log('/videos/'+res.data.video_path)
+            return '/videos/'+res.data.video_path
+         })
+         .catch(err=>'')
+       },
       playerReadied(player) {
         console.log('the player is readied', player)
         // you can use it to do something...

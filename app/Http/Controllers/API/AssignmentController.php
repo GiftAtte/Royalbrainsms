@@ -27,6 +27,16 @@ class AssignmentController extends Controller
             return Assignment::with(['subject','level','arms'])->where([['school_id',auth('api')->user()->school_id],['level_id',$student->class_id],['arm_id',$student->arm_id]])->latest()->paginate(10);
         }
 
+        if($user->type==='parent'){
+            $levelIds=Student::whereIn('parent_id',[$user->parent_id])->pluck('class_id');
+            $armIds=Student::whereIn('parent_id',[$user->parent_id])->pluck('arm_id');
+            return Assignment::with(['subject','level','arms'])
+             ->where('school_id',auth('api')->user()->school_id)
+             ->whereIn('level_id',$levelIds)
+             ->whereIn('arm_id',$armIds)
+             ->latest()->paginate(20);
+        }
+
         if( $user->type==='tutor'){
              $emp=Has_arm::where('staff_id',$user->staff_id)->first();
              return Assignment::with(['subject','level','arms'])->where([['school_id',auth('api')->user()->school_id],['level_id',$emp->level_id],['arm_id',$emp->arms_id]])->latest()->paginate(10);

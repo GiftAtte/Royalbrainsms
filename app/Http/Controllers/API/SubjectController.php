@@ -124,19 +124,21 @@ class SubjectController extends Controller
              $level_id=$level->id;
          }
 
+         $subjects=$request->subjects;
+           foreach($subjects as $subject_id){
          $subject=Level_sub::where([['subject_id',$request->subject_id],
                                      ['level_id',$level_id]])->get();
            // $has_arm=Has_arm::where('staff_id',$user->staff_id)->first();
           if( count($subject)===0){
 
-
-            return Level_sub::create([
+//return $request->all();
+             Level_sub::create([
                 'level_id'=>$level_id,
-                'subject_id'=>$request->subject_id,
+                'subject_id'=>$subject_id,
                 'type'      =>$request->type
             ]);
 
-
+        }
 
         }
         return ['message'=>'subject exist'];
@@ -155,4 +157,35 @@ class SubjectController extends Controller
         }
        return Subject::where('school_id',auth('api')->user()->school_id);
     }
+
+
+    public function cloneLevelSubject($fromId, $toId){
+
+              $fromLevels =Level_sub::where('level_id',$fromId)
+                            ->select('subject_id','type')
+                            ->get();
+                 foreach( $fromLevels as  $fromLevel){
+             $subject=Level_sub::where([['subject_id',$fromLevel->subject_id],
+                                     ['level_id',$toId]])->get();
+           // $has_arm=Has_arm::where('staff_id',$user->staff_id)->first();
+          if( count($subject)===0){
+
+
+            Level_sub::create([
+                'level_id'=>$toId,
+                'subject_id'=>$fromLevel->subject_id,
+                   'type' =>$fromLevel->type
+            ]);
+                 }
+
+    }
+
+    return [
+        'status_code'=>200,
+        'status'=>'success',
+         'subjects'=>$fromLevels
+    ];
+}
+
+
 }

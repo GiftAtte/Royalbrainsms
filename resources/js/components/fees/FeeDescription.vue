@@ -20,7 +20,7 @@
       <!-- /.container-fluid -->
     </div>
 
-    <div class="content" v-if="$gate.isAdminOrTutorOrStudent()">
+    <div class="content" v-if="$gate.isAdminOrTutorOrStudentOrParent()">
       <div
         class="card-body pt-0"
         ref="generatePDF"
@@ -204,7 +204,7 @@
                       <th>Balance</th>
                       <th>-------</th>
                       <th>N{{ discounted_amount }}</th>
-                      <th v-show="isStudent">
+                      <th v-show="$gate.isStudentOrParent()">
                         Status:<span
                           v-show="isPaid"
                           class="text-success text-uppercase"
@@ -236,7 +236,7 @@
                             :amount="round(PayForm.amount * 100)"
                             :email="student ? student.users.email : email"
                             :paystackkey="
-                              levels ? levels.paystacks.paystack_key : ''
+                              levels.paystacks ? levels.paystacks.paystack_key : ''
                             "
                             :reference="reference()"
                             :callback="callback"
@@ -263,7 +263,7 @@
       </div>
     </div>
 
-    <div v-if="!$gate.isAdminOrTutorOrStudent()">
+    <div v-if="!$gate.isAdminOrTutorOrStudentOrParent()">
       <not-found></not-found>
     </div>
     <!-- Arms Modal -->
@@ -294,16 +294,20 @@
           <form @submit.prevent="createDescription()">
             <div class="modal-body">
               <div class="form-group">
-                <input
-                  class="form-control"
-                  type="text"
-                  placeholder="Enter Fee desscription"
-                  :class="{
-                    'is-invalid': DetailsForm.errors.has('description'),
-                  }"
-                  v-model="DetailsForm.description"
-                />
-                <has-error :form="DetailsForm" field="description"></has-error>
+              <select class="form-control"
+              v-model="DetailsForm.description"
+              name="description"
+              id="description"
+              >
+              <option value selected>Select Fee Item</option>
+               <option 
+               v-for="feeItem in feeItems" 
+               :key="feeItem.id"
+               :value="feeItem.name">
+                {{ feeItem.name }}
+               </option>
+              </select>
+              <has-error :form="DetailsForm" field="description"></has-error>
               </div>
               <div class="form-group">
                 <input
@@ -358,6 +362,7 @@ export default {
       discounted_amount: 0.0,
       user: window.user,
       expectedIncome:'',
+      feeItems:[],
       paystackkey: "", //paystack public key
       email: window.user.email, // Customer email
       amount: 0, // in kobo
@@ -462,7 +467,7 @@ export default {
         });
     },
     loadFeeDescription() {
-      if (this.$gate.isAdminOrTutorOrStudent()) {
+      if (this.$gate.isAdminOrTutorOrStudentOrParent()) {
         axios
           .get(
             "/api/fee_description/" +
@@ -489,7 +494,7 @@ export default {
             }
             // this.isPaid=payment_details?payment_details.activation_status:0;
             this.levels = response.data.feegroup;
-            // console.log(this.levels.paystacks.paystack_key)
+          //   console.log(this.levels.paystacks)
             this.discounted_amount = response.data.discounted_amount;
             this.expectedIncome=response.expectedIncome
           });
@@ -594,10 +599,10 @@ URL:&nbsp; ${this.school.website}.
                   <span>
                     <b>Name:</b>&nbsp;${ this.student ? this.student.surname : "" } ,
                     &nbsp;${ this.student ? this.student.first_name : "" }
-                  </span>
+                  </span><br/>
                   <span>
-                    <b>Name:</b>&nbsp;${ this.student ? this.student.surname : "" } ,
-                    &nbsp;${ this.student ? this.student.first_name : "" }
+                    <b>Class:</b>&nbsp;${this.levels ? this.levels.levels.level_name : "" },
+                    &nbsp;
                   </span>
                       <table style=" margin:5px;width:98%;text-align: left;">
                       <thead >
@@ -670,6 +675,13 @@ Thank for your patronage...
       });
       return tr;
     },
+    getFeeItems(){
+         axios.get('/api/feeItems')
+      .then(res=>{
+          this.feeItems=res.data
+         // console.log(res.data)
+          })
+    }
   },
   created() {
     this.PayForm.student_id = this.$route.params.student_id
@@ -690,6 +702,7 @@ Thank for your patronage...
     //    setInterval(() => this.loadUsers(), 3000);
 
     //console.log(window.user)
+    this.getFeeItems();
   },
 };
 </script>

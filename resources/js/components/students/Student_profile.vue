@@ -134,6 +134,15 @@
                 >
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="#assignmentAndNote" data-toggle="tab" v-show="$gate.isParent()">
+                    Assigment/Notes</a>
+              </li>
+              <li class="nav-item" v-show="$gate.isParent()">
+                <a class="nav-link" href="#examsAndRecords" data-toggle="tab"
+                  >Exams/Records</a
+                >
+              </li>
+               <li class="nav-item">
                 <a class="nav-link" href="#security" data-toggle="tab"
                   >Security</a
                 >
@@ -147,6 +156,16 @@
               <div class="tab-pane" id="security">
                 <profile></profile>
               </div>
+              <div class="tab-pane" id="examsAndRecords">
+               <h3 class="text-center"> Student Exams And Records</h3>
+             <student-resut-list></student-resut-list>
+              </div>
+
+              <div class="tab-pane" id="assignmentAndNote">
+               <h3 class="text-center"> Assigment And Notes</h3>
+ <assignment></assignment>
+              </div>
+
               <div class="container tab-pane" id="photo-card">
                 <button
                   class="btn btn-primary float-right"
@@ -577,9 +596,9 @@
                         >
                       </td>
 
-                      <td class="row" v-show="$gate.isStudent()">
+                      <td class="row" v-show="$gate.isStudentOrParent()">
                         <router-link
-                          :to="`fee_description/${report.id}`"
+                          :to="`/fee_description/${report.id}/${$route.params.id}`"
                           title="view fee list"
                           tag="a"
                           exact

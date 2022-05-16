@@ -18,12 +18,13 @@ import VueImageLoader from '@kevindesousa/vue-image-loader'
 import VueChatScroll from 'vue-chat-scroll'
 import VueCoreVideoPlayer from 'vue-core-video-player'
 import VuePerfectPrint from 'vue-perfect-print'
-
+import VueMultiselectComponent from "vue-multiselect-component";
 Vue.use(VuePerfectPrint);
 Vue.use(VueCoreVideoPlayer)
 Vue.use(VueChatScroll)
 Vue.use(VueImageLoader)
 Vue.component('tinymce', tinymce)
+Vue.component('multiselect', VueMultiselectComponent);
 Vue.use(VuePdfReader);
 Vue.component('datetime', Datetime);
 Vue.use(VueCountdownTimer)
@@ -201,8 +202,43 @@ Vue.component(
 );
 Vue.component(
     'chats',
-    require('./components/messaging/Chats.vue').default
+    require('./components/messaging/Chats.vue').default,
 );
+Vue.component("input-field", require("./components/utils/TextField.vue").default);
+Vue.component(
+    "student-resut-list",
+    require("./components/parents/ReportList.vue").default
+);
+Vue.component(
+    "attendance-sheet",
+    require("./components/results/Attendance.vue").default
+);
+Vue.component(
+    "summary-table",
+    require("./components/results/Summary.vue").default
+);
+Vue.component(
+    "learning-domains",
+    require("./components/results/Assessment.vue").default
+);
+Vue.component(
+    "madonna-marks",
+    require("./components/results/MadonnaMarks.vue").default
+);
+Vue.component(
+    "general-marks",
+    require("./components/results/GeneralMarks.vue").default
+);
+Vue.component(
+    "comments-table",
+    require("./components/results/CommentsTable.vue").default
+);
+Vue.component(
+    "comments-with-scores",
+    require("./components/results/CommentWithScores.vue").default
+);
+
+
 
 
 

@@ -74,9 +74,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('load_subjects/{level_id?}', 'API\SubjectController@loadListView');
     Route::get('load_list/{id?}/{is_score?}', 'API\SubjectController@loadSubjects');
     Route::delete('delete_list/{id}', 'API\SubjectController@delete_list');
+    Route::post('cloneSubjects/{from}/{to}', 'API\SubjectController@cloneLevelSubject');
 
     Route::get('teacher_subjects/{staff_id?}', 'API\TeachersController@index');
-    Route::delete('teacher_subjects/{id}', 'API\TeachersController@delete_list');
+    Route::delete('teacher_subjects', 'API\TeachersController@delete_list');
     Route::post('teacher_subjects', 'API\TeachersController@store');
     Route::get('teacher_subjects/{id}', 'API\TeachersController@loadSubjects');
 
@@ -94,8 +95,9 @@ Route::middleware('auth:api')->group(function () {
     Route::get('checkreport/{id}', 'API\ReportController@checkReport');
     Route::get('getArms/{report_id}', 'API\ReportController@getArms');
     Route::get('loadArms/{level_id}', 'API\LevelController@loadArms');
-    Route::get('master/{report_id}', 'API\ReportController@masterCard');
-    // Scores Routes
+    Route::get('master/{report_id}/{arm_id?}', 'API\ReportController@masterCard');
+    Route::get('export_master/{report_id}/{arm_id?}', 'API\ReportController@export_master');
+// Scores Routes
     Route::apiResources(['scores' => 'API\ScoreController']);
     Route::post('import_scores', 'API\ScoreController@import');
     Route::post('primary_scores', 'API\PrimaryController@store');
@@ -166,6 +168,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResources(['videos' => "API\VideoController"]);
     Route::put('video', 'API\VideoController@update');
+    Route::get('getVideo/{id}','API\VideoController@play');
 
     // Learning Domain
     Route::apiResources(['learning_domain' => "API\LDomainController"]);
@@ -212,7 +215,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('level_messages', 'API\ChatsController@sendLevelMessages');
     Route::get('get_chat_level', 'API\ChatsController@getLevel');
     Route::get('transcript/{student_id?}', 'API\ReportController@transcript');
-    Route::get('export_master/{report_id}', 'API\ReportController@export_master');
 
     // Fees
 
@@ -238,7 +240,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('student_fees/{feegroup_id}/', 'API\FeeactivationController@loadActivation');
     Route::post('student_fees', 'API\FeeactivationController@store');
     Route::post('fee_pay', 'API\FeeactivationController@pay');
-
+    Route::post('fee_pay/update', 'API\FeeactivationController@updatePayment');
+    Route::post('confirmPayments','API\FeeactivationController@confirmPayments');
+    Route::post('feeItems', 'API\FeeItemsController@store');
+    Route::get('feeItems', 'API\FeeItemsController@index');
+    Route::put('feeItems', 'API\FeeItemsController@update');
+    Route::delete('feeItems/{id}', 'API\FeeItemsController@destroy');
     /// Creche Domain Routes
     Route::post('domains', 'API\DomainController@store');
     Route::get('domains', 'API\DomainController@index');
@@ -272,7 +279,27 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResources(['principalComments' => 'API\PrincipalcommentController']);
     Route::post('load_principal_comments', 'API\PrincipalcommentController@loadComments');
     Route::post('principal_comment', 'API\PrincipalcommentController@assignComment');
-Route::get('getAllComments', 'API\PrincipalcommentController@getAllComments');
+    Route::get('getAllComments', 'API\PrincipalcommentController@getAllComments');
+
+//  Parents Routes
+Route::get('parents','API\ParentsController@index');
+Route::get('parent/{id?}','API\ParentsController@getParentById');
+Route::post('parents','API\ParentsController@store');
+Route::put('parents','API\ParentsController@update');
+Route::delete('parents/{id}','API\ParentsController@delete');
+Route::get('parents/walletBalance','API\EcopayController@parentWalletBalance');
+Route::get('parents/bills','API\EcopayController@parentBills');
+Route::post('parents/import','API\ParentsController@importParents');
+
+Route::get('siblings/{id?}','API\ParentsController@siblings');
+Route::post('siblings','API\ParentsController@addSiblings');
+Route::delete('siblings/{id}','API\ParentsController@deleteSibling');
+Route::get('siblings/results/{studentId?}','API\ParentsController@siblingsResult');
+
+
+Route::get('attendance/{report_id}/{arm_id}','API\AttendanceController@loadAttendance');
+Route::post('attendance','API\AttendanceController@createAttendance');
+Route::post('attendance/importExcel','API\AttendanceController@importAttendance');
 
 
 

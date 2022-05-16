@@ -243,4 +243,88 @@ class EcopayController extends Controller
             $bill->delete();
         }
     }
+
+// PARENT WALLENT BALACE
+     public function parentWalletBalance(){
+      $studentIDs=Student::with('levels')->whereIn('parent_id',[auth('api')->user()->parent_id])
+                           ->get();
+                           $studentArr=[];
+  foreach ($studentIDs as $student) {
+     $balance= $this->getAccountBalance($student->id)['balance'];
+      array_push($studentArr,[
+          'id'=>$student->id,
+  'name'=>$student->surname.', '.$student->first_name.($student->middle_name?$student->middle_name:''),
+  'level'=>$student->levels->level_name,
+  'accountNumber' =>$student->accountNumber,
+  'bank'=>$student->bankName,
+   'accountBalance'=>$balance
+      ]);
+     
+  }
+   return $studentArr;
+ }
+
+// PARENT BILL AND ACCOUNT
+
+public function getPaidFees($studentId,$feegroup_id){
+
+   $paymentDetails=StudentFees::where([['student_id',$studentId],['feegroup_id',$feegroup_id]])->first();
+   if($paymentDetails){
+       return $paymentDetails;
+   }
+   return [];
+}
+
+ 
+public function parentBills($parentId=null){
+
+    if(empty($parentId)){
+        $parentId=auth('api')->user()->parent_id;
+    }
+
+   $siblings=Student::with('levels')->whereIn('parent_id',[$parentId]);
+   $levels=$siblings->pluck('class_id')->toArray();
+  $feegroups=Fee_group::with('fee_description','terms')->whereIn('level_id',$levels)->orderBy('level_id')->get();
+  $students=$siblings->get();
+   $studentArr=[];
+    foreach ($students as $student ) {
+   
+         foreach ($feegroups as $feegroup ) {
+          //   return[ $feegroup->level_id ,$student->class_id];
+     if($feegroup->level_id==$student->class_id){
+       //  return $feegroup->feeDescription;
+       array_push($studentArr,
+         [
+           'student_id'=>$student->id,
+           'name'=>$student->surname.' '.$student->first_name.' '.($student->middle_name?$student->middle_name:'') ,
+           'level'=>$student->levels->level_name,
+           'feegroup_id'=>$feegroup->id,
+           'title'=>$feegroup->tittle,
+            'feeSum'=>collect($feegroup->fee_description)->sum('amount'),
+            'term'=>$feegroup->terms?$feegroup->terms->name:'',
+         ]);
+     }}}
+  $siblingsBillArr=[];
+   foreach($studentArr as $sibling){
+
+   
+   $paymentDetials=$this->getPaidFees($sibling['student_id'],$sibling['feegroup_id']);
+   $sibling['paymentDetials']=$paymentDetials;
+   $sibling['feePaid']=$paymentDetials?$paymentDetials->amount:0;
+   array_push($siblingsBillArr,$sibling);
+
+}
+$totalSumFee=collect($siblingsBillArr)->sum('feeSum');
+$totalFeePaid=collect($siblingsBillArr)->sum('feePaid');
+
+return [
+    'siblingsBill'=>$siblingsBillArr,
+    'totalSumFee'=>$totalSumFee,
+    'totalFeePaid'=>$totalFeePaid,
+    'totalBalance'=>$totalSumFee-$totalFeePaid
+      ];
+    }
+
+
+
 }

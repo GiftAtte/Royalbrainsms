@@ -42,11 +42,11 @@ class VideoController extends Controller
  $this->validate($request,[
     'level_id' => 'required',
     'title' => 'sometimes|required|max:191',
+    'video_path' => 'required',
 
 ]);
 
 $video=new Video();
-if($request->hasFile('file')){
     $user=auth('api')->user();
 
 
@@ -54,15 +54,17 @@ if($request->hasFile('file')){
     $video->level_id=$request->level_id;
     $video->title=$request->title;
     $video->author_id=$user->id;
+    $video->video_path=$request->video_path;
+
     // if(!Storage::disk('public_uploads')->put($path, $file_content)) {
     //     return false;
     // }
-    $path=  Storage::disk('public_uploads')->put('videos', $request->file('file'));
+    //$path=  Storage::disk('public_uploads')->put('videos', $request->file('file'));
    // $path=Storage::putFile('videos', $request->file('file'));
-    $video->video_path=explode('/',$path)[1];
+   // $video->video_path=explode('/',$path)[1];
 
     $video->save();
-}
+
 return $video;
     }
 
@@ -88,9 +90,11 @@ return $video;
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function play($id)
+    { if($id){
+      return Video::findOrFail($id);
+    }
+       
     }
 
     /**

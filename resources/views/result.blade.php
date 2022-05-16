@@ -41,16 +41,25 @@ html {
   width: device-width;
 }
 body {
-  margin: 0;
+    align-items: center;
+  margin: 0px;
+  padding:5px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 1rem;
   font-weight: 400;
   line-height: 1;
   color: #040505;
   text-align: justify;
-  background-color: #fff;
+  background-color: rgb(247, 254, 255);
 }
 
+hr{
+    line-height: 1px;
+    border: 0.4px
+}
+ .myTable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
 
 
 table {
@@ -1128,7 +1137,7 @@ a.text-dark:hover, a.text-dark:focus {
 
                 <div >
                     <div>
-                    <table class="table "  style="100%">
+                    <table class="table ">
                         <tr>
                             <td style="width: 10%"> <img src="{{ public_path('/img/schools/'.$school->logo) }}" class="img-thumbnail pr-2 " alt="logo" width="30" height="30" onerror="this.style.display='none'">
                         </td>
@@ -1153,11 +1162,17 @@ a.text-dark:hover, a.text-dark:focus {
 <td style="width: 53%">
     <h6><b>Name:</b>&nbsp; {{$summary->student->surname}}&nbsp; {{$summary->student->first_name}} &nbsp; {{$summary->student->middle_name?$summary->student->middle_name:''}}</h6>
                 <h6><b>Class:&nbsp;</b> {{$report->levels->level_name}}&nbsp;{{$arm->name}}</h6>
-                <h6><b>Gender:&nbsp;</b> :{{'-----------'}} </h6>
-                <h6><b>DOB:&nbsp;</b> :{{'-----------'}} </h6>
+              <h6><b>House:&nbsp;</b>-----------</h6>
 
-                 {{-- <h6><b>Gender:&nbsp;</b> {{$summary->student->gender?$summary->student->gender:'-----------'}} </h6>
-                <h6><b>Dob:&nbsp;</b> {{$summary->student->dob?$summary->student->dob:'-----------'}} </h6> --}}
+                 <h6><b>Gender:&nbsp;</b> {{$summary->student->gender?$summary->student->gender:'-----------'}} </h6>
+                <h6><b>Dob:&nbsp;</b> {{$summary->student->dob?$summary->student->dob:'-----------'}} </h6>
+
+                {{-- <h6><b>Gender:&nbsp;</b> :{{'-----------'}} </h6>
+                <h6><b>DOB:&nbsp;</b> :{{'-----------'}} </h6> --}}
+
+
+
+
 
 </td>
 
@@ -1167,21 +1182,31 @@ a.text-dark:hover, a.text-dark:focus {
                 <hr class="text-primary" style="line-height:0.5px">
 </center>
                 <h6 ><b>Term:&nbsp;</b> {{$report->terms->name}}</h6>
+
                 <h6><b>Session:&nbsp;</b> {{$report->sessions->name}} </h6>
+
                 <h6 ><b>Next Term :&nbsp;</b> {{$report->term_start?$report->term_start:'---------'}}</h6>
 
 </td>
 <td style="width: 15%">
-<img src="{{ public_path('/img/profile/'.$user->photo) }}" class=" pl-2 img-thumbnail" style="border-radius: 5px;" alt="logo" width="30" height="30">
+    @php
+        $realPath=public_path('/img/profile/'.$user->photo);
+        $altPath=public_path('/img/profile/'.'profile.png');
+        $imgPath=file_exists($realPath)?$realPath:$altPath;
+
+    @endphp
+<td style="width: 10%"> <img src="{{ $imgPath}}" class="img-thumbnail pr-2 " alt="logo" width="30" height="30" onerror="this.style.display='none'">
 
 
 </td>
     </tr>
     <tr>
         <td rowspan="2">
-            <h6>
+    @if ($report->isArmPosition)
+        <h6>
          Class Position:  {{$summary->arm_position}} &nbsp; out of&nbsp;{{$summary->total_students}}
-</h6>
+        </h6>
+    @endif
         </td>
     </tr>
 </table>
@@ -1207,119 +1232,35 @@ a.text-dark:hover, a.text-dark:focus {
            <h3>No Termplate Selected</h3>
     @endswitch
 
+
+
                <div class="container">
-                <table class="table" style="width: 100%; align-content:top;">
-                 <tr>
-                 <td style="width: 30%">
-                   <table class="table table-bordered" style="width: 100%">
-                      <tr>
-                 <td colspan="2" class="text-center text-primary"> AFFECTIVE </td>
-
-                </tr>
-                <tr><td>GRADE</td><td>DEGREE</td>
-                </tr>
-                     @foreach ($LDomain as $ldomain)
-                    @if($ldomain->ldomain->type==="Behavioural")
-                    <tr>
-                     <td >{{$ldomain->ldomain->domain}}</td>
-                     <td >{{$ldomain->grade}}</td>
-                     @endif
-                     </tr>
-                     @endforeach
-                   </table>
-                   </td>
-                   <td style="width: 30%">
-                   <table class="  table-bordered" style="width: 100%">
-
-                     <tr>
-                <td colspan="2" class="text-center text-primary">PSYCHOMOTOR</td>
-
-                </tr>
-                <tr><td>Domain</td><td>Grade</td></tr>
-
-                     @foreach ($LDomain as $ldomain)
-
-
-                    @if( $ldomain->ldomain->type==="Skill")
-                     <tr>
-                     <td >{{$ldomain->ldomain->domain}}</td>
-                     <td >{{$ldomain->grade}}</td>
-                     @endif
-                     </tr>
-                     @endforeach
-                   </table>
-                 </td>
-
-
-
-                 <td style="width: 38%">
-               <table class=" table-bordered" style="width: 100%">
-                <tr>
-                <td colspan="3" class="text-center text-primary">GRADING KEYS</td>
-
-                </tr>
-                <tr><td>SCORES</td><td>GRADE</td><td>DEGREE</td></tr>
-               @foreach ( $gradings as $grade )
-               <tr>
-          <td>{{$grade->lower_bound}} - {{$grade->upper_bound}}</td>
-          <td>{{$grade->grade}}</td><td>{{$grade->narration}}</td>
-                  </tr>
-               @endforeach
-
-
-                </table>
-
-                </td>
-
-                </tr>
-                    </table>
+                @if($report->isLearningDomain>0)
+                @include('learniningDomain')
+                @endif
                </div>
 
+             <div class="py-2" >
 
-
-                {{-- <table class="table table-bordered table-sm " >
-                <tr >
-                 <th colspan="2"  class="text-uppercase text-center text-primary text-bold">PART C-PSYCHOMOTOR</th>
-                 </tr>
-
-                 <tbody>
-                     <tr v-for="ldomain in LDomain" :key="ldomain.id">
-                     <td v-if="ldomain.ldomain.type==='Skill'">{{$ldomain->ldomain->domain}}</td>
-                     <td v-if="ldomain.ldomain.type==='Skill'">{{$ldomain->grade}}</td>
-                     </tr>
-                 </tbody>
-                    </table> --}}
-
-                {{-- <table class=" table table-bordered table-sm  text-uppercase myTable table-striped" width="100%">
-                <tr>
-                <th colspan="3" class="text-center text-primary" >Grading Key</th>
-                </tr>
-
-                <tbody>
-                <tr v-for="grade in grades" :Key="grade.id">
-                <td>{{grade.lower_bound}} - {{grade.upper_bound}}</td>
-                <td>{{grade.grade}}</td>
-                <!-- <td>{{grade.narration}}</td> -->
-                </tr>
-                </tbody>
-                </table> --}}
-
-
-<div class="py-2" >
-
-                <table style="width: 100%" class="  table py-2  ">
+                <table style="width: 100%" class="  table ">
                 <tr>
                <td style="width: 100%"> <br/>
+                @if ($report->isTeacherComment)
                  <b>Tutor's Comment:&nbsp;{{""}}</b>
-                  <hr style="font-weight: normal">
+                 <hr style="font-weight: normal">
+                @endif
+
                 </td>
 
                     </tr>
                     <tr>
                     <td style="width: 100%" >
                         <br/>
-                <b> Principal's Comment:&nbsp;{{$principal_comment?$principal_comment:""}}</b>
-                 <hr style="font-weight: normal">
+                @if ($report->isPrincipalComment)
+                  <b> Principal's/Head Teacher's Comment:&nbsp;{{$principal_comment?$principal_comment:""}}</b>
+                <hr style="font-weight: normal">
+                  @endif
+
             </td>
                     </tr>
                 </table>
@@ -1327,7 +1268,8 @@ a.text-dark:hover, a.text-dark:focus {
 </div>
                 </div>
                 <center>
-                <div class=" text-center py-2"><span><b>Authorized Signature:&nbsp;</b ><img src="{{public_path('img/signatures/'.$signature->photo)}}" class="ml-2 img-result " width="30px" height="30px" onerror="this.style.display='none'"></span></div>
+                <div class=" text-center py-2"><span><b>Authorized Signature:&nbsp;</b ><img src="{{public_path('img/signatures/'.$signature->photo)}}"
+                    alt="sign" class="ml-2 img-result " width="30px" height="30px" onerror="this.style.display='none'"></span></div>
                 </center>
 
 

@@ -21,11 +21,11 @@
 
 
 
-        <div class="row " v-if="$gate.isAdminOrTutor()" >
+        <div class="col-md-12 " v-if="$gate.isAdminOrTutor()">
           <div class="col-12">
             <div class="card card-navy card-outline col-12">
               <div class="card-header ">
-                <div class="row col-12">
+                <div class="col-md-12">
 
                 <div v-show="$gate.isAdminOrTutor()" class="form-group col-10">
                              <select
@@ -47,7 +47,10 @@
                         <has-error :form="form" field="level"></has-error>
                     </div>
                        <div class="card-tools float-right col-md-2">
-                           <button class="btn btn-success btn-sm float-right m-2" @click="set_AddToList">Add Subjects  <i class="fas fa-user-plus fa-fw"></i></button></div>
+                           <button class="btn btn-success btn-sm float-right m-2" @click="set_AddToList">Add Subjects From Bank </button>
+                           <button class="btn btn-primary btn-sm float-right m-2" @click="newModal">Clone From Prev. Level  </button>
+                           </div>
+
                     <div class="form-group col-md-6" v-show="addToList">
                       <select
                       class="form-control"
@@ -59,23 +62,16 @@
                       </select>
                  </div>
                 <div class="form-group col-md-6" v-show="addToList">
-                             <select
-                    name="subject_id"
-                    id="subject_id"
-                    :class="{'is-invalid':form.errors.has('subject_id')}"
-                    class="form-control"
-                    v-model="form.subject_id"
-                   @change="AddSubject"
-
-                  >
-                    <option value selected>Select subject to Add to list</option>
-                    <option
-                      v-for="subject in subjects"
-                      :key="subject.id"
-                      :value="subject.id"
-                    >{{subject.name}}</option>
-                  </select>
-                        <has-error :form="form" field="subject"></has-error>
+                              <label>Subjects</label>
+                            <multiselect
+                        v-model="form.subjects"
+                        :options="listOptions"
+                       placeholder="Select subjects"
+                       placeholder-as-label="true"
+                        style="color:black"
+                            />
+                       <br/>
+<button class="btn btn-primary" @click="AddSubject">Add</button>
                     </div>
 
                  </div>
@@ -128,28 +124,32 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-                    <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New</h5>
+                    <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Cone Subjects</h5>
                     <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update subject's Info</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-       <form @submit.prevent="editmode ? updateSubject() : createSubject()">
+       <form @submit.prevent="editmode ? updateSubject() : cloneSubjects()">
       <div class="modal-body">
 
                 <div class="form-group">
-                    <input type="text" name="name" placeholder="Enter Name" id="name"
-                   class="form-control" :class="{ 'is-invalid': form.errors.has('name') }"
-                   v-model="form.name" >
-                <has-error :form="form" field="name"></has-error>
-                 </div>
+                    <label>Clone From</label>
+                   <select
+                    name="level_id"
+                    id="levl_id"
+                    :class="{'is-invalid':form.errors.has('from_id')}"
+                    class="form-control"
+                    v-model="form.from"
 
-                 <div class="form-group">
-                    <input type="text" name="code" placeholder="Enter Name"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('code') }"
-                   v-model="form.code"
-                    >
-                <has-error :form="form" field="code"></has-error>
+                  >
+                    <option value selected>Select Level to clone from</option>
+                    <option
+                      v-for="level in levels"
+                      :key="level.id"
+                      :value="level.id"
+                    >{{level.level_name}}</option>
+                  </select>
                  </div>
 
 
@@ -158,7 +158,7 @@
             <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
-                    <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
+                    <button v-show="!editmode" type="submit" class="btn btn-primary">Clone</button>
 
            </div>
 </form>
@@ -182,17 +182,20 @@
                 addToList:false,
                 subjects:{},
                 levels:{},
+                level_id:'',
                 subjects_list:'',
                 selected_file:'',
                 counter:0,
-
+           listOptions:[],
                   form: new Form({
                       type:'',
                     id : '',
                     name:'',
                     code: '',
                     level_id:'',
-                    subject_id:''
+                    subject_id:'',
+                    subjects:[],
+                    from:''
 
                 }),
 
@@ -228,13 +231,13 @@
             },
             editModal(subject){
                 this.editmode = true;
-                this.form.reset();
+               // this.form.reset();
                 $('#addNew').modal('show');
                 this.form.fill(subject);
             },
             newModal(){
                 this.editmode = false;
-                this.form.reset();
+                //this.form.reset();
                 $('#addNew').modal('show');
             },
             set_AddToList(){
@@ -259,6 +262,7 @@
                     this.$Progress.finish();
 
                       Fire.$emit('AfterCreate');
+                      this.form.subjects=[];
                 })
                 .catch(()=>{
 
@@ -278,7 +282,8 @@
 
                         // Send request to the server
                          if (result.value) {
-                                axios.delete('api/delete_list/'+id).
+
+                                axios.delete(`/api/delete_list/${id}`).
                                 then(()=>{
                                         swal.fire(
                                         'Deleted!',
@@ -296,15 +301,20 @@
 
                 if(this.$gate.isAdminOrTutor()){
 
-                    axios.get("api/load_list").then( res  => {
+                    axios.get("api/load_list")
+                    .then( res  => {
                       this.subjects = res.data;
-                           console.log(this.subjects)
-                          }
-                      );
+                           res.data.forEach(subject => {
+           this.listOptions.push(
+           {
+              id:subject.id,
+              label:subject.name,
+              value:subject.id
+            }
+      )
+  });
                 }
-
-
-            },
+)}},
              loadSubjects_list(){
                if(this.$gate.isAdmin()){
                  console.log(this.$gate.isAdmin());
@@ -321,7 +331,33 @@
  //console.log(res);
      })
      .catch(err=>{});
-             }}
+             }},
+
+          cloneSubjects(){
+               this.$Progress.start()
+                 const from=this.form.from
+                 const to=this.form.level_id
+                 console.log( [from, to])
+                  axios.post(`/api/cloneSubjects/${from}/${to}`)
+                        .then(res=>{
+                             $('#addNew').modal('hide')
+                             toast.fire({
+                        type: 'success',
+                        title: 'subject added successfully'
+                        })
+                        this.$Progress.finish()
+                         Fire.$emit('AfterCreate');
+                        })
+                        .catch(err=>{
+                           toast.fire({
+                        type: 'success',
+                        title: err.message
+                        })
+                        })
+             }
+
+
+
         },
 
 

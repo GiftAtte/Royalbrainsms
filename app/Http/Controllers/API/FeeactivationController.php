@@ -9,6 +9,8 @@ use App\StudentFees;
 use App\Fee_description;
 use App\Fee_group;
 use App\Student;
+use App\Http\Controllers\API\StudentController;
+
 class FeeactivationController extends Controller
 {
 
@@ -24,16 +26,22 @@ class FeeactivationController extends Controller
 
     public function loadActivation($feegroup_id)
     {
-        $Ecopay=new EcopayController();
-      $report=Fee_group::findOrFail($feegroup_id);
-         $amount=Fee_description::where('feegroup_id',$feegroup_id)->sum('amount');
-      $description= \DB::table('students')->where('class_id',$report->level_id)
-        ->leftJoin('student_fees', function($join) use($feegroup_id)
+      $Ecopay=new EcopayController();
+      $description=[];
+     // $students=null;
+      $report=Fee_group::with('levels','fee_description')->where('id',$feegroup_id)->first();
+      $amount=Fee_description::where('feegroup_id',$feegroup_id)->sum('amount');
+
+
+       // $students=$this->getStudents($report);
+
+     $description =$this->getStudents($report)
+                  ->leftJoin('student_fees', function($join) use($feegroup_id)
         {
             $join->on('student_fees.student_id', '=', 'students.id')
             ->where('student_fees.feegroup_id',$feegroup_id);
         })->select(\DB::raw('CONCAT(students.surname," ", students.first_name)as name, students.id as id,
-         students.accountNumber as accountNumber, students.id as student_id, student_fees.activation_status as activation_status,student_fees.amount as amount_paid'))
+         students.accountNumber as accountNumber, students.id as student_id, student_fees.activation_status as activation_status,student_fees.amount as amount_paid , student_fees.created_at as paidAt'))
          ->distinct('students.id')->orderBy('name')
         ->get();
 
@@ -43,7 +51,7 @@ class FeeactivationController extends Controller
        ->whereNotNull('accountNumber')
        ->pluck('id');
          $walletDetails=[];
-         if(count($accountNumbers) > 0){
+         if(count($accountNumbers) > 0 && $report->paystack_key){
        for($i=0;$i<count($accountNumbers);++$i){
            $account=$Ecopay->getAccountBalance($accountNumbers[$i]);
             array_push($walletDetails, ['studentId'=> $accountNumbers[$i],'balance'=>$account['balance']]);
@@ -184,9 +192,33 @@ class FeeactivationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function confirmPayments(Request $request)
     {
-        //
+      $feeSum=Fee_description::whereIn('feegroup_id',[$request->feegroup_id])
+               ->sum('amount')  ;
+               $generator=new StudentController();
+
+               StudentFees::whereIn('student_id',$request->studentIds)
+                         ->whereIn('feegroup_id',[$request->feegroup_id])
+                         ->delete() ;
+                         $feegroup_id=$request->feegroup_id;
+                         foreach ($request->studentIds as $student_id) {
+                             $transctionId=$generator->generateRandomString(12);
+                           StudentFees::create([
+                                'feegroup_id'=>$feegroup_id,
+                                'student_id'=>$student_id,
+                                'amount'=>$feeSum,
+                                'activation_status'=>1,
+                                'message'=>'Payments completed',
+                                  'transaction_id'=>$transctionId,
+                                  'reference_id'=>$transctionId,
+                            ]);
+                         }
+                         return [
+                             'status_code'=>200,
+                             'status'=>'success',
+                             'students'=>$request->studentIds
+                         ];
     }
 
     /**
@@ -195,8 +227,45 @@ class FeeactivationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function getStudents($report)
     {
-        //
+        if($report->fee_type==='CLASS-BASED'){
+       return \DB::table('students')->where('class_id',$report->level_id);
+         }
+   if($report->fee_type==='GENERAL-BASED'){
+      return \DB::table('students')->where('school_id',$report->school_id);
+    }
+    if($report->fee_type==='NEW-CLASS-BASED'){
+      return \DB::table('students')->where('class_id',$report->level_id)->where('is_new',1);
+
+    }
+     if($report->fee_type==='NEW-BASED'){
+      return \DB::table('students')->where('school_id',$report->school_id)->where('is_new',1);
+
+    }
+    }
+
+    public function updatePayment(Request $request){
+
+            if($request->updateType==='CREDIT')
+            {
+                return $this->pay($request);
+            }
+            $feeSum=Fee_description::whereIn('feegroup_id',[$request->feegroup_id])
+               ->sum('amount')  ;
+           $student= StudentFees::where([['student_id',$request->student_id],['feegroup_id',$request->feegroup_id]])
+                        ->first();
+                          $student->amount=$student->amount-$request->amount;
+                          if($student->amount-$feeSum>=0){
+                            $student->activation_status=0;
+                          }else{
+                              $student->activation_status=1;
+                          }
+                          $student->save();
+                          return [
+                              'status_code'=>0,
+                              'status'=>'success'
+
+                          ];
     }
 }

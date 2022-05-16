@@ -107,6 +107,7 @@ else{
                     'class_id' => $request['class_id'],
                     'arm_id' => $request['arm_id'],
                     'school_id' =>$school->id,
+                    'is_new'=>$request->is_new,
                 ])->id;
                    //  $email=strtolower('stud'.$id.'@'.$school->short_name.'.com');
                     //  $user->name=$request->surname."".$request->first_name;
@@ -256,7 +257,9 @@ else{
 
 
         if ($search = \Request::get('q')) {
-            $users = Student::with('levels')->where(function($query) use ($search){
+            $users = Student::with('levels')
+             ->whereIn('school_id',[auth('api')->user()->school_id])
+             ->where(function($query) use ($search){
                 $query->where('surname','LIKE',"%$search%")
                         ->orWhere('first_name','LIKE',"%$search%")
                         ->orWhere('middle_name','LIKE',"%$search%");
@@ -317,6 +320,7 @@ if(!empty($id)){
                               'blood_group'=>$student['blood_group'],
                               'arm_id'     =>$student['arm_id'],
                                'reg_date'=>$student['reg_date'],
+                               'is_new'=>$student['is_new'],
                                'school_id'=>$school->id,
                 ];
 
@@ -359,21 +363,50 @@ public function exportLogin(){
 
 
 
-   $student_login=DB::table('login_details')->whereNotNull('login_details.student_id')->where('login_details.school_id',auth('api')->user()->school_id)
-   ->leftJoin('arms','login_details.arm_id','=','arms.id')
-   ->join('levels','login_details.level_id','=','levels.id')
-   ->crossJoin('users','login_details.student_id','=','users.student_id')
-   ->select('login_details.student_id','login_details.name','login_details.email','login_details.password','login_details.level_id',
-   'levels.level_name','login_details.portal_id','users.photo','login_details.created_at','arms.name as arm')
-   ->orderby('levels.level_name')
-   ->orderby('arm')
-   ->orderby('login_details.name')
-   ->get();
+   $student_login = DB::table('students')
+                ->where('students.school_id',auth('api')->user()->school_id)
+                ->whereNotNull('students.arm_id')
+                ->leftJoin('arms', 'students.arm_id', '=', 'arms.id')
+                ->join('levels', 'students.class_id', '=', 'levels.id')
+               // ->where('levels.is_history',1)
+                ->join('login_details', 'students.id', '=', 'login_details.student_id')
+                ->crossJoin('users', 'students.id', '=', 'users.student_id')
+                ->select(
+                    'students.id',
+                    'students.surname',
+                    'students.first_name',
+                    'students.middle_name',
+                    'login_details.email',
+                    'login_details.password',
+                    'students.class_id',
+                    'levels.level_name',
+                    'users.portal_id',
+                    'users.photo',
+                    'login_details.created_at',
+                    'arms.name as arm',
+                    'users.id as userId',
+                    'users.isActive as isActive'
+                )
+                ->orderby('students.surname')
+                ->orderby('levels.level_name')
+                ->orderby('arm')
+
+                ->get();
    $staff_login=DB::table('login_details')->whereNotNull('staff_id')->where('school_id',auth('api')->user()->school_id)
     ->select('name','email','password','staff_id','portal_id','created_at')->orderby('level_id')->get();
     $num_students=count($staff_login);
     $num_staff=count($staff_login);
-   return response()->json(['student_login'=>$student_login,'staff_login'=>$staff_login,'num_student'=>$num_students,'num_staff'=>$num_staff]);
+
+     $parent_login=DB::table('login_details')->whereNotNull('parent_id')->where('school_id',auth('api')->user()->school_id)
+             ->select('name','email','password','parent_id','portal_id','created_at')->orderby('name')->get();
+
+   return response()->json(
+       ['student_login'=>$student_login,
+       'staff_login'=>$staff_login,
+       'num_student'=>$num_students,
+       'num_staff'=>$num_staff,
+        'parent_login'=>$parent_login
+    ]);
         }
 
         public function exportLogins($level_id,$arm_id,$isAccountNumbers=null){
@@ -434,7 +467,19 @@ else{
              ->select('name','email','password','staff_id','portal_id','created_at')->orderby('level_id')->get();
              $num_students=count($staff_login);
              $num_staff=count($staff_login);
-            return response()->json(['student_login'=>$student_login,'staff_login'=>$staff_login,'num_student'=>$num_students,'num_staff'=>$num_staff]);
+
+             $parent_login=DB::table('login_details')->whereNotNull('parent_id')->where('school_id',auth('api')->user()->school_id)
+             ->select('name','email','password','parent_id','portal_id','created_at')->orderby('name')->get();
+
+
+
+            return response()->json(
+            ['student_login'=>$student_login,
+            'staff_login'=>$staff_login,
+            'num_student'=>$num_students,
+            'num_staff'=>$num_staff,
+            'parent_login'=>$parent_login
+        ]);
                  }
 
 
@@ -451,4 +496,20 @@ else{
                     }
                 // DB::table($userTable)->where('age', '<', 18)->update(array('under_18' => 1));
         }
+
+
+
+public function importBio(Request $request){
+    if($request->has('file')){
+
+   $data=array_map('str_getcsv',file($request->file));
+    $header=$data[0];
+    unset($data[0]);
+
+    
     }
+}
+
+}
+
+

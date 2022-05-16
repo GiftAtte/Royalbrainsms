@@ -299,7 +299,9 @@
         },
 
         created() {
-
+if(this.$gate.isParent()){
+    this.$router.push(`/parent_profile/parent/${window.user.parent_id}`);
+}
 
         // this.$route.params.id
         }

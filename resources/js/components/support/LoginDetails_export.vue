@@ -78,6 +78,22 @@
 
                     </td>
                   </tr>
+                  <tr>
+                    <td>3</td>
+                    <td> Parents Logins</td>
+                    <td>
+     <export-excel
+       class="btn btn-primary"
+       :data="parent_login"
+
+     >
+       Download Data
+       <i class="fa fa-download"></i>
+     </export-excel>
+
+
+                    </td>
+                  </tr>
                 </tbody></table>
               </div>
               <!-- /.card-body -->
@@ -103,7 +119,7 @@
 <script>
  import {mapState} from "vuex";
     export default {
-      computed: mapState(['student_login','staff_login']),
+      computed: mapState(['student_login','staff_login','parent_login']),
 
         data() {
             return {

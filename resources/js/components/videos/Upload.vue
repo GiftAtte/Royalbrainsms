@@ -17,13 +17,12 @@
       </div><!-- /.container-fluid -->
     </div>
 
-
   <loading :active.sync="isLoading"
         :can-cancel="false"
         :on-cancel="onCancel"
         color="blue"
         :is-full-page="fullPage"></loading>
-        <div class="row " v-if="this.$gate.isAdminOrTutorOrStudent()">
+        <div class="row " v-if="this.$gate.isAdminOrTutorOrStudentOrParent()">
           <div class="col-12">
             <div >
               <div class="card card-navy card-outline">
@@ -31,7 +30,9 @@
 
                 <div class="card-header">
 
-               <button class="btn btn-success float-right m-2" @click="newModal">Add New <i class="fas fa-user-plus fa-fw"></i></button>
+               <button class="btn btn-success float-right m-2"
+               v-show="$gate.isAdminOrTutor()"
+                @click="newModal">Add New <i class="fas fa-user-plus fa-fw"></i></button>
                 </div>
 
 
@@ -58,7 +59,7 @@
                     <td>{{video.created_at | myDate}}</td>
 
                     <td class="row">
-                        <router-link :to="`/watch_video/${video.video_path}`" class="btn bt-primary btn-sm">
+                        <router-link :to="`/watch_video/${video.id}`" class="btn bt-primary btn-sm">
                         <i class="fa fa-eye"></i> Watch</router-link>
 
                         /
@@ -82,7 +83,7 @@
           </div>
         </div>
         </div>
-        <div v-if="!$gate.isAdminOrTutorOrStudent()">
+        <div v-if="!$gate.isAdminOrTutorOrStudentOrParent()">
             <not-found></not-found>
         </div>
 
@@ -92,7 +93,7 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New</h5>
-                    <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update User's Info</h5>
+                    <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update Vido</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -124,7 +125,10 @@
 
 
            <div class=" form-group">
-               <input type="file"  ref="file" @change="setFile" class=" form-control">
+               <input type="text"  v-model="form.video_path" 
+               class=" form-control"
+              placeholder="youtube video link"
+               >
 
            </div>
 
@@ -165,6 +169,7 @@
                  id:'',
                 level_id:'',
                 title:'',
+                video_path:''
 
                 }),
 
@@ -244,7 +249,7 @@
             },
            loadVideos(){
 
-                if(this.$gate.isAdminOrTutorOrStudent()){
+                if(this.$gate.isAdminOrTutorOrStudentOrStudent()){
                     axios.get("/api/videos").then( res  => {
                       this.videos = res.data;
                            console.log(this.videos)
@@ -261,6 +266,7 @@
            formData.append('file',this.file);
            formData.append('level_id',this.form.level_id);
            formData.append('title',this.form.title);
+           formData.append('video_path',this.form.video_path)
             console.log(this.file);
           axios.post('/api/videos',formData)
            .then(res=>{

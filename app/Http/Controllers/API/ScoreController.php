@@ -16,6 +16,7 @@ use App\Level_sub;
 use App\CrecheDomain;
 use App\Level;
 use App\Assessment;
+use App\Attendance;
 use App\CheckResult;
 use App\Staff_comment;
 use App\TeachersComment;
@@ -830,15 +831,22 @@ public function studenResult( $report_id, $student_id=null)
     $scoreArr=[];
     $scores=null;
     $summary=null;
+     $report=Report::with(['levels','sessions','terms'])->where('id',$report_id)->first();
  // return Mark:: where([['subject_id',98],['level_id',28]])->whereNotIn('report_id',[140,141,22])->get();
     $principal_sign=User::where([['type','principal'],['school_id',auth('api')->user()->school_id]])->select('photo')->first();
-      if($student_id===null){
-        $student_id=auth('api')->user()->student_id;
+      if($student_id==='null'||$student_id===null){
+        $user=auth('api')->user();
+          if($user->type==='parent'){
+        $student_id=Student::where([['class_id',$report->level_id],['parent_id',$user->parent_id]])->first()->id;
+          }else{
+               $student_id=$user->student_id;
+          }
+
       }
 
 
         $comment=Result_activation::where([['report_id',$report_id],['student_id',$student_id]])->first();
-      $report=Report::with(['levels','sessions','terms'])->where('id',$report_id)->first();
+      $attendance=Attendance::where([['student_id',$student_id],['report_id',$report_id]])->first();
           // MADONNA ANNUAL
     // $pastTotal=Mark::whereIn('level_id',[$report->level_id])->where('student_id',$student_id)
     //           ->whereNotIn('report_type',['mid_term','default-midterm','default-result'])
@@ -862,29 +870,23 @@ public function studenResult( $report_id, $student_id=null)
 
   $level_sub=Level_sub::where('level_id',$report->level_id)->pluck('subject_id');
       //Mark::where('report_id',$report_id)->whereNotIn('subject_id',$level_sub)->distinct('subject_id')->delete();
-$student=Student::findOrFail($student_id);
+    $student=Student::findOrFail($student_id);
      $arm=Arm::findOrFail($student->arm_id);
     // $this->resultSummary($report_id, $student_id,$student->arm_id);
     $user=User::with(['students','school'])->where('student_id',$student_id)->first();
     $grading=Grading::whereIn('group_id',[$report->gradinggroup_id])->where('school_id',$user->school_id)->get();
 
-if($report->type==='creche'){
+    $creche=$this->getCrecheComment($report,$student->id);
+   if($report->type==='creche'){
+    $scores=$creche['crecheComment'];
+    $summary=$creche['summary'];
 
-    $domains=CrechestudentDomain::where([['report_id',$report_id],['student_id',$student_id]])->distinct('domain_id')->pluck('domain_id');
-    for($i=0;$i<count($domains);++$i){
-
-        $subdomains=  CrechestudentDomain::where([['domain_id',$domains[$i]],['report_id',$report_id],['student_id',$student_id]])->with(['ratings','subdomains'])->get();
-        $domain=CrecheDomain::findOrFail($domains[$i]);
-            array_push($scoreArr,['domain'=>$domain->name,'subdomains'=>$subdomains]);
-    }
-    $scores=collect($scoreArr);
-    $summary=CrechestudentDomain::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
-}else{
-   $scores=Mark::whereIn('report_id',[$report_id])->with('subjects')
-    ->where([['student_id',$student_id],['type','Academic']])->whereNotIn('total',[0])
-    ->distinct('subject_id')->get();
-    $summary=Result::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
-}
+     }else{
+      $scores=Mark::whereIn('report_id',[$report_id])->with('subjects')
+     ->where([['student_id',$student_id],['type','Academic']])->whereNotIn('total',[0])
+     ->distinct('subject_id')->get();
+     $summary=Result::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
+     }
     $noneAcademic=Mark::whereIn('report_id',[$report_id])->with('subjects')
     ->where([['student_id',$student_id],['type','None Academic']])->whereNotIn('total',[0])
     ->distinct('subject_id')->get();
@@ -895,9 +897,10 @@ if($report->type==='creche'){
 
         $LDomain=$this->learningDomain($student_id,$report_id);
 
-        return response()->json(['principal_comment'=>$principal_comment,'scores'=>$scores,'summary'=>$summary,'user'=>$user,'pastTotal'=>$collect,
-    'comment'=>$comment,'signature'=>$principal_sign, 'staff_comment'=>$staff_comment,
-     'report'=>$report,'arm'=>$arm,'gradings'=>$grading,'noneAcademic'=>$noneAcademic,'LDomain'=>$LDomain]);
+        return response()->json(['principal_comment'=>$principal_comment,'scores'=>$scores,'summary'=>$summary,'user'=>$user,
+         'pastTotal'=>$collect,'attendance'=>$attendance,
+         'comment'=>$comment,'signature'=>$principal_sign, 'staff_comment'=>$staff_comment, 'crecheComment'=>$creche['crecheComment'],
+         'report'=>$report,'arm'=>$arm,'gradings'=>$grading,'noneAcademic'=>$noneAcademic,'LDomain'=>$LDomain]);
 
 
 
@@ -952,6 +955,25 @@ public function staffComment($student_id,$report_id){
         public function learningDomain($student_id,$report_id){
             return Assessment::with('Ldomain')->where([['report_id',$report_id],['student_id',$student_id]])->get();
         }
+
+
+        public function getCrecheComment($report,$student_id){
+      $summary=null;
+      $scoreArr=[];
+    $domains=CrechestudentDomain::where([['report_id',$report->id],['student_id',$student_id]])->distinct('domain_id')->pluck('domain_id');
+    for($i=0;$i<count($domains);++$i){
+
+        $subdomains=  CrechestudentDomain::where([['domain_id',$domains[$i]],['report_id',$report->id],['student_id',$student_id]])->with(['ratings','subdomains'])->get();
+        $domain=CrecheDomain::findOrFail($domains[$i]);
+            array_push($scoreArr,['domain'=>$domain->name,'subdomains'=>$subdomains]);
+    }
+    $scores=collect($scoreArr);
+    if($report->type==='creche'){
+      $summary=CrechestudentDomain::with(['student'])->where([['report_id',$report->id],['student_id',$student_id]])->first();
+    }
+  return ['crecheComment'=>$scores,'summary'=> $summary];
+}
+
 
 public function importExcel( Request $request){
 
@@ -1105,7 +1127,7 @@ foreach($scoreArr as $score){
      if($report->type==='terminal'){
       $score['progress_status']=$this->grade($score['annual_average'],$report->gradinggroup_id,auth('api')->user()->school_id)['progress_status'];
       $score['annual_grade']=$this->grade($score['annual_average'],$report->gradinggroup_id,auth('api')->user()->school_id)['grade'];
-      //$score['annual_position']=$this->annualRanking($ScoreCollects,$score['annual_average']);
+      $score['annual_position']=$this->annualRanking($ScoreCollects,$score['annual_average']);
     }else{
      $score['progress_status']=$this->grade($score['cummulative_average'],$report->gradinggroup_id,auth('api')->user()->school_id)['progress_status'];
      }
@@ -1219,7 +1241,7 @@ if($report->type==='terminal' && $report->term_id===3){
 
     }
     if($report->term_id===3){
-       $this->cummulativePerformance($request->report_id,$subject_id,'terminal');
+       $this->cummulativePerformance($request->report_id,$subject_id,'default_result');
     }
 
 
@@ -1300,7 +1322,7 @@ public function getRanking($scoresCollection,$total){
     public function cummulativePerformance($report_id,$subject_id,$reportType){
             //  $level_marks=null;
          if($reportType==='terminal'){
-              return  $level_marks=Mark::whereIn('report_id',[$report_id])
+                 $level_marks=Mark::whereIn('report_id',[$report_id])
                      ->whereNotIn('grand_total',[0])
                      ->where('subject_id',$subject_id)
                      ->select('id','student_id','annual_total as total','annual_position')

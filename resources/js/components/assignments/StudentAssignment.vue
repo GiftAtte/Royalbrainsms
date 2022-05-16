@@ -4,7 +4,7 @@
 
 
 
-        <div class="row " v-if="$gate.isStudent()">
+        <div class="row " v-if="$gate.isStudentOrParent()">
           <div class=" col-md-12">
             <div >
               <div class="card-header mb-2">
@@ -85,7 +85,7 @@
                         <router-link v-show="!assignment.is_pdf" :to="`/noteviewer/${assignment.id}`" tag="a" target="_blank" >view/download</router-link>
                         <router-link v-show="assignment.is_pdf" :to="`/pdfviewer/${assignment.id}`" tag="a" >view /</router-link>
                        <a  href="#" v-show="assignment.is_pdf"  @click="downloadFile(assignment.id)"  title="download">download</a>
-                        <a v-show="$gate.isStudent()" href="#"  @click="getNote(assignment)">Do Assignment</a>
+                        <a v-show="$gate.isStudentOrParent()" href="#"  @click="getNote(assignment)">Do Assignment</a>
                         /
                         <a href="#" v-show="$gate.isAdminOrTutor()"  @click="deleteAssignment(assignment.id)" class="pl-2" title="delete">
                             <i class="fa fa-trash red"></i>
@@ -106,7 +106,7 @@
           </div>
         </div>
 
-        <div v-if="!$gate.isAdminOrTutorOrStudent()">
+        <div v-if="!$gate.isAdminOrTutorOrStudentOrParent()">
             <not-found></not-found>
         </div>
 

@@ -229,6 +229,9 @@ export default {
     };
   },
   mounted() {
+      if(this.$gate.isParent()){
+          this.$router.push('/parents/bill')
+      }
     axios.get("/api/getAllBills").then((res) => {
       this.bills = res.data;
     });

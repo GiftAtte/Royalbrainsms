@@ -21,7 +21,7 @@
 
 
         <div class="content " v-if="$gate.isAdminOrTutorOrStudent()">
-          <div class="col-12">
+          <div class="col-md-12">
             <div class="card card-navy card-outline">
               <div class="card-header">
                 <div class="row float-right">
@@ -35,7 +35,7 @@
                  </div>
               </div>
               <!-- /.card-header -->
-              <div class="card-body table-responsive ">
+              <div class="card-body ">
                 <table class="table table-hover">
                   <tbody>
                     <tr>

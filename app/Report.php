@@ -8,9 +8,34 @@ class Report extends Model
 {
     //
     protected $table='reports';
-    protected $fillable=['level_id','term_id','session_id','title','term_start','term_end','school_days','next_term',
-    'school_id','header','arm_id','type','gradinggroup_id','isCummulative',
-    'isCa2','isCa3'
+    protected $fillable=[
+        'level_id',
+        'term_id',
+        'session_id',
+        'title',
+        'school_days',
+        'next_term',
+    'school_id',
+    'header',
+    'arm_id',
+    'type',
+    'gradinggroup_id',
+    'isCummulative',
+    'isCa2','isCa3',
+    'isAttendance',
+                'isPrincipalComment',
+                'isTeacherComment',
+                'isProgressStatus',
+                'isMaxScore',
+                'isMinScore',
+                'isSubjectPosition',
+                'isArmPosition',
+                'isClassPosition',
+                'ca1Percent',
+               'ca2Percent',
+                'ca3Percent',
+                'examPercent',
+                'isLearningDomain'
 ];
 
     public function levels()

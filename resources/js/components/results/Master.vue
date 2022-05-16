@@ -26,7 +26,7 @@
             <div class="card card-navy card-outline">
                 <div class="card-header">
 
- <export-excel
+ <export-excel v-if="masterSheet.length"
        class="btn btn-primary"
          name="masterheet"
        :data="masterSheet"
@@ -34,6 +34,7 @@
        Download Excel
        <i class="fa fa-download"></i>
      </export-excel>
+     <h2 class="text-center text-danger" v-if="!reports.length && !masterSheet.length">Loading........</h2>
     <button class="btn btn-primary float-right pl-2" @click="printResults"><i class="fa fa-print"></i>Print Result</button>
 
     </div>
@@ -52,8 +53,10 @@
 <h5 class="pt-2 text-danger">Results Master Sheet</h5>
 </div>
 </div>
-<div class="container text-center text-primary text-uppercase"><h4>{{reports.terms.name}} RESULTS MASTER SHEET FOR {{reports.levels.level_name}}, {{reports.sessions.name}} Academic Session </h4></div>
-        <div class="container">
+<div class="container text-center text-primary text-uppercase">
+    <h4 v-if="reports">{{reports.terms.name}} RESULTS MASTER SHEET FOR {{reports.levels.level_name}} {{ $route.params.arm_id?arm:'' }},
+     {{reports.sessions.name}} Academic Session </h4></div>
+        <div class="col-md-12 ">
             <table class="table table-sm table-bordered m-2 text-center table-striped mt-2 table-info myTable ">
                 <tbody>
                     <tr>
@@ -72,12 +75,12 @@
                 </tbody>
             </table>
             </div>      <!-- /.card-header -->
-              <div class="card-body table-responsive">
+              <div class=" table-responsive">
                 <table class="  table table-hover myTable table-sm table-bordered" id="data_tb">
                   <tbody>
                     <tr class=" text-capitalize">
                         <th>Names/Subjects</th>
-                        <th  v-for="subject in subjects" :key="subject.id" class=" text-capitalize">
+                        <th v-if="reports"  v-for="subject in subjects" :key="subject.id" class=" text-capitalize">
                           {{subject.subjects.name}}
                         </th>
 
@@ -88,7 +91,7 @@
                         <th>C P</th></tr></th>
 
                   </tr>
-                  <tr v-for="student in students" :key="student.id">
+                  <tr v-if="reports" v-for="student in students" :key="student.id">
                       <td>{{student.surname}}, {{student.first_name}} {{student.middle_name}}</td>
                       <td v-for="subject in subjects" :key="subject.id"
                        >
@@ -99,10 +102,10 @@
                        </td>
                        <td v-for="result in results" :key="result.id" v-if="result.student_id===student.id">
                           <tr>
-                            <td>{{result.annual_total}}</td>
-                            <td>{{result.annual_average}}</td>
+                            <td>{{result.total_scores}}</td>
+                            <td>{{result.average_scores}}</td>
                            <!-- <td>{{result.arm_position}}</td> -->
-                           <td>{{result.annual_position?result.annual_position:''}}</td></tr>
+                           <td>{{result.arm_position?result.arm_position:''}}</td></tr>
 
                        </td>
 
@@ -141,6 +144,7 @@
             return {
                subjects:'',
                reports:'',
+               arm:'',
                students:'',
                marks:'',
                results:'',
@@ -157,22 +161,29 @@
     mounted(){
 
             // $('#data_tb').DataTable();
-        axios.get(`/api/export_master/${this.$route.params.report_id}`)
+
+    },
+        methods: {
+            exportMaster(){
+                 axios.get(`/api/export_master/
+       ${this.$route.params.report_id}
+       /${this.$route.params.arm_id?this.$route.params.arm_id:''}`)
             .then(result => {
                this.masterSheet=result.data.mastersheet;
-
-              console.log(result.data);
+                    this.arm=result.data.mastersheet[0]['CLASS ARM']
+             // console.log(result.data);
             }).catch((err) => {
 
             })
-    },
-        methods: {
+            },
 
 printResults(){
                   window.print();
                 },
    masterCard(){
-       axios.get(`/api/master/${this.$route.params.report_id}`)
+       axios.get(`/api/master/
+       ${this.$route.params.report_id}
+       /${this.$route.params.arm_id?this.$route.params.arm_id:''}`)
        .then(res=>{
            this.students=res.data.students;
            this.subjects=res.data.subjects;
@@ -186,6 +197,11 @@ printResults(){
         created() {
 
           this.masterCard();
+          this.exportMaster()
+
+
+
+
 
             Fire.$on('searching',() => {
                 let query = this.$parent.search;

@@ -221,6 +221,9 @@ export default {
     };
   },
   mounted() {
+      if(this.$gate.isParent()){
+          this.$router.push('/parents/wallet')
+      }
     axios.get("api/arms").then((res) => {
       this.arms = res.data;
       // this.id=id;
@@ -265,7 +268,7 @@ export default {
       }
     },
     loadStudents() {
-      if (this.$gate.isAdminOrTutor()) {
+      if (this.$gate.isAdminOrTutorOrParent()) {
         axios
           .get("/api/students/" + this.level_id + "/" + this.arm_id)
           .then(({ data }) => (this.students = data));

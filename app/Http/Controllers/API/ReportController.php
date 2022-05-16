@@ -67,7 +67,25 @@ if($user->type==='tutor'){
             $arm=Has_arm::where('staff_id',$user->staff_id)->whereNotIn('level_id',$historyLevel)->first();
     return Report::with(['levels','terms'])->where([['school_id',$user->school_id],['level_id',$arm->level_id]])->latest()->paginate(10);
 }
-        return Report::with(['levels','terms'])->where('school_id',$user->school_id)->latest()->paginate(10);
+
+if($user->type==="parent"){
+$siblings=Student::whereIn('parent_id',[$user->parent_id]);
+$siblingsIlevelIds=$siblings->pluck('class_id')->toArray();
+$siblingsIDs=$siblings->pluck('id');
+$historyLevelIds=Level_history::whereIn('student_id',$siblingsIDs)->distinct('level_id')->pluck('level_id')->toArray();
+$totalLevelIds=array_merge($siblingsIlevelIds,$historyLevelIds);
+return Report::whereIn('level_id',$totalLevelIds)
+                  ->with('levels')
+                  ->leftJoin('result_activations',function($join) use($siblingsIDs){
+                      $join->on('result_activations.report_id','=','reports.id')
+                      ->whereIn('result_activations.student_id',$siblingsIDs);
+                  })
+             ->select(DB::raw('reports.*, result_activations.activation_status as activation_status'))
+             ->distinct('reports.id')  ->orderby('id','desc')->paginate(10);
+
+
+                }
+return Report::with(['levels','terms'])->where('school_id',$user->school_id)->latest()->paginate(10);
     }
 
     public function store(Request $request)
@@ -234,21 +252,29 @@ public function staffComment($average){
 }
 
 
-public function masterCard($report_id){
+public function masterCard($report_id,$arm_id=null){
     $report=Report::with(['sessions','terms','levels'])->where('id',$report_id)->first();
     $subjectsIds=Mark::where('report_id',$report_id)->distinct('subject_id')->pluck('subject_id');
     $subjects=Level_sub::where('level_id',$report->level_id)->whereIn('subject_id',$subjectsIds)->with('subjects')->get();
       $students=null;
+      $ids=null;
     if(auth('api')->user()->type==='tutor'){
         $arm=Has_arm::where('staff_id',auth('api')->user()->staff_id)->first();
         $students=Student::where([['class_id',$report->level_id],['arm_id',$arm->arms_id]])->get();
     }else{
-        $ids=Mark::where('report_id',$report_id)->distinct('student_id')->pluck('student_id');
+
+               $ids=$arm_id?
+                   Mark::whereIn('report_id',[$report_id])->where('arm_id',$arm_id)->pluck('student_id')->toArray()
+                  :Mark::whereIn('report_id',[$report_id])->pluck('student_id')->toArray();
+
+        //$ids=Mark::where('report_id',$report_id)->distinct('student_id')->pluck('student_id');
         $students=Student::whereIn('id',$ids)->get();
 
     }
 
- $marks=Mark::where('report_id',$report_id)->whereNotIn('total',[0])
+ $marks=Mark::where('report_id',$report_id)
+ ->whereIn('student_id',$ids)
+ ->whereNotIn('total',[0])
 ->orderBy('total','desc')->get();
  //positions
 $results=Result::where('report_id',$report_id)->get();
@@ -328,16 +354,21 @@ public function transcript($student_id=null)
 
 
 
-            public function export_master($report_id){
+            public function export_master($report_id,$arm_id=null){
                 $masterSheet=[];
-                $masterArr=[];
-                $subject_headers=[];
 
                 $count=0;
+                $student=null;
+              $arms=collect(Arm::where('school_id',auth('api')->user()->school_id)->get());
                 $report=Report::findOrFail($report_id);
-                $ids=Mark::whereIn('report_id',[$report_id])->distinct('student_id')->pluck('student_id');
-                $totals =Mark::whereIn('report_id',[$report_id])->get();
+                  $marks=$arm_id?
+                   Mark::whereIn('report_id',[$report_id])->where('arm_id',$arm_id)->get()
+                  :Mark::whereIn('report_id',[$report_id])->get();
+                $ids=collect($marks)->whereIn('report_id',[$report_id])->unique('student_id')->pluck('student_id');
+
+                $totals =collect($marks)->whereIn('report_id',[$report_id])->all();
                 $subjects=Level_sub::with('subjects')->where('level_id',$report->level_id)->get();
+
                 $students=Student::whereIn('id',$ids)->select('id','surname','first_name','middle_name','class_id','arm_id')->get();
 
 
@@ -350,17 +381,18 @@ public function transcript($student_id=null)
                 foreach($students as $student){
                      $arm=null;
                    $scores=collect($Allscores)->whereIn('student_id',[$student->id])->all();
-                   $total =collect($totals)->whereIn('student_id',$student->id)->sum('total');
+                   $total =collect($totals)->whereIn('student_id',$student->id)->whereNotIn('type',['None Academic'])->sum('total');
+                   $avg =collect($totals)->whereIn('student_id',$student->id)->whereNotIn('type',['None Academic'])->avg('total');
                    $name=$student->surname.' '.$student->first_name.' '.$student->middle_name;
                    $collect=collect(['STUDENT ID'=>$student->id,'NAMES'=>$name]);
-                   $subject_headers=collect(['STUDENT ID'=>'STUDENT ID','NAMES'=>'NAMES']);
+                  // $subject_headers=collect(['STUDENT ID'=>'STUDENT ID','NAMES'=>'NAMES']);
 
                     foreach($subjects as $subject){
                        $isSubject=0;
                         foreach($scores as $score){
                              $arm=$score->arm_id;
                                if($score->subject_id===$subject->subject_id){
-                                $collect=  $collect->put(strval($subject->subjects->name),round($score->total,2));
+                                $collect=  $collect->put(strval($subject->subjects->name),($score->total)>0?$score->total:'');
 
                                   $isSubject=1;
                                 //  $subject_headers=$subject_headers->put($subject->subjects->name,$subject->subjects->name);
@@ -374,9 +406,11 @@ public function transcript($student_id=null)
 
                     }
 
-                    $arms=Arm::findOrFail($arm);
+                    $thisArms=$arms->where('id',$arm)->first();
                     $collect= $collect->put('TOTAL',round($total,2));
-                    $collect= $collect->put('CLASS ARM',$arms->name);
+                    $collect= $collect->put('AVERAGE',round($avg,2));
+                    $collect= $collect->put('CLASS ARM',$thisArms->name);
+
 
 
 
@@ -426,6 +460,27 @@ public function checkReport($id){
 }
 
 
+
+public function masterSheetDownload($reportId,$arm=null){
+
+     $report=Report::with(['sessions','terms','levels'])
+              ->where('id',$reportId)
+              ->first();
+
+             $subjects=Level_sub::with('subjects')
+                        ->whereIn('level_id',[$report->level_id])
+                        ->get();
+                  $subjectIds= collect($subjects)->pluck('subject_id')  ;
+                    $scores=DB::table('marks')->whereIn('report_id',[$reportId])
+                         ->whereIn('subject_id',$subjectIds)
+                         ->select('student_id','subject_id','total')
+                         //->groupBy('student_id')
+                         ->get()     ;
+
+                       return  $scores2=collect($scores)->groupBy('student_id')
+                            ->avg('total');
+                           // ->all();
+}
 
 }
 
