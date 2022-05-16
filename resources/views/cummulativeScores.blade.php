@@ -55,13 +55,13 @@
 
 @foreach($Totals as $total)
 @if($total['subject_id']===$score->subject_id && $total['term_id']===1)
-<td>{{$total['total']?$total['total']:'-'}}</td>
+<td>{{$total['total']>0?$total['total']:'-'}}</td>
 @endif
 @endforeach
 
 @foreach ($Totals as $total)
 @if($total['subject_id']===$score->subject_id && $total['term_id']===2)
-<td>{{$total['total']?$total['total']:'-'}}</td>
+<td>{{$total['total']>0?$total['total']:'-'}}</td>
 @endif
 @endforeach
 
