@@ -95,7 +95,7 @@
                  @php
                      $count=1;
                  @endphp
- @foreach($noneAcademic as $score)
+@foreach($noneAcademic as $score)
                 <tr>
 
 <td>{{$count}}</td>

@@ -68,7 +68,7 @@
 <td>{{$score->arm_subj_position?$score->arm_subj_position:'-'}}</td>
 @endif
 <td>{{$score->narration?$score->narration:'-'}}</td>
-@endif
+
 </tr>
                 @php
                      $count=$count+1;
@@ -105,7 +105,7 @@
 <td>{{$score->arm_subj_position?$score->arm_subj_position:'-'}}</td>
 @endif
 <td>{{$score->narration?$score->narration:'-'}}</td>
-@endif
+
 </tr>
                 @php
                      $count=$count+1;
