@@ -129,7 +129,7 @@
                                         }"
                                         :height="20"
                                         :font-size="14"
-                                        :value="student.isActive"
+                                        :value="student.users.isActive"
                                         :color="'green'"
                                         :name="'activated'"
                                         class="pl-2"

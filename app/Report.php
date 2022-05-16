@@ -35,7 +35,8 @@ class Report extends Model
                'ca2Percent',
                 'ca3Percent',
                 'examPercent',
-                'isLearningDomain'
+                'isLearningDomain',
+                'isManualPrincipalComment'
 ];
 
     public function levels()

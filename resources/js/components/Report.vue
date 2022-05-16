@@ -772,6 +772,20 @@
                                         :sync="true"
                                     />
                                 </div>
+                                <div class="form-group col-md-3">
+                                    <label> Manual P. Comment</label>
+                                    <toggle-button
+                                        :label="true"
+                                        id="pcm"
+                                        :labels="{
+                                            checked: 'ON',
+                                            unchecked: 'OFF',
+                                        }"
+                                        v-model="form.isManualPrincipalComment"
+                                        :color="'green'"
+                                        :sync="true"
+                                    />
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -987,6 +1001,7 @@ export default {
                 ca2Percent: "",
                 ca3Percent: "",
                 examPercent: "",
+                isManualPrincipalComment:'',
                 isLearningDomain: true,
             }),
 

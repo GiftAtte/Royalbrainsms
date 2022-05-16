@@ -891,9 +891,14 @@ public function studenResult( $report_id, $student_id=null)
     ->where([['student_id',$student_id],['type','None Academic']])->whereNotIn('total',[0])
     ->distinct('subject_id')->get();
 
-      // $principal_comment=$this->getManualPrincipalComment($student_id,$report_id);
-      $principal_comment=$this->principalComment($summary?$summary->average_scores:0,$report->gradinggroup_id);
-       $staff_comment=$this->staffComment($student_id,$report_id);
+      // 
+       $principal_comment=null;
+       if($report->isManualPrincipalComment>0){
+           $principal_comment=$this->getManualPrincipalComment($student_id,$report_id);
+       }else{
+       $principal_comment=$this->principalComment($summary?$summary->average_scores:0,$report->gradinggroup_id);
+       }
+      $staff_comment=$this->staffComment($student_id,$report_id);
 
         $LDomain=$this->learningDomain($student_id,$report_id);
 

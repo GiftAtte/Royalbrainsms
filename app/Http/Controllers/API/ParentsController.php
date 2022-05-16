@@ -77,14 +77,14 @@ class ParentsController extends Controller
 
  public function siblings($id=null){
      if(!empty($id)){
-   $siblings=Student::with('levels','arm','parents')->where('parent_id',$id)->get();
+   $siblings=Student::with(['levels','arm','parents','users'])->where('parent_id',$id)->get();
 $parent=Parents::findOrFail($id);
 return [
        'parent'=>$parent,
        'siblings'=>$siblings
    ];
 }
- $siblings=   Student::with('levels','arm','parents')->where('parent_id',auth('api')->user()->parent_id)->get();
+ $siblings=   Student::with('levels','arm','parents','users')->where('parent_id',auth('api')->user()->parent_id)->get();
    $parent=Parents::findOrFail(auth('api')->user()->parent_id);
    return [
        'parent'=>$parent,
