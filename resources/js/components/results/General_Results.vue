@@ -49,8 +49,8 @@
 <div class="col-md-6 py-2">
 <h5><b>Name:</b>&nbsp; {{summary.student.surname}}&nbsp; {{summary.student.first_name}} &nbsp; {{summary.student.middle_name?summary.student.middle_name:''}}</h5>
 <h5><b>class:&nbsp;</b> {{report.levels.level_name}}&nbsp;{{arm.name}}</h5>
-<h5><b>Gender:&nbsp;</b> {{'-----------'}} </h5>
-<h5 ><b>Dob:</b>&nbsp; {{'-------------'}}</h5>
+<h5 v-if="report.isGender"><b>Gender:&nbsp;</b> {{'-----------'}} </h5>
+<h5 v-if="report.isDob"><b>Dob:</b>&nbsp; {{'-------------'}}</h5>
 <h5 ><b>Portal ID:</b>&nbsp; {{user.portal_id}}</h5>
 </div>
 <div class="col-md-6">
