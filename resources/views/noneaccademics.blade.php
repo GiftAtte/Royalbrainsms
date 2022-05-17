@@ -1,8 +1,9 @@
 <tr>
-<td  colspan="14" style="border:none">
-    <div class="text-center text-bold text-primary">
+<th  colspan="14" >
+   <div class="text-center text-bold text-primary">
          NON ACADEMIC SUBJECTS</div>
-</td>
+
+</th>
 </tr>
 @php
     $count=1;

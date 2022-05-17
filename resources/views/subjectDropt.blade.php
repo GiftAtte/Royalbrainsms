@@ -5,8 +5,10 @@
 <table class="table myTable table-bordered" style="width: 100%">
     <thead>
         <tr>
-            <th colspan="14"><h6 class="text-primary"><div class="text-center text-bold text-primary">
-         DROPPED SUBJECTS</div></th>
+<th colspan="14">
+    <div class="text-center text-bold text-primary">
+         DROPPED SUBJECTS</div>
+        </th>
         </tr>
     </thead>
     <tbody>

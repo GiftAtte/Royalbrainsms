@@ -1,42 +1,47 @@
-
+<style>
+    .table th{
+   text-transform: uppercase;
+   font-weight: bold
+    }
+</style>
 <div>
-                <table class=" table table-bordered text-capitalized myTable">
+                <table class="table table-bordered myTable table-capitalize">
 
                 <tr class="text-center text-capitalized table-striped" style="vertical-align: center;background-color:rgb(15, 15, 112); color:rgb(251, 249, 246)">
-                <td>S/N</td>
-                <td>Subject</td>
-                <td>{{ $report->isCa2?'CA1':'CA' }}<br/>[{{ $report->ca1Percent?($report->ca1Percent.'%'):'' }}]</td>
+                <th>S/N</th>
+                <th>Subject</th>
+                <th>{{ $report->isCa2?'CA1':'CA' }}<br/>[{{ $report->ca1Percent?($report->ca1Percent.'%'):'' }}]</th>
                 @if ($report->isCa2)
-                <td>CA2 <br/>[{{ $report->ca2Percent?($report->ca2Percent.'%'):'' }}]</td>
+                <th>CA2 <br/>[{{ $report->ca2Percent?($report->ca2Percent.'%'):'' }}]</th>
                 @endif
                 @if ($report->isCa3)
-                <td>CA3 <br/>[{{ $report->ca3Percent?($report->ca3Percent.'%'):'' }}]</td>
+                <th>CA3 <br/>[{{ $report->ca3Percent?($report->ca3Percent.'%'):'' }}]</th>
                 @endif
-                <td>Exam <br/>[{{ $report->examPercent?($report->examPercent.'%'):'' }}]</td>
+                <th>Exam <br/>[{{ $report->examPercent?($report->examPercent.'%'):'' }}]</th>
                 @if($report->term_id===3 && $report->isCummulative>0)
-                <td>1st Term</td>
-                <td>2nd Term</td>
-                <td>3rd Term</td>
-                <td>Grand<br>Total</td>
-                <td>Cumm.<br>Avg</td>
+                <th>1st Term</th>
+                <th>2nd Term</th>
+                <th>3rd Term</th>
+                <th>Grand<br>Total</th>
+                <th>Cumm.<br>Avg</th>
 
                 @else
-                <td>Total<br/>[100%]</td>
+                <th>Total<br/>[100%]</th>
                  @endif
                  @if ($report->isMinScore)
-                 <td>Lowest <br/>Score</td>
+                 <th>Lowest <br/>Score</th>
                  @endif
 
                  @if ($report->isMaxScore)
-                 <td>Highest <br/>Score</td>
+                 <th>Highest <br/>Score</th>
                  @endif
 
-                <td>Class Avg</td>
-                <td>Grade</td>
+                <th>Class Avg</th>
+                <th>Grade</th>
                 @if ($report->isSubjectPosition)
-                 <td>Subject<br/>Position</td>
+                 <th>Subject<br/>Position</th>
                 @endif
-                <td>Comment</td>
+                <th>Comment</th>
 
                 </tr>
                  @php
@@ -79,7 +84,7 @@
     <div class="text-center text-bold text-primary">
          NON ACADEMIC SUBJECTS</div>
 </td>
-   
+
  @php
                      $count=1;
                  @endphp

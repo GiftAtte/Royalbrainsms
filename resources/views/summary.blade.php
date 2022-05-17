@@ -1,6 +1,11 @@
 
+<style>
+    .table th{
+   text-transform: uppercase;
+    }
+</style>
 <tr style="border: none">
- <th colspan="8"  style="border: none"><h5 class="text-danger text-center">Results Summary</h5></th>
+ <th colspan="8"  style="border: none"><h6 class="text-danger text-center">RESULTS SAMMARY</h6></th>
  </tr>
 <table class="table table-bordered table-sm font-weight-bold  myTable" >
  <tbody>

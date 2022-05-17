@@ -59,16 +59,25 @@ hr{
 }
  .myTable tr:nth-child(even) {
   background-color: #f2f2f2;
+
 }
+
 
 
 table {
   border-collapse: collapse;
   width:98%;
-   font-size:5px;
+   font-size: 4.2px;
+
 
 }
-.table-bordered th,
+.table-bordered th{
+
+text-transform: uppercase;
+font-weight: bold;
+border: 0.25px solid rgb(209, 208, 208) !important;
+padding:1.5px;
+}
 .table-bordered td {
 
   border: 0.25px solid rgb(209, 208, 208) !important;
@@ -1124,8 +1133,12 @@ a.text-dark:hover, a.text-dark:focus {
   .container {
     width: 992px !important;
   }
-
-
+.learnig-domain{
+   font-size: xx-small !important;
+}
+.text-capitalized{
+    text-transform: capitalize !important ;
+}
 
 }
 </style>
@@ -1163,9 +1176,13 @@ a.text-dark:hover, a.text-dark:focus {
     <h6><b>Name:</b>&nbsp; {{$summary->student->surname}}&nbsp; {{$summary->student->first_name}} &nbsp; {{$summary->student->middle_name?$summary->student->middle_name:''}}</h6>
                 <h6><b>Class:&nbsp;</b> {{$report->levels->level_name}}&nbsp;{{$arm->name}}</h6>
               <h6><b>House:&nbsp;</b>-----------</h6>
-
+                   @if($report->isGender)
                  <h6><b>Gender:&nbsp;</b> {{$summary->student->gender?$summary->student->gender:'-----------'}} </h6>
+                  @endif
+                  @if ($report->isDob)
                 <h6><b>Dob:&nbsp;</b> {{$summary->student->dob?$summary->student->dob:'-----------'}} </h6>
+                  @endif
+
 
                 {{-- <h6><b>Gender:&nbsp;</b> :{{'-----------'}} </h6>
                 <h6><b>DOB:&nbsp;</b> :{{'-----------'}} </h6> --}}
@@ -1240,7 +1257,7 @@ a.text-dark:hover, a.text-dark:focus {
                 @endif
                </div>
 
-             <div class="py-2" >
+             <div class="py-1" >
 
                 <table style="width: 100%" class="  table ">
                 <tr>
@@ -1268,7 +1285,7 @@ a.text-dark:hover, a.text-dark:focus {
 </div>
                 </div>
                 <center>
-                <div class=" text-center py-2"><span><b>Authorized Signature:&nbsp;</b ><img src="{{public_path('img/signatures/'.$signature->photo)}}"
+                <div class=" text-center"><span><b>Authorized Signature:&nbsp;</b ><img src="{{public_path('img/signatures/'.$signature->photo)}}"
                     alt="sign" class="ml-2 img-result " width="30px" height="30px" onerror="this.style.display='none'"></span></div>
                 </center>
 

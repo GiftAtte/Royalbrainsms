@@ -773,7 +773,7 @@
                                     />
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label> Manual P. Comment</label>
+                                    <label> M.P.Comment</label>
                                     <toggle-button
                                         :label="true"
                                         id="pcm"
@@ -782,6 +782,34 @@
                                             unchecked: 'OFF',
                                         }"
                                         v-model="form.isManualPrincipalComment"
+                                        :color="'green'"
+                                        :sync="true"
+                                    />
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label> DOB</label>
+                                    <toggle-button
+                                        :label="true"
+                                        id="isDob"
+                                        :labels="{
+                                            checked: 'ON',
+                                            unchecked: 'OFF',
+                                        }"
+                                        v-model="form.isDob"
+                                        :color="'green'"
+                                        :sync="true"
+                                    />
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label> Gender</label>
+                                    <toggle-button
+                                        :label="true"
+                                        id="isGender"
+                                        :labels="{
+                                            checked: 'ON',
+                                            unchecked: 'OFF',
+                                        }"
+                                        v-model="form.isGender"
                                         :color="'green'"
                                         :sync="true"
                                     />
@@ -1003,6 +1031,8 @@ export default {
                 examPercent: "",
                 isManualPrincipalComment:'',
                 isLearningDomain: true,
+                isDob:true,
+                isGender:true
             }),
 
             computeForm: new Form({

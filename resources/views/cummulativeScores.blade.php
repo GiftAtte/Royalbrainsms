@@ -1,8 +1,9 @@
+
 @php
     function getTotal($obj,$subject_id,$term_id){
            $result=null;
         foreach ($obj as  $value) {
-            
+
            if($value['subject_id']===$subject_id && $value['term_id']===$term_id){
             $result=$value;
             break;
@@ -16,43 +17,43 @@
              else{
                return '-';
              }
-       
+
     }
 @endphp
 
 
 <div>
-                <table class=" table table-bordered text-capitalized myTable">
+                <table class=" table table-bordered myTable">
 
-                <tr class="text-center text-capitalized table-striped" style="vertical-align: center;background-color:rgb(15, 15, 112); color:rgb(251, 249, 246)">
-                <td>S/N</td>
-                <td>Subject</td>
-                <td>{{ $report->isCa2?'CA1':'CA' }}<br/>[{{ $report->ca1Percent?($report->ca1Percent.'%'):'' }}]</td>
+                <tr  style="vertical-align: center;background-color:rgb(15, 15, 112); color:rgb(251, 249, 246); text-transform:uppercase">
+                <th>S/N</th>
+                <th >SUBJECTS</th>
+                <th>{{ $report->isCa2?'CA1':'CA' }}<br/>[{{ $report->ca1Percent?($report->ca1Percent.'%'):'' }}]</th>
                 @if ($report->isCa2)
-                <td>CA2 <br/>[{{ $report->ca2Percent?($report->ca2Percent.'%'):'' }}]</td>
+                <th>CA2 <br/>[{{ $report->ca2Percent?($report->ca2Percent.'%'):'' }}]</th>
                 @endif
                 @if ($report->isCa3)
-                <td>CA3 <br/>[{{ $report->ca3Percent?($report->ca3Percent.'%'):'' }}]</td>
+                <th>CA3 <br/>[{{ $report->ca3Percent?($report->ca3Percent.'%'):'' }}]</th>
                 @endif
-                <td>Exam <br/>[{{ $report->examPercent?($report->examPercent.'%'):'' }}]</td>
-                <td>1st Term<br>[100%]</td>
-                <td>2nd Term<br>[100%]</td>
-                <td>3rd Term<br>[100%]</td>
-                <td>Grand<br>Total</td>
-                <td>Cumm.<br>Avg</td>
+                <th>Exam <br/>[{{ $report->examPercent?($report->examPercent.'%'):'' }}]</th>
+                <th>1ST TERM<br>[100%]</th>
+                <th>2ND TERM<br>[100%]</th>
+                <th>3RD TERM<br>[100%]</th>
+                <th>GRAND<br>TOTAL</th>
+                <th>CUMM.<br>AVG</th>
 
                  @if ($report->isMaxScore)
-                 <td>Highest <br/>Score</td>
+                 <th>HIGHEST<br/>SCORE</th>
                  @endif
                  @if ($report->isMinScore)
-                 <td>Lowest <br/>Score</td>
+                 <th>LOWEST <br/>SCORE</th>
                  @endif
-               
-                <td>Grade</td>
+
+                <th>GRADE</th>
                 @if ($report->isSubjectPosition)
-                 <td>Subject<br/>Position</td>
+                 <th>SUBJECT<br/>POSITION</th>
                 @endif
-                <td>Comment</td>
+                <th>COMMENT</th>
 
                 </tr>
 
@@ -99,7 +100,7 @@
                  @endphp
 </tr>
 
-                  
+
                 @endforeach
 @if (count($noneAcademic)>0)
    <td  colspan="14" style="border:none">

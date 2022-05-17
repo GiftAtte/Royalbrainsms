@@ -181,7 +181,7 @@
 </tr>
 <tr>
     <td colspan="14">
-<subject-dropped :scores="subjectsDropped" />
+<subjects-dropped :scores="subjectsDropped" />
     </td>
 </tr>
 </tbody>
