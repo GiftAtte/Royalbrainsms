@@ -4,8 +4,13 @@
         foreach ($obj as  $value) {
             
            if($value['subject_id']===$subject_id && $value['term_id']===$term_id){
-              
-            return $value['total'];
+            
+            if(is_numeric($value['total'])){
+                return $value['total'];
+            }
+             else{
+               return '-';
+             }
            }
         }
   return '-';
