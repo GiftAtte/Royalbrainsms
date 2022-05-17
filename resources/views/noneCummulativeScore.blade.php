@@ -75,6 +75,10 @@
                  @endphp
                 @endforeach
 @if (count($noneAcademic)>0)
+<td  colspan="14" style="border:none">
+    <div class="text-center text-bold text-primary">
+         NON ACADEMIC SUBJECTS</div>
+</td>
    
  @php
                      $count=1;

@@ -94,24 +94,27 @@
 <td>{{$score->cummulative_narration?$score->cummulative_narration:'-'}}</td>
 
 
-
-</tr>
-
-                @php
+ @php
                      $count=$count+1;
                  @endphp
+</tr>
+
+                  
                 @endforeach
 @if (count($noneAcademic)>0)
-   
+   <td  colspan="14" style="border:none">
+    <div class="text-center text-bold text-primary">
+         NON ACADEMIC SUBJECTS</div>
+</td>
 
 
                  @php
-                     $count=1;
+                     $count2=1;
                  @endphp
 @foreach($noneAcademic as $score)
                 <tr>
 
-<td>{{$count}}</td>
+<td>{{$count2}}</td>
 <td>{{$score->subjects?$score->subjects->name:'-'}}</td>
 <td>{{$score->test1?$score->test1:'-'}}</td>
 @if ($report->isCa2)
@@ -154,7 +157,7 @@
 </tr>
 
                 @php
-                     $count=$count+1;
+                     $count2=$count2+1;
                  @endphp
                 @endforeach
 
