@@ -124,18 +124,8 @@
 <td>{{$score->test3?$score->test3:'-'}}</td>
 @endif
 <td>{{$score->exams?$score->exams:'-'}}</td>
-
-@foreach($Totals as $total)
-@if($total['subject_id']===$score->subject_id && $total['term_id']===1)
-<td>{{$total['total']?$total['total']:'-'}}</td>
-@endif
-@endforeach
-
-@foreach ($Totals as $total)
-@if($total['subject_id']===$score->subject_id && $total['term_id']===2)
-<td>{{$total['total']?$total['total']:'-'}}</td>
-@endif
-@endforeach
+<td>{{ getTotal($Totals,$score->subject_id,1) }}</td>
+<td>{{ getTotal($Totals,$score->subject_id,2) }}</td>
 
 <td>{{$score->total?$score->total:'-'}}</td>
 <td>{{$score->grand_total?$score->grand_total:'-'}}</td>
