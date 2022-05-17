@@ -1,19 +1,21 @@
 @php
     function getTotal($obj,$subject_id,$term_id){
-        
+           $result=null;
         foreach ($obj as  $value) {
             
            if($value['subject_id']===$subject_id && $value['term_id']===$term_id){
-            
-            if(is_numeric($value['total'])){
-                return $value['total'];
+            $result=$value;
+            break;
+           }
+
+
+        }
+         if(!empty($result) && is_numeric($result['total'])){
+                return $result['total'];
             }
              else{
                return '-';
              }
-           }
-        }
-  return '-';
        
     }
 @endphp
