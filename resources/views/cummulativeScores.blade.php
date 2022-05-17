@@ -1,3 +1,18 @@
+@php
+    function getTotal($obj,$subject_id,$term_id){
+        
+        foreach ($obj as  $value) {
+            
+           if($value['subject_id']===$subject_id && $value['term_id']===$term_id){
+              
+            return $value['total'];
+           }
+        }
+  return '-';
+       
+    }
+@endphp
+
 
 <div>
                 <table class=" table table-bordered text-capitalized myTable">
@@ -53,17 +68,8 @@
 @endif
 <td>{{$score->exams?$score->exams:'-'}}</td>
 
-@foreach($Totals as $total)
-@if($total['subject_id']===$score->subject_id && $total['term_id']===1)
-<td>{{$total['total']>0?$total['total']:'-'}}</td>
-@endif
-@endforeach
-
-@foreach ($Totals as $total)
-@if($total['subject_id']===$score->subject_id && $total['term_id']===2)
-<td>{{$total['total']>0?$total['total']:'-'}}</td>
-@endif
-@endforeach
+<td>{{ getTotal($Totals,$score->subject_id,1) }}</td>
+<td>{{ getTotal($Totals,$score->subject_id,2) }}</td>
 
 <td>{{$score->total?$score->total:'-'}}</td>
 <td>{{$score->grand_total?$score->grand_total:'-'}}</td>
