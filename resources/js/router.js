@@ -79,7 +79,7 @@ export default new Router({
         { path: '/fee_description/:feegroup_id/:student_id?', component: require('./components/fees/FeeDescription.vue').default },
         { path: '/fee_list/:feegroup_id', component: require('./components/fees/Feelist.vue').default },
         { path: '/payment_api', component: require('./components/fees/Paystack.vue').default },
-        { path: '/feeItems', component: require('./components/fees/FeeItems.vue').default }, 
+        { path: '/feeItems', component: require('./components/fees/FeeItems.vue').default },
         { path: '/subject_teachers', component: require('./components/subject/SubjectTeacher.vue').default },
         { path: '/tutor_comments', component: require('./components/staff/TutorsComment.vue').default },
         { path: '/creche_domain', component: require('./components/creche/Domain.vue').default },
@@ -99,7 +99,8 @@ export default new Router({
         { path:'/parents/Bill', component: require('./components/parents/Bills.vue').default },
         { path: '/siblings/:parentId?', component: require('./components/parents/Siblings.vue').default },
         { path:'/parent_profile/:userType?/:id?', component: require('./components/parents/Profile.vue').default },
-        { path:'/attendance', component: require('./components/attendance/Index.vue').default }
+        { path:'/attendance', component: require('./components/attendance/Index.vue').default },
+        { path:'/feeQuery', component: require('./components/fees/FeeQuery.vue').default }
 
 
     ]

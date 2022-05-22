@@ -246,6 +246,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('feeItems', 'API\FeeItemsController@index');
     Route::put('feeItems', 'API\FeeItemsController@update');
     Route::delete('feeItems/{id}', 'API\FeeItemsController@destroy');
+    Route::post('queryFees', 'API\FeesController@queryFees');
     /// Creche Domain Routes
     Route::post('domains', 'API\DomainController@store');
     Route::get('domains', 'API\DomainController@index');

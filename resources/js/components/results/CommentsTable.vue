@@ -7,7 +7,7 @@
 
     </tr>
 
-
+    
 <table class="table table-bordered"  v-for="(score,index) in scores" :key="index">
   <tr><td style="width: 5%">***</td><td class="text-uppercase text-bold text-primary text-center" style="width: 65%" >{{score.domain}}</td><td>-----</td></tr>
   <tr v-for="(sub,index2) in score.subdomains" :key="index2">

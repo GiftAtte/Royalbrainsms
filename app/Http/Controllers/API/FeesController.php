@@ -10,6 +10,8 @@ use App\Student;
 use App\Level_history;
 use App\StudentFees;
 use App\Paystack;
+use Illuminate\Support\Facades\DB;
+
 class FeesController extends Controller
 {
     public function __construct()
@@ -20,10 +22,10 @@ class FeesController extends Controller
 
     public function index($student_id=null)
     {
-        
-        
+
+
         $user=auth('api')->user();
-        
+
         if($user->type==='student'||!empty($student_id)){
             $current_level=null;
             if(!empty($student_id)){
@@ -257,6 +259,25 @@ if($user->type==='parent'){
         $report=Paystack::findOrFail($request->id);
         $report->update($request->all());
         return ['message'=>'report updated successfully'];
+    }
+
+
+    public function queryFees(Request $request){
+
+               if($request->searchCondition==="TERM"){
+                   //return $request->all();
+                   return DB::table('students')
+                                ->whereIn('students.school_id',[auth('api')->user()->school_id])
+                                ->rightJoin('student_fees','student_fees.student_id','=','students.id')
+                                ->join('fee_groups','fee_groups.id','=','student_fees.feegroup_id')
+                                ->where('fee_groups.term_id',$request->term_id)
+                                ->join('levels','students.class_id','=','levels.id')
+                               ->select(DB::raw('CONCAT(students.surname," ", students.first_name)as name, student_fees.student_id as id,fee_groups.tittle,
+                               student_fees.amount,levels.level_name as level, fee_groups.fee_type as fee_type'))
+                                ->distinct('id')->orderBy('name')
+                               ->get();
+               }
+                 return 'No query paramenters';
     }
 
 }

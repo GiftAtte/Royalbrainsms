@@ -467,7 +467,7 @@
                                     <div class="form-group">
                                         <label>Next Term Begins:</label>
                                         <input
-                                            v-model="form.term_start"
+                                            v-model="form.next_term"
                                             type="date"
                                             name="term_start"
                                             id="term_start"
@@ -476,7 +476,7 @@
                                             :class="{
                                                 'is-invalid':
                                                     form.errors.has(
-                                                        'term_start'
+                                                        'next_term'
                                                     ),
                                             }"
                                         />

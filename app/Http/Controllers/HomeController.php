@@ -88,8 +88,8 @@ class HomeController extends Controller
     public function pdfdownload($id,$report_id,$email=null)
 
     { // $items = DB::table("items")->get();
-
-  $scores= $this->studenResult($report_id,$id) ;
+    //$school=School::findOrFail(auth()->user()->school_id);
+ $scores= $this->studenResult($report_id,$id) ;
         //return $Totals=collect($scores['pastTotal']);
 
       // return $LDomain=$this->learningDomain($id,$report_id);
@@ -111,6 +111,7 @@ class HomeController extends Controller
                 'noneAcademic'=>$scores['noneAcademic'],
                 'attendance'=>$scores['attendance'],
                 'subjectDropt'=>$scores['subjectDropt'],
+                'crecheComment'=>$scores['crecheComment'],
                 ]);
          //return$scores['school'];
     // return view('result');
@@ -176,6 +177,7 @@ public function studenResult( $report_id, $student_id=null)
         $comment=Result_activation::where([['report_id',$report_id],['student_id',$student_id]])->first();
       $attendance=Attendance::where([['student_id',$student_id],['report_id',$report_id]])->first();
           // MADONNA ANNUAL
+         // if($report->type==='')
     // $pastTotal=Mark::whereIn('level_id',[$report->level_id])->where('student_id',$student_id)
     //           ->whereNotIn('report_type',['mid_term','default-midterm','default-result'])
     //              ->select('annual_score','subject_id','term_id','total')->distinct('term_id')->get();
@@ -206,7 +208,7 @@ public function studenResult( $report_id, $student_id=null)
      $subjectDropt=null;
     if($report->isCummulative){
               $subjectDropt=$this->getSubjectDroped($report,$student_id,$level_sub);
-    }            
+    }
 
     $creche=$this->getCrecheComment($report,$student->id);
    if($report->type==='creche'){
@@ -223,7 +225,7 @@ public function studenResult( $report_id, $student_id=null)
     ->where([['student_id',$student_id],['type','None Academic']])->whereNotIn('total',[0])
     ->distinct('subject_id')->get();
 
-      // 
+      //
        $principal_comment=null;
        if($report->isManualPrincipalComment>0){
            $principal_comment=$this->getManualPrincipalComment($student_id,$report_id);
@@ -420,7 +422,7 @@ public function principalComment($average){
 
 
   public function getSubjectDroped($report,$student_id,$level_sub){
-       
+
           $allMarks=Mark::with('subjects')
                       ->whereIn('subject_id',$level_sub)
                       ->whereIn('student_id',[$student_id]);

@@ -583,5 +583,10 @@ export default {
             txt: "Bills",
             link: "/bills",
         },
+        {
+            type: "link",
+            txt: "Fee Query",
+            link: "/feeQuery",
+        },
     ],
 };

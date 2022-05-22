@@ -106,7 +106,7 @@ public function AnnualScore($score,$term_id){
     public function store(Request $request)
     {
          $report=Report::findOrFail($request->report_id);
-        if($report->type==='default-result'||$report->type==='default-midterm'){
+        if($report->type==='default-result'||$report->type==='default-midterm'||$report->type==='diamond'){
            return $this->default_store($request);
         }
                $request->subject_id;
@@ -843,8 +843,8 @@ public function studenResult( $report_id, $student_id=null)
           }
 
       }
-      
-             
+
+
         $comment=Result_activation::where([['report_id',$report_id],['student_id',$student_id]])->first();
       $attendance=Attendance::where([['student_id',$student_id],['report_id',$report_id]])->first();
           // MADONNA ANNUAL
@@ -870,11 +870,11 @@ public function studenResult( $report_id, $student_id=null)
 
   $level_sub=Level_sub::where('level_id',$report->level_id)->pluck('subject_id');
       //Mark::where('report_id',$report_id)->whereNotIn('subject_id',$level_sub)->distinct('subject_id')->delete();
-    
+
       $subjectDropt=null;
     if($report->isCummulative){
               $subjectDropt=$this->getSubjectDroped($report,$student_id,$level_sub);
-    }  
+    }
       $student=Student::findOrFail($student_id);
      $arm=Arm::findOrFail($student->arm_id);
     // $this->resultSummary($report_id, $student_id,$student->arm_id);
@@ -896,7 +896,7 @@ public function studenResult( $report_id, $student_id=null)
     ->where([['student_id',$student_id],['type','None Academic']])->whereNotIn('total',[0])
     ->distinct('subject_id')->get();
 
-      // 
+      //
        $principal_comment=null;
        if($report->isManualPrincipalComment>0){
            $principal_comment=$this->getManualPrincipalComment($student_id,$report_id);
@@ -1368,9 +1368,9 @@ public function getRanking($scoresCollection,$total){
     }
 
 
-    
+
   public function getSubjectDroped($report,$student_id,$level_sub){
-       
+
           $allMarks=Mark::with('subjects')
                       ->whereIn('subject_id',$level_sub)
                       ->whereIn('student_id',[$student_id]);

@@ -180,7 +180,7 @@
 
 </tr>
 <tr>
-    <td colspan="14">
+    <td colspan="14" v-if="subjectsDropped.length">
 <subjects-dropped :scores="subjectsDropped" />
     </td>
 </tr>

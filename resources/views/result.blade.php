@@ -50,7 +50,7 @@ body {
   line-height: 1;
   color: #040505;
   text-align: justify;
-  background-color: rgb(247, 254, 255);
+  background-color: rgba(250, 255, 255, 0.906);
 }
 
 hr{
@@ -1202,7 +1202,7 @@ a.text-dark:hover, a.text-dark:focus {
 
                 <h6><b>Session:&nbsp;</b> {{$report->sessions->name}} </h6>
 
-                <h6 ><b>Next Term :&nbsp;</b> {{$report->term_start?$report->term_start:'---------'}}</h6>
+
 
 </td>
 <td style="width: 15%">
@@ -1243,7 +1243,10 @@ a.text-dark:hover, a.text-dark:focus {
         @break
           @case('annual')
            @include('madonna-annual')
-        @break
+          @break
+            @case('diamond')
+           @include('diamond')
+          @break
 
         @default
            <h3>No Termplate Selected</h3>
@@ -1251,11 +1254,22 @@ a.text-dark:hover, a.text-dark:focus {
 
 
 
-               <div class="container">
-                @if($report->isLearningDomain>0)
-                @include('learniningDomain')
-                @endif
-               </div>
+                   <table class="table">
+                       <tr>
+                           @if ($report->type!='diamond')
+                          <td colspan="2">
+                         @include('grading')
+                           </td>
+                          @endif
+
+                    @if($report->isLearningDomain>0)
+                    <td  colspan="6">
+                     @include('learniningDomain')
+
+                           </td>
+                            @endif
+                       </tr>
+                   </table>
 
              <div class="py-1" >
 

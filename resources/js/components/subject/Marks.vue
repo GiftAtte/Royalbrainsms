@@ -30,7 +30,7 @@
                                 >Import scores {{ "(cvs)" }} </router-link
                             >&nbsp;/Select Report Set
                         </h4>
-                      
+
                     </div>
 
                     <div class="col-md-6">
@@ -166,7 +166,8 @@
                                 <general-marks
                                     v-if="
                                         report.type === 'default-result' ||
-                                        report.type === 'default-midterm'
+                                        report.type === 'default-midterm'||
+                                        report.type === 'diamond'
                                     "
                                     :form="form"
                                     :report="report"

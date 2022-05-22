@@ -2,7 +2,7 @@
   <div>
    <table
                     v-if="
-                    report.type === 'default-result' || report.type === 'default-midterm'
+                    report.type === 'default-result' || report.type === 'default-midterm'|| report.type === 'diamond'
                   "
                   class="table table-hover table-sm"
                 >
@@ -25,7 +25,7 @@
                       <th v-show="report.type === 'default-midterm'">
                         MID-TERM EXAMS
                       </th>
-                      <th v-show="report.type === 'default-result'">
+                      <th v-if="report.type === 'default-result'||report.type === 'diamond'">
                         TERMINAL EXAMS {{report.examPercent?`[${report.examPercent}]`:''}}
                       </th>
                     </tr>

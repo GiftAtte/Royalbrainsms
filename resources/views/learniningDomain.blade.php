@@ -1,12 +1,13 @@
-<table class="table" style="width: 100%; align-content:top;">
+               <table class="table">
                  <tr>
-                 <td style="width: 30%">
-                   <table class="table table-bordered" style="width: 100%;font-size:xx-small">
+                 <td>
+
+                   <table class="table table-bordered myTable" style="font-size:xx-small">
                       <tr>
-                 <td colspan="2" style="vertical-align: center;background-color:rgb(15, 15, 112); color:white"> AFFECTIVE </td>
+                 <th colspan="2" style="vertical-align: center;background-color:rgb(15, 15, 112); color:white"> AFFECTIVE </th>
 
                 </tr>
-                <tr><td>Domain</td><td>Grade</td>
+                <tr><th>Domain</th><th>Grade</th>
                 </tr>
                      @foreach ($LDomain as $ldomain)
                     @if($ldomain->ldomain->type==="Behavioural")
@@ -18,14 +19,14 @@
                      @endforeach
                    </table>
                    </td>
-                   <td style="width: 30%">
-                   <table class="table-bordered myTable " style="width: 100%; font-size:xx-small">
+                   <td>
+                   <table class=" table table-bordered myTable " style="width: 100%; font-size:xx-small">
 
                      <tr>
-                <td colspan="2" style="vertical-align: center;background-color:rgb(15, 15, 112); color:white">PSYCHOMOTOR</td>
+                <th colspan="2" style="vertical-align: center;background-color:rgb(15, 15, 112); color:white">PSYCHOMOTOR</th>
 
                 </tr>
-                <tr><td>Domain</td><td>Grade</td></tr>
+                <tr><th>Domain</th><th>Grade</th></tr>
 
                      @foreach ($LDomain as $ldomain)
 
@@ -39,27 +40,5 @@
                      @endforeach
                    </table>
                  </td>
-
-
-
-                 <td style="width: 38%">
-               <table class=" table-bordered " style="width: 100% ; font-size:xx-small">
-                <tr>
-                <td colspan="3" style="vertical-align: center;background-color:rgb(15, 15, 112); color:white">GRADING KEYS</td>
-
-                </tr>
-                <tr><td>SCORES</td><td>GRADE</td><td>DEGREE</td></tr>
-               @foreach ( $gradings as $grade )
-               <tr class="text-capitalized">
-          <td>{{$grade->lower_bound}} - {{$grade->upper_bound}}</td>
-          <td>{{$grade->grade}}</td><td class="text-capitalized">{{$grade->narration}}</td>
-                  </tr>
-               @endforeach
-
-
-                </table>
-
-                </td>
-
                 </tr>
                     </table>

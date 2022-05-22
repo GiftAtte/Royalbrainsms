@@ -320,7 +320,7 @@ if(!empty($id)){
                               'blood_group'=>$student['blood_group'],
                               'arm_id'     =>$student['arm_id'],
                                'reg_date'=>$student['reg_date'],
-                               'is_new'=>$student['is_new'],
+                               //'is_new'=>$student['is_new']?$student['is_new']:'',
                                'school_id'=>$school->id,
                 ];
 
@@ -506,7 +506,7 @@ public function importBio(Request $request){
     $header=$data[0];
     unset($data[0]);
 
-    
+
     }
 }
 

@@ -4,12 +4,17 @@
    text-transform: uppercase;
     }
 </style>
-<tr style="border: none">
- <th colspan="8"  style="border: none"><h6 class="text-danger text-center">RESULTS SAMMARY</h6></th>
+<tr >
+
+ <th colspan="8" >
+     <div class=" pt-2" style="width:100%;  height:10px; border-radius:25px; background-color:rgb(61, 19, 57)">
+<h6 class="text-white text-center">RESULTS SAMMARY</h6>
+    </div>
+    </th>
  </tr>
 <table class="table table-bordered table-sm font-weight-bold  myTable" >
  <tbody>
-     <tr style="align-items: center;background-color:rgb(15, 15, 112); color:white">
+     <tr class="text-center" style="background-color:rgb(61, 19, 57); color:white">
 
          <th>Total score</th>
          <th>Average <br/>score</th>
@@ -33,7 +38,7 @@
 
      </tr>
 
-<tr>
+<tr class="text-center">
 
 
 <td>{{$summary->total_scores}}</td>
@@ -63,13 +68,9 @@
 
  </tr>
 
-<tr>
-    <td colspan="9">
-        @if ($report->isAttendance)
-@include('attendance')
-        @endif
-
-    </td>
-</tr>
  </tbody>
  </table>
+
+    @if ($report->isAttendance)
+     @include('attendance')
+     @endif
