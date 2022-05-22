@@ -212,22 +212,11 @@
 
 </div>
 <div class="col-md-12 row">
-<div class="  col-md-4  ">
-<table class=" table table-bordered table-sm font-weight-bold  table-striped" width="100%">
-<tr>
-<th colspan="3" class="text-center text-primary text-uppercase table-sm" >Grading Key</th>
-</tr>
 
-<tbody>
-<tr v-for="grade in grades" :Key="grade.id">
-<td>{{grade.lower_bound}} - {{grade.upper_bound}}</td><td>{{grade.grade}}</td><td>{{grade.narration}}</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="col-md-8">
-<attendance :attendance="attendance"/>
-</div>
+
+<general-grading :grades="grades" :report="report" :attendance="attendance"/>
+<attendance v-if="report.isAttendance && attendance" :attendance="attendance"/>
+
 </div>
 <div class="  card-body row">
 <div v-if="report.isPrincipalComment" class=" row col-6"><span><b>Principal's Comment:&nbsp;</b>{{principal_comment?principal_comment:''}}</span></div>
@@ -295,8 +284,8 @@ import Attendance from './Attendance.vue';
                  isTComment:false,
                  isCummulative:false,
                  isMidterm:false,
-                 attendance:{},
-                 subjectsDropped:''
+                 subjectsDropped:'',
+                 attendance:{}
 
             }
         },

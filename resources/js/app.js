@@ -241,6 +241,10 @@ Vue.component(
     "subjects-dropped",
     require("./components/results/SubjectDropt.vue").default
 );
+Vue.component(
+    "general-grading",
+    require("./components/results/GeneralGrading.vue").default
+);
 
 
 

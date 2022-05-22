@@ -1,4 +1,6 @@
 <template>
+<div class="col-md-8">
+
   <table class="table table-bordered" >
             <thead>
           <tr style="vertical-align: center;background-color:rgb(15, 15, 112); color:bisque">
@@ -23,6 +25,7 @@ ATTENDANCE
           </tr>
       </tbody>
   </table>
+  </div>
 </template>
 
 <script>
