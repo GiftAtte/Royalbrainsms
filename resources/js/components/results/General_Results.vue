@@ -179,8 +179,8 @@
 <td v-show="isCAScore">{{score.class_avg_score}}</td> -->
 
 </tr>
-<tr colspan="14" v-if="subjectsDropped">
-    <td >
+<tr  v-if="subjectsDropped">
+    <td colspan="20">
 <subjects-dropped :scores="subjectsDropped" />
     </td>
 </tr>
