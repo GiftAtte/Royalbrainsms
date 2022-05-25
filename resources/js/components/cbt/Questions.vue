@@ -30,7 +30,7 @@
             </tr>
         </thead>
         <tbody>
- <tr v-for="(question,index) in questions " :key="question.id">
+ <tr v-for="(question,index) in questions.data " :key="question.id">
      <td>{{index+1}}</td>
      <td v-html="question.question"></td>
      <td>
@@ -48,7 +48,7 @@
 
 
 
-<div v-show="addNew" class="col-md-12" >
+                             <div v-show="addNew" class="col-md-12" >
                                 <div class="form-group col-md-12 mt-5">
                                   <label>Question</label>
                                   <editor apiKey="iwn8pu5nycy45llbr36ffh5czp4yt712apbn3txi3fsf2oda"
@@ -268,7 +268,7 @@ import VueTimepicker from 'vue2-timepicker/dist/VueTimepicker.umd.min.js'
                 if(this.$gate.isAdminOrTutor()){
  this.$Progress.start()
                     axios.get("/api/questions/"+this.form.exam_id).then( res  => {
-                      this.questions = res.data.data;
+                      this.questions = res.data;
                            if(this.questions.length>0){
          this.isNew=false
           this.$Progress.finish()

@@ -39,7 +39,7 @@ class ExamController extends Controller
      * @return \Illuminate\Http\Response
      */
  public function Questions($id)
-{       return Question::where('exam_id',$id)->latest()->paginate(20);
+{       return Question::where('exam_id',$id)->latest()->paginate(100);
     # code...
 }
 

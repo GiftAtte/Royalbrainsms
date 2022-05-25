@@ -150,7 +150,7 @@
 <td v-if="report.isCa2">{{score.test2}}</td>
 <td v-if="report.isCa3">{{score.test3}}</td>
 <td>{{score.exams?score.exams:''}}</td>
-<!-- <td  v-show="isMidterm">{{score.mid_term?score.mid_term:''}}</td> -->
+<td  v-show="isMidterm">{{score.mid_term?score.mid_term:''}}</td>
 <td>{{score.total?score.total:'-'}}</td>
 <td v-if="report.isCummulative" >
     {{getPastTotal(score.subject_id,1)}}
