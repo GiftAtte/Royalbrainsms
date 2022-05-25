@@ -284,7 +284,7 @@ import Attendance from './Attendance.vue';
                  isTComment:false,
                  isCummulative:false,
                  isMidterm:false,
-                 subjectsDropped:'',
+                 subjectsDropped:[],
                  attendance:{}
 
             }

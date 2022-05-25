@@ -17,13 +17,13 @@
     <th colspan="4">Average Score</th>
 </tr>
 
-<tr v-for="(score, index) in sccores" :key="index">
+<tr v-for="(score, index) in scores" :key="index">
      <td colspan="2">{{ index+1 }}</td>
     <td colspan="4">{{ score.subject }}</td>
      <td colspan="4">{{ score.grandTotal}}</td>
       <td colspan="4">{{ score.average }}</td>
 </tr>
-  
+
     </tbody>
 
 </table>

@@ -72,7 +72,7 @@
                                     </td>
                                     <td>
                                         <a
-                                            v-show="$gate.isSuperadmin()"
+                                            v-show="$gate.isAdmin()"
                                             disabled="true"
                                             href="#"
                                             @click="download(report.id)"
