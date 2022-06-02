@@ -125,16 +125,16 @@ class SubjectController extends Controller
          }
 
          $subjects=$request->subjects;
-           foreach($subjects as $subject_id){
-         $subject=Level_sub::where([['subject_id',$request->subject_id],
+           foreach($subjects as $subject){
+         $check=Level_sub::where([['subject_id',$subject['id']],
                                      ['level_id',$level_id]])->get();
            // $has_arm=Has_arm::where('staff_id',$user->staff_id)->first();
-          if( count($subject)===0){
+          if( count($check)===0){
 
 //return $request->all();
              Level_sub::create([
                 'level_id'=>$level_id,
-                'subject_id'=>$subject_id,
+                'subject_id'=>$subject['id'],
                 'type'      =>$request->type
             ]);
 

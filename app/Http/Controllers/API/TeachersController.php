@@ -33,34 +33,34 @@ class TeachersController extends Controller
         if(empty($staff_id)){
           if($user->type==='superadmin'){
             $staff_id=$user->staff_id||$user->staff_id;
-        
+
              }
             }
 
 
-       $subjectIDs=$request->subjects;
-       foreach($subjectIDs as $subject_id){
+       $subjects=$request->subjects;
+       foreach($subjects as $subject){
 
-         $check=Teachersubject::where([['subject_id',$subject_id],
+         $check=Teachersubject::where([['subject_id',$subject['id']],
                                      ['level_id',$request->level_id],['staff_id',$user->id]])->get();
-  
+
            if( count($check)===0){
-    
+
                 Teachersubject::create([
                 'level_id'=>$request->level_id,
-                'subject_id'=>$subject_id,
+                'subject_id'=>$subject['id'],
                 'staff_id'      =>$staff_id,
                 'school_id'      =>$user->school_id,
             ]);
-          
+
         }
-      
-    
+
+
     }
       return [
           'status_code'=>201,
           'status'=>'success',
-          'subjects'=>$subjectIDs];
+          'subjects'=>$subjects];
     }
 
 

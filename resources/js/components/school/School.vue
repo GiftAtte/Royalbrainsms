@@ -43,7 +43,7 @@
                         <th>Name</th>
                         <th>Location</th>
                         <th>State</th>
-                        <th>Date Created</th>
+                        <th>Templates</th>
                         <th>Modify</th>
                   </tr>
 
@@ -54,7 +54,14 @@
                     <td>{{school.name|upText}}  </td>
                     <td>{{school.contact_address}}</td>
                     <td>{{school.state}}</td>
-                    <td>{{school.created_at|myDate}}</td>
+                    <td>
+                        <router-link
+                        tag="a"
+                        :to="`/schoolTemplates/${school.id}`"
+                        >
+                           Add Result Templates
+                        </router-link>
+                    </td>
 
 
                     <td class="row">
@@ -98,8 +105,8 @@
             <not-found></not-found>
         </div>
 <!-- Arms Modal -->
-<div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+<div class="modal fade " id="addNew" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
                     <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New</h5>
@@ -109,10 +116,11 @@
                     </button>
 
                 </div>
-       <form @submit.prevent="editmode ? updateSchool() : createSchool()">
-      <div class="modal-body">
 
-                <div class="form-group">
+      <div class="modal-body ">
+<div class="row">
+    <div class="col-md-6">
+  <div class="form-group">
                 <input type="text" name="name" placeholder="Enter Name" id="name"
                    class="form-control" :class="{ 'is-invalid': form.errors.has('name') }"
                    v-model="form.name" >
@@ -156,7 +164,10 @@
                    v-model="form.website" >
                 <has-error :form="form" field="website"></has-error>
                  </div>
-                 <div class="form-group">
+
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
                 <input type="text" name="country" placeholder="Counntry" id="country"
                    class="form-control" :class="{ 'is-invalid': form.errors.has('country') }"
                    v-model="form.country" >
@@ -175,18 +186,24 @@
                       <label> PAYMENT GATE WAY</label>
                    <input type="text"  class="form-control"  v-model="form.gateway_pk"
                    placeholder="payment gateway public key">
-
                  </div>
+
+
+    </div>
+</div>
+
+
+
 
 
         </div>
 
             <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
-                    <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
+                    <button v-show="editmode" type="button" class="btn btn-success" @click="updateSchool">Update</button>
+                    <button v-show="!editmode" type="button" class="btn btn-primary" @click="createSchool">Create</button>
            </div>
-</form>
+
 </div>
 </div>
 </div>
@@ -206,11 +223,11 @@
         data() {
             return {
                 editmode: false,
-
-
                 schools:{},
                 selected_file:'',
                   activate:false,
+                  templates:[],
+                  templateOptions:[],
                   form: new Form({
                     id : '',
                     name:'',
@@ -222,7 +239,8 @@
                     country:'',
                     short_name:'',
                     email: '',
-                    gateway_pk:''
+                    gateway_pk:'',
+                    result_templates:[{id:1,label:'default',value:'default'}]
 
                 }),
 
@@ -236,6 +254,22 @@
                                 this.subjects = response.data;
                             });
                 },
+         loadTemplate(){
+                    axios.get("api/templates")
+                    .then(res  => {
+                       res.data.forEach(template=>{
+                           this.templateOptions.push(
+                               {
+                                   id:template.id,
+                                   label:template.name,
+                                   value:template.name
+                               }
+                           )
+                       })
+                        });
+
+         },
+
             updateSchool(){
                 this.$Progress.start();
                 // console.log('Editing data');
@@ -291,7 +325,7 @@
 
             createSchool(){
                  this.$Progress.start();
-                this.form.post('api/school')
+                this.form.post('/api/school')
                 .then(()=>{
                     Fire.$emit('AfterCreate');
                     $('#addNew').modal('hide')
@@ -373,16 +407,8 @@
         }
         },
         created() {
-            Fire.$on('searching',() => {
-                let query = this.$parent.search;
-                axios.get('api/findSchool?q=' + query)
-                .then((data) => {
-                    this.levels = data.data
-                })
-                .catch(() => {
 
-                })
-            })
+            this.loadTemplate();
            this.loadSchools();
 
            Fire.$on('AfterCreate',() => {

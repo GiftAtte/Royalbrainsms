@@ -27,8 +27,8 @@
             <primary-terminal v-show="!isAnnual"  v-if="report.type==='primary-terminal'"/>
             <creche-comment  v-if="report.type==='creche'"/>
             <comments-with-scores  v-if="report.type==='diamond'"/>
-
-            <general-results  v-if="report.type==='default-result'||report.type==='default-midterm'"/>
+            <general-results  v-if="report.type==='default-result'||report.type==='navy-template'||report.type==='default-midterm'"/>
+            
 
 
 

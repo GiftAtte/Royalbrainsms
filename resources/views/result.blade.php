@@ -1155,12 +1155,20 @@ a.text-dark:hover, a.text-dark:focus {
                             <td style="width: 10%"> <img src="{{ public_path('/img/schools/'.$school->logo) }}" class="img-thumbnail pr-2 " alt="logo" width="30" height="30" onerror="this.style.display='none'">
                         </td>
                              <td  style="width: 70%" class="pr-2 ">
-                                 <h5 class="text-primary text-uppercase pl-3">{{$school->name}},
-                     </h5>
+
+
+                                @if ($report->type==='navy-template')
+                <h5 class="text-success text-uppercase pl-3">{{$school->name}},</h5>
+                <h6 class="pl-3 text-danger">{{$school->contact_address}},&nbsp; {{$school->state}}</h6>
+                <h6 class="pl-3">P:&nbsp; {{$school->phone}}. &nbsp; E: {{$school->email}}</h6>
+                <h6 class="pl-3">URL:&nbsp; {{$school->website}}.</h6>
+                                @else
+                  <h5 class="text-primary text-uppercase pl-3">{{$school->name}},</h5>
                 <h6 class="pl-3">{{$school->contact_address}},&nbsp; {{$school->state}}</h6>
                 <h6 class="pl-3">P:&nbsp; {{$school->phone}}. &nbsp; E: {{$school->email}}</h6>
                 <h6 class="text-danger pl-3">URL:&nbsp; {{$school->website}}.</h6>
-                     </td>
+                       @endif
+                           </td>
                               <td style="width: 20%">
                                    <h6 class="pl-2 text-danger">Results Sheet</h6>
                               </td>
@@ -1235,7 +1243,7 @@ a.text-dark:hover, a.text-dark:focus {
          @case('mid_term')
            @include('madonna-midterm')
         @break
-         @case('default-result')
+         @case('navy-template')
            @include('default-terminal')
         @break
          @case('mock')
@@ -1249,7 +1257,7 @@ a.text-dark:hover, a.text-dark:focus {
           @break
 
         @default
-           <h3>No Termplate Selected</h3>
+           @include('default-terminal')
     @endswitch
 
 

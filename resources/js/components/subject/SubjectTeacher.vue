@@ -26,7 +26,7 @@
             <div class="card card-navy card-outline">
               <div class="card-header ">
                 <div class="row col-md-12">
-             <div v-show="$gate.isAdmin()" class="form-group col-md-10" >
+             <div v-show="$gate.isAdmin()" class="form-group col-md-6" >
                      <select
                     name="class_id"
                     id="class_id"
@@ -46,7 +46,7 @@
                         <has-error :form="form" field="staff_id"></has-error>
                  </div>
 
-                <div v-show="$gate.isAdminOrTutor()" class="form-group col-10">
+                <div v-show="$gate.isAdminOrTutor()" class="form-group col-md-6">
                              <select
                     name="level_id"
                     id="level_id"
@@ -65,20 +65,24 @@
                   </select>
                         <has-error :form="form" field="level"></has-error>
                     </div>
-                       <div class="card-tools float-right col-md-2">
-                           <button class="btn btn-success btn-sm float-right m-2" @click="AddSubject">Add Subjects  <i class="fas fa-user-plus fa-fw"></i></button>
-                        </div>
 
-                <div class="form-group col-md-10 ">
+
+                <div class="form-group col-md-8 ">
                     <label>Subjects</label>
                             <multiselect
                         v-model="form.subjects"
-                        :options="listOptions"
-                       placeholder="Select subjects"
-                       placeholder-as-label="true"
-                        style="color:black"
-                            />
-                      
+                        :items="listOptions"
+                         item-key="id"
+                         item-label="label"
+                        title="Select Subjects"
+                         menu-position="float"
+                            >
+                            <template v-slot:selected-items-footer>
+                                 <button class="btn btn-success  float-right m-2" @click="AddSubject">Save</button>
+                           </template>
+
+                            </multiselect>
+
                     </div>
 
                  </div>
@@ -148,12 +152,13 @@
 
 
 </div>
-   
+
 </template>
 
 <script>
-
+//import VueMultiselectComponent from "vue-multiselect-component";
     export default {
+
 
         data() {
             return {
@@ -173,7 +178,7 @@
             isSubjectId:false,
             isSelectAll:false,
              deleteForm:new Form({
-                            subjectIds:[]  
+                            subjectIds:[]
              }),
 
                   form: new Form({
@@ -188,7 +193,7 @@
 
             }
         },
-    
+
         methods: {
 
             AddSubject(){
@@ -199,13 +204,13 @@
                  //console.log(this.form.subjects)
                 this.form.post('api/teacher_subjects')
                 .then(()=>{
-                  
+
                     toast.fire({
                         type: 'success',
                         title: 'subject added successfully'
                         })
                     this.$Progress.finish();
-               
+
                       Fire.$emit('AfterCreate');
                       this.form.reset()
                 })
@@ -372,7 +377,7 @@
 
 
         created() {
-           
+
            this.loadSubjects_list();
 
            Fire.$on('AfterCreate',() => {

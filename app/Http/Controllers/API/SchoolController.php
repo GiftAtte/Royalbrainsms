@@ -19,7 +19,7 @@ class SchoolController extends Controller
         return School::latest()->paginate(50);
     }
 
-   
+
     /**
      * Store a newly created resource in storage.
      *
@@ -33,15 +33,15 @@ class SchoolController extends Controller
             'name' => 'required|string|max:191',
             'contact_address' => 'required|string',
             'short_name' => 'required|string',
-            
+
         ]);
          if(!empty($request->logo)){
            $name = time().'.' . explode('/', explode(':', substr($request->logo, 0, strpos($request->logo, ';')))[1])[1];
            // $name=$user->portal_id.'.'.explode('/', explode(':', substr($request->photo, 0, strpos($request->logo, ';')))[1])[1];
             \Image::make($request->logo)->save(public_path('img/schools/').$name);
-           
 
-          
+
+
 
         return School::create([
             'name' => $request['name'],
@@ -96,14 +96,14 @@ class SchoolController extends Controller
      */
     public function update(Request $request, $id=null)
     {
-     
+
         $school = School::findOrFail($id);
 
         $this->validate($request,[
             'name' => 'required|string|max:191',
             'contact_address' => 'required|string',
             'short_name' => 'required|string',
-            
+
         ]);
 $currentPhoto=$school->logo;
 
@@ -122,7 +122,7 @@ if($request->logo != $currentPhoto){
         }
 
 
-     
+
         if(!empty($request->logo)){
             $school->logo=strval($name);
           //  return $request->all();
@@ -143,10 +143,10 @@ if($request->logo != $currentPhoto){
     {
 
         //$this->authorize('isAdmin');
-          
+
         $school = School::findOrFail($id);
         // delete the user
-     
+
         $school->delete();
 
         return ['message' => 'School Deleted'];
@@ -178,23 +178,23 @@ if($request->logo != $currentPhoto){
             'staff_count'=>$staff_count,
             'level_count'=>$level_count,
             'message'=>"user counted successfully"]);
-        
+
     }
 
     function import(Request $request)
     {
-        
+
        // return $request->all();
     $this->authorize('isAdmin');
      $this->validate($request, [
     'selected_file'  => 'required|mimes:xls,xlsx,csv'
      ]);
    // return $request->all();
-   
 
-   
+
+
    return response()->json( Excel::import(new UsersImport, $request->file('selected_file')));
-    
+
 }
 
  public function setSchool($school_id)

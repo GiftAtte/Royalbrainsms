@@ -4,13 +4,13 @@
             <div class="container-fluid navy">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Parents</h1>
+                        <h1 class="m-0 text-dark">Fee Items</h1>
                     </div>
                     <!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">
-                                <a href="#">Parent</a>
+                                <a href="#">FeeItems</a>
                             </li>
                             <li class="breadcrumb-item active">Report Group</li>
                         </ol>

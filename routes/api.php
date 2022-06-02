@@ -296,7 +296,11 @@ Route::get('siblings/{id?}','API\ParentsController@siblings');
 Route::post('siblings','API\ParentsController@addSiblings');
 Route::delete('siblings/{id}','API\ParentsController@deleteSibling');
 Route::get('siblings/results/{studentId?}','API\ParentsController@siblingsResult');
-
+Route::apiResources(['templates' => 'API\TemplateController']);
+Route::put('templates','API\TemplateController@update');
+Route::get('schoolTemplates/{id?}','API\TemplateController@loadSchoolTemplates');
+Route::post('schoolTemplates','API\TemplateController@createSchoolTemplate');
+Route::delete('schoolTemplates/{id}','API\TemplateController@deleteSchoolTemplate');
 
 Route::get('attendance/{report_id}/{arm_id}','API\AttendanceController@loadAttendance');
 Route::post('attendance','API\AttendanceController@createAttendance');

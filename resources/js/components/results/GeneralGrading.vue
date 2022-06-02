@@ -1,5 +1,5 @@
 <template>
-<div class="col-md-4" v-if="report.isAttendance && attendance">
+    <!-- <div class="col-md-4" v-if="report.isAttendance && attendance">
 <table class=" table table-bordered table-sm font-weight-bold  table-striped" width="100%">
 <tr>
 <th colspan="3" class="text-center text-primary text-uppercase table-sm" >Grading Key</th>
@@ -26,13 +26,24 @@
 </tbody>
 </table>
 
-</div>
+</div> -->
+<div class="container text-bold">
+        GRADING KEY
+        <hr>
+        <p class="text-bold">
+                |<span v-for="grade in grades" :Key="grade.id">
+                    &nbsp;{{ grade.lower_bound }}&nbsp;-&nbsp; {{ grade.upper_bound }}&nbsp;:&nbsp;{{
+                        grade.grade}} &nbsp;: &nbsp;{{ grade.narration }}&nbsp;|&nbsp;
+                </span>
 
+        </p>
+        <hr>
+
+   </div>
 </template>
 
 <script>
 export default {
-props:['grades','report','attendance']
-}
+    props: ["grades", "report", "attendance"],
+};
 </script>
-

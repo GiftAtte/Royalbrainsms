@@ -11,16 +11,24 @@
     <button v-show="$gate.isAdminOrStudent()" class="btn btn-primary float-right pl-2" @click="printResults"><i class="fa fa-print"></i>Print Result</button>
 
     </div>
-<div class="card-body pt-0" id="section-to-print"  ref="generatePDF" :style="`background-image: linear-gradient(to bottom, rgba(255,255,255,0.98) 100%,rgba(255,255,255,0.98) 100%), url(/img/schools/${school.logo}) ;background-repeat: no-repeat; background-position: center;background-size: 80%;`">
+<div class="card-body pt-0" id="section-to-print"  ref="generatePDF" :style="`background-image: linear-gradient(to bottom, rgba(255,255,255,0.98) 100%,rgba(255,255,255,0.98) 100%), url(/img/schools/${school.logo}) ;background-repeat: no-repeat; background-position: center;background-size: cover;`">
 <div class="card-body row col-md-12  pt-1 mt-0">
 <div class="col-md-2 col-sm-2"><img :src="`/img/schools/${school.logo}`" class="img-thumbnail  result-logo" alt="logo" width="100" height="100"></div>
-<div class="col-md-8 col-sm-12">
+
+ <div class="col-md-8 col-sm-12" v-if="report.type==='navy-template'">
+<h3 class="text-primary text-success">{{school.name}},
+</h3>
+<h5 class="text-danger">{{school.contact_address}},&nbsp; {{school.state}}</h5>
+<h5>P:&nbsp; {{school.phone}}. &nbsp; E: {{school.email}}</h5>
+<h5 >URL:&nbsp; {{school.website}}.</h5>
+</div>
+
+<div class="col-md-8 col-sm-12" v-else>
 <h3 class="text-primary text-uppercase">{{school.name}},
 </h3>
 <h5>{{school.contact_address}},&nbsp; {{school.state}}</h5>
 <h5>P:&nbsp; {{school.phone}}. &nbsp; E: {{school.email}}</h5>
 <h5 class="text-red">URL:&nbsp; {{school.website}}.</h5>
-
 </div>
 <div class="col-md-2 col-sm-2">
 <h5 class="pt-2 text-danger">Results Sheet</h5>
@@ -192,30 +200,20 @@
 
 </div>
 
-
-
-
-
-
-<div  class="row col-md-12 py-1">
-<summary-table
-
-:summary="summary"
-:report="report"
-/>
-
-</div>
-
-<div class="col-md-12 row container"  v-if="report.isLearningDomain">
-
-<learning-domains :LDomain="LDomain" />
-
-</div>
-<div class="col-md-12 row">
+<div class="col-md-12 row py-1">
 
 
 <general-grading :grades="grades" :report="report" :attendance="attendance"/>
+<div class="container">
 <attendance v-if="report.isAttendance && attendance" :attendance="attendance"/>
+</div>
+</div>
+<div  class="row col-md-12 py-1">
+<summary-table :summary="summary" :report="report"/>
+</div>
+<div class="col-md-12 row container"  v-if="report.isLearningDomain">
+
+<learning-domains :LDomain="LDomain" />
 
 </div>
 <div class="  card-body row">

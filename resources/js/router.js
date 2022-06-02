@@ -100,8 +100,9 @@ export default new Router({
         { path: '/siblings/:parentId?', component: require('./components/parents/Siblings.vue').default },
         { path:'/parent_profile/:userType?/:id?', component: require('./components/parents/Profile.vue').default },
         { path:'/attendance', component: require('./components/attendance/Index.vue').default },
-        { path:'/feeQuery', component: require('./components/fees/FeeQuery.vue').default }
-
+        { path:'/feeQuery', component: require('./components/fees/FeeQuery.vue').default },
+        { path:'/templates', component: require('./components/results/Templates.vue').default },
+         { path:'/schoolTemplates/:id', component: require('./components/school/Templates.vue').default }
 
     ]
 })

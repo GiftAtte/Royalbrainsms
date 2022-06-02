@@ -63,15 +63,20 @@
                  </div>
                 <div class="form-group col-md-6" v-show="addToList">
                               <label>Subjects</label>
-                            <multiselect
+                             <multiselect
                         v-model="form.subjects"
-                        :options="listOptions"
-                       placeholder="Select subjects"
-                       placeholder-as-label="true"
-                        style="color:black"
-                            />
-                       <br/>
-<button class="btn btn-primary" @click="AddSubject">Add</button>
+                        :items="subjects"
+                         item-key="id"
+                         item-label="name"
+                         title="Select Subjects"
+                         menu-position="float"
+                            >
+                            <template v-slot:selected-items-footer>
+                               <button class="btn btn-primary float-right" @click="AddSubject">Add</button>
+                           </template>
+
+                            </multiselect>
+
                     </div>
 
                  </div>
@@ -180,7 +185,7 @@
             return {
                 editmode: false,
                 addToList:false,
-                subjects:{},
+                subjects:[],
                 levels:{},
                 level_id:'',
                 subjects_list:'',
@@ -362,16 +367,7 @@
 
 
         created() {
-            Fire.$on('searching',() => {
-                let query = this.$parent.search;
-                axios.get('api/findSubject?q=' + query)
-                .then((data) => {
-                    this.data = data.data
-                })
-                .catch(() => {
 
-                })
-            })
            this.loadSubjects();
 
            Fire.$on('AfterCreate',() => {

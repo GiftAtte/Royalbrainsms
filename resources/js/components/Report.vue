@@ -314,7 +314,13 @@
                                             <option value="" selected>
                                                 Select Result Template
                                             </option>
-                                            <option value="default-result">
+
+                                               <option v-for="template in schoolTemplates" :key="template.id"
+                                               :value="template.name">
+                                                 {{ template.name }}
+                                               </option>
+
+                                            <!-- <option value="default-result">
                                                 Default-Terminal
                                             </option>
                                             <option value="default-midterm">
@@ -343,7 +349,7 @@
                                             </option>
                                             <option value="diamond">
                                                 DIAMOND SHEET
-                                            </option>
+                                            </option> -->
                                         </select>
 
                                         <has-error
@@ -978,9 +984,10 @@
 </template>
 
 <script>
+import SelectedItems from 'vue-gridmultiselect/src/components/SelectedItems.vue';
 import Loading from "vue-loading-overlay";
 export default {
-    components: { Loading },
+    components: { Loading, SelectedItems },
     data() {
         return {
             isLoading: false,
@@ -998,7 +1005,7 @@ export default {
             arm_id: "",
             report_id: "",
             isMaster: false,
-
+            schoolTemplates:[],
             form: new Form({
                 id: "",
                 title: "",
@@ -1265,6 +1272,23 @@ export default {
             this.report_id = id;
             this.isMaster = true;
         },
+             loadSchoolTemplate(){
+                 let defaultTemplate=[{
+                     id:1, name:'default-result'
+                 }]
+            axios.get(`/api/schoolTemplates`)
+            .then(res=>{
+                 if((res.data).length){
+                this.schoolTemplates=res.data
+                 }else{
+               this.schoolTemplates=defaultTemplate;
+                 }
+            }
+                )
+            .catch(err=>console.log(err))
+        },
+
+
         viewMaster() {
             $("#summaryModal").modal("hide");
             this.$router.push(
@@ -1277,6 +1301,7 @@ export default {
     },
     created() {
         this.getGradinggroup();
+        this.loadSchoolTemplate();
         // console.log(window.user)
         Fire.$on("searching", () => {
             let query = this.$parent.search;

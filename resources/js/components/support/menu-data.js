@@ -378,6 +378,12 @@ export default {
 
         {
             type: "link",
+            txt: "Result Templates",
+            link: "/templates",
+        },
+
+        {
+            type: "link",
             txt: "Activation Keys",
             link: "/activation_keys",
         },
