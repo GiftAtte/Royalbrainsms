@@ -19,7 +19,13 @@
     </div>
  <div class="col-md-12">
  <div class="card card-navy card-outline">
-     <div class="card-bod">
+     <div class="card-header">
+         <button v-show="$gate.isAdminOrStudent()"
+          class="btn btn-primary float-right pl-2"
+           @click="printResults"><i class="fa fa-print"></i>Print Sheet</button>
+     </div>
+
+     <div class="card-body" id="section-to-print">
 
             <h3 class=" mt-5 text-center"> {{exam.title}}</h3>
 
@@ -240,7 +246,9 @@ saveAnswers(){
                          }})
 
 },
-
+            printResults(){
+                  window.print();
+                },
         },
         created() {
 
