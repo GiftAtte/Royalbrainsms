@@ -35,7 +35,7 @@
 
                     <div v-for="options in question.options" :key="options.id" class="row">
                   <div class="icheck-success icheck-inline">
-                <input type="radio" :id="`q${options.id}`"   :value="options.option_id" :name="`q${question.question.id}`" :checked="question.student_answer.option_id===options.option_id" >
+                <input type="radio" :id="`q${options.id}`"   :value="options.option_id?options.option_id:''" :name="`q${question.question.id}`" :checked="question.student_answer&&question.student_answer.option_id===options.option_id" >
 
                  <label :for="`q${options.id}`">{{options.options.option}}: &nbsp; {{options.option_value}}</label>
                  </div>

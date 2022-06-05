@@ -16,7 +16,7 @@
 <div class="col-md-2 col-sm-2"><img :src="`/img/schools/${school.logo}`" class="img-thumbnail  result-logo" alt="logo" width="100" height="100"></div>
 
  <div class="col-md-8 col-sm-12" v-if="report.type==='navy-template'">
-<h3 class="text-primary text-success">{{school.name}},
+<h3 class=" text-success">{{school.name}},
 </h3>
 <h5 class="text-danger">{{school.contact_address}},&nbsp; {{school.state}}</h5>
 <h5>P:&nbsp; {{school.phone}}. &nbsp; E: {{school.email}}</h5>
@@ -476,7 +476,9 @@ getPastTotal(subject_id,term_id){
 
     },
     created(){
-
+//  let primaryColor=$('.text-primary')
+//           primaryColor.style.color='green';
+            //  console.log(primaryColor)
             const student_id=this.$route.params.student_id
             const report_id=this.$route.params.report_id
             this.$Progress.start()
