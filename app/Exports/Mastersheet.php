@@ -43,7 +43,7 @@ class Mastersheet implements FromArray, WithHeadings//,WithMapping
 
     {
 
-            $headers=collect(['t1'=>'-','t2'=>'-']);
+            $headers=collect(['S/N'=>'S/N','STUDENT ID'=>'STUDENT ID','NAME'=>'NAMES','ARM'=>'ARM']);
             for($i=0;$i<$this->subjectCount;++$i){
               $headers=$headers->put($i.'t1','1st Term');
               $headers=$headers->put($i.'t2','2nd Term');

@@ -557,6 +557,11 @@ export default {
         },
         {
             type: "link",
+            txt: "Attendance",
+            link: "/attendance",
+        },
+        {
+            type: "link",
             txt: "Assignment-Notes",
             link: "/assignments",
         },

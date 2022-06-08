@@ -11,7 +11,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <link rel="shortcut icon" type="image/x-icon" href="img/logo.png" />
 
-  <title>RB</title>
+  <title>TSA</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="{{ asset('css/app.css') }}">

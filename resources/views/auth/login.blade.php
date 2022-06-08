@@ -2,9 +2,6 @@
  <style>
             html, body {
                 background-color: #fff;
-                background-image: url('/img/back.png');
-                background-repeat: repeat;
-
                 color: white;
                 font-family: 'Raleway', sans-serif;
                 font-weight: 200;
@@ -84,7 +81,7 @@
          <a class="btn btn-link" href="{{ route('password.request') }}">
          {{ __('Forgot Your Password?') }}
          @endif
-       
+
       </p>
       </form>
 

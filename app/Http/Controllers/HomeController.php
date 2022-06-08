@@ -290,26 +290,33 @@ public function principalComment($average){
                 $report=Report::findOrFail($report_id);
                 $ids=Mark::whereIn('level_id',[$report->level_id])->distinct('student_id')->pluck('student_id');
                 $totals =Mark::whereIn('report_id',[$report->level_id])->get();
-                $subjects=Level_sub::with('subjects')->where('level_id',$report->level_id)->get();
-                $students=Student::whereIn('id',$ids)->select('id','surname','first_name','middle_name','class_id','arm_id')->get();
+                $students=Student::with('arm')->whereIn('id',$ids)->select('id','surname','first_name','middle_name','class_id','arm_id')->get();
 
 
                 $Allscores =Mark::whereIn('level_id',[$report->level_id])
+                ->whereNotIn('total',['null'])
                   // ->whereIn('report_type',['default-result'])
                    ->join('subjects','marks.subject_id','=','subjects.id')
                    ->select('subjects.name as subject','marks.test1 as ca1','marks.test2 as ca2','marks.exams as exam',
                    'marks.total as total','subjects.id as subject_id','marks.arm_id as arm_id','marks.student_id as student_id',
                    'marks.cummulative_avg as cumm_avg','marks.term_id as term_id')
                    ->orderBy('term_id')->orderBy('student_id')->get();
+                   $i=1;
+                   $lSubjectId=collect($Allscores)->pluck('subject_id')->toArray();
+                 $subjects=Level_sub::whereIn('subject_id',$lSubjectId)
+                 ->with('subjects')->where('level_id',$report->level_id)
+                   ->get();
                 foreach($students as $student){
 
                      $arm=null;
                   $scores=collect($Allscores)->whereIn('student_id',$student->id)->all();
-                   $total =collect($totals)->whereIn('student_id',$student->id)->sum('total');
+                 //  $total =collect($totals)->whereIn('student_id',$student->id)->sum('total');
 
                    $name=$student->surname.' '.$student->first_name.' '.$student->middle_name;
-                   $collect=collect(['STUDENT ID'=>$student->id,'NAMES'=>$name]);
-                   $subject_headers=collect(['STUDENT ID'=>'STUDENT ID','NAMES'=>'NAMES']);
+                   $collect=collect([ 'S/N'=>$i,'STUDENT ID'=>$student->id,'NAMES'=>$name,'ARM'=>$student->arm->name]);
+                   $subject_headers=collect(['SUBJECT'=>'NAMES','SUBJECT'=>' ','SUBJECT'=>' ','SUBJECT'=>' ']);
+                    //$subject_headers=$subject_headers->put($collect->subjects->name,$collect->scollect->name);
+                  $subject_headers=collect(['SUBJECT'=>'SUBJECT','STUDENT ID'=>'-','NAMES'=>'- ','ARM'=>'-']);
 
                     foreach($subjects as $subject){
                                   $isSubject=0;
@@ -321,7 +328,7 @@ public function principalComment($average){
 
 
                                 foreach($scores as $score){
-                               $arm=$score->arm_id;
+                             //  $arm=$score->arm_id;
                                  // $isSubject=0;
                                if($score->subject_id===$subject->subject_id){
 
@@ -329,26 +336,19 @@ public function principalComment($average){
                                    $term_id=$score->term_id;
                                    switch ($term_id) {
                                            case 1:
-                                          $collect=  $collect->put($subject->subjects->name.'t1',$score->total?round($score->total,2):'');
+                                          $collect=  $collect->put($subject->subjects->name.'t1',$score->total?round($score->total,2):'-');
                                           break;
                                            case 2:
-                                          $collect=  $collect->put($subject->subjects->name.'t2',$score->total?round($score->total,2):'');
+                                          $collect=  $collect->put($subject->subjects->name.'t2',$score->total?round($score->total,2):'-');
                                           break;
                                                 case 3:
-                                          $collect=  $collect->put($subject->subjects->name.'t3',$score->total?round($score->total,2):'');
+                                          $collect=  $collect->put($subject->subjects->name.'t3',$score->total?round($score->total,2):'-');
 
                                           break;
                                           default:
                                            # code...
                                            break;
                                    }
-
-
-
-
-
-
-
                             }
 
 
@@ -357,10 +357,10 @@ public function principalComment($average){
                                if($isSubject<1){
 
 
-                                $collect=  $collect->put($subject->subjects->name.'t1','');
-                                $collect=  $collect->put($subject->subjects->name.'t2','');
-                                $collect=  $collect->put($subject->subjects->name.'t3','');
-                                $collect=  $collect->put($subject->subjects->name.'cum','');
+                                $collect=  $collect->put($subject->subjects->name.'t1','-');
+                                $collect=  $collect->put($subject->subjects->name.'t2','-');
+                                $collect=  $collect->put($subject->subjects->name.'t3','-');
+                                $collect=  $collect->put($subject->subjects->name.'cum','-');
 
 
 
@@ -370,7 +370,7 @@ public function principalComment($average){
 
 
                     }
-
+//return $collect;
                     // $arms=Arm::findOrFail($arm);
                     // $collect= $collect->put('TOTAL',round($total,2));
                     // $collect= $collect->put('CLASS ARM',$arms->name);
@@ -379,7 +379,8 @@ public function principalComment($average){
 
                       ///return $collect;
                     array_push($masterSheet, $collect->toArray());
-
+$i=$i+1;
+//return $masterSheet;
                     //array_push($masterSheet,...$sc);
                    }  // $subject->subjects->name=>$subject_ScoreArr
                   // return count($subjects);

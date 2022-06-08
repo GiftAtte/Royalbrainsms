@@ -260,18 +260,16 @@ public function masterCard($report_id,$arm_id=null){
       $ids=null;
     if(auth('api')->user()->type==='tutor'){
         $arm=Has_arm::where('staff_id',auth('api')->user()->staff_id)->first();
-        $students=Student::where([['class_id',$report->level_id],['arm_id',$arm->arms_id]])->get();
+        $students=Student::where([['class_id',$report->level_id],['arm_id',$arm_id]])->get();
     }else{
-
                $ids=$arm_id?
                    Mark::whereIn('report_id',[$report_id])->where('arm_id',$arm_id)->pluck('student_id')->toArray()
                   :Mark::whereIn('report_id',[$report_id])->pluck('student_id')->toArray();
 
         //$ids=Mark::where('report_id',$report_id)->distinct('student_id')->pluck('student_id');
-        $students=Student::whereIn('id',$ids)->get();
-
     }
-
+ $ids=Mark::whereIn('report_id',[$report_id])->where('arm_id',$arm_id)->pluck('student_id')->toArray();
+ $students=Student::whereIn('id',$ids)->get();
  $marks=Mark::where('report_id',$report_id)
  ->whereIn('student_id',$ids)
  ->whereNotIn('total',[0])

@@ -73,6 +73,7 @@ class ParentsController extends Controller
         Parents::where('id',$id)->update([
             'is_active'=>false
         ]);
+         User::where('parent_id',$id)->delete();
     }
 
  public function siblings($id=null){
@@ -151,7 +152,7 @@ array_push($levelIDs,$currentLevel);
     }
 
 public function importParents(Request $request){
-   
+
     if($request->has('file')){
 
       $data=array_map('str_getcsv',file($request->file));
@@ -204,7 +205,7 @@ public function importParents(Request $request){
       }
 
 return $this->updateStudents($siblingsArr);
-    
+
 }
 
 

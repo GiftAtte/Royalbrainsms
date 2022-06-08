@@ -57,7 +57,7 @@
     <h4 v-if="reports">{{reports.terms.name}} RESULTS MASTER SHEET FOR {{reports.levels.level_name}} {{ $route.params.arm_id?arm:'' }},
      {{reports.sessions.name}} Academic Session </h4></div>
         <div class="col-md-12 ">
-            <table class="table table-sm table-bordered m-2 text-center table-striped mt-2 table-info myTable ">
+            <table class="table table-sm font-weight-bold table-bordered m-2 text-center table-striped mt-2 table-info ">
                 <tbody>
                     <tr>
                         <th rowspan="3" >Short<br> Keys</th>
@@ -76,7 +76,7 @@
             </table>
             </div>      <!-- /.card-header -->
               <div class=" table-responsive">
-                <table class="  table table-hover myTable table-sm table-bordered" id="data_tb">
+                <table class="table table-bordered table-sm font-weight-bold " id="data_tb">
                   <tbody>
                     <tr class=" text-capitalize">
                         <th>Names/Subjects</th>
