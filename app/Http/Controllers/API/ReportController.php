@@ -391,6 +391,8 @@ public function transcript($student_id=null)
                              $arm=$score->arm_id;
                                if($score->subject_id===$subject->subject_id){
                                 $collect=  $collect->put(strval($subject->subjects->name),($score->total)>0?$score->total:'');
+                               
+
 
                                   $isSubject=1;
                                 //  $subject_headers=$subject_headers->put($subject->subjects->name,$subject->subjects->name);

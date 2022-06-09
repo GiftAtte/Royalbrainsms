@@ -70,7 +70,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
     <h5 class="header text-danger text-uppercase">Result Class List for {{ $report->title }} </h5>
 <a href="{{ route('export_master',['report_id'=>$report->id]) }}" class="btn btn-primary">
-    Download CSV</a>
+    Cummulative CSV</a>
+
+    <a href="{{ route('export_master_term',['report_id'=>$report->id]) }}" class="btn btn-success">
+    This Term CVS</a>
 </div>
     <div class="card-body table-responsive col-12">
     <table class="table table-hover  display" id="data_tb" width="100%">

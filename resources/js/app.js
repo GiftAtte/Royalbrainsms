@@ -247,6 +247,14 @@ Vue.component(
     "general-grading",
     require("./components/results/GeneralGrading.vue").default
 );
+Vue.component(
+    "student-dashboard",
+    require("./components/StudentDashboard.vue").default
+);
+Vue.component(
+    "admin-dashboard",
+    require("./components/AdminDashboard.vue").default
+);
 
 
 

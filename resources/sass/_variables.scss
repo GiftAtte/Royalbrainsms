@@ -9,14 +9,19 @@ $line-height-base: 1.6;
 // Colors
 $blue: #0c0455;
 $indigo: #6574cd;
-$purple: #8b0485;
+$purple-light: #f135e8;
+$purple: #770871;
 $pink: #f66d9b;
-$red: #e3342f;
+$red-light: #fa7772;
+$red: #d9201a;
 $orange: #f6993f;
 $yellow: #ffed4a;
 $green: #10803f;
+$green-light:#32d074;
 $teal: #4dc0b5;
 $cyan: #6cb2eb;
+$black:black;
+$white:white;
 
 
 .blue{
@@ -60,3 +65,20 @@ $cyan: #6cb2eb;
 }
 
 
+
+
+
+@mixin respond($breakpoint) {
+    @if $breakpoint == phone {
+        @media only screen and (max-width: 37.5em) { @content };    //600px
+    }
+    @if $breakpoint == tab-port {
+        @media only screen and (max-width: 56.25em) { @content };     //900px
+    }
+    @if $breakpoint == tab-land {
+        @media only screen and (max-width: 75em) { @content };    //1200px
+    }
+    @if $breakpoint == big-desktop {
+        @media only screen and (min-width: 112.5em) { @content };    //1800
+    }
+}
