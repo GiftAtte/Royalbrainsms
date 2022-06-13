@@ -163,7 +163,7 @@ return Report::with(['levels','terms'])->where('school_id',$user->school_id)->la
 
        if($user->type==='tutor'){
       $arm=Has_arm::where('staff_id',$user->staff_id)->first();
-       $students=Student::with('arm')->whereIn('id',$stu)->where('arm_id',$arm->arms_id)->orderby('students.surname')->paginate(50);
+      return $students=Student::with('arm')->whereIn('id',$stu)->where('arm_id',$arm->arms_id)->orderby('students.surname')->paginate(50);
        }
 
      return $students=Student::with('arm')->whereIn('id',$stu)->orderby('students.surname')->paginate(50);
