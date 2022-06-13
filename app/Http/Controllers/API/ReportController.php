@@ -162,7 +162,7 @@ return Report::with(['levels','terms'])->where('school_id',$user->school_id)->la
        }
 
        if($user->type==='tutor'){
-       $arm=Has_arm::where('staff_id',$user->staff_id)->first();
+       return$arm=Has_arm::where('staff_id',$user->staff_id)->first();
        return $students=Student::with('arm')->whereIn('id',$stu)->where('arm_id',$arm->arms_id)->orderby('students.surname')->paginate(50);
        }
 
@@ -391,7 +391,7 @@ public function transcript($student_id=null)
                              $arm=$score->arm_id;
                                if($score->subject_id===$subject->subject_id){
                                 $collect=  $collect->put(strval($subject->subjects->name),($score->total)>0?$score->total:'');
-                               
+
 
 
                                   $isSubject=1;
