@@ -156,14 +156,14 @@ return Report::with(['levels','terms'])->where('school_id',$user->school_id)->la
     $user=auth('api')->user();
        $report=Report::findOrFail($id);
        if($report->type==='creche'){
-        $stu= CrechestudentDomain::where('report_id',$id)->distinct('student_id')->pluck('student_id');
+        $stu= CrechestudentDomain::where('report_id',$id)->distinct('student_id')->pluck('student_id')->toArray();
        }else{
-        $stu= Mark::where('report_id',$id)->distinct('student_id')->pluck('student_id');
+        $stu= Mark::where('report_id',$id)->distinct('student_id')->pluck('student_id')->toArray();
        }
 
        if($user->type==='tutor'){
-       return$arm=Has_arm::where('staff_id',$user->staff_id)->first();
-       return $students=Student::with('arm')->whereIn('id',$stu)->where('arm_id',$arm->arms_id)->orderby('students.surname')->paginate(50);
+      $arm=Has_arm::where('staff_id',$user->staff_id)->first();
+       $students=Student::with('arm')->whereIn('id',$stu)->where('arm_id',$arm->arms_id)->orderby('students.surname')->paginate(50);
        }
 
      return $students=Student::with('arm')->whereIn('id',$stu)->orderby('students.surname')->paginate(50);
