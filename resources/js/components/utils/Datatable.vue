@@ -94,7 +94,7 @@ export default {
     margin: 1.5rem;
 
 }
-.fa{
+.fa-search{
     position: relative;
     margin-left: -1.5rem;
     color: gray;
