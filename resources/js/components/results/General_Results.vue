@@ -85,7 +85,7 @@
 <th v-if="report.isCa3">3rd CA <br/>{{report.ca3Percent?`[${report.ca3Percent}]`:''}}</th>
 <th>Exams <br/>{{report.examPercent?`[${report.examPercent}]`:''}}</th>
 <th v-show="isMidterm">Mid Term</th>
-<th>Total <br/>[100%]</th>
+<th>Total <br/></th>
 <th v-if="report.isCummulative" >1st Term <br/>{{report.ca1Percent?`[${report.ca1Percent}]`:''}} </th>
 <th v-if="report.isCummulative" >2nd Term<br/>{{report.ca2Percent?`[${report.ca2Percent}]`:''}}</th>
 <th v-if="report.isCummulative" >Grand Total</th>
