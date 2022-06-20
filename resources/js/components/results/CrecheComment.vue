@@ -82,7 +82,7 @@
 <table class="table table-bordered"  v-for="(score,index) in scores" :key="index">
   <tr><td style="width: 5%">***</td><td class="text-uppercase text-bold text-primary text-center" style="width: 65%" >{{score.domain}}</td><td>-----</td></tr>
   <tr v-for="(sub,index2) in score.subdomains" :key="index2">
- <td style="width: 5%">{{ index2+1}}</td><td  style="width: 70%" >{{ sub.subdomains.name }}</td><td>{{ sub.ratings.rate }}</td>
+ <td style="width: 5%">{{ index2+1}}</td><td  style="width: 70%" >{{ sub.subdomains?sub.subdomains.name:'' }}</td><td>{{ sub.ratings?sub.ratings.rate:'' }}</td>
    </tr>
 
 </table>

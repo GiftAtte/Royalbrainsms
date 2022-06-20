@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import {categoryRoute} from './appRoutes/categoryRoute'
 Vue.use(Router)
 
 export default new Router({
@@ -9,6 +9,7 @@ export default new Router({
     routes: [
 
         // loads Home component
+        ...categoryRoute,
         { path: '/', component: require('./components/Dashboard.vue').default },
         { path: ' /home', component: require('./components/Dashboard.vue').default },
         { path: '/dashboard', component: require('./components/Dashboard.vue').default },
@@ -102,7 +103,7 @@ export default new Router({
         { path:'/attendance', component: require('./components/attendance/Index.vue').default },
         { path:'/feeQuery', component: require('./components/fees/FeeQuery.vue').default },
         { path:'/templates', component: require('./components/results/Templates.vue').default },
-         { path:'/schoolTemplates/:id', component: require('./components/school/Templates.vue').default }
+
 
     ]
 })

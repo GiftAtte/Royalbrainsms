@@ -207,6 +207,7 @@ Vue.component(
     require('./components/messaging/Chats.vue').default,
 );
 Vue.component("input-field", require("./components/utils/TextField.vue").default);
+Vue.component("select-box", require("./components/utils/SelectInput.vue").default);
 Vue.component(
     "student-resut-list",
     require("./components/parents/ReportList.vue").default
@@ -256,6 +257,12 @@ Vue.component(
     require("./components/AdminDashboard.vue").default
 );
 
+Vue.component(
+    "app-body",
+    require("./components/utils/AppBody.vue").default
+);
+Vue.component("app-modal", require("./components/utils/AppModal.vue").default);
+Vue.component("app-table", require("./components/utils/DataTable.vue").default);
 
 
 
@@ -263,11 +270,11 @@ Vue.component(
 // Vue Router
 
 
-// formating using moment
+
 Vue.filter('upText', function (text) {
     return text.charAt(0).toUpperCase() + text.slice(1)
 });
-
+// formating using moment
 Vue.filter('myDate', function (created) {
     return moment(created).format('MMMM Do YYYY');
 });

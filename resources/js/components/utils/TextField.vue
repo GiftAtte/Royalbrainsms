@@ -1,8 +1,8 @@
 <template>
                        <div class="form-group">
-<label>{{label}}</label>
-                        <input :value="value" :type="type" :name="field"
-                            :placeholder="placeholder"
+                     <label>{{label?label:''}}</label>
+                        <input :value="value" :type="type"
+                            :placeholder="placeholder?placeholder:''"
                             class="form-control"
                             :class="{ 'is-invalid': form.errors.has('value') }"
                              @input="update"
