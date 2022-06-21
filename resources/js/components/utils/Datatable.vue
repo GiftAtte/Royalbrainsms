@@ -73,7 +73,9 @@ export default {
 
 }
 </script>
-<style>
+<style scoped>
+
+
 .search-container{
     display: flex;
     justify-items: flex-end;

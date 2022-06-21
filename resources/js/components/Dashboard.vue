@@ -1,5 +1,5 @@
 <template>
-    <div class="col-12">
+    <div class="col-md-12">
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
@@ -23,7 +23,7 @@
         </div>
 
         <div class="row justify-content-center">
-            <div class="col-12">
+            <div class="col-md-12">
                 <div class="card card-navy">
                     <div class="card-header">
                         <h3 class="card-title">Welcome Back!</h3>
@@ -33,16 +33,16 @@
                         <div class="ribbon-wrapper">
                             <div class="ribbon bg-primary">Dashboard</div>
                         </div>
-                        <div class="col-md-12 pb-5">
-                            <div class="container col-md-12">
-                                <div class="col-md-12">
+            
+                            <div class="row col-md-12 pb-5">
+                                
 
                                     <student-dashboard v-if="$gate.isStudentOrParent()"/>
                                     <admin-dashboard v-else />
-                                </div>
-                                <div class="col-md-12 text-bold"><hr /></div>
+                               
+                                
                             </div>
-                        </div>
+                       <div class="col-md-12 text-bold"><hr/></div>
 
                         <div class="card card-navy">
                             <div class="card-header">

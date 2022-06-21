@@ -1,6 +1,7 @@
 <template>
-<div class=" card-body col-md-12 row" >
-          <div class="col-md-3 col-sm-12 ">
+<div class="row col-md-12" >
+  
+          <div class="col-md-3 col-xs-12 ">
             <!-- small box -->
             <div class="small-box bg-navy">
               <div class="inner">
@@ -15,7 +16,7 @@
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-md-3 col-sm-12">
+          <div class="col-md-3 col-xs-12">
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
@@ -30,7 +31,7 @@
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-md-3 col-sm-12">
+          <div class="col-md-3 col-xs-12">
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
@@ -45,7 +46,7 @@
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-md-3 col-sm-12">
+          <div class="col-md-3 col-xs-12">
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
@@ -237,3 +238,8 @@ showEvent(arg) {
     }
 </script>
 
+<style>
+.small-box{
+    width:100%
+}
+</style>
