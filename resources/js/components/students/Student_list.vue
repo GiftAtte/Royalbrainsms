@@ -84,20 +84,18 @@
                         </div>
                     </div>
                     <div class="row float-right">
-                        <div class="card-title">
+                        <div class="card-tools">
                             <input
                                 type="file"
                                 ref="file"
                                 @change="setFile"
                             /><button
                                 @click="importStudents"
-                                class="btn btn-success float-right m-2"
+                                class="btn btn-success m-2"
                             >
                                 import(cvs)
                             </button>
-                        </div>
 
-                        <div class="card-tools">
                             <button class="btn btn-success" @click="newModal">
                                 Add New <i class="fas fa-user-plus fa-fw"></i>
                             </button>
