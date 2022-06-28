@@ -600,4 +600,53 @@ export default {
             link: "/feeQuery",
         },
     ],
+
+    Inventory: [
+        {
+            type: "title",
+            txt: "Inventory",
+            icon: "fa fa-book context-menu__title-icon",
+        },
+
+        {
+            type: "link",
+            txt: "Category",
+            link: "/inventory/category",
+        },
+        {
+            type: "link",
+            txt: "Products",
+            link: "/inventory/products",
+        },
+        {
+            type: "link",
+            txt: "School Items",
+            link: "/inventory/items",
+        },
+        {
+            type: "link",
+            txt: "Purchases",
+            link: "/inventory/purchases",
+        },
+        {
+            type: "link",
+            txt: "Suppliers",
+            link: "/inventory/suppliers",
+        },
+        {
+            type: "link",
+            txt: "Sales",
+            link: "/inventory/sales",
+        },
+        {
+            type: "link",
+            txt: "Stock",
+            link: "/inventory/stock",
+        },
+        {
+            type: "link",
+            txt: "Manage Price",
+            link: "/inventory/prices",
+        },
+    ],
 };

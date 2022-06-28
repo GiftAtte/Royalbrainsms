@@ -296,13 +296,21 @@ if(!empty($id)){
 
     function import(Request $request)
     {
+      if($request->has('file')){
+       $info= array_map('str_getcsv',file($request->file));
+       $header=$info[0];
+       unset($info[0]);
 
-        $students=$request->csv;
 
         $school=School::findOrFail(auth('api')->user()->school_id);
-        foreach($students as $student){
-             //$user =new User();
 
+
+
+
+
+        foreach($info as $body){
+             //$user =new User();
+            $student=array_combine($header,$body);
            $data=[
 
                     'surname' => $student['surname'],
@@ -344,8 +352,8 @@ if(!empty($id)){
 
 
             }
-             return $students;
-            }
+             return 'success';
+            }}
 
 
     public  function generateRandomString($length = 6) {

@@ -6,22 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class SaleDetails extends Model
 {
+   protected $table='sell_details';
    protected $fillable=[
-    'stock_id',
-    'sell_id',
+    'transaction_id',
+    'sales_id',
     'product_id',
-    'category_id',
-    'vendor_id',
-    'user_id',
-    'selling_dat',
-    'customer_id',
-    'sold_quantity',
-    'buy_price',
-    'sold_price',
-    'total_buy_price',
-    'total_sold_price',
-    'discount',
-    'discount_type',
-    'discount_amount',
+    'unit_price',
+    'quantity',
+    'amount',
    ];
+
+
+
+    
 }

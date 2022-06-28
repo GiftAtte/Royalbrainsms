@@ -18,6 +18,8 @@ Route::get('auth/login', 'API\AuthController@login');
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/posts/{post}/comments', 'CommentController@index');
 Route::middleware('auth:api')->group(function () {
+
+
     Route::post('/posts/{post}/comment', 'CommentController@store');
     // users routes
     Route::apiResources(['user' => 'API\UserController']);
@@ -226,7 +228,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('fee_description/{id}/{student_id?}', 'API\FeesController@feeDescriptions');
     Route::put('fee_description/{id}', 'API\FeesController@updateDescriptions');
     Route::delete('fee_description/{id}', 'API\FeesController@deleteDescription');
-
+ 
+    // MESSAGES
     Route::post('messageApi', 'API\SmsController@createMessageApi');
     Route::get('messageApi', 'API\SmsController@MessageApi');
     Route::put('messageApi', 'API\SmsController@updateMessageApi');
@@ -305,6 +308,48 @@ Route::delete('schoolTemplates/{id}','API\TemplateController@deleteSchoolTemplat
 Route::get('attendance/{report_id}/{arm_id}','API\AttendanceController@loadAttendance');
 Route::post('attendance','API\AttendanceController@createAttendance');
 Route::post('attendance/importExcel','API\AttendanceController@importAttendance');
+
+// INVENTORY ROUTES
+
+Route::get('inventory/category','API\Inventory\CategoryController@index');
+Route::post('inventory/category','API\Inventory\CategoryController@createCategory');
+Route::put('inventory/category','API\Inventory\CategoryController@update');
+Route::delete('inventory/category/{id}','API\Inventory\CategoryController@delete');
+
+Route::get('inventory/products','API\Inventory\ProductController@index');
+Route::post('inventory/products','API\Inventory\ProductController@createProduct');
+Route::put('inventory/products','API\Inventory\ProductController@update');
+Route::delete('inventory/products/{id}','API\Inventory\ProductController@delete');
+Route::post('inventory/products/purchases','API\Inventory\ProductController@purchasedProduct');
+Route::delete('inventory/products/purchases/{id}','API\Inventory\ProductController@deletePurchased');
+Route::get('inventory/products/purchases','API\Inventory\ProductController@getPurchases');
+Route::post('inventory/products/price','API\Inventory\PriceController@createPrice');
+Route::delete('inventory/products/price/{id}','API\Inventory\PriceController@delete');
+Route::get('inventory/products/price','API\Inventory\PriceController@index');
+Route::put('inventory/products/price','API\Inventory\PriceController@update');
+Route::get('inventory/products/stock','API\Inventory\StockController@getAllStock');
+Route::post('inventory/products/sell','API\Inventory\SalesController@createSales');
+
+Route::get('inventory/items','API\Inventory\ItemsController@index');
+Route::post('inventory/items','API\Inventory\ItemsController@createItem');
+Route::put('inventory/items','API\Inventory\ItemsController@update');
+Route::delete('inventory/items/{id}','API\Inventory\ItemsController@delete');
+
+Route::get('inventory/sales','API\Inventory\SalesController@index');
+Route::post('inventory/sales','API\Inventory\SalesController@createSales');
+Route::put('inventory/sales','API\Inventory\SalesController@update');
+Route::delete('inventory/sales/{id}','API\Inventory\SalesController@delete');
+
+Route::get('inventory/stock','API\Inventory\StockController@index');
+Route::post('inventory/stock','API\Inventory\StockController@createStock');
+Route::put('inventory/stock','API\Inventory\StockController@update');
+Route::delete('inventory/stock/{id}','API\Inventory\StockController@delete');
+
+Route::get('inventory/suppliers','API\Inventory\SuppliersController@index');
+Route::post('inventory/suppliers','API\Inventory\SuppliersController@createSupplier');
+Route::put('inventory/suppliers','API\Inventory\SuppliersController@update');
+Route::delete('inventory/suppliers/{id}','API\Inventory\SuppliersController@delete');
+
 
 
 

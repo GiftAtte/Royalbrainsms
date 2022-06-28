@@ -19,11 +19,13 @@
     </div>
 
 
-
+          
         <div class="content " v-if="$gate.isAdminOrTutorOrStudent()">
+         
+           
          <slot></slot>
-        </div>
-
+          </div>
+         
         <div v-if="!$gate.isAdminOrTutorOrStudent()">
             <not-found></not-found>
         </div>

@@ -30,7 +30,6 @@
                                 >Import scores {{ "(cvs)" }} </router-link
                             >&nbsp;/Select Report Set
                         </h4>
-
                     </div>
 
                     <div class="col-md-6">
@@ -166,7 +165,7 @@
                                 <general-marks
                                     v-if="
                                         report.type === 'default-result' ||
-                                        report.type === 'default-midterm'||
+                                        report.type === 'default-midterm' ||
                                         report.type === 'diamond'
                                     "
                                     :form="form"
@@ -397,19 +396,22 @@ export default {
                     ? document.querySelector(`#test2${index}`).value
                     : "";
                 var exams = document.querySelector(`#exams${index}`).value;
-
+                var note = document.querySelector(`#note${index}`)
+                    ? document.querySelector(`#note${index}`).value
+                    : "";
+                var test3 = this.report.isCa3
+                    ? document.querySelector(`#test3${index}`).value
+                    : "";
                 this.form.student_id.push(student_id);
                 this.form.test1.push(test1);
-
                 this.form.test2.push(test2);
+                this.form.test3.push(test3);
+                this.form.note.push(note);
 
                 if (
                     this.report.type != "primary-midterm" &&
                     this.report.type != "primary-terminal"
                 ) {
-                    var test3 = this.report.isC3
-                        ? document.querySelector(`#test3${index}`).value
-                        : "";
                     if (check) {
                         var midterm = document.querySelector(
                             `#midterm${index}`
@@ -417,16 +419,12 @@ export default {
                         this.form.midterm.push(midterm);
                         console.log(check);
                     }
-                    var note = document.querySelector(`#note${index}`).value;
-
-                    this.form.test3.push(test3);
-                    this.form.note.push(note);
                 }
                 this.form.exams.push(exams);
 
                 this.form.number_of_students = ++this.form.number_of_students;
             }
-            console.log("Running Herae");
+            console.log("Running Herae now");
             if (
                 this.report.type === "primary-midterm" ||
                 this.report.type === "primary-terminal"

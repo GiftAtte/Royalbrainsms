@@ -9,6 +9,7 @@ class Category extends Model
    protected $fillable=[
 'name',
 'school_id',
-'status'
+'status',
+'type'
    ];
 }

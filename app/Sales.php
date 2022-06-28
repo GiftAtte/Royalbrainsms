@@ -6,27 +6,31 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sales extends Model
 {
+    
+    
+    
     protected $fillable = [
         'student_id',
-        'user_id',
+        'employee_id',
         'school_id',
         'total_amount',
         'paid_amount',
         'sell_date',
-        'discount_amount',
+        'discount',
+        'products_count',
         'payment_method',
         'payment_status',
+        'payment_balance',
+        'transaction_id'
     ];
-    public function client() {
-        return $this->belongsTo('App\Client');
+    public function students() {
+        return $this->belongsTo('App\Student');
     }
-    public function transactions() {
-        return $this->hasMany('App\Transaction');
+    public function salesDetails() {
+        return $this->hasMany('App\SaleDetails','sales_id','id');
     }
-    public function products() {
-        return $this->hasMany('App\SoldProduct');
-    }
-    public function user() {
-        return $this->belongsTo('App\User');
+
+    public function employees() {
+        return $this->belongsTo('App\Staff','employee_id','id');
     }
 }

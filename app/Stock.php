@@ -7,19 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Stock extends Model
 {
    protected $fillable=[
-    'product_code',
-    'puchase_id',
+    'purchase_id',
     'product_id',
-    'category_id',
-    'vendor_id',
-    'user_id',
-    'buying_price',
-    'selling_price',
-    'discount',
-    'stock_quantity',//supplied quantity
-    'current_quantity',//quantity after sales
-    'note',
-    'status'
+    'employee_id',
+    'last_sold_quantity',
+    'last_added_quantity',
+    'available_quantity',
+    'update_type',
+    'status',
+    'school_id'
    ];
 
     // relation with product

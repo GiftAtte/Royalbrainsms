@@ -23,39 +23,40 @@
         </div>
 
         <div class="content col-md-12" v-if="$gate.isTutorOrAdmin()">
-            <div class="card card-navy card-outline ">
+            <div class="card card-navy card-outline">
                 <div class="card-header">
-                    <div class="row  ">
+                    <div class="row">
                         <div class="col-md-2">
                             <select
                                 name="class_id"
                                 id="level"
                                 :class="{
-                                    'is-invalid': form.errors.has('class_id')
+                                    'is-invalid': form.errors.has('class_id'),
                                 }"
                                 class="form-control"
                                 v-model="level_id"
                                 @change="checkArm"
                             >
-                                <option value selected
-                                    >Select Class/Level</option
-                                >
+                                <option value selected>
+                                    Select Class/Level
+                                </option>
                                 <option
                                     v-for="level in levels"
                                     :key="level.id"
                                     :value="level.id"
-                                    >{{ level.level_name }}</option
                                 >
+                                    {{ level.level_name }}
+                                </option>
                             </select>
                             &nbsp; &nbsp;
                         </div>
 
-                        <div v-show="hasArm" class=" col-md-2">
+                        <div v-show="hasArm" class="col-md-2">
                             <select
                                 name="arm_id"
                                 id="arm_id"
                                 :class="{
-                                    'is-invalid': form.errors.has('arm_id')
+                                    'is-invalid': form.errors.has('arm_id'),
                                 }"
                                 class="form-control"
                                 v-model="arm_id"
@@ -66,8 +67,9 @@
                                     v-for="arm in arms"
                                     :key="arm.id"
                                     :value="arm.id"
-                                    >{{ arm.name }}</option
                                 >
+                                    {{ arm.name }}
+                                </option>
                             </select>
                             <has-error :form="form" field="arm_id"></has-error>
                         </div>
@@ -82,19 +84,26 @@
                         </div>
                     </div>
                     <div class="row float-right">
-                        <div class="card-title ">
-                            <router-link to="/import_students" class="p-5">
-                                Import student list (cvs)</router-link
+                        <div class="card-title">
+                            <input
+                                type="file"
+                                ref="file"
+                                @change="setFile"
+                            /><button
+                                @click="importStudents"
+                                class="btn btn-success float-right m-2"
                             >
+                                import(cvs)
+                            </button>
                         </div>
 
                         <div class="card-tools">
-                            <button class="btn btn-success " @click="newModal">
+                            <button class="btn btn-success" @click="newModal">
                                 Add New <i class="fas fa-user-plus fa-fw"></i>
                             </button>
                             <button
                                 v-show="$gate.isAdmin()"
-                                class="btn btn-danger "
+                                class="btn btn-danger"
                                 @click="updatePassword"
                             >
                                 Update Password
@@ -104,120 +113,124 @@
                     </div>
                 </div>
                 <!-- /.card-header -->
-                <div class="card-body  ">
+                <div class="card-body">
                     <div class="table-responsive">
-                    <table class="table table-hover ">
-                        <tbody>
-                            <tr>
-                                <th>
-                                    Select All&nbsp;<input
-                                        type="checkbox"
-                                        @click="selectAll"
-                                        v-model="allSelected"
-                                        :checked="isSelectAll"
-                                    />
-                                </th>
-                                <th>S/ID</th>
-                                <th colspan="2">Student Names</th>
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <th>
+                                        Select All&nbsp;<input
+                                            type="checkbox"
+                                            @click="selectAll"
+                                            v-model="allSelected"
+                                            :checked="isSelectAll"
+                                        />
+                                    </th>
+                                    <th>S/ID</th>
+                                    <th colspan="2">Student Names</th>
 
-                                <th>Course</th>
-                                <th>Arm</th>
-                                <th>Gender</th>
-                                <th>Photo</th>
-                                <th>Modify</th>
-                                <th>Status</th>
-                            </tr>
+                                    <th>Course</th>
+                                    <th>Arm</th>
+                                    <th>Gender</th>
+                                    <th>Photo</th>
+                                    <th>Modify</th>
+                                    <th>Status</th>
+                                </tr>
 
-                            <tr
-                                v-for="student in students.data"
-                                :key="student.id"
-                            >
-                                <td width="20">
-                                    <input
-                                        :id="`student${student.id}`"
-                                        type="checkbox"
-                                        @click="select(student.id)"
-                                        :checked="isChecked"
-                                    />
-                                </td>
-                                <td>{{ student.id }}</td>
+                                <tr
+                                    v-for="student in students.data"
+                                    :key="student.id"
+                                >
+                                    <td width="20">
+                                        <input
+                                            :id="`student${student.id}`"
+                                            type="checkbox"
+                                            @click="select(student.id)"
+                                            :checked="isChecked"
+                                        />
+                                    </td>
+                                    <td>{{ student.id }}</td>
 
-                                <td colspan="2">
-                                    <router-link
-                                        :to="
-                                            `student_profile/${student.id}/student`
-                                        "
-                                        tag="a"
-                                        exact
-                                    >
-                                        {{ student.surname }}, &nbsp;{{
-                                            student.first_name
-                                        }}
-                                        &nbsp;{{
-                                            student.middle_name
-                                                ? student.middle_name
+                                    <td colspan="2">
+                                        <router-link
+                                            :to="`student_profile/${student.id}/student`"
+                                            tag="a"
+                                            exact
+                                        >
+                                            {{ student.surname }}, &nbsp;{{
+                                                student.first_name
+                                            }}
+                                            &nbsp;{{
+                                                student.middle_name
+                                                    ? student.middle_name
+                                                    : ""
+                                            }}
+                                        </router-link>
+                                    </td>
+                                    <td>
+                                        {{
+                                            student.levels
+                                                ? student.levels.level_name
                                                 : ""
                                         }}
-                                    </router-link>
-                                </td>
-                                <td>
-                                    {{
-                                        student.levels
-                                            ? student.levels.level_name
-                                            : ""
-                                    }}
-                                </td>
-                                <td>
-                                    {{ student.arm ? student.arm.name : "" }}
-                                </td>
-                                <td>
-                                    {{ student.gender ? student.gender : "" }}
-                                </td>
-                                <td>
-                                    <img
-                                        :src="
-                                            '/img/profile/stud' +
+                                    </td>
+                                    <td>
+                                        {{
+                                            student.arm ? student.arm.name : ""
+                                        }}
+                                    </td>
+                                    <td>
+                                        {{
+                                            student.gender ? student.gender : ""
+                                        }}
+                                    </td>
+                                    <td>
+                                        <img
+                                            :src="
+                                                '/img/profile/stud' +
                                                 student.id +
                                                 '.png'
-                                        "
-                                        alt="no pics"
-                                        width="35"
-                                        height="35"
-                                        class="  img-circle "
-                                    />
-                                </td>
+                                            "
+                                            alt="no pics"
+                                            width="35"
+                                            height="35"
+                                            class="img-circle"
+                                        />
+                                    </td>
 
-                                <td>
-                                    <a href="#" @click="editModal(student)">
-                                        <i class="fa fa-edit blue"></i>
-                                    </a>
-                                    /
-                                    <a
-                                        href="#"
-                                        @click="deleteStudent(student.id)"
-                                    >
-                                        <i class="fa fa-trash red"></i>
-                                    </a>
-                                </td>
-                                <td>
-                                    <toggle-button
-                                        @change="setActivation(student.userId)"
-                                        :label="true"
-                                        :labels="{
-                                            checked: 'ON',
-                                            unchecked: 'OFF'
-                                        }"
-                                        :height="20"
-                                        :font-size="14"
-                                        :value="student.isActive"
-                                        :color="'green'"
-                                        :name="'activated'"
-                                        class="pl-2"
-                                    />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    <td>
+                                        <a href="#" @click="editModal(student)">
+                                            <i class="fa fa-edit blue"></i>
+                                        </a>
+                                        /
+                                        <a
+                                            href="#"
+                                            @click="deleteStudent(student.id)"
+                                        >
+                                            <i class="fa fa-trash red"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <toggle-button
+                                            @change="
+                                                setActivation(student.userId)
+                                            "
+                                            :label="true"
+                                            :labels="{
+                                                checked: 'ON',
+                                                unchecked: 'OFF',
+                                            }"
+                                            :height="20"
+                                            :font-size="14"
+                                            :value="student.isActive"
+                                            :color="'green'"
+                                            :name="'activated'"
+                                            class="pl-2"
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <!-- /.card-body -->
@@ -294,7 +307,8 @@
                                     placeholder="Surname"
                                     class="form-control"
                                     :class="{
-                                        'is-invalid': form.errors.has('surname')
+                                        'is-invalid':
+                                            form.errors.has('surname'),
                                     }"
                                 />
                                 <has-error
@@ -310,9 +324,8 @@
                                     placeholder=" First Name"
                                     class="form-control"
                                     :class="{
-                                        'is-invalid': form.errors.has(
-                                            'first_name'
-                                        )
+                                        'is-invalid':
+                                            form.errors.has('first_name'),
                                     }"
                                 />
                                 <has-error
@@ -348,7 +361,7 @@
                                     placeholder="Dob"
                                     class="form-control"
                                     :class="{
-                                        'is-invalid': form.errors.has('dob')
+                                        'is-invalid': form.errors.has('dob'),
                                     }"
                                 />
                                 <has-error :form="form" field="dob"></has-error>
@@ -361,7 +374,7 @@
                                     id="class_id"
                                     class="form-control"
                                     :class="{
-                                        'is-invalid': form.errors.has('gender')
+                                        'is-invalid': form.errors.has('gender'),
                                     }"
                                 >
                                     <option value="">Select sex</option>
@@ -379,23 +392,23 @@
                                     name="class_id"
                                     id="level"
                                     :class="{
-                                        'is-invalid': form.errors.has(
-                                            'class_id'
-                                        )
+                                        'is-invalid':
+                                            form.errors.has('class_id'),
                                     }"
                                     class="form-control"
                                     v-model="form.class_id"
                                     @change="checkArm"
                                 >
-                                    <option value selected
-                                        >Select Class/Level</option
-                                    >
+                                    <option value selected>
+                                        Select Class/Level
+                                    </option>
                                     <option
                                         v-for="level in levels"
                                         :key="level.id"
                                         :value="level.id"
-                                        >{{ level.level_name }}</option
                                     >
+                                        {{ level.level_name }}
+                                    </option>
                                 </select>
                                 <has-error
                                     :form="form"
@@ -408,33 +421,31 @@
                                     name="arm_id"
                                     id="arm_id"
                                     :class="{
-                                        'is-invalid': form.errors.has('arm_id')
+                                        'is-invalid': form.errors.has('arm_id'),
                                     }"
                                     class="form-control"
                                     v-model="form.arm_id"
                                 >
-                                    <option value selected
-                                        >Select Class Arm</option
-                                    >
+                                    <option value selected>
+                                        Select Class Arm
+                                    </option>
                                     <option
                                         v-for="arm in arms"
                                         :key="arm.id"
                                         :value="arm.id"
-                                        >{{ arm.name }}</option
                                     >
+                                        {{ arm.name }}
+                                    </option>
                                 </select>
                                 <has-error
                                     :form="form"
                                     field="arm_id"
-                                ></has-error>    
+                                ></has-error>
                             </div>
                             <div class="form-group">
-                                    <label>New Student</label>
-                                    <input type="checkbox"
-                                    v-model="form.is_new"
-                                    >
-
-                                </div>
+                                <label>New Student</label>
+                                <input type="checkbox" v-model="form.is_new" />
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button
@@ -472,7 +483,7 @@ export default {
     computed: {
         school() {
             return this.$store.state.school;
-        }
+        },
     },
     data() {
         return {
@@ -503,74 +514,74 @@ export default {
                 gender: "",
                 dob: "",
                 class_id: "",
-                is_new:0,
-                school_id: window.user.school_id
+                is_new: 0,
+                school_id: window.user.school_id,
             }),
             deleteForm: new Form({
-                studentIds: []
+                studentIds: [],
             }),
             tableColumns: [
                 {
                     label: "S/ID",
                     field: "id",
                     numeric: false,
-                    html: false
+                    html: false,
                 },
                 {
                     label: "SURNAME",
                     field: "surname",
                     numeric: false,
-                    html: false
+                    html: false,
                 },
                 {
                     label: "FIRST NAME",
                     field: "first_name",
                     numeric: false,
-                    html: false
+                    html: false,
                 },
                 {
                     label: "MIDDLE NAME",
                     field: "middle_name",
                     numeric: false,
-                    html: false
+                    html: false,
                 },
                 {
                     label: "PHONE",
                     field: "phone",
                     numeric: false,
-                    html: false
+                    html: false,
                 },
                 {
                     label: "CLASS",
                     field: "levels.level_name",
                     numeric: false,
-                    html: false
+                    html: false,
                 },
                 {
                     label: "ARM",
                     field: "arm.name",
                     numeric: false,
-                    html: false
+                    html: false,
                 },
                 {
                     label: "GENDER",
                     field: "gender",
                     numeric: false,
-                    html: false
-                }
+                    html: false,
+                },
             ],
-            tableRows: []
+            tableRows: [],
         };
     },
     mounted() {
-        axios.get("api/arms").then(res => {
+        axios.get("api/arms").then((res) => {
             this.arms = res.data;
             // this.id=id;
         });
     },
     methods: {
         getResults(page = 1) {
-            axios.get("api/student?page=" + page).then(response => {
+            axios.get("api/student?page=" + page).then((response) => {
                 this.students = response.data;
             });
         },
@@ -615,8 +626,8 @@ export default {
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            }).then(result => {
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
                 // Send request to the server
                 if (result.value) {
                     this.deleteForm.studentIds = this.studentIds;
@@ -664,49 +675,49 @@ export default {
 
             this.form
                 .post("api/student")
-                .then(res => {
+                .then((res) => {
                     Fire.$emit("AfterCreate");
                     $("#addNew").modal("hide");
 
                     toast.fire({
                         type: "success",
-                        title: "Student Created in successfully"
+                        title: "Student Created in successfully",
                     });
                     //console.log(res)
                     this.$Progress.finish();
                 })
-                .catch(err => {
+                .catch((err) => {
                     toast.fire({
                         type: "fail",
-                        title: err
+                        title: err,
                     });
                     this.$Progress.fail();
                 });
         },
-        selectFile() {
-            this.selected_file = this.$refs.file.files[0];
-            console.log(this.selected_file);
+        setFile() {
+            this.file = this.$refs.file.files[0];
+            console.log(this.file);
         },
         importStudents() {
             this.$Progress.start();
             const formData = new FormData();
-            formData.append("selected_file", this.selected_file);
+            formData.append("file", this.file);
             //console.log(formData.values);
             axios
                 .post("api/importStudents", formData)
-                .then(res => {
+                .then((res) => {
                     toast.fire({
                         type: "success",
-                        title: "Students successfully imported"
+                        title: "Students successfully imported",
                     });
                     //  console.log(res.data)
                     this.$Progress.finish();
                     Fire.$emit("AfterCreate");
                 })
-                .catch(err => {
+                .catch((err) => {
                     toast.fire({
                         type: "danger",
-                        title: "there was error uploading the file" + err
+                        title: "there was error uploading the file" + err,
                     });
                     console.log(err);
                 });
@@ -717,7 +728,7 @@ export default {
             console.log(id);
             axios
                 .get(`api/check_arm/${id}`)
-                .then(res => {
+                .then((res) => {
                     if (res.data > 0) {
                         this.hasArm = true;
                         //  this.downloadLogin();
@@ -725,7 +736,7 @@ export default {
                         this.hasArm = false;
                     }
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log(err);
                 });
         },
@@ -795,8 +806,8 @@ export default {
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, update !"
-            }).then(result => {
+                confirmButtonText: "Yes, update !",
+            }).then((result) => {
                 // Send request to the server
                 if (result.value) {
                     axios
@@ -822,22 +833,22 @@ export default {
         },
 
         setActivation(id) {
-            axios.put("/api/activateUser/" + id).then(res => {});
+            axios.put("/api/activateUser/" + id).then((res) => {});
         },
         downloadLogin() {
             axios
                 .get(`/api/login_export/${this.level_id}/${this.arm_id}`)
-                .then(res => {
+                .then((res) => {
                     this.student_login = res.data.student_login;
                 });
-        }
+        },
     },
     created() {
         Fire.$on("searching", () => {
             let query = this.$parent.search;
             axios
                 .get("api/findStudent?q=" + query)
-                .then(data => {
+                .then((data) => {
                     this.students = data.data;
                     //  console.log(this.students)
                 })
@@ -850,6 +861,6 @@ export default {
             this.loadStudents();
         });
         //setInterval(() => this.loadUsers(), 3000);
-    }
+    },
 };
 </script>
