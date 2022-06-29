@@ -25,17 +25,17 @@ class StockController extends Controller
             if($quantityDiff>0){
 
                  // $product['available_quantity']=$product['available_quantity']-abs($quantityDiff);
-                  $product['update_type']=config('constants.update_type.DEDUCTION_UPDATE');
+                  $product['update_type']='DEDUCTION_UPDATE';
                   $product['last_added_quantity']=$quantity;
                 }else{
                // $product['available_quantity']=$product['available_quantity']-$quantityDiff;
-                $product['update_type']=config('constants.update_type.INCREASE_UPDATE');
+                $product['update_type']='INCREASE_UPDATE';
                  $product['last_added_quantity']=$quantity;
             }
         }
             else{
                 $product=Stock::where('product_id',$product_id)->first();
-                $product['update_type']=config('constants.update_type.NEW_STOCK_ADDED');
+                $product['update_type']='NEW_STOCK_ADDED';
 
         }
 
@@ -66,7 +66,7 @@ class StockController extends Controller
            $product['available_quantity']=$product['available_quantity']-$quantitySold;
            $product['last_quantity_sold']=$quantitySold;
            $product['employee_id']=$this->employee_id();
-           $product['update_type']=config('constants.update_type.SALES_UPDATE');
+           $product['update_type']='SALES_UPDATE';
            $product->save();
         //Stock::where('product_id',$product_id)->update($product);
      }
