@@ -11,10 +11,10 @@ use Illuminate\Http\Request;
 
 class StockController extends Controller
 {
-     
-     
-     
-     
+
+
+
+
      public function updateStock($purchased_id,$product_id,$quantity){
              // return $product_id;
              $product=Stock::where([['product_id',$product_id],['purchase_id',$purchased_id]])->first();
@@ -22,20 +22,20 @@ class StockController extends Controller
              $quantityDiff=$product['last_added_quantity']-$quantity;
              // Decuction
             if($quantityDiff>0){
-                 
+
                  // $product['available_quantity']=$product['available_quantity']-abs($quantityDiff);
-                  $product['update_type']=config('constants.update_type.DEDUCTION_UPDATE');
+                  $product['update_type']='DEDUCTION_UPDATE';
                   $product['last_added_quantity']=$quantity;
                 }else{
                // $product['available_quantity']=$product['available_quantity']-$quantityDiff;
                 $product['update_type']=config('constants.update_type.INCREASE_UPDATE');
                  $product['last_added_quantity']=$quantity;
             }
-        }    
+        }
             else{
                 $product=Stock::where('product_id',$product_id)->first();
-                $product['update_type']=config('constants.update_type.NEW_STOCK_ADDED');
-                  
+                $product['update_type']='NEW_STOCK_ADDED';
+
         }
 
                 $currentStock=$this->getCurrentStock($product_id);
@@ -44,7 +44,7 @@ class StockController extends Controller
                 $product['last_added_quantity']=$quantity;
                 $product['employee_id']=$this->employee_id();
                 return $product->save();
-             
+
      }
      public function addNewProduct($purchase=[]){
             //return$purchase;
@@ -55,7 +55,7 @@ class StockController extends Controller
              $purchase['last_added_quantity']=$quantity;
              $purchase['employee_id']=$this->employee_id();
              $purchase['school_id']=$this->school_id();
-             $purchase['update_type']=config('constants.update_type.NEW_STOCK_ADDED');
+             $purchase['update_type']='NEW_STOCK_ADDED';
              return Stock::create($purchase);
          }
         return ['error'=>'Empty stock is not allowed'];
@@ -66,7 +66,7 @@ class StockController extends Controller
            $product['last_quantity_sold']=$quantitySold;
            $product['employee_id']=$this->employee_id();
            $product['update_type']=config('constants.update_type.SALES_UPDATE');
-           $product->save(); 
+           $product->save();
         //Stock::where('product_id',$product_id)->update($product);
      }
      public function getAllStock(){

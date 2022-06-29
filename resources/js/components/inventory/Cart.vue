@@ -79,16 +79,18 @@
                         >Partial Payment</label
                     >
                 </div>
-                <input-field
-                    v-show="isPartial"
-                    label="PARTIAL AMOUNT"
-                    v-model="form.paid_amount"
-                    id="paid_amount"
-                    :form="form"
-                    field="paid_amount"
-                    type="number"
-                    placeholder="Enter amount"
-                />
+                <transition name="appear">
+                    <input-field
+                        v-if="isPartial"
+                        label="PARTIAL AMOUNT"
+                        v-model="form.paid_amount"
+                        id="paid_amount"
+                        :form="form"
+                        field="paid_amount"
+                        type="number"
+                        placeholder="Enter amount"
+                    />
+                </transition>
             </template>
         </app-table>
         <div class="col-md-12">
@@ -219,3 +221,18 @@ export default {
     created() {},
 };
 </script>
+<style>
+.appear-enter {
+    opacity: 0;
+}
+.appear-enter-active {
+    transition: opacity 1s;
+}
+.appear-leave {
+}
+.appear-leave-active {
+    transform: translateX(30px);
+    opacity: 0;
+    transition: all 1s;
+}
+</style>
