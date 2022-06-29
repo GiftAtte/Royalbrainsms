@@ -33,21 +33,19 @@
                         <div class="ribbon-wrapper">
                             <div class="ribbon bg-primary">Dashboard</div>
                         </div>
-            
-                            <div class="row col-md-12 pb-5">
-                                
 
-                                    <student-dashboard v-if="$gate.isStudentOrParent()"/>
-                                    <admin-dashboard v-else />
-                               
-                                
-                            </div>
-                       <div class="col-md-12 text-bold"><hr/></div>
+                        <div class="row col-md-12 pb-5">
+                            <student-dashboard
+                                v-if="$gate.isStudentOrParent()"
+                            />
+                            <admin-dashboard v-else />
+                        </div>
+                        <div class="col-md-12 text-bold"><hr /></div>
 
                         <div class="card card-navy">
                             <div class="card-header">
-                        <h3 class="card-title">Calender</h3>
-                    </div>
+                                <h3 class="card-title">Calender</h3>
+                            </div>
                             <div class="card-body">
                                 <Fullcalendar
                                     :plugins="CalenderPlugins"
@@ -219,14 +217,16 @@ import DaygridPlugin from "@fullcalendar/daygrid";
 import TimegridPlugin from "@fullcalendar/timegrid";
 import InteractionPlugin from "@fullcalendar/interaction";
 import ListPlugin from "@fullcalendar/list";
-import { mapState } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
     computed: {
         school() {
             return this.$store.state.school;
         },
     },
-    mounted() {},
+    mounted() {
+        this.loadSchool();
+    },
 
     components: { Fullcalendar },
     data: () => {
@@ -239,10 +239,10 @@ export default {
                 ListPlugin,
             ],
             active_school: "",
-            user_count: '',
-            student_count: '',
-            staff_count: '',
-            level_count: '',
+            user_count: "",
+            student_count: "",
+            staff_count: "",
+            level_count: "",
 
             events: "",
             indexToUpdate: "",
@@ -257,6 +257,9 @@ export default {
     },
 
     methods: {
+        ...mapGetters(["getSchool"]),
+        ...mapActions(["loadSchool"]),
+
         editModal(event) {
             this.editmode = true;
             this.form.reset();
@@ -362,7 +365,7 @@ export default {
         //     this.$router.push('/reports')
 
         //   }
-        this.getCounts();
+
         this.getEvent();
         Fire.$on("AfterCreate", () => {
             this.getEvent();

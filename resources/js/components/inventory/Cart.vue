@@ -8,11 +8,12 @@
             :createAction="sellProducts"
             :form="form"
             search="true"
-            title="School Item list"
+            title="Cart Item list"
             updateTitle="Update Item"
             :sumitButtonText="'SELL'"
             :modalTitle="`Payment of NGN:${form.total_amount}`"
         >
+            <template #addButton> &nbsp; </template>
             <template #extra-action>
                 <th class="text-danger">Actions</th>
             </template>

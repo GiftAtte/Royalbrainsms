@@ -11,6 +11,7 @@
             :sumitButtonText="'SELL'"
             :modalTitle="`Payment of NGN:${form.total_amount}`"
         >
+            <template #addButton>&nbsp;</template>
             <template #extra-action>
                 <th>Transaction Dete</th>
                 <th class="text-danger">Actions</th>

@@ -87,4 +87,21 @@ class SalesController extends Controller
         Sales::where('id',$id)->delete();
         return;
     }
+
+
+    public function salesDetails($sales_id){
+
+
+
+         return Sales::where('sales.id',$sales_id)
+                             ->join('sell_details','sell_details.sales_id','=','sales.id')
+                             ->join('products','sell_details.product_id','=','products.id')
+                             ->join('students','sales.student_id','=','students.id')
+                             ->selectRaw('concat(students.surname," ",students.first_name) as student ,products.name as name,
+                              sales.total_amount as total, sales.paid_amount as paid_amount,sell_details.*')
+                              ->get();
+
+}
+
+
 }

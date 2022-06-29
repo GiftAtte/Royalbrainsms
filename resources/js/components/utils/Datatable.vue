@@ -8,13 +8,14 @@
                     </h3>
                 </div>
                 <div class="col-md-6 col-sm-6">
-                    <button
-                        v-if="createButton"
-                        @click="newModal"
-                        class="btn btn-primary float-right"
-                    >
-                        Add New <i class="fas fa-user-plus fa-fw"></i>
-                    </button>
+                    <slot name="addButton">
+                        <button
+                            @click="newModal"
+                            class="btn btn-primary float-right"
+                        >
+                            Add New <i class="fas fa-user-plus fa-fw"></i>
+                        </button>
+                    </slot>
                 </div>
             </div>
             <div class="pt-3 row">
@@ -100,7 +101,9 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
+import Templates from "../results/Templates.vue";
 export default {
+    components: { Templates },
     props: [
         "headers",
         "data",

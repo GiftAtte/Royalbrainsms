@@ -7,6 +7,7 @@
             search="true"
             title="Stock list"
         >
+            <template #addButton>&nbsp;</template>
             <template #extra-action>
                 <th class="text-danger">Actions</th>
             </template>

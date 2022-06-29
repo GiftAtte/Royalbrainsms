@@ -15,22 +15,38 @@ export const store = new Vuex.Store({
         staff_login: [],
         level: [],
     },
-    getters: {},
+    getters: {
+        getSchool(state) {
+            return state.school;
+        },
+        getStudentLogin(state) {
+            return state.student_login;
+        },
+        getParentLogn(state) {
+            return state.parent_login;
+        },
+        getStaffLogin(state) {
+            return state.school;
+        },
+        getLevel(state) {
+            return state.level;
+        },
+    },
     mutations: {
-        SAVE_SCHOOL(state, school) {
-            state.school = school;
+        SAVE_SCHOOL(state, payload) {
+            state.school = payload;
         },
         SAVE_LEVEL(state, level) {
             state.level = level;
         },
-        SAVE_STUDENT_LOGIN(state, student_login) {
-            state.student_login = student_login;
+        SAVE_STUDENT_LOGIN(state, payload) {
+            state.student_login = payload;
         },
-        SAVE_STAFF_LOGIN(state, staff_login) {
-            state.staff_login = staff_login;
+        SAVE_STAFF_LOGIN(state, payload) {
+            state.staff_login = payload;
         },
-        SAVE_PARENT_LOGIN(state, parent_login) {
-            state.parent_login = parent_login;
+        SAVE_PARENT_LOGIN(state, payload) {
+            state.parent_login = payload;
         },
     },
     actions: {
@@ -66,7 +82,7 @@ export const store = new Vuex.Store({
                 });
         },
     },
-    //plugins: [createPersistedState()],
+    plugins: [createPersistedState()],
     modules: {
         Sales,
     },

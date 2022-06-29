@@ -13,6 +13,7 @@
             title="Category list"
             updateTitle="Update Category"
         >
+            <template #addButton></template>
             <template #modal-fields>
                 <input-field
                     label="Category Name"

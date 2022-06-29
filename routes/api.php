@@ -228,7 +228,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('fee_description/{id}/{student_id?}', 'API\FeesController@feeDescriptions');
     Route::put('fee_description/{id}', 'API\FeesController@updateDescriptions');
     Route::delete('fee_description/{id}', 'API\FeesController@deleteDescription');
- 
+
     // MESSAGES
     Route::post('messageApi', 'API\SmsController@createMessageApi');
     Route::get('messageApi', 'API\SmsController@MessageApi');
@@ -339,6 +339,7 @@ Route::get('inventory/sales','API\Inventory\SalesController@index');
 Route::post('inventory/sales','API\Inventory\SalesController@createSales');
 Route::put('inventory/sales','API\Inventory\SalesController@update');
 Route::delete('inventory/sales/{id}','API\Inventory\SalesController@delete');
+Route::get('inventory/sales/{id}','API\Inventory\SalesController@salesDetails');
 
 Route::get('inventory/stock','API\Inventory\StockController@index');
 Route::post('inventory/stock','API\Inventory\StockController@createStock');
