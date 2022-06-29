@@ -1,58 +1,51 @@
 // imports
-require('./bootstrap');
-window.Vue = require('vue');
-import moment from 'moment';
-import router from './router';
-import Vuex from 'vuex';
-import { store } from './store/store';
-import { mapState } from 'vuex';
+require("./bootstrap");
+window.Vue = require("vue");
+import moment from "moment";
+import router from "./router";
+import Vuex from "vuex";
+import { store } from "./store/store";
+import { mapState } from "vuex";
 import { ToggleButton } from "vue-js-toggle-button";
-import excel from 'vue-excel-export'
-import VueFormWizard from 'vue-form-wizard'
-import 'vue-form-wizard/dist/vue-form-wizard.min.css'
-import VueCountdownTimer from 'vuejs-countdown-timer'
-import { Datetime } from 'vue-datetime';
-import VuePdfReader from 'vue-pdf-reader';
-import tinymce from 'vue-tinymce-editor'
-import VueImageLoader from '@kevindesousa/vue-image-loader'
-import VueChatScroll from 'vue-chat-scroll'
-import VueCoreVideoPlayer from 'vue-core-video-player'
-import VuePerfectPrint from 'vue-perfect-print'
+import excel from "vue-excel-export";
+import VueFormWizard from "vue-form-wizard";
+import "vue-form-wizard/dist/vue-form-wizard.min.css";
+import VueCountdownTimer from "vuejs-countdown-timer";
+import { Datetime } from "vue-datetime";
+import VuePdfReader from "vue-pdf-reader";
+import tinymce from "vue-tinymce-editor";
+import VueImageLoader from "@kevindesousa/vue-image-loader";
+import VueChatScroll from "vue-chat-scroll";
+import VueCoreVideoPlayer from "vue-core-video-player";
+import VuePerfectPrint from "vue-perfect-print";
 import GridMultiSelect from "vue-gridmultiselect";
 import "vue-gridmultiselect/dist/vue-gridmultiselect.css";
 
 Vue.use(VuePerfectPrint);
-Vue.use(VueCoreVideoPlayer)
-Vue.use(VueChatScroll)
-Vue.use(VueImageLoader)
-Vue.component('tinymce', tinymce)
-Vue.component('multiselect', GridMultiSelect);
+Vue.use(VueCoreVideoPlayer);
+Vue.use(VueChatScroll);
+Vue.use(VueImageLoader);
+Vue.component("tinymce", tinymce);
+Vue.component("multiselect", GridMultiSelect);
 Vue.use(VuePdfReader);
-Vue.component('datetime', Datetime);
-Vue.use(VueCountdownTimer)
-
-Vue.use(VueFormWizard)
-
-
-// Import stylesheet
-
-
-import VueVideoPlayer from 'vue-video-player'
+Vue.component("datetime", Datetime);
+Vue.use(VueCountdownTimer);
+Vue.use(VueFormWizard);
+import VueVideoPlayer from "vue-video-player";
 Vue.use(VueVideoPlayer);
 
-
-Vue.use(excel)
-Vue.use(Vuex)
+Vue.use(excel);
+Vue.use(Vuex);
 Vue.component("ToggleButton", ToggleButton);
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
-import ToggleSwitch from 'vuejs-toggle-switch'
-Vue.use(ToggleSwitch)
+import ToggleSwitch from "vuejs-toggle-switch";
+Vue.use(ToggleSwitch);
 
-import { Form, HasError, AlertError } from 'vform';
-import Chartkick from 'vue-chartkick'
-import Chart from 'chart.js'
-import { VueCsvImport } from 'vue-csv-import';
+import { Form, HasError, AlertError } from "vform";
+import Chartkick from "vue-chartkick";
+import Chart from "chart.js";
+import { VueCsvImport } from "vue-csv-import";
 // import {
 //     PdfViewerPlugin, Toolbar, Magnification,
 //     Navigation, LinkAnnotation, BookmarkView, ThumbnailView,
@@ -61,153 +54,126 @@ import { VueCsvImport } from 'vue-csv-import';
 // Vue.use(PdfViewerPlugin);
 Vue.use(Chartkick.use(Chart));
 //full calende
-import App from './App.vue'
 import Fullcalendar from "@fullcalendar/vue";
 import DaygridPlugin from "@fullcalendar/daygrid";
 import TimegridPlugin from "@fullcalendar/timegrid";
 import InteractionPlugin from "@fullcalendar/interaction";
 import ListPlugin from "@fullcalendar/list";
-Fullcalendar.plugins = (
-    {
-        DaygridPlugin,
-        TimegridPlugin
-        , InteractionPlugin,
-        ListPlugin
-    })
+Fullcalendar.plugins = {
+    DaygridPlugin,
+    TimegridPlugin,
+    InteractionPlugin,
+    ListPlugin,
+};
 
-Vue.component(Fullcalendar)
+Vue.component(Fullcalendar);
 // Gate
 import Gate from "./Gate";
 Vue.prototype.$gate = new Gate(window.user);
 // import  ResultConfig  from "./ResultConfig";
 
-
-
 // ProgressBar
-import VueProgressBar from 'vue-progressbar'
+import VueProgressBar from "vue-progressbar";
 Vue.use(VueProgressBar, {
-    color: 'rgb(143, 255, 199)',
-    failedColor: 'red',
-    height: '3px',
+    color: "rgb(143, 255, 199)",
+    failedColor: "red",
+    height: "3px",
     transition: {
-        speed: '0.2s',
-        opacity: '0.6s',
-        termination: 3000
-      },
-   autoRevert: true,
-  inverse: false
-})
+        speed: "0.2s",
+        opacity: "0.6s",
+        termination: 3000,
+    },
+    autoRevert: true,
+    inverse: false,
+});
 
 // Pagination
-Vue.component('pagination', require('laravel-vue-pagination'));
+Vue.component("pagination", require("laravel-vue-pagination"));
 
 // Vform for handlinng forms
 window.Form = Form;
-Vue.component(HasError.name, HasError)
-Vue.component(AlertError.name, AlertError)
-Vue.component(VueCsvImport)
+Vue.component(HasError.name, HasError);
+Vue.component(AlertError.name, AlertError);
+Vue.component(VueCsvImport);
 
 // sweet Alert
 
-import swal from 'sweetalert2'
-import Axios from 'axios';
+import swal from "sweetalert2";
 window.swal = swal;
 
 const toast = swal.mixin({
     toast: true,
-    position: 'top-end',
+    position: "top-end",
     showConfirmButton: false,
-    timer: 3000
+    timer: 3000,
 });
 
 window.toast = toast;
 
 // Routes registration/Defination
 
-
+Vue.component("not-found", require("./components/NotFound.vue").default);
+Vue.component("profile", require("./components/Profile.vue").default);
 Vue.component(
-    'not-found',
-    require('./components/NotFound.vue').default
+    "assignment",
+    require("./components/assignments/Assignment.vue").default
 );
 Vue.component(
-    'profile',
-    require('./components/Profile.vue').default
+    "lesson-notes",
+    require("./components/assignments/Lesson_note.vue").default
 );
 Vue.component(
-    'assignment',
-    require('./components/assignments/Assignment.vue').default
-);
-Vue.component(
-    'lesson-notes',
-    require('./components/assignments/Lesson_note.vue').default
-);
-Vue.component(
-    'first-second-term',
-    require('./components/results/First_second_term.vue').default
+    "first-second-term",
+    require("./components/results/First_second_term.vue").default
 );
 
 Vue.component(
-    'annual',
-    require('./components/results/Annual_Result.vue').default
+    "annual",
+    require("./components/results/Annual_Result.vue").default
+);
+Vue.component("midterm", require("./components/results/Mid_term.vue").default);
+Vue.component("mock", require("./components/results/Mock_Result.vue").default);
+Vue.component(
+    "terminal",
+    require("./components/results/Terminal_Results.vue").default
 );
 Vue.component(
-    'midterm',
-    require('./components/results/Mid_term.vue').default
+    "creche-comment",
+    require("./components/results/CrecheComment.vue").default
 );
 Vue.component(
-    'mock',
-    require('./components/results/Mock_Result.vue').default
+    "primary-terminal",
+    require("./components/results/PrimaryTerminal.vue").default
 );
 Vue.component(
-    'terminal',
-    require('./components/results/Terminal_Results.vue').default
+    "primary-midterm",
+    require("./components/results/PrimaryMidterm.vue").default
 );
 Vue.component(
-    'creche-comment',
-    require('./components/results/CrecheComment.vue').default
+    "general-results",
+    require("./components/results/General_Results.vue").default
+);
+Vue.component("grading", require("./components/results/Grading.vue").default);
+Vue.component("side-menu", require("./App.vue").default);
+Vue.component("header-view", require("./components/layout/Header.vue").default);
+Vue.component(
+    "menutogglebtn",
+    require("./components/layout/MenuToggleBtn.vue").default
+);
+Vue.component("timer", require("./components/cbt/Timer.vue").default);
+Vue.component(
+    "student-assignment",
+    require("./components/assignments/StudentAssignment.vue").default
+);
+Vue.component("chats", require("./components/messaging/Chats.vue").default);
+Vue.component(
+    "input-field",
+    require("./components/utils/TextField.vue").default
 );
 Vue.component(
-    'primary-terminal',
-    require('./components/results/PrimaryTerminal.vue').default
+    "select-box",
+    require("./components/utils/SelectInput.vue").default
 );
-Vue.component(
-    'primary-midterm',
-    require('./components/results/PrimaryMidterm.vue').default
-);
-Vue.component(
-    'general-results',
-    require('./components/results/General_Results.vue').default
-);
-Vue.component(
-    'grading',
-    require('./components/results/Grading.vue').default
-);
-Vue.component(
-    'side-menu',
-    require('./App.vue').default
-);
-Vue.component(
-    'header-view',
-    require('./components/layout/Header.vue').default
-);
-Vue.component(
-    'menutogglebtn',
-    require('./components/layout/MenuToggleBtn.vue').default
-);
-Vue.component(
-    'timer',
-    require('./components/cbt/Timer.vue').default
-);
-Vue.component(
-    'student-assignment',
-    require('./components/assignments/StudentAssignment.vue').default
-);
-Vue.component(
-    'chats',
-    require('./components/messaging/Chats.vue').default,
-);
-Vue.component("input-field", require("./components/utils/TextField.vue").default);
-Vue.component("select-box", require("./components/utils/SelectInput.vue").default);
 Vue.component(
     "student-resut-list",
     require("./components/parents/ReportList.vue").default
@@ -256,31 +222,22 @@ Vue.component(
     "admin-dashboard",
     require("./components/AdminDashboard.vue").default
 );
-
-Vue.component(
-    "app-body",
-    require("./components/utils/AppBody.vue").default
-);
+Vue.component("app-body", require("./components/utils/AppBody.vue").default);
 Vue.component("app-modal", require("./components/utils/AppModal.vue").default);
 Vue.component("app-table", require("./components/utils/DataTable.vue").default);
 
-
-
-
 // Vue Router
 
-
-
-Vue.filter('upText', function (text) {
-    return text.charAt(0).toUpperCase() + text.slice(1)
+Vue.filter("upText", function (text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
 });
 // formating using moment
-Vue.filter('myDate', function (created) {
-    return moment(created).format('MMMM Do YYYY');
+Vue.filter("myDate", function (created) {
+    return moment(created).format("MMMM Do YYYY");
 });
 
-Vue.filter('myDateTime', function (input_date) {
-    return moment(input_date).format('MMMM Do YYYY h:mm:ss a')
+Vue.filter("myDateTime", function (input_date) {
+    return moment(input_date).format("MMMM Do YYYY h:mm:ss a");
 });
 
 // Initializing Vue
@@ -310,44 +267,30 @@ window.Fire = new Vue();
 //             window.print();
 //         },
 
-
 //     },
 //     render: h => h(App)
 
 // }).$mount('#app')
 
-
 const app = new Vue({
-    el: '#app',
+    el: "#app",
     router,
     store: store,
     data: {
-
-        search: '',
-        message: 'weledrcome',
-        level_id:''
-
-
+        search: "",
+        message: "weledrcome",
+        level_id: "",
     },
 
-
-    computed: mapState([ 'school' ]),
-
-
+    computed: mapState(["school"]),
 
     methods: {
         searchit: _.debounce(() => {
-            Fire.$emit('searching');
+            Fire.$emit("searching");
         }, 1000),
 
         printme() {
             window.print();
         },
-
-
     },
-
-
-
-
 });

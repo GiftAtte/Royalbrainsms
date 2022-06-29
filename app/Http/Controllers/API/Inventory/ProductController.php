@@ -12,8 +12,8 @@ use App\Stock;
 class ProductController extends Controller
 {
 
- 
-      
+
+
     public function index(){
         return Product::where('products.school_id',auth('api')->user()->school_id)
                    ->join('categories','products.category_id','=','categories.id')
@@ -24,7 +24,7 @@ class ProductController extends Controller
     }
 
     public function createProduct(Request $request){
-        
+
          $request->validate([
             'name'=>'required|string',
             'category_id'=>'required|integer',
@@ -57,16 +57,16 @@ class ProductController extends Controller
             'quantity'=>'required',
             'total_cost'=>'required',
             'purchased_date'=>'required|date',
-            
+
         ]);
           $data=$request->all();
           $data['unit_cost']=round((floatval($request->total_cost)/floatval($request->quantity)),2);
-          $data['school_id']=auth('api')->user()->school_id;            
-         
+          $data['school_id']=auth('api')->user()->school_id;
+
                      $stockManager=new StockController();
                     $purchase=Purchase::updateOrCreate(['id'=>$request->id,'product_id'=>$request->product_id],$data);
                       $check=Stock::where('product_id',$request->product_id)->first();
-                    
+
                       if(!empty($check )){
                     return $stockManager->updateStock($request->id,$request->product_id,$request->quantity);
                     }
@@ -78,7 +78,7 @@ class ProductController extends Controller
 
 
      public function getPurchases(){
-        
+
         return Purchase::where('purchases.school_id',auth('api')->user()->school_id)
                    ->join('products','purchases.product_id','=','products.id')
                     ->join('categories','products.category_id','=','categories.id')
@@ -90,8 +90,8 @@ class ProductController extends Controller
 
 
       public function deletePurchased($id){
-        Purchase::where('id',$id)->first();
-        
+        Purchase::where('id',$id)->delete();
+
         return;
     }
 }
