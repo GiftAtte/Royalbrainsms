@@ -96,7 +96,6 @@
                                     }"
                                     class="form-control"
                                     v-model="form.arm_id"
-                                    @change="loadSubjects"
                                 >
                                     <option value selected>
                                         Select Class/Level Arm
@@ -333,6 +332,8 @@ export default {
         },
 
         loadArms() {
+            this.subjects = [];
+            this.Scores = [];
             axios.get("/api/getArms/" + this.form.report_id).then((res) => {
                 this.arms = res.data;
                 this.isArm = true;
@@ -344,6 +345,7 @@ export default {
                         this.report = rep;
                         console.log(rep);
                     }
+                    this.loadSubjects();
                 });
             });
         },
