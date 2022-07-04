@@ -22,13 +22,14 @@ class PettyGroupController extends Controller
 
     public function store(Request $request)
     {
+
         $data=$request->validate([
             'session_id'=>'required',
             'term_id'=>'required',
             'title'=>'required'
         ]);
 
-
+         //return $data;
              $data['school_id']=AppUtils::getSchoolId();
               return Pettygroup::create($data);
 

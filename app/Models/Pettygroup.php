@@ -11,6 +11,8 @@ class Pettygroup extends Model
     protected $fillable=[
         'pettygroup_id',
         'title',
+        'term_id',
+        'session_id',
         'school_id'
     ];
 }
