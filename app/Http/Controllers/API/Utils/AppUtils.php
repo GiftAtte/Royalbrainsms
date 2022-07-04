@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\API\Utils;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AppUtils extends Controller
+class AppUtils
 {
    public function generateRandomString($length = 6) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -23,8 +22,28 @@ class AppUtils extends Controller
         return auth('api')->user()->employee_id?auth('api')->user()->employee_id:0;
      }
 
-     
+
      public function school_id (){
         return auth('api')->user()->school_id;
      }
+
+public static function getCurrentEmployeeId(){
+    return auth('api')->user()->employee_id?auth('api')->user()->employee_id:0;
 }
+
+
+public static function getCurrentStudentId(){
+    return auth('api')->user()->student_id;
+}
+
+public static function isClassTeacher(){
+    return auth('api')->user()->type==='tutor';
+}
+
+
+public static function getSchoolId(){
+    return auth('api')->user()->school_id;
+}
+}
+
+

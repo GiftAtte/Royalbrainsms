@@ -8,6 +8,7 @@
             class="form-control"
             :class="{ 'is-invalid': form.errors.has(field) }"
             @input="update"
+            :disabled="disabled"
         />
         <has-error :form="form" :field="field"></has-error>
     </div>
@@ -15,7 +16,15 @@
 
 <script>
 export default {
-    props: ["value", "type", "label", "form", "placeholder", "field"],
+    props: [
+        "value",
+        "type",
+        "label",
+        "form",
+        "placeholder",
+        "field",
+        "disabled",
+    ],
     methods: {
         update(event) {
             this.$emit("input", event.target.value);

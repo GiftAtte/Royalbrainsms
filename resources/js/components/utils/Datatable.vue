@@ -33,15 +33,19 @@
                             >{{ getProducts().length }}</span
                         >
                     </button>
+                    <h3 v-show="!tbData && !appData">loading....</h3>
                 </div>
                 <div class="col-md-6 search-container">
-                    <input
-                        class="form-control float-right"
-                        v-model="queryString"
-                        type="text"
-                        placeholder="Search...."
-                    />
-                    <i class="fa fa-search"></i>
+                    <slot name="search">
+                        <input
+                            class="form-control float-right"
+                            v-model="queryString"
+                            type="text"
+                            placeholder="Search...."
+                        />
+
+                        <i class="fa fa-search"></i>
+                    </slot>
                 </div>
             </div>
         </div>
@@ -81,7 +85,9 @@
                 </tfoot>
             </table>
         </div>
-
+        <div class="card-footer">
+            <slot name="card-footer"></slot>
+        </div>
         <!-- Modal -->
 
         <app-modal
@@ -131,6 +137,7 @@ export default {
             tbData: [],
             queryString: "",
             editmode: false,
+            isData: false,
         };
     },
     created() {

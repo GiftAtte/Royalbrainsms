@@ -618,16 +618,7 @@ export default {
             txt: "Products",
             link: "/inventory/products",
         },
-        {
-            type: "link",
-            txt: "School Items",
-            link: "/inventory/items",
-        },
-        {
-            type: "link",
-            txt: "Purchases",
-            link: "/inventory/purchases",
-        },
+
         {
             type: "link",
             txt: "Suppliers",
@@ -640,13 +631,44 @@ export default {
         },
         {
             type: "link",
+            txt: "Add Stock",
+            link: "/inventory/purchases",
+        },
+        {
+            type: "link",
             txt: "Stock",
             link: "/inventory/stock",
         },
         {
             type: "link",
-            txt: "Manage Price",
+            txt: "Manage Prices",
             link: "/inventory/prices",
+        },
+        {
+            type: "link",
+            txt: "Pettycash Group",
+            link: "/petty/cash/groups",
+        },
+        {
+            type: "link",
+            txt: "Petty Cash",
+            link: "/petty/cash",
+        },
+        {
+            type: "link",
+            txt: "Expense Book",
+            link: "/petty/cash/expenses",
+        },
+
+        {
+            type: "link",
+            txt: "Assets",
+            link: "/inventory/items",
+        },
+        {
+            type: "link",
+            txt: "Issue Assets",
+            link: "/inventory/items",
         },
     ],
 };

@@ -39,4 +39,17 @@ export const InventoryRoutes = [
         path: "/inventory/sales/details/:salesId",
         component: require("../components/inventory/SalesDetails.vue").default,
     },
+    {
+        path: "/petty/cash",
+        component: require("../components/inventory/PettyCash.vue").default,
+    },
+    {
+        path: "/petty/cash/groups",
+        component: require("../components/inventory/PettyCashGroup.vue")
+            .default,
+    },
+    {
+        path: "/petty/cash/expenses",
+        component: require("../components/inventory/Expense.vue").default,
+    },
 ];

@@ -13,7 +13,7 @@
         >
             <template #addButton>&nbsp;</template>
             <template #extra-action>
-                <th>Transaction Dete</th>
+                <th>Transaction Date</th>
                 <th class="text-danger">Actions</th>
             </template>
             <template v-slot:extra-action-body="{ row }">

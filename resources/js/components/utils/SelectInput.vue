@@ -5,7 +5,7 @@
             class="form-control"
             :name="name"
             :id="id"
-            @change="onChange ? onChange : fallback"
+            @change="change ? change : fallback"
             :value="value"
             @input="update"
             :class="{ 'is-invalid': form.errors.has(field) }"
@@ -31,7 +31,7 @@ export default {
         "placeholder",
         "field",
         "options",
-        "onChange",
+        "change",
         "value",
         "id",
         "name",
