@@ -38,7 +38,7 @@ Route::get('inventory/issueItems','API\Inventory\ItemController@getIssueItems');
 Route::delete('inventory/issueItems/{id}','API\Inventory\ItemController@deleteIssueItems');
 Route::put('inventory/issueItems/','API\Inventory\ItemController@updateIssueItems');
 Route::put('inventory/returnItems/','API\Inventory\ItemController@returnItems');
-Route::get('inventory/availableItems/{id}','API\Inventory\StockItemsController@getCurrentStock');
+Route::get('inventory/availableItems/{id}','API\Inventory\StockItemController@getCurrentStock');
 
 
 Route::get('inventory/sales','API\Inventory\SalesController@index');
