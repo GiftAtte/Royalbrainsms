@@ -52,4 +52,12 @@ export const InventoryRoutes = [
         path: "/petty/cash/expenses",
         component: require("../components/inventory/Expense.vue").default,
     },
+    {
+        path: "/inventory/items/issue",
+        component: require("../components/inventory/IssueItems.vue").default,
+    },
+    {
+        path: "/inventory/items/addItems",
+        component: require("../components/inventory/AddItems.vue").default,
+    },
 ];

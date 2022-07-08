@@ -53,6 +53,7 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th>S/N</th>
                         <th v-for="header in headers" :key="header.key">
                             {{ header.header }}
                         </th>
@@ -62,9 +63,12 @@
                 </thead>
                 <tbody>
                     <tr
-                        v-for="row in queryString.length ? tbData : appData"
+                        v-for="(row, index) in queryString.length
+                            ? tbData
+                            : appData"
                         :key="row.id"
                     >
+                        <td colspan="0.5">{{ index + 1 }}</td>
                         <td v-for="header in headers" :key="header.key">
                             {{ row[header.key] }}
                         </td>
@@ -97,6 +101,7 @@
             :updateTitle="updateTitle"
             :modalTitle="modalTitle"
             :sumitButtonText="sumitButtonText"
+            :modalSize="modalSize"
         >
             <slot name="modal-fields"></slot>
         </app-modal>
@@ -125,6 +130,7 @@ export default {
         "createButton",
         "modalTitle",
         "sumitButtonText",
+        "modalSize",
     ],
     computed: {
         ...mapState(["productCount"]),

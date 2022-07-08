@@ -38,6 +38,13 @@
                     </select>
                 </div>
             </template>
+
+            <template #extra-action>
+                <th>Expense Date</th>
+            </template>
+            <template v-slot:extra-action-body="{ row }">
+                <td>{{ row.expense_date | myDate }}</td>
+            </template>
             <template #extra-row>
                 <tr>
                     <th class="text-primary">
@@ -112,10 +119,11 @@ export default {
             tbHeaders: [
                 { header: "Purpose", key: "purpose" },
                 { header: "Expense Cost", key: "amount" },
-                { header: " Expense Date ", key: "expense_date" },
+                //{ header: " Expense Date ", key: "expense_date" },
             ],
             tbData: {},
             options: [],
+            items: [],
             totalExpenses: 0.0,
             totalCredit: 0.0,
             totalBalance: 0.0,

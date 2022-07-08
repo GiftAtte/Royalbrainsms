@@ -80,11 +80,11 @@ import DaygridPlugin from "@fullcalendar/daygrid";
 import TimegridPlugin from "@fullcalendar/timegrid";
 import InteractionPlugin from "@fullcalendar/interaction";
 import ListPlugin from "@fullcalendar/list";
-import { mapState } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 export default {
     computed: {
         school() {
-            return this.$store.state.school;
+            return this.getSchool();
         },
     },
     mounted() {},
@@ -120,9 +120,11 @@ export default {
         this.getCounts();
     },
     methods: {
+        ...mapGetters(["getSchool"]),
+        ...mapActions(["loadSchool"]),
         getCounts() {
             axios
-                .get("api/count/" + this.school.id)
+                .get("/api/count/" + window.user.school_id)
                 .then((response) => {
                     const {
                         user_count,
@@ -237,6 +239,7 @@ export default {
     },
 
     created() {
+        this.loadSchool();
         if (this.$gate.isStudent()) {
             this.$router.push("/reports");
         }

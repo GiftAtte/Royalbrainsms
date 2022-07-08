@@ -28,7 +28,7 @@ class AppUtils
      }
 
 public static function getCurrentEmployeeId(){
-    return auth('api')->user()->employee_id?auth('api')->user()->employee_id:0;
+    return auth('api')->user()->employee_id?auth('api')->user()->employee_id:5;
 }
 
 

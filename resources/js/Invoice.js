@@ -1,10 +1,10 @@
-const  invoiceInfo = (feeInfo=null) => {
+const invoiceInfo = (feeInfo = null) => {
     const school = feeInfo.school;
-      
-          const invoice = `
+
+    const invoice = `
                     <div style="font-size:10px;border-style: dashed ; border-width:0.1px;
                      width:44mm; font-family: "Times New Roman", Times, serif;">
-<center>
+                    <center>
                     <h3 >Fee Payment Reciept</h3>
                      Reciept No: ${school.short_name}
                     </center>
@@ -25,7 +25,7 @@ URL:&nbsp; ${school.website}.
                     </table>
                   <span>
                     <b>Name:</b>&nbsp;${feeInfo.name} ,
-                  
+
                   </span><br/>
                   <span>
                     <b>Class:</b>&nbsp;${feeInfo.feegroup.levels.level_name},
@@ -72,10 +72,9 @@ URL:&nbsp; ${school.website}.
                        <td>
                        BAL
                        </td>
-                       <td></td><td>${
-                          ( Number(feeInfo.feeSum)-Number(feeInfo.amount_paid)).toFixed(2)
-                              
-                       }</td>
+                       <td></td><td>${(
+                           Number(feeInfo.feeSum) - Number(feeInfo.amount_paid)
+                       ).toFixed(2)}</td>
                        </tr>
                     </tbody>
                 </table>
@@ -88,32 +87,23 @@ Thank for your patronage...
                     </div>
 
                     `;
-   return invoice
-    }
-   
-  
+    return invoice;
+};
 
-
-
-
-
-
-
-
- const createTable=( reports)=> {
-      let tr = "";
-      reports.map((report, index) => {
+const createTable = (reports) => {
+    let tr = "";
+    reports.map((report, index) => {
         tr += `
                     <tr style="">
                     <center>
                     <td>${index + 1}</td>
                     <td>${report.description}</td>
-                    <td>${(report.amount).toFixed(2)} </td>
+                    <td>${report.amount.toFixed(2)} </td>
                     </center>
                      </tr>
                       `;
-      });
-      return tr;
-    }
+    });
+    return tr;
+};
 
-    export default invoiceInfo; 
+export default invoiceInfo;

@@ -77,6 +77,10 @@ export default {
                 { header: "Unit Price", key: "price" },
                 { header: "Status", key: "status" },
             ],
+            typeOptions: [
+                { id: 1, label: "Returnables", value: "Returnables" },
+                { id: 2, label: "None-Returnables", value: "None-Returnable" },
+            ],
             tbData: [],
             options: [],
             form: new Form({

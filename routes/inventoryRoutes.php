@@ -27,6 +27,20 @@ Route::post('inventory/items','API\Inventory\ItemsController@createItem');
 Route::put('inventory/items','API\Inventory\ItemsController@update');
 Route::delete('inventory/items/{id}','API\Inventory\ItemsController@delete');
 
+Route::get('inventory/stockItems','API\Inventory\StockItemsController@index');
+Route::post('inventory/stockItems','API\Inventory\StockItemsController@store');
+Route::put('inventory/stockItems','API\Inventory\StockItemsController@update');
+Route::delete('inventory/stockItems/{id}','API\Inventory\StockItemsController@destroy');
+
+
+Route::post('inventory/issueItems','API\Inventory\ItemsController@issueItems');
+Route::get('inventory/issueItems','API\Inventory\ItemsController@getIssueItems');
+Route::delete('inventory/issueItems/{id}','API\Inventory\ItemsController@deleteIssueItems');
+Route::put('inventory/issueItems/','API\Inventory\ItemsController@updateIssueItems');
+Route::put('inventory/returnItems/','API\Inventory\ItemsController@returnItems');
+Route::get('inventory/availableItems/{id}','API\Inventory\StockItemsController@getCurrentStock');
+
+
 Route::get('inventory/sales','API\Inventory\SalesController@index');
 Route::post('inventory/sales','API\Inventory\SalesController@createSales');
 Route::put('inventory/sales','API\Inventory\SalesController@update');

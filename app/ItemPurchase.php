@@ -11,7 +11,7 @@ class ItemPurchase extends Model
            'item_id',
            'quantity',
            'employee_id',
-           'initial_quantity'
+
 
    ];
 }

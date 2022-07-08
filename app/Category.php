@@ -10,6 +10,5 @@ class Category extends Model
 'name',
 'school_id',
 'status',
-'type'
    ];
 }

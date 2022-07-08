@@ -17,9 +17,9 @@ class ItemsController extends Controller
     public function index(){
         return Items::where('school_items.school_id',auth('api')->user()->school_id)
                    ->join('categories','school_items.category_id','=','categories.id')
-                   ->select('school_items.id as id','school_items.name as name','categories.name as category','school_items.created_at as date')
+                   ->select('school_items.*','categories.name as category')
                    ->orderBy('category')
-                   ->orderBy('date')
+                   ->orderBy('created_at','desc')
                    ->get();
     }
 
@@ -28,6 +28,7 @@ class ItemsController extends Controller
         $data=$request->validate([
             'name'=>'required|string',
             'category_id'=>'required|string',
+            'type'=>'required|string',
         ]);
         $data['school_id']=auth('api')->user()->school_id;
               return Items::create($data);
@@ -38,6 +39,7 @@ class ItemsController extends Controller
            $request->validate([
             'name'=>'required|string',
             'category_id'=>'required|string',
+            'type'=>'required|string',
         ]);
         return Items::where('id',$request->id)->update($request->all());
     }
@@ -51,13 +53,15 @@ class ItemsController extends Controller
 
 
 
-    public function issueItem(Request $request){
+    public function issueItems(Request $request){
 
             $data= $request->validate([
                  'issued_to'=>'required',
                  'item_id'=>'required',
-                 'date_issued'=>'required',
-                 'quantity'=>'required'
+                 'category_id'=>'required',
+                 'type'=>'required',
+                 'issued_date'=>'required',
+                 'quantity'=>'required',
             ]);
 
               $data['issued_by']=AppUtils::getCurrentEmployeeId();
@@ -66,14 +70,8 @@ class ItemsController extends Controller
 
 
 
-              IssuedItem::create($data);
+            return  IssuedItem::create($data);
 
-              $itemStock=Itemstock::where('item_id',$request->item_id)->get();
-              if(count($itemStock)>0){
-                return $this->updateItemStock($request->item_id);
-              }else{
-                return $this->addNewItemStock($request->item_id,$request->quantity);
-              }
 
 
     }
@@ -113,9 +111,68 @@ public function updateItemStock($itemId){
                  }
 
 
-
-
+public function getIssueItems(){
+    return IssuedItem::where('school_items.school_id',AppUtils::getSchoolId())
+                      ->join('school_items','issued_items.item_id','=','school_items.id')
+                      ->join('staff','issued_items.issued_to','=','staff.id')
+                      ->selectRaw('concat(staff.surname," ",staff.first_name) as reciever,school_items.name as item,issued_items.*')
+                      ->latest()->paginate(50);
 }
+
+
+
+public function deleteIssueItems($id){
+    IssuedItem::destroy($id);
+    return;
+}
+
+
+   public function updateIssueItems(Request $request){
+
+   $data= $request->validate([
+                 'issued_to'=>'required',
+                 'item_id'=>'required',
+                 'category_id'=>'required',
+                 'type'=>'required',
+                 'issued_date'=>'required',
+                 'quantity'=>'required',
+            ]);
+
+              $data['issued_by']=AppUtils::getCurrentEmployeeId();
+              $data['school_id']=AppUtils::getSchoolId();
+              $data['return_date']=$request->return_date;
+
+
+
+            return  IssuedItem::where('id',$request->id)->update($data);
+
+
+
+    }
+
+
+        public function returnItems(Request $request){
+
+
+             IssuedItem::where('id',$request->id)
+                         ->update([
+                              'isReturned'=>1,
+                               'comment'=>$request->comment
+                         ]);
+
+
+                         return[
+                            'status_code'=>200,
+                            'status'=>'success',
+                            'message'=>'updated successfully'
+                         ];
+
+        }
+
+   }
+
+
+
 
 
 

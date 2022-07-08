@@ -8,13 +8,15 @@ class IssuedItem extends Model
 {
     protected $fillable=[
         'issued_to',
-        'date_issued',
+        'issued_date',
         'item_id',
         'quantity',
         'return_date',
         'school_id',
         'note',
         'issued_by',
-        'isReurned',
+        'isReturned',
+        'category_id',
+        'type'
     ];
 }

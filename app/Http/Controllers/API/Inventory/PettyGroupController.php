@@ -17,7 +17,7 @@ class PettyGroupController extends Controller
                         ->join('sessions','pettygroups.session_id','=','sessions.id')
                         ->join('terms','pettygroups.term_id','=','terms.id')
                         ->select('pettygroups.*','sessions.name as session','terms.name as term')
-                         ->paginate(20);
+                         ->paginate(2);
     }
 
     public function store(Request $request)

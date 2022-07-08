@@ -14,6 +14,14 @@
             updateTitle="Update Category"
         >
             <template #addButton></template>
+
+            <template #extra-action>
+                <th>Created On</th>
+            </template>
+            <template v-slot:extra-action-body="{ row }">
+                <td>{{ row.created | myDate }}</td>
+            </template>
+
             <template #modal-fields>
                 <input-field
                     label="Category Name"
@@ -22,18 +30,6 @@
                     :form="form"
                     field="name"
                     placeholder="Enter category name"
-                />
-                <select-box
-                    label="Category Type"
-                    :form="form"
-                    v-model="form.type"
-                    placeholder="Select category Type"
-                    field="type"
-                    :options="typeOptions"
-                    id="type"
-                    name="type"
-                    optionValue="value"
-                    optionLabel="label"
                 />
             </template>
         </app-table>
@@ -47,16 +43,9 @@ export default {
             editmode: true,
             componentKey: 0,
             updateTitle: "Update Category",
-            tbHeaders: [
-                { header: "Category", key: "name", id: 1 },
-                { header: "Type", key: "type", id: 1 },
-            ],
+            tbHeaders: [{ header: "Category", key: "name" }],
             tbData: [],
-            typeOptions: [
-                { id: 1, label: "Running Assets", value: "Running Assets" },
-                { id: 2, label: "Fixed Assets", value: "Fixed Assets" },
-                { id: 3, label: "Stock", value: "Stock" },
-            ],
+
             form: new Form({
                 id: "",
                 name: "",

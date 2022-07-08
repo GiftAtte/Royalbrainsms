@@ -662,13 +662,18 @@ export default {
 
         {
             type: "link",
-            txt: "Assets",
+            txt: "School Items",
             link: "/inventory/items",
         },
         {
             type: "link",
-            txt: "Issue Assets",
-            link: "/inventory/items",
+            txt: "Add Items",
+            link: "/inventory/items/addItems",
+        },
+        {
+            type: "link",
+            txt: "Issue Items",
+            link: "/inventory/items/issue",
         },
     ],
 };

@@ -5,7 +5,7 @@
             class="form-control"
             :name="name"
             :id="id"
-            @change="change ? change : fallback"
+            @change="change ? change() : fallback"
             :value="value"
             @input="update"
             :class="{ 'is-invalid': form.errors.has(field) }"

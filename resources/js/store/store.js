@@ -9,11 +9,12 @@ import Sales from "./sales";
 Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
-        school: [],
+        school: "",
         student_login: [],
         parent_login: [],
         staff_login: [],
         level: [],
+        tbData: {},
     },
     getters: {
         getSchool(state) {
@@ -30,6 +31,9 @@ export const store = new Vuex.Store({
         },
         getLevel(state) {
             return state.level;
+        },
+        getData(state) {
+            return state.tbData;
         },
     },
     mutations: {
@@ -48,13 +52,16 @@ export const store = new Vuex.Store({
         SAVE_PARENT_LOGIN(state, payload) {
             state.parent_login = payload;
         },
+        setData(state, payload) {
+            state.tbData = payload;
+        },
     },
     actions: {
         loadSchool({ commit }) {
             axios
                 .get("/api/school/" + window.user.school_id)
                 .then((result) => {
-                    //  console.log(window.user.school_id)
+                    console.log(result.data);
                     commit("SAVE_SCHOOL", result.data);
                 })
                 .catch((error) => {
@@ -81,8 +88,15 @@ export const store = new Vuex.Store({
                     throw new Error(`API ${error}`);
                 });
         },
+
+        loadPaginatedData({ commit }, url, page = 1) {
+            axios.get(`/api/${url}?page=${page}`).then((res) => {
+                console.log("datd:", res.data);
+                commit("setData", res.tbData);
+            });
+        },
     },
-    plugins: [createPersistedState()],
+    // plugins: [createPersistedState()],
     modules: {
         Sales,
     },
