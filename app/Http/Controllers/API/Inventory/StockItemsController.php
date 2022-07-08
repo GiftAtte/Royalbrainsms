@@ -5,8 +5,6 @@ namespace App\Http\Controllers\API\Inventory;
 use App\Http\Controllers\API\Utils\AppUtils;
 use App\Http\Controllers\Controller;
 use App\IssuedItem;
-use App\ItemPurchase;
-use App\Items;
 use App\ItemStock;
 use Illuminate\Http\Request;
 
