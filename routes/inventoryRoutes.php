@@ -22,22 +22,22 @@ Route::put('inventory/products/price','API\Inventory\PriceController@update');
 Route::get('inventory/products/stock','API\Inventory\StockController@getAllStock');
 Route::post('inventory/products/sell','API\Inventory\SalesController@createSales');
 
-Route::get('inventory/items','API\Inventory\ItemsController@index');
-Route::post('inventory/items','API\Inventory\ItemsController@createItem');
-Route::put('inventory/items','API\Inventory\ItemsController@update');
-Route::delete('inventory/items/{id}','API\Inventory\ItemsController@delete');
+Route::get('inventory/items','API\Inventory\ItemController@index');
+Route::post('inventory/items','API\Inventory\ItemController@createItem');
+Route::put('inventory/items','API\Inventory\ItemController@update');
+Route::delete('inventory/items/{id}','API\Inventory\ItemController@delete');
 
-Route::get('inventory/stockItems','API\Inventory\StockItemsController@index');
-Route::post('inventory/stockItems','API\Inventory\StockItemsController@store');
-Route::put('inventory/stockItems','API\Inventory\StockItemsController@update');
-Route::delete('inventory/stockItems/{id}','API\Inventory\StockItemsController@destroy');
+Route::get('inventory/stockItems','API\Inventory\StockItemController@index');
+Route::post('inventory/stockItems','API\Inventory\StockItemController@store');
+Route::put('inventory/stockItems','API\Inventory\StockItemController@update');
+Route::delete('inventory/stockItems/{id}','API\Inventory\StockItemController@destroy');
 
 
-Route::post('inventory/issueItems','API\Inventory\ItemsController@issueItems');
-Route::get('inventory/issueItems','API\Inventory\ItemsController@getIssueItems');
-Route::delete('inventory/issueItems/{id}','API\Inventory\ItemsController@deleteIssueItems');
-Route::put('inventory/issueItems/','API\Inventory\ItemsController@updateIssueItems');
-Route::put('inventory/returnItems/','API\Inventory\ItemsController@returnItems');
+Route::post('inventory/issueItems','API\Inventory\ItemController@issueItems');
+Route::get('inventory/issueItems','API\Inventory\ItemController@getIssueItems');
+Route::delete('inventory/issueItems/{id}','API\Inventory\ItemController@deleteIssueItems');
+Route::put('inventory/issueItems/','API\Inventory\ItemController@updateIssueItems');
+Route::put('inventory/returnItems/','API\Inventory\ItemController@returnItems');
 Route::get('inventory/availableItems/{id}','API\Inventory\StockItemsController@getCurrentStock');
 
 

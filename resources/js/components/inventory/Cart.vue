@@ -57,7 +57,7 @@
                     label="PAYMENT METHOD"
                     :form="form"
                     v-model="form.payment_method"
-                    placeholder="Select Payment Method "
+                    placeholder="Select Payment Method"
                     field="payment_method"
                     :options="options"
                     id="payment_method"
