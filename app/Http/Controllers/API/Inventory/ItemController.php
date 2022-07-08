@@ -6,7 +6,7 @@ use App\Items;
 use App\Http\Controllers\Controller;
 use App\IssuedItem;
 use App\ItemPurchase;
-use App\ItemStock;
+use App\Itemstock;
 use App\Stock;
 use Illuminate\Http\Request;
 
@@ -90,7 +90,7 @@ public function updateItemStock($itemId){
          $itemPurchased= ItemPurchase::where('item_id',$itemId)
                        ->sum('quantity');
 
-          $itemStock= ItemStock::where('item_id',$itemId)->first();
+          $itemStock= Itemstock::where('item_id',$itemId)->first();
   if(count($itemStock)>0){
       $itemStock->update(['quantity'=>$itemPurchased-$itemIssued]);
   }
@@ -100,7 +100,7 @@ public function updateItemStock($itemId){
 
       public function addNewItemStock($itemId,$quantity){
 
-               return ItemStock::create([
+               return Itemstock::create([
                 'item_id'=>$itemId,
                 'quantity'=>$quantity,
                 'school_id'=>AppUtils::getSchoolId()

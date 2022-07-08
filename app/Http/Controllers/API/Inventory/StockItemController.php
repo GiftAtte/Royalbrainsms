@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\Inventory;
 use App\Http\Controllers\API\Utils\AppUtils;
 use App\Http\Controllers\Controller;
 use App\IssuedItem;
-use App\ItemStock;
+use App\Itemstock;
 use Illuminate\Http\Request;
 class StockItemController extends Controller
 {
@@ -16,7 +16,7 @@ class StockItemController extends Controller
     public function index()
     {
        // return ItemStock::latest()->paginate(5);
-       return ItemStock::where('item_stocks.school_id',AppUtils::getSchoolId())
+       return Itemstock::where('item_stocks.school_id',AppUtils::getSchoolId())
                    ->join('school_items','item_stocks.item_id','=','school_items.id')
                    ->join('categories','school_items.category_id','=','categories.id')
                    ->join('staff', 'item_stocks.employee_id','=','staff.id')
@@ -42,7 +42,7 @@ class StockItemController extends Controller
          $data['school_id']=AppUtils::getSchoolId();
          $data['employee_id']=AppUtils::getCurrentEmployeeId();
 
-            return ItemStock::create($data);
+            return Itemstock::create($data);
     }
 
 
@@ -57,7 +57,7 @@ class StockItemController extends Controller
          $data['school_id']=AppUtils::getSchoolId();
          $data['employee_id']=AppUtils::getCurrentEmployeeId();
 
-            return ItemStock::where('id',$request->id)->update($data);
+            return Itemstock::where('id',$request->id)->update($data);
     }
 
     /**
@@ -68,7 +68,7 @@ class StockItemController extends Controller
      */
     public function destroy($id)
     {
-        ItemStock::destroy($id);
+        Itemstock::destroy($id);
         return;
     }
 
@@ -76,7 +76,7 @@ class StockItemController extends Controller
    public function getCurrentStock($item_id){
 
                //$totalIssued=0;
-               $totalStock=ItemStock::where('item_id',$item_id)
+               $totalStock=Itemstock::where('item_id',$item_id)
                                                       ->sum('quantity');
                          $totalIssued=IssuedItem::where([['item_id',$item_id],['isReturned',0]])
                            ->sum('quantity');

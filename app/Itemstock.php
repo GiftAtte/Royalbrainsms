@@ -4,8 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ItemStock extends Model
+class Itemstock extends Model
 {
+    protected $table='item_stocks';
    protected $fillable=[
                 'item_id',
                 'quantity',
