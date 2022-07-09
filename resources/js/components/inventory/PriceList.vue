@@ -48,7 +48,7 @@
                     type="number"
                 />
                 <input-field
-                    label="Cost Price"
+                    label="Selling Price"
                     v-model="form.selling_price"
                     id="selling_price"
                     :form="form"

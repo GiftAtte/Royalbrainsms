@@ -95,7 +95,7 @@ export default {
             ],
             typeOptions: [
                 { name: "Returnable Item", id: "Returnables" },
-                { name: "None Returnable Item", id: "None-Returnables" },
+                { name: "None Returnable Item", id: "Non-Returnables" },
             ],
             tbData: [],
             options: [],
