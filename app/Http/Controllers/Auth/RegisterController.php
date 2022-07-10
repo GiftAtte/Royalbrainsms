@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\School;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -23,6 +24,17 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
+
+
+      public function showRegistrationForm($id=null)
+    {
+        if(!empty($id)){
+            $school= School::where('id',$id)->first();
+            return view('auth.register',['school'=>$school]);
+          }
+
+        return view('auth.register');
+    }
 
     /**
      * Where to redirect users after registration.
