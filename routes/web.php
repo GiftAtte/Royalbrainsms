@@ -21,12 +21,81 @@ Route::get('/', function () {
 
      return redirect()->to('/dashboard');
 });
+
+
+
 Route::get('/email', function () {
     return new SendResults() ;
 });
-Route::resource('/posts', 'PostController');
 
-Auth::routes();
+// Route::post('/register/new',function(){
+//   //  return $id;
+//     return view('auth.register');
+// });
+
+
+//Auth::routes();
+
+
+
+
+
+// Authentication Routes...
+Route::get('login', [
+  'as' => 'login',
+  'uses' => 'Auth\LoginController@showLoginForm'
+]);
+Route::post('login', [
+  'as' => '',
+  'uses' => 'Auth\LoginController@login'
+]);
+Route::post('logout', [
+  'as' => 'logout',
+  'uses' => 'Auth\LoginController@logout'
+]);
+
+// Password Reset Routes...
+Route::post('password/email', [
+  'as' => 'password.email',
+  'uses' => 'Auth\ForgotPasswordController@sendResetLinkEmail'
+]);
+Route::get('password/reset', [
+  'as' => 'password.request',
+  'uses' => 'Auth\ForgotPasswordController@showLinkRequestForm'
+]);
+Route::post('password/reset', [
+  'as' => 'password.update',
+  'uses' => 'Auth\ResetPasswordController@reset'
+]);
+Route::get('password/reset/{token}', [
+  'as' => 'password.reset',
+  'uses' => 'Auth\ResetPasswordController@showResetForm'
+]);
+
+// Registration Routes...
+Route::get('register/{id?}', [
+  'as' => 'register',
+  'uses' => 'Auth\RegisterController@showRegistrationForm'
+]);
+Route::post('register', [
+  'as' => '',
+  'uses' => 'Auth\RegisterController@register'
+]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 
@@ -45,5 +114,7 @@ Route::post('/downloads/{id}',function(){
 });
 //Route::get('/users',[UserController::class,'index']);
 Route::get('{path}','HomeController@index')->where( 'path', '.*' );
+
+
 
 

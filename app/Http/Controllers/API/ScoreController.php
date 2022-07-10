@@ -107,7 +107,7 @@ public function AnnualScore($score,$term_id){
     {
         //return $request->all();
          $report=Report::findOrFail($request->report_id);
-        if($report->type==='default-result'||$report->type==='default-midterm'||$report->type==='diamond'){
+        if($report->type==='default-result'||$report->type==='default-midterm'||$report->type==='diamond'||$report->type==='navy-template'){
            return $this->default_store($request);
         }
                $request->subject_id;

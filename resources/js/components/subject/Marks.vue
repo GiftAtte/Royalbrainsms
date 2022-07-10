@@ -165,6 +165,7 @@
                                     v-if="
                                         report.type === 'default-result' ||
                                         report.type === 'default-midterm' ||
+                                        report.type === 'navy-template' ||
                                         report.type === 'diamond'
                                     "
                                     :form="form"

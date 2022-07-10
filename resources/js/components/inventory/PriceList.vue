@@ -18,7 +18,7 @@
                 <th class="text-danger">Actions</th>
             </template>
 
-            <template v-slot:extra-action-body="slotProps">
+            <template #extra-action-body>
                 <td>Available</td>
                 <td>
                     <router-link :to="`/inventory/stock`"> stock </router-link>

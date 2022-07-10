@@ -280,11 +280,15 @@ const app = new Vue({
         search: "",
         message: "weledrcome",
         level_id: "",
+        name: "Gift",
     },
 
     computed: mapState(["school"]),
 
     methods: {
+        changeName() {
+            this.name = "Atte";
+        },
         searchit: _.debounce(() => {
             Fire.$emit("searching");
         }, 1000),
