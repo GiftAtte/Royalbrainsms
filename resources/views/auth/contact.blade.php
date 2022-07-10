@@ -48,11 +48,11 @@
             {{ $school->contact_address }}
           </li>
           <li>
-           _+234 &nbsp;{{ $school->state }}, &nbsp; {{ $school->country }}
+            &nbsp;{{ $school->state }}, &nbsp; {{ $school->country }}
           </li>
 
        <li>
-        {{$school->phone}}
+        +234 &nbsp;{{$school->phone}}
        <li>{{ $school->email }}</li>
         </ul>
         </div>

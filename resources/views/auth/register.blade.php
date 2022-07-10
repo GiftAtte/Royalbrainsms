@@ -3,7 +3,7 @@
 
     <div class="header" id="app">
       <div class="logo-box">
-        <h1 class="logo">{{ $school->short_name }}</h1>
+        <h1 class="logo">{{ $school->short_name?$school->short_name:'' }}</h1>
         <h3 class="sub-logo">Our School Admission Portal</h3>
       </div>
       <div class="address-box">
@@ -32,7 +32,7 @@
       @include('auth.contact')
     </main>
     <footer class="footer">
-       <span class="header-primary-sub">{{ $school->name }}</span>
+       <span class="header-primary-sub">{{ $school->name?$school->name:'' }}</span>
        &copy; ThinkschoolApp 2022
     </footer>
 
