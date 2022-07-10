@@ -30,10 +30,10 @@ class RegisterController extends Controller
     {
         if(!empty($id)){
             $school= School::where('id',$id)->first();
-            return view('auth.register',['school'=>$school]);
+            return view('auth.registerSchool',['school'=>$school]);
           }
 
-        return view('auth.register');
+        return view('auth.registerSchool');
     }
 
     /**
