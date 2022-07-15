@@ -1285,7 +1285,7 @@ a.text-dark:hover, a.text-dark:focus {
                 <tr>
                <td style="width: 100%"> <br/>
                 @if ($report->isTeacherComment)
-                 <b>Tutor's Comment:&nbsp;{{""}}</b>
+                 <b>Tutor's Comment:&nbsp;{{$staff_comment?$staff_comment:""}}</b>
                  <hr style="font-weight: normal">
                 @endif
 

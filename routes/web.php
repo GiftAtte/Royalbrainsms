@@ -77,10 +77,7 @@ Route::get('register/{id?}', [
   'as' => 'register',
   'uses' => 'Auth\RegisterController@showRegistrationForm'
 ]);
-Route::post('register', [
-  'as' => '',
-  'uses' => 'Auth\RegisterController@register'
-]);
+Route::post('registerNewUSer', 'Auth\RegisterController@admissionRegistration');
 
 
 

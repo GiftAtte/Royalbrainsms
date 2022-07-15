@@ -1,10 +1,19 @@
 <?php
 
 namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\API\Utils\AppUtils;
 use App\School;
 use App\User;
 use App\Http\Controllers\Controller;
+use App\Imports\UsersImport;
+use App\Level;
+use App\Staff;
+use App\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\URL;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SchoolController extends Controller
 {
@@ -203,5 +212,31 @@ if($request->logo != $currentPhoto){
     $user->school_id=$school_id;
     $user->save();
 }
+
+
+public function generateRegLink(Request $request,$id){
+
+                $school=School::findOrFail($id);
+
+                if(!empty($school->admission_link)){
+                    return $school->admission_link;
+                }
+                  else{
+                   $url=$request->getSchemeAndHttpHost();
+                  //  $linkArr=explode('/',$url);
+                //     array_pop($linkArr);
+                //    $url =implode('/',$linkArr);
+                    $reg_link=AppUtils::generateRandomString(40);;
+                     $url=$url.'/'.'register/'.$reg_link;
+                    $school['admission_link']=$url;
+                    $school->save();
+             return $url;
+                  }
+
+
+               //return $request->url();
+}
+
+
 }
 

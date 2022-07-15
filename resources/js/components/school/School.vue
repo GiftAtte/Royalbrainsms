@@ -22,6 +22,19 @@
             <!-- /.container-fluid -->
         </div>
 
+        <app-modal
+            id="admissionLink"
+            modalTitle=" "
+            modalSize="modal-lg"
+            hideCreateBtn="true"
+        >
+            <div class="col-md-12">
+                <p class="text-center">
+                    {{ url }}
+                </p>
+            </div>
+        </app-modal>
+
         <div class="content" v-if="$gate.isAdmin()">
             <div class="col-12">
                 <div class="card card-navy card-outline">
@@ -47,6 +60,7 @@
                                     <th>Name</th>
                                     <th>Location</th>
                                     <th>State</th>
+                                    <th>Admission Link</th>
                                     <th>Templates</th>
                                     <th>Modify</th>
                                 </tr>
@@ -59,6 +73,14 @@
                                     <td>{{ school.name | upText }}</td>
                                     <td>{{ school.contact_address }}</td>
                                     <td>{{ school.state }}</td>
+                                    <td>
+                                        <button
+                                            class="btn btn-primary"
+                                            @click="getRegLink(school.id)"
+                                        >
+                                            ALink
+                                        </button>
+                                    </td>
                                     <td>
                                         <router-link
                                             tag="a"
@@ -371,6 +393,7 @@ export default {
     data() {
         return {
             editmode: false,
+            url: "",
             schools: {},
             selected_file: "",
             activate: false,
@@ -465,7 +488,12 @@ export default {
             this.form.reset();
             $("#addNew").modal("show");
         },
-
+        getRegLink(id) {
+            axios.get("/api/getRegLink/" + id).then((res) => {
+                this.url = res.data;
+                $("#admissionLink").modal("show");
+            });
+        },
         createSchool() {
             this.$Progress.start();
             this.form

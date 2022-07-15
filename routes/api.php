@@ -16,6 +16,7 @@ use function Composer\Autoload\includeFile;
 |
 */
 
+Route::get('getRegLink/{id}', 'API\SchoolController@generateRegLink');
 Route::get('auth/login', 'API\AuthController@login');
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/posts/{post}/comments', 'CommentController@index');

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class AppUtils
 {
-   public function generateRandomString($length = 6) {
+   public static function generateRandomString($length = 6) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';

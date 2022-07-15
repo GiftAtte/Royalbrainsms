@@ -3,7 +3,7 @@
 
     <div class="header" id="app">
       <div class="logo-box">
-        <h1 class="logo">{{ $school->short_name?$school->short_name:'' }}</h1>
+        <h1 class="logo text-uppercase">{{ $school->short_name?$school->short_name:'' }}</h1>
         <h3 class="sub-logo">Our School Admission Portal</h3>
       </div>
       <div class="address-box">
@@ -28,6 +28,7 @@
 
     </div>
     <main>
+
       @include('auth.form')
       @include('auth.contact')
     </main>
