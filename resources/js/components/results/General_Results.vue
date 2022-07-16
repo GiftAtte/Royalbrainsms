@@ -500,7 +500,7 @@
                     <div class="card-body row">
                         <div v-if="report.isPrincipalComment" class="row col-6">
                             <span
-                                ><b>Principal's Comment:&nbsp;</b
+                                ><b>Principal's/Head Teacher's Comment:&nbsp;</b
                                 >{{
                                     principal_comment ? principal_comment : ""
                                 }}</span
