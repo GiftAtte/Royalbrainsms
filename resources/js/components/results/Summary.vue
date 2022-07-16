@@ -13,7 +13,7 @@
                     <td>Grade</td>
                     <td>Narration</td>
                     <td>Students In Class</td>
-                    <td v-if="report.isProgress_status">Progress status</td>
+                    <td v-if="report.isProgressStatus">Progress status</td>
                 </tr>
 
                 <tr>
@@ -35,7 +35,7 @@
 
                     <td>{{ summary.total_students }}</td>
 
-                    <td v-if="report.isProgress_status">
+                    <td v-if="report.isProgressStatus">
                         <b>{{
                             summary.progress_status
                                 ? summary.progress_status
