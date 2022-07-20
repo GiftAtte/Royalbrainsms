@@ -28,13 +28,14 @@
                 @else
                 <th>Total<br/>[100%]</th>
                  @endif
+                  @if ($report->isMaxScore)
+                 <th>Highest <br/>Score</th>
+                 @endif
                  @if ($report->isMinScore)
                  <th>Lowest <br/>Score</th>
                  @endif
 
-                 @if ($report->isMaxScore)
-                 <th>Highest <br/>Score</th>
-                 @endif
+
 
                 <th>Class Avg</th>
                 <th>Grade</th>
