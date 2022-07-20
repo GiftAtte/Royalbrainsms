@@ -43,13 +43,14 @@
 <td>{{$score->cummulative_narration?$score->cummulative_narration:'-'}}</td>
 @else
 <td>{{$score->total?$score->total:'-'}}</td>
+ @if ($report->isMaxScore)
+<td>{{$score->arm_max_score?$score->arm_max_score:'-'}}</td>
+ @endif
 @if ($report->isMinScore)
 <td>{{$score->arm_min_score?$score->arm_min_score:'-'}}</td>
 @endif
 
- @if ($report->isMaxScore)
-<td>{{$score->arm_max_score?$score->arm_max_score:'-'}}</td>
- @endif
+
 
  <td>{{$score->arm_avg_score?$score->arm_avg_score:'-'}}</td>
 <td>{{$score->grade?$score->grade:'-'}}</td>
