@@ -30,6 +30,7 @@ use App\Exports\MasterAndCa;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Exports\Mastersheet;
+use App\Http\Controllers\API\Utils\AppUtils;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Level_history;
 use App\Markcheck;
@@ -184,11 +185,11 @@ public function studenResult( $report_id, $student_id=null)
     //              ->select('annual_score','subject_id','term_id','total')->distinct('term_id')->get();
 
                  //Thinks School Annual
-         $pastTotal=Mark::select('total as annual_score','subject_id','term_id','report_id')
-         ->where([['student_id',$student_id],['level_id',$report->level_id]
-         ])->whereNotIn('report_type',['mid_term','default-midterm'])->whereNotIn('term_id',[4,3])->distinct(['term_id','subject_id'])->get();
+        //  $pastTotal=Mark::select('total as annual_score','subject_id','term_id','report_id')
+        //  ->where([['student_id',$student_id],['level_id',$report->level_id]
+        //  ])->whereNotIn('report_type',['mid_term','default-midterm'])->whereNotIn('term_id',[4,3])->distinct(['term_id','subject_id'])->get();
 
-
+   $pastTotal=AppUtils::getPastTotal($student_id,$report);
 
           $pastTotalarray=[];
           foreach ($pastTotal as $total ) {

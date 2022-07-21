@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Utils;
 
+use App\Mark;
 use Illuminate\Http\Request;
 
 class AppUtils
@@ -44,6 +45,38 @@ public static function isClassTeacher(){
 public static function getSchoolId(){
     return auth('api')->user()->school_id;
 }
+
+
+public static function getPastTotal($student_id,$report){
+
+
+      if($report->type==='default-result'||
+         $report->type==='default-midterm'||
+         $report->type==='diamond'||
+         $report->type==='navy-template'){
+        return Mark::select('total as annual_score','subject_id','term_id','report_id')
+         ->where([['student_id',$student_id],['level_id',$report->level_id]
+         ])->whereNotIn('report_type',['mid_term','default-midterm'])->whereNotIn('term_id',[4,3])->distinct(['term_id','subject_id'])->get();
+      }else{
+
+        // MADONNA ANNUAL
+    return  Mark::whereIn('level_id',[$report->level_id])->where('student_id',$student_id)
+              ->whereNotIn('report_type',['mid_term','default-midterm','default-result'])
+                 ->select('annual_score','subject_id','term_id','total')->distinct('term_id')->get();
+
+
+      }
+
+                 //Thinks School Annual
+
+
+
+
+
+
+
+}
+
 }
 
 

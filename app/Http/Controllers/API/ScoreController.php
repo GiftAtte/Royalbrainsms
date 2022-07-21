@@ -30,6 +30,7 @@ use App\Markcheck;
 use App\Imports\MarksImport;
 use App\Teachersubject;
 use App\CrechestudentDomain;
+use App\Http\Controllers\API\Utils\AppUtils;
 use App\PrincipalComent;
 use Exception;
 //use App\CrechestudentDomain;
@@ -854,12 +855,12 @@ public function studenResult( $report_id, $student_id=null)
     //              ->select('annual_score','subject_id','term_id','total')->distinct('term_id')->get();
 
                  //Thinks School Annual
-         $pastTotal=Mark::select('total as annual_score','subject_id','term_id','report_id')
-         ->where([['student_id',$student_id],['level_id',$report->level_id]
-         ])->whereNotIn('report_type',['mid_term','default-midterm'])->whereNotIn('term_id',[4,3])->distinct(['term_id','subject_id'])->get();
+        //  $pastTotal=Mark::select('total as annual_score','subject_id','term_id','report_id')
+        //  ->where([['student_id',$student_id],['level_id',$report->level_id]
+        //  ])->whereNotIn('report_type',['mid_term','default-midterm'])->whereNotIn('term_id',[4,3])->distinct(['term_id','subject_id'])->get();
 
 
-
+          $pastTotal=AppUtils::getPastTotal($student_id,$report);
           $pastTotalarray=[];
           foreach ($pastTotal as $total ) {
 
@@ -1177,16 +1178,19 @@ if($report->type==='terminal' && $report->term_id===3){
     {
     $subject_id=$request->subject_id;
     $Nstudents= $request->number_of_students;
+      $isAvgTotal=0;
 
         $marksArray=[];
- $report=Report::findOrFail($request->report_id);
- Mark::whereIn('report_id',[$request->report_id])->where([['arm_id',$request->arm_id],['subject_id',$request->subject_id]])->delete();
+    $report=Report::findOrFail($request->report_id);
+   Mark::whereIn('report_id',[$request->report_id])->where([['arm_id',$request->arm_id],['subject_id',$request->subject_id]])->delete();
 
             $subject=Level_sub::where([['level_id',$report->level_id],['subject_id',$request->subject_id]])->first();
             $LevelScores=Mark::whereIn('subject_id',[$request->subject_id])->where([['level_id',$report->level_id],['arm_id',$request->arm_id]],)
              ->get();
 
-
+              if($report->ca1Percent===100){
+                $isAvgTotal=1;
+              }
             for($i=0;$i<$Nstudents; ++$i){
                 $total=$this->default_sum($request->test1[$i],$request->test2[$i],$request->test3[$i],$request->exams[$i]);
                 $gradding= $this->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
@@ -1201,7 +1205,7 @@ if($report->type==='terminal' && $report->term_id===3){
           $mark['test3']=$request->test3[$i];
           $mark['exams']=$request->exams[$i];
           $mark['arm_id']=$request->arm_id;
-          $mark['total']=$total;
+          $mark['total']= $isAvgTotal > 0?round($total/2,2): $total;
           $mark['grade']=$gradding['grade'];
           $mark['narration']=$gradding['narration'];
           $mark['term_id']=$report->term_id;

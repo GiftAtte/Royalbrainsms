@@ -127,9 +127,10 @@
                                 <h5>
                                     <b>Next Term Begins:&nbsp;</b>
                                     {{
-                                        report.term_start
-                                            ? report.term_start
-                                            : "---------"
+                                        report.next_term
+                                            ? report.next_term
+        : "---------"
+                                            
                                     }}
                                 </h5>
                             </div>
