@@ -1209,6 +1209,8 @@ a.text-dark:hover, a.text-dark:focus {
                 <h6 ><b>Term:&nbsp;</b> {{$report->terms->name}}</h6>
 
                 <h6><b>Session:&nbsp;</b> {{$report->sessions->name}} </h6>
+                 <h6 ><b>Next Term Begins:&nbsp;</b> {{$report->term_start?$report->term_start:'---------'}}</h6>
+
 
 
 

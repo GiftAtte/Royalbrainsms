@@ -21,7 +21,7 @@ ATTENDANCE
               <td>{{ $attendance?$attendance->school_days:'----'}}</td>
               <td>{{ $attendance?$attendance->days_present:'----'}}</td>
               <td>{{ $attendance?$attendance->days_absent:'----'}}</td>
-              <td>{{$report->next_term?$report->next_term:'---------'}}</td>
+              <td>{{$report->term_start?$report->term_start:'---------'}}</td>
 
           </tr>
 
