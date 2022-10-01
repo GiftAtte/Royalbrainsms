@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\API\Utils\AppUtils;
 use App\Video;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -65,7 +67,7 @@ class VideoController extends Controller
 
 
 
-    $data['school_id']=$user->school_id;
+    $data['school_id']=AppUtils::getSchoolId();
     $data['level_id']=$request->level_id;
     $data['title']=$request->title;
     $data['author_id']=$user->id;
