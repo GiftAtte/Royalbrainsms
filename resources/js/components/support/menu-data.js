@@ -70,19 +70,23 @@ export default {
 
         {
             type: "link",
-            txt: "Level History",
-            link: "/level_history",
+            txt: "Assignment-Notes",
+            link: "/assignments",
         },
         {
             type: "link",
-            txt: "Download Login Details",
-            link: "/exports",
+            txt: "Videos",
+            link: "/video_list",
         },
-
         {
             type: "link",
-            txt: "Upload  Zipe Images",
-            link: "/photos",
+            txt: "Live Classes",
+            link: "/liveClasses",
+        },
+        {
+            type: "link",
+            txt: "Attendance",
+            link: "/daily/attendance",
         },
     ],
 
@@ -140,11 +144,6 @@ export default {
             txt: "Subject Performance",
             link: "/subject_tracker",
         },
-        {
-            type: "link",
-            txt: "Assignment-Notes",
-            link: "/assignments",
-        },
 
         {
             type: "link",
@@ -153,8 +152,8 @@ export default {
         },
         {
             type: "link",
-            txt: "Videos",
-            link: "/video_list",
+            txt: "Weekly Activity",
+            link: "/weekly/marks",
         },
     ],
     // student accademics
@@ -213,6 +212,11 @@ export default {
             type: "link",
             txt: "CBT",
             link: "/exam_list",
+        },
+        {
+            type: "link",
+            txt: "Live Classes",
+            link: "/liveClasses",
         },
     ],
 
@@ -356,12 +360,6 @@ export default {
             txt: "Learning Domain",
             link: "/learning_domain",
         },
-
-        {
-            type: "link",
-            txt: "SMS Message",
-            link: "/sms",
-        },
     ],
     //superadmin
     superadmin: [
@@ -480,19 +478,26 @@ export default {
             txt: "School Chat",
             link: "/chats",
         },
-    ],
 
+        {
+            type: "link",
+            txt: "SMS Sender",
+            link: "/sms",
+        },
+        {
+            type: "link",
+            txt: "Email Sender",
+            link: "/sms",
+        },
+    ],
+    //TUTOR
     tutor: [
         {
             type: "title",
             txt: "Form Tutor",
             icon: "fa fa-pencil context-menu__title-icon",
         },
-        {
-            type: "link",
-            txt: "Subject Teacher",
-            link: "/subject_teacher",
-        },
+
         {
             type: "link",
             txt: "Students",
@@ -503,11 +508,7 @@ export default {
             txt: "Report Card",
             link: "/reports",
         },
-        {
-            type: "link",
-            txt: "Manage Promotion",
-            link: "/manage_progress",
-        },
+
         {
             type: "link",
             txt: "Score Card",
@@ -547,11 +548,6 @@ export default {
 
         {
             type: "link",
-            txt: "Performance Tracker",
-            link: "/chart",
-        },
-        {
-            type: "link",
             txt: "Subject Performance",
             link: "/subject_tracker",
         },
@@ -564,6 +560,21 @@ export default {
             type: "link",
             txt: "Assignment-Notes",
             link: "/assignments",
+        },
+        {
+            type: "link",
+            txt: "Daily Attendance",
+            link: "/daily/attendance",
+        },
+        {
+            type: "link",
+            txt: "Live Classes",
+            link: "/liveClasses",
+        },
+        {
+            type: "link",
+            txt: "Weekly Activity",
+            link: "/weekly/marks",
         },
     ],
     fees: [
@@ -674,6 +685,67 @@ export default {
             type: "link",
             txt: "Issue Items",
             link: "/inventory/items/issue",
+        },
+    ],
+
+    // ADMISSION
+
+    Admission: [
+        {
+            type: "title",
+            txt: "Admission",
+            icon: "fa fa-book context-menu__title-icon",
+        },
+        {
+            type: "link",
+            txt: "Liveclasses",
+            link: "/liveclasses",
+        },
+        {
+            type: "link",
+            txt: "Personal Info",
+            link: "/admission/profile",
+        },
+
+        {
+            type: "link",
+            txt: "Admission Requirements",
+            link: "/admission/requirements",
+        },
+
+        {
+            type: "link",
+            txt: "CBT",
+            link: "/admission/cbt",
+        },
+        {
+            type: "link",
+            txt: "Admission Status",
+            link: "/admission/admission-status",
+        },
+    ],
+    // DOWNLOADS
+    Downloads: [
+        {
+            type: "title",
+            txt: "Download/History",
+            icon: "fa fa-history context-menu__title-icon",
+        },
+        {
+            type: "link",
+            txt: "Download Login Details",
+            link: "/exports",
+        },
+
+        {
+            type: "link",
+            txt: "Upload  Zipe Images",
+            link: "/photos",
+        },
+        {
+            type: "link",
+            txt: "History",
+            link: "/history",
         },
     ],
 };

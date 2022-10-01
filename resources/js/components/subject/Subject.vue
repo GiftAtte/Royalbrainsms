@@ -30,7 +30,7 @@
                 <div class="card-tools">
                 <!-- Default checked -->
 
-               <button v-show="$gate.isAdminOrTutor()" class="btn btn-success btn-sm float-right m-2" @click="newModal">Add New <i class="fas fa-user-plus fa-fw"></i></button>
+               <button v-show="$gate.isAdminOrTutor()" class="btn btn-primary btn-sm float-right m-2" @click="newModal"> <i class="fas fa-plus-circle fa-fw"></i>Add New</button>
                 </div>
                  </div>
               </div>

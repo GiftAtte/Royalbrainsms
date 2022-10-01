@@ -12,7 +12,7 @@
                             <li class="breadcrumb-item">
                                 <a href="#">FeeItems</a>
                             </li>
-                            <li class="breadcrumb-item active">Report Group</li>
+                            <li class="breadcrumb-item active">Fee Items</li>
                         </ol>
                     </div>
                     <!-- /.col -->
@@ -26,17 +26,15 @@
             <div class="col-12">
                 <div class="card card-navy card-outline">
                     <div class="card-header">
-                      
-                        
                         <div class="row float-right">
                             <div class="card-tools">
                                 <button
                                     v-show="$gate.isAdmin()"
-                                    class="btn btn-success btn-sm float-right m-2"
+                                    class="btn btn-primary btn-sm float-right m-2"
                                     @click="newModal"
                                 >
+                                    <i class="fas fa-plus-circle mx-1"></i>
                                     Add New
-                                    <i class="fas fa-user-plus fa-fw"></i>
                                 </button>
                             </div>
                         </div>
@@ -81,9 +79,7 @@
                         </table>
                     </div>
                     <!-- /.card-body -->
-                    <div class="card-footer">
-                       
-                    </div>
+                    <div class="card-footer"></div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -227,7 +223,6 @@ export default {
             $("#addNew").modal("show");
         },
 
-   
         CreateFeeItem() {
             this.$Progress.start();
             //console.log(this.form.name);
@@ -287,8 +282,6 @@ export default {
                 });
             }
         },
-
-        
     },
     created() {
         // console.log(window.user)

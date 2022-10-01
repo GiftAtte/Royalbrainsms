@@ -37,7 +37,8 @@ class Report extends Model
                 'examPercent',
                 'isLearningDomain',
                 'isManualPrincipalComment',
-                'isDob','isGender'
+                'isDob','isGender','isWeeklyCa',
+                'term_start','term_end'
 ];
 
     public function levels()

@@ -309,4 +309,7 @@ public function sum($t1,$t2,$t3,$exams){
 
            return[ 'student'=>$student,'cbt'=>$cbt,'exam'=>$exam,'isSubmitted'=>$isSubmitted,'score'=>$score];
     }
+
+
+
 }

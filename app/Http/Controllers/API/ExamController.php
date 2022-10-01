@@ -6,6 +6,7 @@ use App\Exam;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Has_arm;
+use App\Http\Controllers\API\Utils\AppUtils;
 use App\Option;
 use App\Question;
 use App\Question_answer;
@@ -86,7 +87,8 @@ class ExamController extends Controller
              'staff_id'=>$user->staff_id,
              'school_id'=>$user->school_id,
              'venue'=>$request->venue,
-             'duration'=>$request->duration
+             'duration'=>$request->duration,
+             'comment'=>$request->comment
 
         ])->id;
     }
@@ -203,4 +205,28 @@ public function questionOptions(Request $request){
   return $question_id;
 }
 
+
+  public function publishExam($id){
+
+
+        $exam= Exam::where('id',$id)->first();
+        $initialState=$exam->isPublished;
+        $exam->isPublished=!$initialState;
+       return $exam->save();
+    }
+
+
+    public function publishedExam(){
+
+         $user=auth('api')->user();
+         if($user->type==='student'){
+             $student=Student::findOrFail($user->student_id);
+        return Exam::with(['examiner','level','subject'])->where([['level_id',$student->class_id],['arm_id',$student->arm_id],['isPublished',1]])->latest()->paginate(20);
+        }
+        if($user->type==='tutor'){
+            $level=Has_arm::where('staff_id',$user->staff_id)->first();
+            return Exam::with(['examiner','level','subject'])->where([['level_id',$level->level_id],['arm_id',$level->arms_id],['isPublished',1]])->latest()->paginate(20);
+        }
+        return Exam::with(['examiner','level','subject'])->where([['school_id',$user->school_id],['isPublished',1]])->latest()->paginate(20);
+    }
 }

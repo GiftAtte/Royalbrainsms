@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Has_arm;
+use App\Http\Controllers\API\Utils\AppUtils;
 use App\Staff_comment;
 use App\TeachersComment;
 use App\Report;
@@ -50,6 +51,7 @@ class StaffcommentController extends Controller
        return Staff_comment::create([
 
            'comment' => $request->comment,
+           'staff_id'=>AppUtils::getCurrentEmployeeId(),
 
            'school_id' => auth('api')->user()->school_id,
        ]);
@@ -94,8 +96,11 @@ class StaffcommentController extends Controller
     public function assignComment(Request $request){
         $students=$request->number_of_students;
         $report=Report::findOrFail($request->report_id);
+
        for ($i=0;$i<$students;++$i){
+        if($request->comment_id[$i]>0){
            TeachersComment::where([['report_id',$report->id],['student_id',$request->student_id[$i]]])->delete();
+
            TeachersComment::create(
 
            [
@@ -105,5 +110,6 @@ class StaffcommentController extends Controller
            'level_id'=>$report->level_id,
            'arm_id'=>$request->arm_id
            ]);}
+        }
 }
 }

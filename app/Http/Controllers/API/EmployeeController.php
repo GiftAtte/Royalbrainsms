@@ -50,9 +50,9 @@ class EmployeeController extends Controller
       $this->validate($request,[
     'surname' => 'required|string|max:191',
     'first_name' => 'required|string|max:191',
-    'phone' => 'required|string|max:191',
+   // 'phone' => 'required|string|max:191',
     'gender' => 'required|string|max:191',
-    'qualification' => 'required|string|max:191',
+   // 'qualification' => 'required|string|max:191',
     //'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
 
 ]);
@@ -136,9 +136,9 @@ try{
              $this->validate($request,[
     'surname' => 'required|string|max:191',
     'first_name' => 'required|string|max:191',
-    'phone' => 'required|string|max:191',
+    //'phone' => 'required|string|max:191',
     'gender' => 'required|string|max:191',
-    'qualification' => 'required|string|max:191',
+    //'qualification' => 'required|string|max:191',
     //'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
 
 ]);

@@ -1,6 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
 import { InventoryRoutes } from "./appRoutes/InventoryRoutes";
+import { AdmissionRoutes } from "./appRoutes/admissionRoutes";
+import { LivestreamRoutes } from "./appRoutes/livestreamRoutes";
+import { WeeklyRoutes } from "./appRoutes/weeklyRoutes";
 Vue.use(Router);
 
 export default new Router({
@@ -8,7 +11,10 @@ export default new Router({
 
     routes: [
         // loads Home component
+        ...WeeklyRoutes,
+        ...AdmissionRoutes,
         ...InventoryRoutes,
+        ...LivestreamRoutes,
         { path: "/", component: require("./components/Dashboard.vue").default },
         {
             path: " /home",
@@ -221,9 +227,8 @@ export default new Router({
             component: require("./components/cbt/CbtScores.vue").default,
         },
         {
-            path: "/level_history",
-            component: require("./components/students/LevelHistory.vue")
-                .default,
+            path: "/history",
+            component: require("./components/history/History.vue").default,
         },
         {
             path: "/students/:id",

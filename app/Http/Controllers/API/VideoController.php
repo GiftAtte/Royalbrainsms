@@ -5,9 +5,10 @@ use App\Video;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-
+ini_set('max_execution_time', '1000');
 class VideoController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -38,34 +39,41 @@ class VideoController extends Controller
      */
     public function store(Request $request)
     {
-    //return $request->all();
+  //  return $request->all();
  $this->validate($request,[
     'level_id' => 'required',
     'title' => 'sometimes|required|max:191',
-    'video_path' => 'required',
 
 ]);
 
-$video=new Video();
+    $data=[];
     $user=auth('api')->user();
-
-
-    $video->school_id=$user->school_id;
-    $video->level_id=$request->level_id;
-    $video->title=$request->title;
-    $video->author_id=$user->id;
-    $video->video_path=$request->video_path;
-
+    $path='';
+    if($request->type==='youtube_video'){
+    $data['video_path']=$request->video_path;
+    } else{
+ if($request->has('file')){
     // if(!Storage::disk('public_uploads')->put($path, $file_content)) {
     //     return false;
     // }
-    //$path=  Storage::disk('public_uploads')->put('videos', $request->file('file'));
-   // $path=Storage::putFile('videos', $request->file('file'));
-   // $video->video_path=explode('/',$path)[1];
+   $path=  Storage::disk('public_uploads')->put('videos', $request->file('file'));
+   //$path=Storage::putFile('videos', $request->file('file'));
+   $data['video_path']=explode('/',$path)[1];
+    }
 
-    $video->save();
+    }
 
-return $video;
+
+
+    $data['school_id']=$user->school_id;
+    $data['level_id']=$request->level_id;
+    $data['title']=$request->title;
+    $data['author_id']=$user->id;
+    $data['type']=$request->type;
+   $id=$request->id;
+
+
+return Video::updateOrCreate(['id'=>$id],$data);
     }
 
     /**
@@ -94,7 +102,7 @@ return $video;
     { if($id){
       return Video::findOrFail($id);
     }
-       
+
     }
 
     /**

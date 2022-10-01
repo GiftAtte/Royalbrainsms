@@ -38,7 +38,7 @@ use PDF;
 use App\Mail\SendMailPdf;
 use App\PrincipalComent;
 use Illuminate\Support\Facades\Mail;
-class HomeController extends Controller
+class Home2Controller extends Controller
 {
     /**
      * Create a new controller instance.
@@ -248,7 +248,7 @@ public function studenResult( $report_id, $student_id=null)
     ->where([['student_id',$student_id],['type','None Academic']])->whereNotIn('total',[0])
     ->distinct('subject_id')->get();
 
-      // 
+      //
        $principal_comment=null;
        if($report->isManualPrincipalComment>0){
            $principal_comment=$this->getManualPrincipalComment($student_id,$report_id);

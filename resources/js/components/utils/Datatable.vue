@@ -8,12 +8,13 @@
                     </h3>
                 </div>
                 <div class="col-md-6 col-sm-6">
-                    <slot name="addButton">
+                    <slot name="actionBtn"> </slot>
+                    <slot name="addButton" v-if="$gate.isAdminOrTutor()">
                         <button
                             @click="newModal"
                             class="btn btn-primary float-right"
                         >
-                            Add New <i class="fas fa-user-plus fa-fw"></i>
+                            <i class="fa fa-plus-circle"></i> ADD NEW
                         </button>
                     </slot>
                 </div>
@@ -21,6 +22,7 @@
             <div class="pt-3 row">
                 <div class="col-md-6">
                     <button
+                        v-if="cart"
                         title="cart. click to show content"
                         @click="goToCart"
                         type="button"
@@ -49,45 +51,47 @@
                 </div>
             </div>
         </div>
-        <div class="card-body table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>S/N</th>
-                        <th v-for="header in headers" :key="header.key">
-                            {{ header.header }}
-                        </th>
-                        <slot name="extra-action"> </slot>
-                        <th v-if="action">Modify</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr
-                        v-for="(row, index) in queryString.length
-                            ? tbData
-                            : appData"
-                        :key="row.id"
-                    >
-                        <td colspan="0.5">{{ index + 1 }}</td>
-                        <td v-for="header in headers" :key="header.key">
-                            {{ row[header.key] }}
-                        </td>
-                        <slot name="extra-action-body" :row="row"> </slot>
-                        <td v-if="action">
-                            <a href="#" @click="editModal(row)">
-                                <i class="fa fa-edit blue"></i>
-                            </a>
-                            &nbsp;|&nbsp;
-                            <a href="#" @click="deleteItem(row.id)">
-                                <i class="fa fa-trash red"></i>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <slot name="extra-row" :data="tbData"></slot>
-                </tfoot>
-            </table>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table :class="`table ${tb_classes ? tb_classes : ''}`">
+                    <thead>
+                        <tr>
+                            <th>S/N</th>
+                            <th v-for="header in headers" :key="header.key">
+                                {{ header.header }}
+                            </th>
+                            <slot name="extra-action"> </slot>
+                            <th v-if="action">Modify</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="(row, index) in queryString.length
+                                ? tbData
+                                : appData"
+                            :key="row.id"
+                        >
+                            <td colspan="0.5">{{ index + 1 }}</td>
+                            <td v-for="header in headers" :key="header.key">
+                                {{ row[header.key] }}
+                            </td>
+                            <slot name="extra-action-body" :row="row"> </slot>
+                            <td v-if="action">
+                                <a href="#" @click="editModal(row)">
+                                    <i class="fa fa-edit blue"></i>
+                                </a>
+                                &nbsp;|&nbsp;
+                                <a href="#" @click="deleteItem(row.id)">
+                                    <i class="fa fa-trash red"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <slot name="extra-row" :data="tbData"></slot>
+                    </tfoot>
+                </table>
+            </div>
         </div>
         <div class="card-footer">
             <slot name="card-footer"></slot>
@@ -131,6 +135,8 @@ export default {
         "modalTitle",
         "sumitButtonText",
         "modalSize",
+        "cart",
+        "tb_classes",
     ],
     computed: {
         ...mapState(["productCount"]),

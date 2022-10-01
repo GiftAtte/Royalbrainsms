@@ -9,7 +9,7 @@ class Comment extends Model
     //
     protected $table="comments";
     protected $fillable=[
-        'upper_bound','lower_bound','comment','school_id','group_id'
+        'upper_bound','lower_bound','comment','school_id','group_id','staff_id'
     ];
 
 

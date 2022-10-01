@@ -105,8 +105,13 @@ class AssignmentController extends Controller
         //
 
         $headers = ['Content-Type: application/pdf'];
-        $assignment=Assignment::findOrFail($id);
+        $assignment=Assignment::with('subject')->where('id',$id)->first();
+
+          if($assignment->is_pdf<1){
+            return $assignment;
+          }
         $path=public_path('/'.$assignment->file_name);
+
         return response()->download($path,'assignment.pdf',$headers);
     }
 

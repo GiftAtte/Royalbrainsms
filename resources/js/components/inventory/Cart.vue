@@ -12,6 +12,7 @@
             updateTitle="Update Item"
             :sumitButtonText="'SELL'"
             :modalTitle="`Payment of NGN:${form.total_amount}`"
+            cart="true"
         >
             <template #addButton> &nbsp; </template>
             <template #extra-action>

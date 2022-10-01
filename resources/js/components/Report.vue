@@ -30,11 +30,11 @@
                             <div class="card-tools">
                                 <button
                                     v-show="$gate.isAdmin()"
-                                    class="btn btn-success btn-sm float-right m-2"
+                                    class="btn btn-primary btn-md float-right m-2"
                                     @click="newModal"
                                 >
+                                    <i class="fa fa-plus-circle"></i>
                                     Add New
-                                    <i class="fas fa-user-plus fa-fw"></i>
                                 </button>
                             </div>
                         </div>
@@ -48,12 +48,9 @@
                                     <th>Title</th>
 
                                     <th>Class/Level</th>
-                                    <th v-show="$gate.isSuperadmin()">
-                                        Downloads
-                                    </th>
                                     <th>Action</th>
                                     <th v-show="$gate.isAdminOrTutor()">
-                                        Status
+                                        Modify
                                     </th>
                                 </tr>
 
@@ -70,24 +67,73 @@
                                                 : ""
                                         }}
                                     </td>
-                                    <td>
+
+                                    <td
+                                        style="
+                                            display: flex;
+                                            flex-direction: row;
+                                        "
+                                    >
+                                        <router-link
+                                            class="btn btn-flat"
+                                            v-show="$gate.isAdminOrTutor()"
+                                            :to="`result_list/${report.id}`"
+                                            title="view report list"
+                                            tag="button"
+                                            exact
+                                            ><i class="fa fa-eye"></i
+                                        ></router-link>
                                         <a
+                                            class="btn btn-flat"
+                                            v-show="$gate.isAdminOrTutor()"
+                                            href="#"
+                                            title="view master sheet"
+                                            tag="a"
+                                            exact
+                                            @click="loadMasterArms(report.id)"
+                                            ><i class="fa fa-book"></i
+                                        ></a>
+                                        <a
+                                            class="btn btn-flat btn-sm"
                                             v-show="$gate.isAdmin()"
                                             disabled="true"
                                             href="#"
                                             @click="download(report.id)"
-                                            >downloads</a
                                         >
-                                    </td>
-                                    <td>
-                                        <router-link
+                                            <i
+                                                class="fa fa-download"
+                                                title="Go To Downloads"
+                                            ></i>
+                                        </a>
+                                        <button
+                                            title="Compute Summary"
                                             v-show="$gate.isAdminOrTutor()"
-                                            :to="`result_list/${report.id}`"
-                                            title="view report list"
-                                            tag="a"
-                                            exact
-                                            ><i class="fa fa-eye blue"></i
-                                        ></router-link>
+                                            type="btn"
+                                            class="btn btn-flat btn-sm mr-2"
+                                            @click="loadArms(report.id)"
+                                        >
+                                            <i
+                                                class="fas fa-calculator"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </button>
+                                        <toggle-button
+                                            @change="activateReport(report.id)"
+                                            v-show="$gate.isAdmin()"
+                                            :label="true"
+                                            :labels="{
+                                                checked: 'ON',
+                                                unchecked: 'OFF',
+                                            }"
+                                            :height="20"
+                                            :font-size="14"
+                                            :value="report.is_ready"
+                                            :color="'navy'"
+                                            :name="'activated'"
+                                            class="pl-2"
+                                        />
+                                    </td>
+                                    <td class="">
                                         <a
                                             href="#"
                                             @click="editModal(report)"
@@ -105,42 +151,8 @@
                                         >
                                             <i class="fa fa-trash red"></i>
                                         </a>
-                                        <a
-                                            v-show="$gate.isAdminOrTutor()"
-                                            href="#"
-                                            title="view report list"
-                                            tag="a"
-                                            exact
-                                            @click="loadMasterArms(report.id)"
-                                            >master sheet</a
-                                        >
                                     </td>
 
-                                    <td v-show="$gate.isAdmin()">
-                                        <button
-                                            v-show="$gate.isAdminOrTutor()"
-                                            type="btn"
-                                            class="btn btn-success btn-sm mr-2"
-                                            @click="loadArms(report.id)"
-                                        >
-                                            Compute Summary
-                                        </button>
-                                        <toggle-button
-                                            @change="activateReport(report.id)"
-                                            v-show="$gate.isAdmin()"
-                                            :label="true"
-                                            :labels="{
-                                                checked: 'ON',
-                                                unchecked: 'OFF',
-                                            }"
-                                            :height="20"
-                                            :font-size="14"
-                                            :value="report.is_ready"
-                                            :color="'green'"
-                                            :name="'activated'"
-                                            class="pl-2"
-                                        />
-                                    </td>
                                     <td
                                         class="row"
                                         v-show="$gate.isStudentOrParent()"
@@ -154,8 +166,11 @@
                                                 disabled="true"
                                                 href="#"
                                                 @click="download(report.id)"
-                                                >download</a
-                                            >
+                                                ><i
+                                                    class="fa fa-download"
+                                                    title="Go To Downloads"
+                                                ></i
+                                            ></a>
                                             <router-link
                                                 class="btn btn-success btn-sm"
                                                 v-show="
@@ -279,284 +294,121 @@
                     >
                         <div class="modal-body">
                             <div class="row col-md-12">
-                                <div class="form-group col-md-12">
-                                    <input
+                                <div class="col-md-6">
+                                    <input-field
                                         v-model="form.title"
                                         type="text"
                                         name="title"
                                         placeholder="Report Title eg 2018/2019-JSS1-FIRST_TERM"
-                                        class="form-control"
-                                        :class="{
-                                            'is-invalid':
-                                                form.errors.has('title'),
-                                        }"
-                                    />
-                                    <has-error
+                                        label="Report Title"
                                         :form="form"
-                                        field="title"
-                                    ></has-error>
-                                </div>
-                            </div>
-                            <div class="row col-md-12">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Result Template</label>
-                                        <select
-                                            v-model="form.type"
-                                            name="type"
-                                            id="term_end"
-                                            class="form-control"
-                                            :class="{
-                                                'is-invalid':
-                                                    form.errors.has('type'),
-                                            }"
-                                        >
-                                            <option value="" selected>
-                                                Select Result Template
-                                            </option>
+                                    />
 
-                                               <option v-for="template in schoolTemplates" :key="template.id"
-                                               :value="template.name">
-                                                 {{ template.name }}
-                                               </option>
+                                    <select-input
+                                        :form="form"
+                                        :field="resultTemplate"
+                                        label="Result Template"
+                                        :options="schoolTemplates"
+                                        id="type"
+                                        name="type"
+                                        optionValue="name"
+                                        optionLabel="name"
+                                        placeholder="Select Template"
+                                        v-model="form.type"
+                                    />
+                                    <select-input
+                                        :form="form"
+                                        :field="level_id"
+                                        label="Level"
+                                        :options="levels"
+                                        id="level_id"
+                                        name="level_id"
+                                        optionValue="id"
+                                        optionLabel="level_name"
+                                        placeholder="Select level"
+                                        v-model="form.level_id"
+                                    />
 
-                                            <!-- <option value="default-result">
-                                                Default-Terminal
-                                            </option>
-                                            <option value="default-midterm">
-                                                Default Midterm
-                                            </option>
-                                            <option value="creche">
-                                                Default Creche Comment
-                                            </option>
-                                            <option value="mid_term" selected>
-                                                Mid-Term Report
-                                            </option>
-                                            <option value="terminal">
-                                                Madonna Termial
-                                            </option>
-                                            <option value="mock">
-                                                Mock Exam Report
-                                            </option>
-                                            <option value="annual">
-                                                Madonna Annual Report
-                                            </option>
-                                            <option value="primary-midterm">
-                                                Madonna Primary Mid-Term
-                                            </option>
-                                            <option value="primary-terminal">
-                                                Madonna Primary Terminal
-                                            </option>
-                                            <option value="diamond">
-                                                DIAMOND SHEET
-                                            </option> -->
-                                        </select>
+                                    <select-input
+                                        :form="form"
+                                        :field="session"
+                                        label="Session"
+                                        :options="sessions"
+                                        id="session_id"
+                                        name="session_id"
+                                        optionValue="id"
+                                        optionLabel="name"
+                                        placeholder="Select Session"
+                                        v-model="form.session_id"
+                                    />
 
-                                        <has-error
-                                            :form="form"
-                                            field="term_end"
-                                        ></has-error>
-                                    </div>
-                                    <div class="form-group">
-                                        <select
-                                            name="level_id"
-                                            id="level_id"
-                                            class="form-control"
-                                            v-model="form.level_id"
-                                        >
-                                            <option value selected>
-                                                Select Level
-                                            </option>
-                                            <option
-                                                v-for="level in levels"
-                                                :key="level.id"
-                                                :value="level.id"
-                                            >
-                                                {{ level.level_name }}
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <select
-                                            name="session_id"
-                                            id="session_id"
-                                            :class="{
-                                                'is-invalid':
-                                                    form.errors.has(
-                                                        'session_id'
-                                                    ),
-                                            }"
-                                            class="form-control"
-                                            v-model="form.session_id"
-                                        >
-                                            <option value selected>
-                                                Select session
-                                            </option>
-                                            <option
-                                                v-for="session in sessions"
-                                                :key="session.id"
-                                                :value="session.id"
-                                            >
-                                                {{ session.name }}
-                                            </option>
-                                        </select>
-                                        <has-error
-                                            :form="form"
-                                            field="session_id"
-                                        ></has-error>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <select
-                                            name="term_id"
-                                            id="term_id"
-                                            :class="{
-                                                'is-invalid':
-                                                    form.errors.has('term_id'),
-                                            }"
-                                            class="form-control"
-                                            v-model="form.term_id"
-                                        >
-                                            <option value selected>
-                                                Select Term
-                                            </option>
-                                            <option
-                                                v-for="term in terms"
-                                                :key="term.id"
-                                                :value="term.id"
-                                            >
-                                                {{ term.name }}
-                                            </option>
-                                        </select>
-                                        <has-error
-                                            :form="form"
-                                            field="term_id"
-                                        ></has-error>
-                                    </div>
-
-                                    <div
-                                        class="form-group"
-                                        v-show="form.term_id === 3"
-                                    >
-                                        <label>Results Format</label>
-                                        <select
-                                            name="isCummulative"
-                                            id="term_id"
-                                            :class="{
-                                                'is-invalid':
-                                                    form.errors.has(
-                                                        'isCummulative'
-                                                    ),
-                                            }"
-                                            class="form-control"
-                                            v-model="form.isCummulative"
-                                        >
-                                            <option value selected>
-                                                select report format
-                                            </option>
-                                            <option value="1">
-                                                Use Cummulative
-                                            </option>
-                                            <option value="0">
-                                                Use Termial Results
-                                            </option>
-                                        </select>
-                                        <has-error
-                                            :form="form"
-                                            field="term_id"
-                                        ></has-error>
-                                    </div>
+                                    <select-input
+                                        :form="form"
+                                        :field="term_id"
+                                        label="Term"
+                                        :options="terms"
+                                        id="term_id"
+                                        name="term_id"
+                                        optionValue="id"
+                                        optionLabel="name"
+                                        placeholder="Select term"
+                                        v-model="form.term_id"
+                                    />
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Next Term Begins:</label>
-                                        <input
-                                            v-model="form.next_term"
-                                            type="date"
-                                            name="term_start"
-                                            id="term_start"
-                                            placeholder="Term Start"
-                                            class="form-control"
-                                            :class="{
-                                                'is-invalid':
-                                                    form.errors.has(
-                                                        'next_term'
-                                                    ),
-                                            }"
-                                        />
-                                        <has-error
-                                            :form="form"
-                                            field="term_start"
-                                        ></has-error>
-                                    </div>
+                                    <input-field
+                                        label="Term Start"
+                                        name="term_start"
+                                        v-model="form.term_start"
+                                        id="term_start"
+                                        :form="form"
+                                        field="term_start"
+                                        type="date"
+                                    />
 
-                                    <div class="form-group">
-                                        <input
-                                            v-model="form.school_days"
-                                            type="number"
-                                            name="school_days"
-                                            id="school_days"
-                                            placeholder="Number of School days(optional)"
-                                            class="form-control"
-                                            :class="{
-                                                'is-invalid':
-                                                    form.errors.has('term_end'),
-                                            }"
-                                        />
-                                        <has-error
-                                            :form="form"
-                                            field="term_end"
-                                        ></has-error>
-                                    </div>
-                                    <div class="form-group">
-                                        <input
-                                            v-model="form.header"
-                                            type="text"
-                                            name="school_days"
-                                            id="header"
-                                            placeholder="Result Header(optional)"
-                                            class="form-control"
-                                            :class="{
-                                                'is-invalid':
-                                                    form.errors.has('header'),
-                                            }"
-                                        />
-                                        <has-error
-                                            :form="form"
-                                            field="header"
-                                        ></has-error>
-                                    </div>
-                                    <div class="form-group">
-                                        <select
-                                            name="gradinggroup_id"
-                                            id="gradinggroup_id"
-                                            class="form-control"
-                                            v-model="form.gradinggroup_id"
-                                            :class="{
-                                                'is-invalid':
-                                                    form.errors.has(
-                                                        'gradinggroup_id'
-                                                    ),
-                                            }"
-                                        >
-                                            <option value selected>
-                                                Select Grading Group
-                                            </option>
-                                            <option
-                                                v-for="group in gradinggroup"
-                                                :key="group.id"
-                                                :value="group.id"
-                                            >
-                                                {{ group.group_name }}
-                                            </option>
-                                        </select>
-                                        <has-error
-                                            :form="form"
-                                            field="gradinggroup_id"
-                                        ></has-error>
-                                    </div>
+                                    <input-field
+                                        label="Term End"
+                                        v-model="form.term_end"
+                                        id="term_end"
+                                        name="term_end"
+                                        :form="form"
+                                        field="term_end"
+                                        type="date"
+                                    />
+
+                                    <input-field
+                                        label="Next Term Begins"
+                                        v-model="form.next_term"
+                                        name="next_term"
+                                        id="next_term"
+                                        :form="form"
+                                        field="next_term"
+                                        type="date"
+                                    />
+
+                                    <input-field
+                                        label="Result Header"
+                                        v-model="form.header"
+                                        name="header"
+                                        id="header"
+                                        :form="form"
+                                        field="header"
+                                        type="text"
+                                    />
+
+                                    <select-input
+                                        name="gradinggroup_id"
+                                        id="gradinggroup_id"
+                                        v-model="form.gradinggroup_id"
+                                        :options="gradinggroup"
+                                        label="Grading Group"
+                                        optionLabel="group_name"
+                                        optionValue="id"
+                                        :form="form"
+                                        field="group_id"
+                                        placeholder="select gradding group"
+                                    />
                                 </div>
                             </div>
                             <div class="row col-md-12">
@@ -628,7 +480,7 @@
                                             unchecked: 'No',
                                         }"
                                         v-model="form.isArmPosition"
-                                        :color="'green'"
+                                        :color="'navy'"
                                         :sync="true"
                                     />
                                 </div>
@@ -643,7 +495,7 @@
                                             unchecked: 'OFF',
                                         }"
                                         v-model="form.isCa2"
-                                        :color="'green'"
+                                        :color="'navy'"
                                         :sync="true"
                                     />
                                 </div>
@@ -657,7 +509,7 @@
                                             unchecked: 'OFF',
                                         }"
                                         v-model="form.isCa3"
-                                        :color="'green'"
+                                        :color="'navy'"
                                         :sync="true"
                                     />
                                 </div>
@@ -674,7 +526,7 @@
                                             unchecked: 'OFF',
                                         }"
                                         v-model="form.isAttendance"
-                                        :color="'green'"
+                                        :color="'navy'"
                                         :sync="true"
                                     />
                                 </div>
@@ -688,7 +540,7 @@
                                             unchecked: 'OFF',
                                         }"
                                         v-model="form.isLearningDomain"
-                                        :color="'green'"
+                                        :color="'navy'"
                                         :sync="true"
                                     />
                                 </div>
@@ -702,7 +554,7 @@
                                             unchecked: 'OFF',
                                         }"
                                         v-model="form.isPrincipalComment"
-                                        :color="'green'"
+                                        :color="'navy'"
                                         :sync="true"
                                     />
                                 </div>
@@ -716,7 +568,7 @@
                                             unchecked: 'OFF',
                                         }"
                                         v-model="form.isTeacherComment"
-                                        :color="'green'"
+                                        :color="'navy'"
                                         :sync="true"
                                     />
                                 </div>
@@ -732,7 +584,7 @@
                                             unchecked: 'OFF',
                                         }"
                                         v-model="form.isProgressStatus"
-                                        :color="'green'"
+                                        :color="'navy'"
                                         :sync="true"
                                     />
                                 </div>
@@ -746,7 +598,7 @@
                                             unchecked: 'OFF',
                                         }"
                                         v-model="form.isMaxScore"
-                                        :color="'green'"
+                                        :color="'navy'"
                                         :sync="true"
                                     />
                                 </div>
@@ -760,7 +612,7 @@
                                             unchecked: 'OFF',
                                         }"
                                         v-model="form.isMinScore"
-                                        :color="'green'"
+                                        :color="'navy'"
                                         :sync="true"
                                     />
                                 </div>
@@ -774,7 +626,7 @@
                                             unchecked: 'OFF',
                                         }"
                                         v-model="form.isSubjectPosition"
-                                        :color="'green'"
+                                        :color="'navy'"
                                         :sync="true"
                                     />
                                 </div>
@@ -788,7 +640,7 @@
                                             unchecked: 'OFF',
                                         }"
                                         v-model="form.isManualPrincipalComment"
-                                        :color="'green'"
+                                        :color="'navy'"
                                         :sync="true"
                                     />
                                 </div>
@@ -802,7 +654,7 @@
                                             unchecked: 'OFF',
                                         }"
                                         v-model="form.isDob"
-                                        :color="'green'"
+                                        :color="'navy'"
                                         :sync="true"
                                     />
                                 </div>
@@ -816,7 +668,35 @@
                                             unchecked: 'OFF',
                                         }"
                                         v-model="form.isGender"
-                                        :color="'green'"
+                                        :color="'navy'"
+                                        :sync="true"
+                                    />
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label> Use Cummulative</label>
+                                    <toggle-button
+                                        :label="true"
+                                        id="isCummulative"
+                                        :labels="{
+                                            checked: 'ON',
+                                            unchecked: 'OFF',
+                                        }"
+                                        v-model="form.isCummulative"
+                                        :color="'navy'"
+                                        :sync="true"
+                                    />
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label> Use Weekly CA</label>
+                                    <toggle-button
+                                        :label="true"
+                                        id="isWeeklyCA"
+                                        :labels="{
+                                            checked: 'ON',
+                                            unchecked: 'OFF',
+                                        }"
+                                        v-model="form.isWeeklyCa"
+                                        :color="'navy'"
                                         :sync="true"
                                     />
                                 </div>
@@ -898,6 +778,7 @@
                                     >
                                         {{ arm.arms.name }}
                                     </option>
+                                    <option value="" selected>All Arms</option>
                                 </select>
                             </div>
                         </div>
@@ -984,10 +865,11 @@
 </template>
 
 <script>
-import SelectedItems from 'vue-gridmultiselect/src/components/SelectedItems.vue';
+import SelectedItems from "vue-gridmultiselect/src/components/SelectedItems.vue";
 import Loading from "vue-loading-overlay";
+import SelectInput from "./utils/SelectInput.vue";
 export default {
-    components: { Loading, SelectedItems },
+    components: { Loading, SelectedItems, SelectInput },
     data() {
         return {
             isLoading: false,
@@ -996,8 +878,12 @@ export default {
             levels: {},
             sessions: {},
             terms: {},
-            gradinggroup: "",
+            gradinggroup: [],
             arms: {},
+            reportFormat: [
+                { id: 1, label: "Use Cummulative" },
+                { id: 0, label: "Use Terminal" },
+            ],
             isNotActivated: true,
             isActivationKey: false,
             isStudent: window.user.student_id,
@@ -1005,24 +891,26 @@ export default {
             arm_id: "",
             report_id: "",
             isMaster: false,
-            schoolTemplates:[],
+            schoolTemplates: [],
             form: new Form({
                 id: "",
                 title: "",
                 level_id: "",
                 term_id: "",
                 session_id: "",
-                term_start: "",
                 type: "",
                 school_days: "",
                 arm_id: "",
                 next_term: "",
+                term_start: "",
+                term_end: "",
                 header: "",
                 gradinggroup_id: "",
                 isCummulative: 0,
                 school_id: window.user.school_id,
                 isCa2: false,
                 isCa3: false,
+                isWeeklyCa: false,
                 isAttendance: false,
                 isPrincipalComment: false,
                 isTeacherComment: false,
@@ -1036,10 +924,10 @@ export default {
                 ca2Percent: "",
                 ca3Percent: "",
                 examPercent: "",
-                isManualPrincipalComment:'',
+                isManualPrincipalComment: "",
                 isLearningDomain: true,
-                isDob:true,
-                isGender:true
+                isDob: true,
+                isGender: true,
             }),
 
             computeForm: new Form({
@@ -1272,22 +1160,24 @@ export default {
             this.report_id = id;
             this.isMaster = true;
         },
-             loadSchoolTemplate(){
-                 let defaultTemplate=[{
-                     id:1, name:'default-result'
-                 }]
-            axios.get(`/api/schoolTemplates`)
-            .then(res=>{
-                 if((res.data).length){
-                this.schoolTemplates=res.data
-                 }else{
-               this.schoolTemplates=defaultTemplate;
-                 }
-            }
-                )
-            .catch(err=>console.log(err))
+        loadSchoolTemplate() {
+            let defaultTemplate = [
+                {
+                    id: 1,
+                    name: "default-result",
+                },
+            ];
+            axios
+                .get(`/api/schoolTemplates`)
+                .then((res) => {
+                    if (res.data.length) {
+                        this.schoolTemplates = res.data;
+                    } else {
+                        this.schoolTemplates = defaultTemplate;
+                    }
+                })
+                .catch((err) => console.log(err));
         },
-
 
         viewMaster() {
             $("#summaryModal").modal("hide");

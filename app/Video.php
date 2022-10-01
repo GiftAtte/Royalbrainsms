@@ -9,7 +9,7 @@ class Video extends Model
     //
     protected $table='videos';
     protected $fillable=[
-        'title','level_id','author_id','video_path'
+        'title','level_id','author_id','video_path','type'
     ];
 
     public function levels(){

@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'mail.mmcisch.com'),
+    'host' => env('MAIL_HOST', 'mail.royalbrainsms.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,7 +56,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'attegift@gmail.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'results@royalbrainsms.com'),
         'name' => env('MAIL_FROM_NAME', 'Royalbrainsms'),
     ],
 

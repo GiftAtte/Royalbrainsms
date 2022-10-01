@@ -5,6 +5,7 @@
                 report.type === 'default-result' ||
                 report.type === 'default-midterm' ||
                 report.type === 'diamond' ||
+                report.type === 'blue_ridge' ||
                 report.type === 'navy-template'
             "
             class="table table-hover table-sm"
@@ -40,7 +41,8 @@
                     <th
                         v-if="
                             report.type === 'default-result' ||
-                            report.type === 'diamond'
+                            report.type === 'diamond' ||
+                            report.type == 'blue_ridge'
                         "
                     >
                         TERMINAL EXAMS
@@ -78,6 +80,7 @@
                             :max="report.ca1Percent"
                             min="0"
                             step="0.01"
+                            :disabled="report.isWeeklyCa > 0"
                         />
                     </td>
                     <td v-if="report.isCa2">
@@ -90,6 +93,7 @@
                             :max="report.ca2Percent"
                             min="0"
                             step="0.01"
+                            :disabled="report.isWeeklyCa > 0"
                         />
                     </td>
                     <td v-if="report.isCa3">

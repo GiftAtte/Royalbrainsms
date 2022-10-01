@@ -23,6 +23,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\API\ScoreController as Gradding;
+use App\Http\Controllers\API\Utils\AppUtils;
 use App\Level;
 use App\Level_sub;
 
@@ -37,6 +38,12 @@ class ReportController extends Controller
     public function index()
     {
         //
+           $currentReport=[];
+            $history=[];
+             $history=Level::where([['is_history',0],['school_id',AppUtils::getSchoolId()]])->pluck('id');
+            $currentReport=Report::whereIn('level_id',$history)->pluck('id');
+
+
         $user=auth('api')->user();
         if($user->type==='student'){
       $combinedLevel=[];
@@ -58,14 +65,14 @@ if(count($history)>0){
                   })
 
          ->select(DB::raw('reports.*, result_activations.activation_status as activation_status'))
-         ->distinct('reports.id')  ->orderby('id','desc')->paginate(10);
+         ->distinct('reports.id')  ->orderby('id','desc')->paginate(20);
 
         }
 if($user->type==='tutor'){
   $historyLevel=Level::where('is_history',1)->pluck('id');
               // $arm=Has_arm::where(['staff_id',$user->staff_id])->whereNotIn('level_id',$historyLevel)->first();
             $arm=Has_arm::where('staff_id',$user->staff_id)->whereNotIn('level_id',$historyLevel)->first();
-    return Report::with(['levels','terms'])->where([['school_id',$user->school_id],['level_id',$arm->level_id]])->latest()->paginate(10);
+    return Report::with(['levels','terms'])->where([['school_id',$user->school_id],['level_id',$arm->level_id]])->latest()->paginate(20);
 }
 
 if($user->type==="parent"){
@@ -85,7 +92,7 @@ return Report::whereIn('level_id',$totalLevelIds)
 
 
                 }
-return Report::with(['levels','terms'])->where('school_id',$user->school_id)->latest()->paginate(10);
+return Report::with(['levels','terms'])->whereIn('id',$currentReport)->latest()->paginate(25);
     }
 
     public function store(Request $request)
@@ -170,74 +177,6 @@ return Report::with(['levels','terms'])->where('school_id',$user->school_id)->la
      //return response()->json(['students'=>$students,'report'=>$report]);
    }
 
-public function studenResult( $report_id, $student_id=null)
-{
-
-    $principal_sign=User::where([['type','principal'],['school_id',auth('api')->user()->school_id]])->select('photo')->first();
-      if($student_id===null){
-           $student_id=auth('api')->user()->student_id;
-      }
-        $student=Student::findOrFail($student_id);
-        $comment=Result_activation::where([['report_id',$report_id],['student_id',$student_id]])->first();
-       $report=Report::with(['levels','sessions','terms'])->where('id',$report_id)->first();
-        $pastTotal=Mark::select('total','subject_id','term_id')
-         ->where([['student_id',$student_id],['level_id',$report->level_id],
-         ])->orderBy('id','asc')->get();
-           $pastTotalarray=[];
-           foreach ($pastTotal as $total ) {
-               array_push($pastTotalarray,['subject_id'=>$total->subject_id,'term_id'=>$total->term_id,'total'=>$total->total]);
-               # code...
-           }
-
-
-    $arm=Arm::findOrFail($student->arm_id);
-    $user=User::with(['students','school'])->where('student_id',$student_id)->first();
-    $grading=Grading::where('school_id',$user->school_id)->get();
-    $summary=Result::with(['student'])->where([['report_id',$report_id],['student_id',$student_id]])->first();
-    $scores=Mark::whereNotIn('total',[0])->with('subjects')->where([['report_id',$report_id],
-    ['student_id',$student_id],['type','Academic']])->get();
-    $noneAcademic=Mark::with('subjects')->where([['report_id',$report_id],
-    ['student_id',$student_id],['type','None Academic']])->get();
-    if(count($scores)>0){
-        $principal_comment=$this->principalComment($summary->average_scores);
-        $staff_comment=$this->staffComment($summary->average_scores);
-        $LDomain=$this->learningDomain($student_id,$report_id);
-        return response()->json(['scores'=>$scores,'summary'=>$summary,'user'=>$user,'pastTotal'=>$pastTotalarray,
-    'comment'=>$comment,'principal_comment'=>$principal_comment,'signature'=>$principal_sign, 'staff_comment'=>$staff_comment,
-     'report'=>$report,'arm'=>$arm,'gradings'=>$grading,'noneAcademic'=>$noneAcademic,'LDomain'=>$LDomain]);
-    }else{
-        return ['Not_found'=>'No reusult found'];
-    }
-
-}
-
-public function principalComment($average){
-$comment=Comment::where([['lower_bound','<=',$average],['upper_bound','>=',$average],['school_id',auth('api')->user()->school_id]])->first();
- if($comment){
-return $comment->comment;
- }
- else {
-     return '';
- }
-}
-
-
-
-
-public function staffComment($average){
-    $comment=Staff_comment::where([['lower_bound','<=',$average],['upper_bound','>=',$average],['school_id',auth('api')->user()->school_id]])->first();
-     if($comment){
-    return $comment->comment;
-     }
-     else {
-         return '';
-     }
-    }
-
-    public function learningDomain($student_id,$report_id){
-        return Assessment::with('Ldomain')->where([['report_id',$report_id],['student_id',$student_id]])->get();
-    }
-
 
 
  public function getArms($id) {
@@ -252,23 +191,41 @@ public function staffComment($average){
 }
 
 
+public function loadArms($id){
+return Has_arm::with('arms')->where([['level_id',$id]])->get();
+
+}
+
+
+
+
+
+
+
+
 public function masterCard($report_id,$arm_id=null){
+    //return $report_id;
     $report=Report::with(['sessions','terms','levels'])->where('id',$report_id)->first();
     $subjectsIds=Mark::where('report_id',$report_id)->distinct('subject_id')->pluck('subject_id');
     $subjects=Level_sub::where('level_id',$report->level_id)->whereIn('subject_id',$subjectsIds)->with('subjects')->get();
       $students=null;
-      $ids=null;
+      $ids=[];
     if(auth('api')->user()->type==='tutor'){
-        $arm=Has_arm::where('staff_id',auth('api')->user()->staff_id)->first();
-        $students=Student::where([['class_id',$report->level_id],['arm_id',$arm_id]])->get();
-    }else{
-               $ids=$arm_id?
-                   Mark::whereIn('report_id',[$report_id])->where('arm_id',$arm_id)->pluck('student_id')->toArray()
-                  :Mark::whereIn('report_id',[$report_id])->pluck('student_id')->toArray();
+    $arm_id=Has_arm::where('staff_id',AppUtils::getCurrentEmployeeId())->first()->arm_id;
+      // $ids=Student::where([['class_id',$report->level_id],['arm_id',$arm->arm_id]])->pluck('id')->;
+    }
+        if($arm_id>0){
+    $ids= Mark::whereIn('report_id',[$report_id])->where('arm_id',$arm_id)->pluck('student_id')->toArray();
+        }else{
+    $ids= Mark::whereIn('report_id',[$report_id])->pluck('student_id')->toArray();
+        }
+
+
+
 
         //$ids=Mark::where('report_id',$report_id)->distinct('student_id')->pluck('student_id');
-    }
- $ids=Mark::whereIn('report_id',[$report_id])->where('arm_id',$arm_id)->pluck('student_id')->toArray();
+
+ //$ids=Mark::whereIn('report_id',[$report_id])->where('arm_id',$arm_id)->pluck('student_id')->toArray();
  $students=Student::whereIn('id',$ids)->get();
  $marks=Mark::where('report_id',$report_id)
  ->whereIn('student_id',$ids)
@@ -481,6 +438,22 @@ public function masterSheetDownload($reportId,$arm=null){
                             ->avg('total');
                            // ->all();
 }
+
+
+
+
+
+          public function historyReport(){
+            $historyReport=[];
+            $history=[];
+             $history=Level::where([['is_history',1],['school_id',AppUtils::getSchoolId()]])->pluck('id');
+             $historyReport=Report::whereIn('level_id',$history)->pluck('id');
+
+            return Report::with(['levels','terms'])
+                           ->whereIn('id',$historyReport)->latest()->paginate(25);
+    }
+
+
 
 }
 

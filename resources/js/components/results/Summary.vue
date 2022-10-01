@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <h3 class="text-center">RESULTS SUMMARY</h3>
         <table
             class="table table-bordered table-sm font-weight-bold table-striped text-center"

@@ -10,11 +10,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>TSA</title>
+  <title>School Portal</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
+<link type="text/css" rel="stylesheet" href="https://source.zoom.us/v2.6.0/css/bootstrap.css" />
+  <link type="text/css" rel="stylesheet" href="https://source.zoom.us/v2.6.0/css/react-select.css" />
 
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
@@ -23,7 +24,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <body class="hold-transition sidebar-mini layout-navbar-fixed">
 
 <div class="wrapper" id="app">
-<nav class="main-header navbar navbar-expand navbar-white navbar-navy bg-navy">
+<nav class="main-header navbar navbar-expand navbar-white bg-primary ">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -32,25 +33,45 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     </ul>
     <!-- Search Form -->
+
     <div class="input-group input-group-sm col-md-8 mx-5">
-      <input class="form-control form-control-navbar" @keyup="searchit" v-model="search" type="search" placeholder="Search" aria-label="Search">
+      <input class="form-control form-control-navbar"
+       @keyup="searchit"
+       placeholder="Search........"
+      v-model="search" type="search" placeholder="Search" aria-label="Search"
+      >
       <div class="input-group-append">
         <button class="btn btn-navbar" @click="searchit">
-          <i class="fa fa-search"></i>
+          <i class="fa fa-search text-white"></i>
         </button>
       </div>
     </div>
 
 
     <!-- Right navbar links -->
+
+
     <ul class="navbar-nav ml-auto">
-       <li><a href="#" class="d-block text-white">
-      </a></li>
+
+        <li class="nav-item my-auto mr-2 text-uppercase">
+            {{ Auth::user()->name}}:
+
+        </li>
+
+      @php
+        $realPath=public_path('/img/profile/'.Auth::user()->photo);
+        $altPath=public_path('/img/profile/'.'profile.png');
+        $imgPath=file_exists($realPath)?$realPath:$altPath;
+        @endphp
       <!-- Messages Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <div class="image">
-          <img src="img/profile/{{ Auth::user()->photo}}" height="30" width="30" class="img-circle elevation-2" alt="User Image">
+          <img src="{{asset($imgPath)}}" height="30" width="30"
+          class="img-circle elevation-2"  alt="User"
+          onerror="this.src='/img/profile.png'"
+
+          >
           </div>
 
         </a>
@@ -120,6 +141,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- AdminLTE App -->
 <script src="{{ asset('js/app.js') }}"></script>
+
 
 </body>
 </html>

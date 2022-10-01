@@ -26,12 +26,26 @@
             id="admissionLink"
             modalTitle=" "
             modalSize="modal-lg"
-            hideCreateBtn="true"
+            sumitButtonText="copy link"
+            :createAction="copy"
         >
             <div class="col-md-12">
-                <p class="text-center">
-                    {{ url }}
-                </p>
+                <div class="form-group">
+                    <label for="reglink">Admission Link</label>
+                    <span
+                        v-if="isCopied"
+                        class="text-white bg-primary my-2 p-2 mx-2"
+                        style="border-radius: 50px"
+                        >Copied</span
+                    >
+                    <input
+                        v-model="url"
+                        type="text"
+                        v-on:focus="$event.target.select()"
+                        class="form-control"
+                        ref="reglink"
+                    />
+                </div>
             </div>
         </app-modal>
 
@@ -42,11 +56,11 @@
                         <div class="row float-right">
                             <div class="card-tools">
                                 <button
-                                    class="btn btn-success btn-sm float-right m-2"
+                                    class="btn btn-primary btn-sm float-right m-2"
                                     @click="newModal"
                                 >
+                                    <i class="fas fa-plus-circle"></i>
                                     Add New
-                                    <i class="fas fa-user-plus fa-fw"></i>
                                 </button>
                             </div>
                         </div>
@@ -75,22 +89,24 @@
                                     <td>{{ school.state }}</td>
                                     <td>
                                         <button
-                                            class="btn btn-primary"
+                                            title="Admission Link"
+                                            class="btn btn-flat"
                                             @click="getRegLink(school.id)"
                                         >
-                                            ALink
+                                            <i class="fa fa-clone"></i>
                                         </button>
                                     </td>
                                     <td>
                                         <router-link
-                                            tag="a"
+                                            class="btn btn-flat"
+                                            tag="button"
                                             :to="`/schoolTemplates/${school.id}`"
                                         >
-                                            Add Result Templates
+                                            <i class="fa fa-share-square"></i>
                                         </router-link>
                                     </td>
 
-                                    <td class="row">
+                                    <td class="action">
                                         <a href="#" @click="editModal(school)">
                                             <i class="fa fa-edit blue"></i>
                                         </a>
@@ -113,7 +129,7 @@
                                             :height="20"
                                             :font-size="14"
                                             :value="isActive(school.id)"
-                                            :color="'green'"
+                                            :color="'navy'"
                                             :name="'activated'"
                                             class="pl-2"
                                         />
@@ -399,6 +415,7 @@ export default {
             activate: false,
             templates: [],
             templateOptions: [],
+            isCopied: false,
             form: new Form({
                 id: "",
                 name: "",
@@ -544,7 +561,14 @@ export default {
                 }
             });
         },
-
+        copy() {
+            this.$refs.reglink.focus();
+            document.execCommand("copy");
+            this.isCopied = true;
+            setTimeout(() => {
+                this.isCopied = false;
+            }, 2000);
+        },
         loadSchools() {
             if (this.$gate.isAdminOrTutor()) {
                 axios

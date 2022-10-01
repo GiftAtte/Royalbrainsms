@@ -78,27 +78,23 @@
                                 class="btn btn-primary"
                                 :data="student_login"
                             >
-                                Download student Logins
                                 <i class="fa fa-download"></i>
+                                student Logins
                             </export-excel>
                         </div>
                     </div>
                     <div class="row float-right">
                         <div class="card-tools">
+                            <button class="btn btn-primary" @click="newModal">
+                                <i class="fas fa-plus-circle"></i> Add New
+                            </button>
                             <input
+                                class="btn btn-primary btn-sm"
                                 type="file"
                                 ref="file"
                                 @change="setFile"
-                            /><button
-                                @click="importStudents"
-                                class="btn btn-success m-2"
-                            >
-                                import(cvs)
-                            </button>
+                            />
 
-                            <button class="btn btn-success" @click="newModal">
-                                Add New <i class="fas fa-user-plus fa-fw"></i>
-                            </button>
                             <button
                                 v-show="$gate.isAdmin()"
                                 class="btn btn-danger"
@@ -221,7 +217,7 @@
                                             :height="20"
                                             :font-size="14"
                                             :value="student.isActive"
-                                            :color="'green'"
+                                            :color="'navy'"
                                             :name="'activated'"
                                             class="pl-2"
                                         />
@@ -694,7 +690,7 @@ export default {
         },
         setFile() {
             this.file = this.$refs.file.files[0];
-            console.log(this.file);
+            this.importStudents();
         },
         importStudents() {
             this.$Progress.start();

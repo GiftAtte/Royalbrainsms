@@ -535,6 +535,19 @@ $i=$i+1;
              }
 
 
+
+
+
+             public function bulkDownload(Request $request,$report_id){
+
+               $studentIDs=$request->studentIds;
+
+               foreach($studentIDs as $key=>$id){
+               return $this->pdfdownload($id,$report_id);
+               }
+
+              //  return $request->all();
+             }
   }
 
 

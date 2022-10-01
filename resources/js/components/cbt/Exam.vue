@@ -118,7 +118,7 @@
                                      :class="{ 'is-invalid': form.errors.has('start_date') }"></datepicker>
                                      <has-error :form="form" field="end_date"></has-error>
                                     </div>
-                                </div>
+                                   </div>
                                    <div class="form-group row">
                                     <label for="inputName" class="col-md-2 control-label">Scheduled Time</label>
 

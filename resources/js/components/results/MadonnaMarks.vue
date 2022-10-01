@@ -44,7 +44,7 @@
                                 :value="score.test1"
                                 type="number"
                                 placeholder="Class Work"
-                                max="100"
+                                max="2"
                                 min="0"
                                 step="0.01"
                             />
@@ -55,7 +55,7 @@
                                 :value="score.test2"
                                 type="number"
                                 placeholder="Assignment "
-                                max="100"
+                                max="2"
                                 min="0"
                                 step="0.01"
                             />
@@ -66,7 +66,7 @@
                                 :value="score.test3"
                                 type="number"
                                 placeholder="Class Test "
-                                max="100"
+                                max="5"
                                 min="0"
                                 step="0.01"
                             />
@@ -77,7 +77,7 @@
                                 :value="score.note"
                                 type="number"
                                 placeholder="Notes "
-                                max="100"
+                                max="1"
                                 min="0"
                                 step="0.01"
                             />
@@ -98,7 +98,7 @@
                                 :value="score.exams"
                                 type="number"
                                 placeholder="Mid-Term Test/Exams"
-                                max="100"
+                                max="70"
                                 min="0"
                                 step="0.01"
                             />

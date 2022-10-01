@@ -8,6 +8,6 @@ class Staff_comment extends Model
 {
     protected $table="staff_comments";
     protected $fillable=[
-        'upper_bound','lower_bound','comment','school_id','level_id','arm_id'
+        'upper_bound','lower_bound','comment','school_id','level_id','arm_id','staff_id'
     ];
 }

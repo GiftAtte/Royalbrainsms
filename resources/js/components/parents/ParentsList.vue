@@ -26,25 +26,30 @@
             <div class="col-12">
                 <div class="card card-navy card-outline">
                     <div class="card-header">
-                        <input type="file" name="parentFile" ref="file" class="btn" @change="setFile">
-                        <button class="btn btn-primary" @click="importParent">Import</button>
+                        <input
+                            class="btn btn-primary"
+                            type="file"
+                            name="parentFile"
+                            ref="file"
+                            @change="setFile"
+                        />
+
                         <div class="row float-right">
                             <div class="card-tools">
-                                
                                 <button
                                     v-show="$gate.isAdmin()"
-                                    class="btn btn-success btn-sm float-right m-2"
+                                    class="btn btn-primary btn-sm float-right m-2"
                                     @click="newModal"
                                 >
+                                    <i class="fas fa-plus-circle mx-1"></i>
                                     Add New
-                                    <i class="fas fa-user-plus fa-fw"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive">
-                        <table class="  table table-hover " id="data_tb">
+                        <table class="table table-hover" id="data_tb">
                             <tbody>
                                 <tr>
                                     <th>R/ID</th>
@@ -61,20 +66,26 @@
                                 >
                                     <td>{{ parent.id }}</td>
                                     <td>
-
-                                     <router-link :to=" `parent_profile/parent/${parent.id}`" tag="a" exact>
-                                       {{ parent.name }}
-                                    </router-link>
+                                        <router-link
+                                            :to="`parent_profile/parent/${parent.id}`"
+                                            tag="a"
+                                            exact
+                                        >
+                                            {{ parent.name }}
+                                        </router-link>
                                     </td>
                                     <td>{{ parent.phoneNumber }}</td>
 
                                     <td>
-
-                                    <router-link  :to=" `siblings/${parent.id}`" tag="a" exact>
-                                        Manage Siblings
-                                    </router-link>
-
-                                </td><td>
+                                        <router-link
+                                            :to="`siblings/${parent.id}`"
+                                            tag="a"
+                                            exact
+                                        >
+                                            Manage Siblings
+                                        </router-link>
+                                    </td>
+                                    <td class="action">
                                         <a
                                             href="#"
                                             @click="editModal(parent)"
@@ -90,7 +101,6 @@
                                         >
                                             <i class="fa fa-trash red"></i>
                                         </a>
-
                                     </td>
                                 </tr>
                             </tbody>
@@ -168,7 +178,7 @@
                                 field="name"
                                 placeholder="Enter fullname"
                             />
-                             <input-field
+                            <input-field
                                 v-model="form.email"
                                 type="text"
                                 label="Email Address"
@@ -176,7 +186,7 @@
                                 field="email"
                                 placeholder="Enter your email"
                             />
-                             <input-field
+                            <input-field
                                 v-model="form.phoneNumber"
                                 type="text"
                                 label="Phone Numbers"
@@ -184,7 +194,7 @@
                                 field="phoneNumber"
                                 placeholder="Enter phone eg 0803333, 09013333"
                             />
-                             <input-field
+                            <input-field
                                 v-model="form.contactAddress"
                                 type="text"
                                 label="Contact Address"
@@ -192,7 +202,7 @@
                                 field="contactAddress"
                                 placeholder="Enter Contact Address"
                             />
-                             <input-field
+                            <input-field
                                 v-model="form.occupation"
                                 type="text"
                                 label="Sponsors's Occupation"
@@ -240,26 +250,23 @@ export default {
             isLoading: false,
             fullPage: true,
             editmode: false,
-            file:'',
-            parents: '',
+            file: "",
+            parents: "",
             form: new Form({
                 id: "",
                 name: "",
                 contactAddress: "",
                 phoneNumber: "",
-                email:'',
-                occupation:''
-
-            })
+                email: "",
+                occupation: "",
+            }),
         };
     },
-    mounted() {
-
-    },
+    mounted() {},
 
     methods: {
         getResults(page = 1) {
-            axios.get("api/parents?page=" + page).then(response => {
+            axios.get("api/parents?page=" + page).then((response) => {
                 this.parents = response.data;
             });
         },
@@ -288,7 +295,6 @@ export default {
             this.form.reset();
             $("#addNew").modal("show");
             this.form.fill(parentInfo);
-
         },
         newModal() {
             this.editmode = false;
@@ -296,30 +302,30 @@ export default {
             $("#addNew").modal("show");
         },
 
-    setFile() {
-      this.file = this.$refs.file.files[0];
-      console.log(this.file);
-    },
+        setFile() {
+            this.file = this.$refs.file.files[0];
+            this.importParent();
+        },
 
-    importParent() {
-      this.isLoading = true;
-      const formData = new FormData();
-      formData.append("file", this.file);
-      axios
-        .post("/api/parents/import", formData)
-        .then((res) => {
-          swal.fire("success", "Uploaded Successfully.", "success");
-          console.log(res.data);
-          this.$Progress.finish();
-          this.isLoading = false;
-          Fire.$emit("AfterCreate");
-        })
-        .catch((err) => {
-          this.$Progress.fail();
-          swal.fire("error", "Errors uploadind." + err, "error");
-          this.isLoading = false;
-        });
-    },
+        importParent() {
+            this.isLoading = true;
+            const formData = new FormData();
+            formData.append("file", this.file);
+            axios
+                .post("/api/parents/import", formData)
+                .then((res) => {
+                    swal.fire("success", "Uploaded Successfully.", "success");
+                    console.log(res.data);
+                    this.$Progress.finish();
+                    this.isLoading = false;
+                    Fire.$emit("AfterCreate");
+                })
+                .catch((err) => {
+                    this.$Progress.fail();
+                    swal.fire("error", "Errors uploadind." + err, "error");
+                    this.isLoading = false;
+                });
+        },
 
         CreateParent() {
             this.$Progress.start();
@@ -332,7 +338,7 @@ export default {
 
                     toast.fire({
                         type: "success",
-                        title: "A parent Created successfully"
+                        title: "A parent Created successfully",
                     });
                     this.$Progress.finish();
                     $("#addNew").modal("hide");
@@ -348,8 +354,8 @@ export default {
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            }).then(result => {
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
                 // Send request to the server
                 if (result.value) {
                     this.form
@@ -374,9 +380,9 @@ export default {
         },
         loadParent() {
             if (this.$gate.isAdminOrTutorOrStudent()) {
-                axios.get("/api/parents").then(response => {
+                axios.get("/api/parents").then((response) => {
                     this.parents = response.data;
-                  //  console.log(response.data.data)
+                    //  console.log(response.data.data)
                 });
             }
         },
@@ -386,26 +392,25 @@ export default {
         },
         resetLoading() {
             this.isLoading = false;
-        }
+        },
     },
     created() {
         // console.log(window.user)
-        this. loadParent();
+        this.loadParent();
         Fire.$on("searching", () => {
             let query = this.$parent.search;
             axios
                 .get("api/findStudent?q=" + query)
-                .then(data => {
+                .then((data) => {
                     this.levels = data.data;
                 })
                 .catch(() => {});
         });
 
-
         Fire.$on("AfterCreate", () => {
             this.loadParent();
         });
         //    setInterval(() => this.loadUsers(), 3000);
-    }
+    },
 };
 </script>

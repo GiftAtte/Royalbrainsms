@@ -188,4 +188,12 @@ class SubjectController extends Controller
 }
 
 
+  public function loadLevelSubject ($id){
+    return Level_sub::with('subjects')
+                      ->where('level_id',$id)
+                      ->get();
+  }
+
+
+
 }

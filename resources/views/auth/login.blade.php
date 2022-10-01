@@ -13,7 +13,7 @@
 
 
 
-<body class="hold-transition login-page bg-navy">
+<body class="hold-transition login-page bg-primary">
 <div class="login-box">
     @if(session()->has('message'))
     <div class="alert alert-success">

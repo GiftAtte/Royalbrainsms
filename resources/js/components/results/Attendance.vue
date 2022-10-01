@@ -1,5 +1,5 @@
 <template>
-<!-- <div class="col-md-8">
+    <!-- <div class="col-md-8">
 
   <table class="table table-bordered" >
             <thead>
@@ -27,24 +27,26 @@ ATTENDANCE
   </table>
   </div> -->
 
-  <div class="text-bold">
-     ATTENDANCE
-      <hr/>
-<p>
-  |SCHOOL DAYS :&nbsp;{{ attendance?attendance.school_days :'______' }}|
-  |DAYS PRESENT :&nbsp;{{ attendance?attendance.days_present:'______' }}|
-  |DAYS ABSENT :&nbsp;{{ attendance?attendance.days_absent:'________' }}|
-</p>
-      <hr/>
-  </div>
+    <div class="text-bold">
+        <h3>ATTENDANCE</h3>
+        <hr />
+        <p>
+            |SCHOOL DAYS :&nbsp;{{
+                attendance ? attendance.school_days : "______"
+            }}| |DAYS PRESENT :&nbsp;{{
+                attendance ? attendance.days_present : "______"
+            }}| |DAYS ABSENT :&nbsp;{{
+                attendance ? attendance.days_absent : "________"
+            }}|
+        </p>
+        <hr />
+    </div>
 </template>
 
 <script>
 export default {
-props:['attendance']
-}
+    props: ["attendance"],
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

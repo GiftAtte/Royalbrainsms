@@ -39,6 +39,8 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('students', 'API\StudentController@destroy');
     Route::post('importStudents', 'API\StudentController@import');
     Route::get('findStudent/{id?}', 'API\StudentController@search');
+    Route::get('birthday','API\StudentController@getBirthdayStudents');
+    Route::get('birthday/reminder','API\StudentController@birthdayReminder');
     //Route::get('findStudents/{id}', 'API\StudentController@search');
     Route::put('student_update/{id}', 'API\StudentController@update');
     Route::put('updateStudent/{id?}', 'API\StudentController@updateStudent');
@@ -88,6 +90,7 @@ Route::middleware('auth:api')->group(function () {
 
     // Results routes
     Route::apiResources(['report' => 'API\ReportController']);
+    Route::get('/reportHistory','API\ReportController@historyReport');
     Route::get('load_session', 'API\ReportController@session_list');
     Route::get('term', 'API\ReportController@term_list');
     Route::get('results/{id}', 'API\ReportController@student_list');
@@ -132,7 +135,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResources(['assignment' => 'API\AssignmentController']);
     Route::post('create_assignment', 'API\AssignmentController@store');
     Route::get('getAssignment', 'API\AssignmentController@index');
-    Route::get('assignment_view/{id}', 'API\AssignmentController@show');
+    Route::get('assignment/{id}', 'API\AssignmentController@show');
     Route::post('/upload_image', 'API\AssignmentController@zipUpload');
     Route::get('get_pdf/{id}', 'API\AssignmentController@getPdf');
     Route::get('get_student_pdf/{id}', 'API\AssignmentController@studentPDF');
@@ -196,6 +199,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('question/{id}', 'API\ExamController@Question');
     Route::delete('question/{id}', 'API\ExamController@deleteQuestion');
     Route::get('cbt/{id}', 'API\CbtController@takeExam');
+    Route::put('publishCBT/{id}', 'API\ExamController@publishExam');
+     Route::get('publishedExams', 'API\ExamController@publishedExam');
     Route::get('cbt_scores/{id}', 'API\CbtController@cbtScores');
     Route::post('save_answers', 'API\CbtController@saveAnswers');
     Route::post('use_cbt', 'API\CbtController@useCBT');
@@ -315,5 +320,8 @@ Route::post('attendance/importExcel','API\AttendanceController@importAttendance'
 // INVENTORY ROUTES
 
 include('inventoryRoutes.php');
+include('admissionRoutes.php');
+include('liveStreamingRoutes.php');
+include('weeklyRoutes.php');
 
 });

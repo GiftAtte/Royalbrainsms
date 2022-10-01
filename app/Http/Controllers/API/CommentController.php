@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Comment;
+use App\Http\Controllers\API\Utils\AppUtils;
+
 class CommentController extends Controller
 {
 
@@ -35,7 +37,7 @@ class CommentController extends Controller
             'lower_bound' => $request->lower_bound,
             'comment' => $request->comment,
             'group_id' => $request->group_id,
-
+            'staff_id'=>AppUtils::getCurrentEmployeeId(),
             'school_id' => auth('api')->user()->school_id,
         ]);
     }

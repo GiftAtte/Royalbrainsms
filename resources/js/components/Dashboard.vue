@@ -24,42 +24,84 @@
 
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card card-navy">
-                    <div class="card-header">
-                        <h3 class="card-title">Welcome Back!</h3>
-                    </div>
-
+                <div class="card">
                     <div class="card-body student-dashboard">
                         <div class="ribbon-wrapper">
                             <div class="ribbon bg-primary">Dashboard</div>
                         </div>
 
-                        <div class="row col-md-12 pb-5">
+                        <div class="col-md-12 pb-5">
                             <student-dashboard
                                 v-if="$gate.isStudentOrParent()"
                             />
-                            <admin-dashboard v-else />
+                            <candidate-dashboard v-if="$gate.isCandidate()" />
+                            <admin-dashboard v-if="$gate.isAdmin()" />
+                            <teachers-dashboard
+                                v-if="$gate.isSubjectOrFormTutor()"
+                            />
                         </div>
                         <div class="col-md-12 text-bold"><hr /></div>
-
-                        <div class="card card-navy">
-                            <div class="card-header">
-                                <h3 class="card-title">Calender</h3>
+                        <div class="col-md-12 row">
+                            <div class="col-md-6">
+                                <div class="card card-navy card-outline">
+                                    <div class="card-header bg-primary">
+                                        <h4 class="py-2">NEWS FEED</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="col-md-12">
+                                            <news-feed
+                                                :school="school"
+                                                v-for="news in newsFeed"
+                                                :key="news.id"
+                                                :news="news"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <router-link
+                                            v-if="$gate.isAdminOrTutor()"
+                                            to="/news"
+                                            class="btn btn-flat"
+                                            >View More <i class="fa fa-eye"></i
+                                        ></router-link>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <Fullcalendar
-                                    :plugins="CalenderPlugins"
-                                    :header="{
-                                        left: 'title',
-                                        //center:'dayGridMonth' //, timeGridWeek , timeGridDay ',
-                                        right: 'prev today next',
-                                    }"
-                                    :weekends="true"
-                                    :month="false"
-                                    :selectable="true"
+                            <div class="col-md-6 birthday">
+                                <today-calender
+                                    :addEvent="newModal"
                                     :events="events"
-                                    @eventClick="showEvent"
                                 />
+                                <div>
+                                    <birthday />
+                                </div>
+                                <hr />
+                                <div class="card birthday" v-show="false">
+                                    <div class="card-header bg-info">
+                                        <h3 class="card-title">Calender</h3>
+                                        <button
+                                            @click="newModal"
+                                            class="btn btn-success float-right"
+                                        >
+                                            Add Event
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <Fullcalendar
+                                            :plugins="CalenderPlugins"
+                                            :header="{
+                                                left: 'title',
+                                                //center:'dayGridMonth' //, timeGridWeek , timeGridDay ',
+                                                right: 'prev today next',
+                                            }"
+                                            :weekends="true"
+                                            :month="false"
+                                            :selectable="true"
+                                            :events="events"
+                                            @eventClick="showEvent"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div
@@ -132,10 +174,11 @@
                                             <div class="form-group">
                                                 <input
                                                     v-model="form.start_date"
-                                                    type="date"
+                                                    onfocus="this.type = 'date'"
+                                                    onblur="this.type = 'text'"
                                                     name="start_date"
                                                     id="start_date"
-                                                    placeholder="Start Date"
+                                                    placeholder="dd/mm/yyyy"
                                                     class="form-control"
                                                     :class="{
                                                         'is-invalid':
@@ -153,7 +196,9 @@
                                             <div class="form-group">
                                                 <input
                                                     v-model="form.end_date"
-                                                    type="date"
+                                                    onfocus="this.type = 'date'"
+                                                    onblur="this.type = 'text'"
+                                                    placeholder="dd/mm/yyyy"
                                                     name="end_date"
                                                     id="end_date"
                                                     class="form-control"
@@ -212,12 +257,18 @@
 </template>
 
 <script>
+import CandidateDashboard from "./CandidateDashboard.vue";
 import Fullcalendar from "@fullcalendar/vue";
 import DaygridPlugin from "@fullcalendar/daygrid";
 import TimegridPlugin from "@fullcalendar/timegrid";
 import InteractionPlugin from "@fullcalendar/interaction";
 import ListPlugin from "@fullcalendar/list";
 import { mapGetters, mapActions } from "vuex";
+import Birthday from "./students/Birthday.vue";
+import NewsFeed from "./NewsFeed.vue";
+import moment from "moment";
+import TodayCalender from "./utils/TodayCalender.vue";
+import TeachersDashboard from "./TeachersDashboard.vue";
 export default {
     computed: {
         school() {
@@ -228,7 +279,14 @@ export default {
         this.loadSchool();
     },
 
-    components: { Fullcalendar },
+    components: {
+        Fullcalendar,
+        CandidateDashboard,
+        Birthday,
+        NewsFeed,
+        TodayCalender,
+        TeachersDashboard,
+    },
     data: () => {
         return {
             editmode: false,
@@ -244,7 +302,7 @@ export default {
             staff_count: "",
             level_count: "",
 
-            events: "",
+            events: [],
             indexToUpdate: "",
             form: new Form({
                 id: "",
@@ -274,22 +332,31 @@ export default {
         getEvent() {
             axios
                 .get("api/event")
-                .then((response) => {
-                    this.events = response.data;
-                    console.log(this.events);
+                .then(({ data }) => {
+                    data.forEach((event) => {
+                        this.events.push({
+                            id: event.id,
+                            title: event.event_name,
+                            start: event.start_date,
+                            end: event.end_date,
+                        });
+                        console.log(this.events);
+                    });
                 })
                 .catch();
         },
         showEvent(arg) {
-            this.editmode = true;
-            this.form.reset();
-            $("#addNew").modal("show");
-            const { id, title, start, end } = arg.event;
-            this.form.id = id;
-            this.form.event_name = title;
-            this.form.start_date = start;
-            this.form.end_date = end;
-            console.log([id, title, start, end]);
+            if (this.$gate.isAdminOrCandidate()) {
+                this.editmode = true;
+                this.form.reset();
+                $("#addNew").modal("show");
+                const { id, title, start, end } = arg.event;
+                this.form.id = id;
+                this.form.event_name = title;
+                this.form.start_date = moment(start).format("DD/MM/YYYY");
+                this.form.end_date = moment(end).format("DD/MM/YYYY");
+            }
+            // console.log(this.form.start_date);
         },
 
         createEvent() {
@@ -309,20 +376,26 @@ export default {
                 .catch(() => {});
         },
         updateEvent() {
-            this.$Progress.start();
-            // console.log('Editing data');
-            this.form
-                .put("api/event/" + this.form.id)
-                .then(() => {
-                    // success
-                    $("#addNew").modal("hide");
-                    swal.fire("Updated!", "event has been updated.", "success");
-                    this.$Progress.finish();
-                    Fire.$emit("AfterCreate");
-                })
-                .catch(() => {
-                    this.$Progress.fail();
-                });
+            if (this.$gate.isAdmin()) {
+                this.$Progress.start();
+                // console.log('Editing data');
+                this.form
+                    .put("api/event/" + this.form.id)
+                    .then(() => {
+                        // success
+                        $("#addNew").modal("hide");
+                        swal.fire(
+                            "Updated!",
+                            "event has been updated.",
+                            "success"
+                        );
+                        this.$Progress.finish();
+                        Fire.$emit("AfterCreate");
+                    })
+                    .catch(() => {
+                        this.$Progress.fail();
+                    });
+            }
         },
         deleteEvent() {
             $("#addNew").modal("hide");
@@ -365,6 +438,10 @@ export default {
         //     this.$router.push('/reports')
 
         //   }
+
+        axios
+            .get("/api/news/published")
+            .then((res) => (this.newsFeed = res.data));
 
         this.getEvent();
         Fire.$on("AfterCreate", () => {

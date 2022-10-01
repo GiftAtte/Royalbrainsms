@@ -1,171 +1,181 @@
 // bootstrap resets
 ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 .menu-container {
-  z-index: 1000;
-  position: fixed;
-  left: 250px;
-  width: 250px;
-  height: 100%;
-  margin-left: -250px;
-  overflow-y: auto;
-  background: #31373d;
-  top: 0;
-  overflow: hidden;
-  transition: all .5s ease;
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 250px;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    background: #eeeff0;
+    top: 0;
+    overflow: hidden;
+    color: black;
+    transition: all 0.5s ease;
 }
 
 .menu {
-  position: fixed;
-  width: 250px;
-  height: 100%;
-  background: #31373d;
-   font-size: medium;
+    position: fixed;
+    width: 250px;
+    height: 100%;
+    background: #f3f5f7;
+    font-size: medium;
+    color: navy !important;
 }
 
 .menu__top {
-  padding: 14px 15px 13px 5px;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    padding: 14px 15px 13px 5px;
+    box-shadow: 0 0 4px white;
 
-  &:after {
-    display: block;
-    content: "";
-    clear: both;
-  }
+    &:after {
+        display: block;
+        content: "";
+        clear: both;
+    }
 }
 
 .menu__logo {
-  display: block;
-  float: left;
+    display: block;
+    float: left;
 }
 
 .menu__title {
-  display: block;
-  float: left;
-  margin-left: 10px;
-  padding-top: 6px;
-  font-weight: 700;
-  color: #fff;
+    display: block;
+    float: left;
+    margin-left: 10px;
+    padding-top: 6px;
+    font-weight: 700;
+    color: black;
 
-  &:hover {
-    color: #ccc;
-    text-decoration: none;
-    transition: all 150ms ease;
-  }
+    &:hover {
+        color: #ccc;
+        text-decoration: none;
+        transition: all 150ms ease;
+    }
 }
 
 .menu__icon {
-  font-size: 16px;
-  width: 16px;
-  text-align: center;
-  margin-right: 10px;
+    font-size: 16px;
+    width: 16px;
+    text-align: center;
+    margin-right: 10px;
 }
 
 .menu__arrow-icon {
-  float: right;
-  margin: 5px 0 0 0;
+    float: right;
+    margin: 5px 0 0 0;
 }
 
 .menu__link {
-  display: block;
-  padding: 10px 15px 10px 15px;
-  color: #fff;
-  text-decoration: none;
-  background: #31373D;
-
-  &:hover {
-    color: #fff;
+    display: block;
+    padding: 10px 15px 10px 15px;
+    color: navy !important;
     text-decoration: none;
-    background: #3c444b;
-    transition: all 500ms ease-out;
-  }
+    background: white;
 
-  &:visited {
-    color: #fff;
-    text-decoration: none;
-  }
+    &:hover {
+        color: white !important;
+        text-decoration: none;
+        background: navy;
+        transition: all 500ms ease-out;
+    }
+
+    &:visited {
+        color: white;
+        text-decoration: none;
+    }
+    &:active {
+        color: white;
+    }
 }
 
 // context menu
 .context-menu-container {
-  position: absolute;
-  left: 40px;
-  width: 237px;
-  height: 100%;
-  background: #31373d;
+    position: absolute;
+    left: 40px;
+    width: 237px;
+    height: 100%;
+    background: white;
+    color: navy !important;
 }
 
 .context-menu {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  background: #31373d;
-  font-size: medium;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background: white;
+    font-size: medium;
+    color: navy !important;
 }
 
 .context-menu__title {
-  font-size: 1.20rem;
-  color: #fff;
-  padding: 18px 0 17px 8px;
-  border-bottom: 1px solid #ccc;
+    font-size: 1.2rem;
+    color: rgb(14, 13, 13);
+    padding: 18px 0 17px 8px;
+    border-bottom: 1px solid #ccc;
 }
 
 .context-menu__title-icon {
-  margin: 0 0 0 0;
+    margin: 0 0 0 0;
 }
 
 .context-menu__btn-close {
-  float: right;
-  margin-right: 8px;
-  color: #fff;
-
-  &:hover {
+    float: right;
+    margin-right: 8px;
     color: #fff;
-  }
+
+    &:hover {
+        color: #fff;
+    }
 }
 
 .context-menu__link {
-  display: block;
-  padding: 10px;
-  color: #fff;
-  text-decoration: none;
-  background: transparent;
-
-  &:hover {
-    color: #fff;
+    display: block;
+    padding: 10px;
+    color: navy;
     text-decoration: none;
-    background: #045194;
-    cursor: pointer;
-    transition: all 500ms ease-out;
-  }
+    background: white;
 
-  &:visited {
-    color: #fff;
-  }
+    &:hover {
+        color: #fff;
+        text-decoration: none;
+        background: navy;
+        cursor: pointer;
+        transition: all 500ms ease-out;
+    }
+
+    &:active {
+        color: #fff;
+    }
 }
 
 .context-menu__link--active {
-  background: #57636d;
+    background: navy;
+    color: white;
 }
 
 // links
 .menu__link--active {
-  background: #000;
+    background: navy;
+    color: white;
 }
 
 .slide-fade-enter-active {
-  transition: all 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .slide-fade-leave-active {
-  transition: all 0.2s ease;
+    transition: all 0.2s ease;
 }
 
-.slide-fade-enter, .slide-fade-leave-to {
-  transform: translate3d(-30px, 0, 0);
-  opacity: 0;
+.slide-fade-enter,
+.slide-fade-leave-to {
+    transform: translate3d(-30px, 0, 0);
+    opacity: 0;
 }

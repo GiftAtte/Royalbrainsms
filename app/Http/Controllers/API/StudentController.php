@@ -7,23 +7,28 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Student;
 use App\Has_arm;
-use App\Level_history;
+
 use App\Level;
 use App\LoginDetail;
 use App\School;
 use Illuminate\Support\Facades\DB;
-use App\Imports\UsersImport;
 use Illuminate\Support\Facades\Hash;
-use Excel;
-use App\Events\studentCreated;
+
+use App\Http\Controllers\API\Traits\AttendanceTrait;
+use App\Http\Controllers\API\Traits\BirthdayTrait;
 use App\Level_sub;
 use App\Mark;
 use App\Report;
 
+
 ini_set('max_execution_time', '300');
 
 class StudentController extends Controller
+
 {
+    use BirthdayTrait;
+    use AttendanceTrait;
+
     public function __construct()
     {
         $this->middleware('auth:api');

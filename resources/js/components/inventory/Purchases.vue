@@ -12,6 +12,7 @@
             search="true"
             title="Purchase list"
             updateTitle="Update Purchases"
+            cart="true"
         >
             <template #modal-fields>
                 <select-box

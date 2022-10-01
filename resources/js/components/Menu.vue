@@ -1,9 +1,8 @@
 <template>
     <div
-        class="menu-container font-weight-light sidebar-dark-primary elevation-4"
+        class="menu-container font-weight-light sidebar-dark bg-navy elevation-4"
     >
-        <!-- root level itens -->
-        <ul class="menu py-5">
+        <ul class="menu py-5" style="background-color: navy">
             <li class="brand-link">
                 <a href="/dashboard" class="menu__logo">
                     <img
@@ -13,17 +12,24 @@
                         style="opacity: 0.98"
                     />
                 </a>
-                <span class="brand-text font-weight-light text-white">{{
+                <span class="brand-text font-weight-light">{{
                     school.short_name
                 }}</span>
             </li>
 
             <li>
-                <div class="user-panel mt-3 text-center d-flex">
+                <div
+                    class="user-panel mt-2 text-center d-flex"
+                    style="background-color: navy"
+                >
                     <div class="image">
-                        <a href="#" class="d-block text-white text-uppercase">
-                            {{ name }}
-                            <p>==={{ type }}===</p>
+                        <a
+                            href="#"
+                            class="pt-2 d-block text-white text-uppercase"
+                        >
+                            <i class="fa fa-globe mx-2 red"></i>
+                            {{ "SCHOOL PORTAL" }}
+                            <p>=======================</p>
                         </a>
                     </div>
                     <div class="info"></div>
@@ -35,8 +41,11 @@
                     @click.prevent="updateMenu('home')"
                     :class="highlightSection('home')"
                 >
-                    <i class="fa fa-home menu__icon" aria-hidden="true"></i>
-                    Home
+                    <i
+                        class="nav-icon fa fa-home menu__icon"
+                        aria-hidden="true"
+                    ></i>
+                    DASHBOARD
                 </a>
             </li>
 
@@ -47,10 +56,11 @@
                     :class="highlightSection('manage')"
                 >
                     <i
-                        class="nav-icon fas fas fa-tachometer-alt red menu__icon"
+                        title="ACADEMICS"
+                        class="nav-icon fas fas fa-tachometer-alt menu__icon"
                         aria-hidden="true"
                     ></i>
-                    Manage
+                    Academics
                     <i
                         class="fa fa-chevron-right menu__arrow-icon"
                         aria-hidden="true"
@@ -65,10 +75,11 @@
                     :class="highlightSection('reports')"
                 >
                     <i
-                        class="fa fa-book green menu__icon"
+                        class="fa fa-book menu__icon"
                         aria-hidden="true"
+                        title="EXAMS AND RECORDS"
                     ></i>
-                    Reports
+                    Exams/Records
                     <i
                         class="fa fa-chevron-right menu__arrow-icon"
                         aria-hidden="true"
@@ -83,7 +94,7 @@
                     :class="highlightSection('accademics')"
                 >
                     <i
-                        class="fa fa-graduation-cap navy menu__icon"
+                        class="fa fa-graduation-cap menu__icon"
                         aria-hidden="true"
                     ></i>
                     My Domain
@@ -103,7 +114,8 @@
                     :class="highlightSection('manage')"
                 >
                     <i
-                        class="nav-icon fa fa-user-friends red menu__icon"
+                        title="PARENTS CONNER"
+                        class="nav-icon fa fa-user-friends menu__icon"
                         aria-hidden="true"
                     ></i>
                     Parent Conner
@@ -122,7 +134,7 @@
                     :class="highlightSection('tutor')"
                 >
                     <i
-                        class="fas fa-chalkboard-teacher navy menu__icon"
+                        class="fas fa-chalkboard-teacher menu__icon"
                         aria-hidden="true"
                     ></i>
                     Form Tutor
@@ -140,7 +152,8 @@
                     :class="highlightSection('cbt')"
                 >
                     <i
-                        class="fas fa-book-open navy menu__icon yellow"
+                        title="CBT"
+                        class="fas fa-book-open menu__icon"
                         aria-hidden="true"
                     ></i>
                     CBT
@@ -158,10 +171,11 @@
                     :class="highlightSection('chat')"
                 >
                     <i
-                        class="fas fa-comments navy menu__icon green"
+                        title="COMMUNICATION"
+                        class="fas fa-comments menu__icon"
                         aria-hidden="true"
                     ></i>
-                    Chats
+                    Communication
                     <i
                         class="fa fa-chevron-right menu__arrow-icon"
                         aria-hidden="true"
@@ -169,14 +183,15 @@
                 </a>
             </li>
 
-            <li v-show="$gate.isAdminOrTutorOrParent()">
+            <li v-show="$gate.isAdmin()">
                 <a
                     href="#"
                     @click.prevent="updateMenu('fees')"
                     :class="highlightSection('fees')"
                 >
                     <i
-                        class="fas fa-money-bill-alt navy menu__icon red"
+                        title="FEE MANAGEMENT"
+                        class="fas fa-money-bill-alt menu__icon"
                         aria-hidden="true"
                     ></i>
                     Fee Management
@@ -187,17 +202,56 @@
                 </a>
             </li>
 
-            <li v-show="$gate.isAdminOrTutor()">
+            <li v-show="$gate.isAdmin()">
                 <a
                     href="#"
                     @click.prevent="updateMenu('Inventory')"
                     :class="highlightSection('Inventory')"
                 >
                     <i
-                        class="fas fa-money-bill-alt navy menu__icon yellow"
+                        title="INVENTORY"
+                        class="fas fa-money-bill-alt navy menu__icon"
                         aria-hidden="true"
                     ></i>
                     Inventory
+                    <i
+                        class="fa fa-chevron-right menu__arrow-icon"
+                        aria-hidden="true"
+                    ></i>
+                </a>
+            </li>
+
+            <li v-show="$gate.isAdminOrCandidate()">
+                <a
+                    href="#"
+                    @click.prevent="updateMenu('Admission')"
+                    :class="highlightSection('Admission')"
+                >
+                    <i
+                        title="ADMISSION"
+                        class="fa fa-user-plus navy menu__icon"
+                        aria-hidden="true"
+                    ></i>
+                    Admission
+                    <i
+                        class="fa fa-chevron-right menu__arrow-icon"
+                        aria-hidden="true"
+                    ></i>
+                </a>
+            </li>
+
+            <li v-show="$gate.isAdmin()">
+                <a
+                    href="#"
+                    @click.prevent="updateMenu('Downloads')"
+                    :class="highlightSection('Downloads')"
+                >
+                    <i
+                        title="DOWNLOAD CENTER"
+                        class="fa fa-history navy menu__icon"
+                        aria-hidden="true"
+                    ></i>
+                    Downloads & History
                     <i
                         class="fa fa-chevron-right menu__arrow-icon"
                         aria-hidden="true"
@@ -212,7 +266,8 @@
                     :class="highlightSection('settings')"
                 >
                     <i
-                        class="fa fa-cog navy menu__icon indigo"
+                        title="ADMIN SETTINGS"
+                        class="fa fa-cog navy menu__icon"
                         aria-hidden="true"
                     ></i>
                     Admin Settings
@@ -230,10 +285,7 @@
                     @click.prevent="updateMenu('superadmin')"
                     :class="highlightSection('superadmin')"
                 >
-                    <i
-                        class="fa fa-cog navy menu__icon red"
-                        aria-hidden="true"
-                    ></i>
+                    <i class="fa fa-cog navy menu__icon" aria-hidden="true"></i>
                     Superadmin
                     <i
                         class="fa fa-chevron-right menu__arrow-icon"

@@ -23,27 +23,13 @@
         </div>
         <div class="content col-12">
             <div class="card">
-                <div class="card-header row">
-                    <div class="col-md-6">
-                        <h4 v-show="!isSession" class="text-danger">
-                            <router-link :to="`/import_scores`" tag="a" exact
-                                >Import scores {{ "(cvs)" }} </router-link
-                            >&nbsp;/Select Report Set
-                        </h4>
-                    </div>
-
-                    <div class="col-md-6">
-                        <input
-                            type="file"
-                            ref="file"
-                            @change="setFile"
-                        /><button
-                            @click="importExcel"
-                            class="btn btn-success float-right m-2"
-                        >
-                            import(cvs)
-                        </button>
-                    </div>
+                <div class="card-header">
+                    <input
+                        class="btn btn-primary float-right"
+                        type="file"
+                        ref="file"
+                        @change="setFile"
+                    />
                 </div>
                 <form @submit.prevent="createScore">
                     <div class="card-body content">
@@ -166,7 +152,8 @@
                                         report.type === 'default-result' ||
                                         report.type === 'default-midterm' ||
                                         report.type === 'navy-template' ||
-                                        report.type === 'diamond'
+                                        report.type === 'diamond' ||
+                                        report.type === 'blue_ridge'
                                     "
                                     :form="form"
                                     :report="report"
@@ -188,7 +175,7 @@
                                     Delete Scores
                                 </button>
                                 <button class="btn btn-success pl-2">
-                                    submit
+                                    Save Scores
                                 </button>
                             </div>
                         </div>
@@ -239,6 +226,7 @@ export default {
                 test3: [],
                 exams: [],
                 midterm: [],
+                note: [],
                 arm_id: "",
                 number_of_students: 0,
             }),
@@ -353,7 +341,7 @@ export default {
 
         setFile() {
             this.file = this.$refs.file.files[0];
-            console.log(this.file);
+            this.importExcel();
         },
 
         importExcel() {

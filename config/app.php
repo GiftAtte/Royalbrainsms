@@ -235,6 +235,7 @@ return [
         'Pusher' => Pusher\Pusher::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
 
+
     ],
 
 ];

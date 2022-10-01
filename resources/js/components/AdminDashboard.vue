@@ -1,77 +1,63 @@
 <template>
-    <div class="row col-md-12">
-        <div class="col-md-3 col-xs-12">
-            <!-- small box -->
-            <div class="small-box bg-navy">
-                <div class="inner">
-                    <h3>{{ user_count }}</h3>
-
-                    <p>Active Users</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-bag"></i>
-                </div>
-                <a href="/users" class="small-box-footer"
-                    >More info <i class="fas fa-arrow-circle-right"></i
-                ></a>
+    <section class="section-features">
+        <div class="col-md-12 row">
+            <marquee behavior="scroll" direction="left" class="message-box">
+                <h4 class="text-bold">
+                    INFO.....!!! &nbsp;&nbsp;&nbsp; Please click on the boxes
+                    below to access Information as described on it. You can also
+                    access other links through the sidebar by your left.
+                </h4>
+            </marquee>
+            <div class="col-md-12 text-primary text-bold">
+                <hr />
             </div>
         </div>
-        <!-- ./col -->
-        <div class="col-md-3 col-xs-12">
-            <!-- small box -->
-            <div class="small-box bg-success">
-                <div class="inner">
-                    <h3>{{ student_count }}</h3>
 
-                    <p>Active Students</p>
+        <div class="row">
+            <div class="col-md-3 col-sm-12">
+                <div
+                    class="feature-box container"
+                    @click="navigate('/reports')"
+                >
+                    <i class="feature-box__icon warning fa fa-users"></i>
+                    <h3 class="header-tertiary" style="color: orange">USERS</h3>
+                    <p>{{ user_count }} &nbsp;Active Users</p>
                 </div>
-                <div class="icon">
-                    <i class="ion ion-stats-bars"></i>
+            </div>
+
+            <div class="col-md-3 col-sm-12" @click="navigate('/exams')">
+                <div class="feature-box container">
+                    <i
+                        class="feature-box__icon primary fa fa-graduation-cap"
+                    ></i>
+                    <h3 class="text-primary u-margin-bottom-small">STUDENTS</h3>
+                    <p>{{ student_count }} &nbsp; Active Students</p>
                 </div>
-                <router-link
-                    to="/students"
-                    class="small-box-footer"
-                    tag="a"
-                    exact
-                    >More info <i class="fas fa-arrow-circle-right"></i
-                ></router-link>
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <div
+                    class="feature-box container"
+                    @click="navigate('/feegroup')"
+                >
+                    <i class="feature-box__icon success fas fa-user"></i>
+                    <h3 class="text-success u-margin-bottom-small">STAFF</h3>
+                    <p>{{ staff_count }} &nbsp; Active Staff</p>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <div
+                    class="feature-box container"
+                    @click="navigate('/assignments')"
+                >
+                    <i class="feature-box__icon danger fa fa-edit"></i>
+                    <h3 class="text-danger u-margin-bottom-small">LEVELS</h3>
+                    <p>{{ level_count }} &nbsp; Active Classes</p>
+                </div>
             </div>
         </div>
-        <!-- ./col -->
-        <div class="col-md-3 col-xs-12">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-                <div class="inner">
-                    <h3>{{ staff_count }}</h3>
-
-                    <p>Active Staff</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-person-add"></i>
-                </div>
-                <router-link to="/staff" class="small-box-footer" tag="a" exact
-                    >More info <i class="fas fa-arrow-circle-right"></i
-                ></router-link>
-            </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-md-3 col-xs-12">
-            <!-- small box -->
-            <div class="small-box bg-danger">
-                <div class="inner">
-                    <h3>{{ level_count }}</h3>
-
-                    <p>Levels/classes</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-pie-graph"></i>
-                </div>
-                <router-link to="/levels" class="small-box-footer" tag="a" exact
-                    >More info <i class="fas fa-arrow-circle-right"></i
-                ></router-link>
-            </div>
-        </div>
-    </div>
+    </section>
 </template>
 
 <script>
@@ -237,12 +223,11 @@ export default {
             });
         },
     },
-
+    // if (this.$gate.isStudent()) {
+    //     this.$router.push("/reports");
+    // }
     created() {
         this.loadSchool();
-        if (this.$gate.isStudent()) {
-            this.$router.push("/reports");
-        }
 
         this.getEvent();
         Fire.$on("AfterCreate", () => {

@@ -61,6 +61,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="container" id="print">
 
 <div class="content col-12">
+    <form action="/resultsBulkDownload/{{ $report->id }}" method="POST">
+        @csrf
     <div class="card card-navy card-outline">
     <div class="card-header">
     <div class="ribbon-wrapper">
@@ -76,6 +78,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     This Term CVS</a>
 </div>
     <div class="card-body table-responsive col-12">
+
     <table class="table table-hover  display" id="data_tb" width="100%">
     <thead>
     <tr>
@@ -83,10 +86,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </tr>
     </thead>
     <tbody>
+
         @foreach ($students as  $student)
 
 
     <tr >
+
+    <td>
+     <input type="checkbox" name="studentIds[]" value="{{ $student->id }}" id="student_id">
+    </td>
     <td>{{$student->id}}</td>
     <td>{{$student->surname}}&nbsp;{{$student->first_name}}&nbsp;{{$student->middle_name}}</td>
     <td>{{$student->arm?$student->arm->name:''}}</td>
@@ -99,13 +107,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <a class="pl-2" href="{{ route('pdfdownload',['id'=>$student->id,'report_id'=>$report->id,'email'=>1]) }}">Send Mail</a>
                         </td>
     </tr>
+
     @endforeach
     </tbody>
     </table>
+
     </div>
     <div class="card-footer">
-
+<button class="button btn btn-primary">Bulk Download</button>
                   </div>
+          </form>
     </div>
     </div>
 

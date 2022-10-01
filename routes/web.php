@@ -2,6 +2,7 @@
 
 use App\Events\DemoEvent;
 use App\Mail\SendResults;
+use App\Models\Livestream\ZoomOauth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,17 @@ Route::get('/', function () {
 
 
 
+
+Route::get('/zoomoauthredirect','API\Livestream\LivestreamContoller@zoomAuthorizeToken');
+
+
+
+
+
+
+
+
+
 Route::get('/email', function () {
     return new SendResults() ;
 });
@@ -36,8 +48,9 @@ Route::get('/email', function () {
 
 //Auth::routes();
 
-
-
+Route::post('zoomcallback', function($data){
+  return $data;
+});
 
 
 // Authentication Routes...
@@ -103,6 +116,8 @@ Route::get('masterAndCa/{report_id}', 'HomeController@masterAndCa')->name('expor
 
 Route::get('/messages','ChatsController@fetchMessages');
 Route::post('/messages','ChatsController@sendMessages');
+
+Route::post('/resultsBulkDownload/{reportId}','homeController@bulkDownload');
 
 Route::get('pdf_download/{report_id}/{student_id?}', 'API\ReportController@pdfDownload');
 Route::get('/dashboard', 'HomeController@index')->name('home');

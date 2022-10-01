@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Level;
 use App\Arm;
 use App\Has_arm;
+use App\Http\Controllers\API\Utils\AppUtils;
 
 class LevelController extends Controller
 {
@@ -136,7 +137,7 @@ public function level_arms()
         //     $arm=Has_arm::where('staff_id',$user->staff_id)->pluck('level_id');
         //     return Level::where('school_id',$user->school_id)->whereIn('id',$arm)->get();
         // }
-        return Level::where('school_id',auth('api')->user()->school_id)->get();
+        return Level::where([['school_id',AppUtils::getSchoolId()],['is_history',0]])->get();
     }
 
 
@@ -150,10 +151,10 @@ public function level_arms()
     public function update_arms(Request $request ,$id)
     {
         //
-        $hasArm=Has_arm::where('staff_id',$request->staff_id)->first();
-        if( $hasArm){
-        $hasArm->staff_id=null;
-         $hasArm->save();
+        $hasArm=Has_arm::where('staff_id',$request->staff_id)->count();
+        if( $hasArm>0){
+       Has_arm::where('staff_id',$request->staff_id)->update(['staff_id'=>null]);
+        // $hasArm->save();
         }
 
         $item = Has_arm::findOrFail($id);
@@ -165,14 +166,15 @@ public function level_arms()
     }
 
     public  function add_arms(Request $request){
+
         $arm=Has_arm::where([['arms_id',$request->arms_id],
         ['level_id',$request->level_id]])->first();
         if($arm){
-            return back()->withErrors('Sorry! Arm exist ');
+            return 'Sorry! Arm exist ';
         }
         Has_arm::create($request->all());
         $updated_level = Level::findOrFail($request->level_id);
-        if($updated_level->has_arm<=1){
+        if($updated_level->has_arm<1){
         $updated_level->has_arm=1;
         $updated_level->save();
 

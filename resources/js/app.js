@@ -65,7 +65,8 @@ Fullcalendar.plugins = {
     InteractionPlugin,
     ListPlugin,
 };
-
+import VueYouTubeEmbed from "vue-youtube-embed";
+Vue.use(VueYouTubeEmbed);
 Vue.component(Fullcalendar);
 // Gate
 import Gate from "./Gate";
@@ -271,6 +272,7 @@ window.Fire = new Vue();
 //     render: h => h(App)
 
 // }).$mount('#app')
+import { ZegoExpressEngine } from "zego-express-engine-webrtc";
 
 const app = new Vue({
     el: "#app",
@@ -281,14 +283,41 @@ const app = new Vue({
         message: "weledrcome",
         level_id: "",
         name: "Gift",
+        token: "04AAAAAGLzB9oAEHE1Nmt1ZTAzOXloZnlxMzEAsMHyWKa+PixaJ4QsFyoAIYpd0YfYu2FefKRfxYpi1Ewr/SBOW/7dJzkPfJcyt27xbq93BAY99WMkfEsCCzskAs9lDk4cg7VHywXGBhObBWFC4TZPDB3QevQoQnHZV3N7ryBeGWceMpCMs0+Ke0uE+XTQ0v6F41oE5bCrJ7LU+WqJkyuTqrZsuzuczuxoog/1ToDC/NwIt0gnGf+ZolD/T2dl411ddJD3RQPosQvE0cX2",
     },
 
     computed: mapState(["school"]),
+    mounted() {
+        //this.meeting();
+        console.log(this.$route);
+        if (this.$route.name.includes("nat-4")) {
+            this.$router.push("/dashboard");
+        }
+    },
 
     methods: {
         changeName() {
             this.name = "Atte";
         },
+
+        meeting() {
+            const zg = new ZegoExpressEngine(
+                1919895756,
+                "f624ef5a3323cd64f8f922f6bb47df43"
+            );
+            zg.checkSystemRequirements().then((res) => {
+                console.log(res);
+            });
+
+            zg.loginRoom(
+                "web_001",
+                this.token,
+                { userID: "enoatte82@gmail.com", userName: "Admin" },
+                { userUpdate: true }
+            );
+            zg.startPublishingStream("web_001");
+        },
+
         searchit: _.debounce(() => {
             Fire.$emit("searching");
         }, 1000),

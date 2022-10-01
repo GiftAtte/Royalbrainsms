@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Level;
@@ -219,7 +219,7 @@ class HistoryController extends Controller
     $level->is_history=1;
     $level->save();
 }
-    
+
         return 'success';
     }
 

@@ -1,315 +1,288 @@
-
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url("https://fonts.googleapis.com/css?family=Nunito");
 //@import url('https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.css');
 
 // Variables
-@import 'variables';
-@import 'summernote/summernote';
+@import "variables";
+@import "summernote/summernote";
 
 $fa-font-path: "../webfonts";
+
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
-@import '~admin-lte/dist/css/adminlte.css';
-@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
-@import '~@fortawesome/fontawesome-free/scss/solid.scss';
-@import '~@fortawesome/fontawesome-free/scss/brands.scss';
-@import '~@fullcalendar/core/main.css';
-@import '~@fullcalendar/daygrid/main.css';
-@import '~video.js/dist/video-js.css';
-@import '~vue-loading-overlay/dist/vue-loading.css';
-@import '~vue2-timepicker/dist/VueTimepicker.css';
-@import '~vue-datetime/dist/vue-datetime.css';
+@import "~bootstrap/scss/bootstrap";
+@import "~admin-lte/dist/css/adminlte.css";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+@import "~@fullcalendar/core/main.css";
+@import "~@fullcalendar/daygrid/main.css";
+@import "~video.js/dist/video-js.css";
+@import "~vue-loading-overlay/dist/vue-loading.css";
+@import "~vue2-timepicker/dist/VueTimepicker.css";
+@import "~vue-datetime/dist/vue-datetime.css";
 
-@import '~codemirror/lib/codemirror.css';
-@import '~@toast-ui/editor/dist/toastui-editor.css';
+@import "~codemirror/lib/codemirror.css";
+@import "~@toast-ui/editor/dist/toastui-editor.css";
 
-@import '~vue-pdf-reader/dist/vue-pdf-reader.min.css';
+@import "~vue-pdf-reader/dist/vue-pdf-reader.min.css";
 @import "~material-design-icons-iconfont/dist/material-design-icons";
 
+.vertical-header {
+    vertical-align: bottom;
+}
 .navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
-.router-link-exact-active{
-    background-color: #0b2ce9ea;
-    color:#fff !important;
+.router-link-exact-active {
+    background-color: navy;
+    color: #fff !important;
 }
-.modify{
-padding: 5px;
+.modify {
+    padding: 5px;
 }
-.btn-group-xs > .btn, .btn-xs {
-    padding: .25rem .4rem;
-    font-size: .875rem;
-    line-height: .5;
-    border-radius: .2rem;
+.btn-group-xs > .btn,
+.btn-xs {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.875rem;
+    line-height: 0.5;
+    border-radius: 0.2rem;
     color: white;
-  }
-  th.rotate {
+}
+th.rotate {
     /* Something you can count on */
     height: 150px;
     white-space: nowrap;
-    align-content:space-between;
-  }
-
-  th.rotate > div {
-    transform:
-      /* Magic Numbers */
-      translate(25px, 51px)
-      /* 45 is really 360 - 45 */
-      rotate(-90deg);
-    width: 20px;
-
-  }
-  th.rotate > div > span {
-
-    padding: 0px 10px 0 0px;
-
-  }
-   .myTable tr td{
-    font-size: 12px;
-    font-weight: 14;
-    padding: auto;
-
-
-
-  }
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  #section-to-print, #section-to-print *{
-    visibility: visible;
-    margin: 0 0 0 0;
-
-    width: auto;
-
-  }
-
-  #profile {
-      display: none;
-  }
-  #section-to-print {
-
-    position: auto;
-    left: 0;
-    top: 0;
-    margin-top: 0;
-    background-image: linear-gradient(top to bottom, rgb(184, 184, 244),rgb(251, 211, 211));
-
-  }
-  #section-to-print .img-result{
-    width: 150px;
-    height: 120px;
-
-  }
-  #section-to-print .result-logo{
-    width: 150px;
-    height: 120px;
-  }
-  #section-to-print .table{
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-   font-weight: normal;
-    font-size: 14px;
-  }
-
-  #section-to-print .table-responsive{
-    visibility: hidden;
-
-  }
-  #section-to-print .action{
-    visibility: hidden;
-
-  }
-  #section-to-print .table{
-    border-color: black;
-     color: black;
-  }
-
+    align-content: space-between;
 }
 
-#print{
+th.rotate > div {
+    transform:
+      /* Magic Numbers */ translate(25px, 51px)
+        /* 45 is really 360 - 45 */ rotate(-90deg);
+    width: 20px;
+}
+th.rotate > div > span {
+    padding: 0px 10px 0 0px;
+}
+.myTable tr td {
+    font-size: 14px;
+    font-weight: 14;
+    color: black;
+    padding: auto;
+}
+@media print {
     body * {
-      visibility: hidden;
+        visibility: hidden;
     }
-    #section-to-print, #section-to-print *{
-      visibility: visible;
-      margin: 0 0 0 0;
+    #section-to-print,
+    #section-to-print * {
+        visibility: visible;
 
-      width: auto;
-
+        width: auto;
     }
-    #print .not-printable{
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 14px;
+        color: black;
+    }
+    .table,
+    .table-sm {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 14px !important;
+        color: black;
+    }
+    .table-bordered th {
+        text-transform: uppercase;
+        font-weight: bold;
+        border: 0.25px solid black !important;
+        padding: 2.5px;
+    }
+    .table-bordered td {
+        border: 0.25px solid black !important;
+        padding: 1.5px;
+        text-transform: capitalize;
+        font-weight: bold;
+        font-size: 14px !important;
+    }
+    #profile {
+        display: none;
+    }
+    #section-to-print {
+        position: absolute;
+        left: 0;
+        top: -50px;
+        right: 0;
+        width: auto;
+        background-image: linear-gradient(
+            top to bottom,
+            rgb(184, 184, 244),
+            rgb(251, 211, 211)
+        );
+    }
+    #section-to-print .img-result {
+        width: 150px;
+        height: 120px;
+    }
+    #section-to-print .result-logo {
+        width: 150px;
+        height: 120px;
+    }
+    #section-to-print .table {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        font-weight: normal;
+        font-size: 13px;
+    }
+    #section-to-print .table th,
+    tr,
+    td {
+        padding: 0.1px;
+        margin: 0.1px;
+        border: 0.5 solid black;
+    }
+
+    #section-to-print .table-responsive {
+        visibility: hidden;
+    }
+    #section-to-print .action {
+        visibility: hidden;
+    }
+}
+
+#print {
+    body * {
+        //  visibility: hidden;
+    }
+    #section-to-print,
+    #section-to-print * {
+        visibility: visible;
+        margin: 0 0 0 0;
+
+        width: auto;
+    }
+    #print .not-printable {
         display: none;
     }
     #profile {
         display: none;
     }
     #section-to-print {
-
-      position: auto;
-      left: 0;
-      top: 0;
-      margin-top: 0;
-
+        position: auto;
+        left: 0;
+        top: 0;
+        margin-top: 0;
     }
-    #section-to-print .img-result{
-      width: 150px;
-      height: 120px;
-
+    #section-to-print .img-result {
+        width: 150px;
     }
-    #section-to-print .result-logo{
-      width: 150px;
-      height: 120px;
+    #section-to-print .result-logo {
+        width: 100%;
     }
-    #section-to-print .table .table{
-      width: 100%;
-      overflow: hidden;
-      position: relative;
-     font-weight: normal;
-      font-size: 16px !important;
-      padding: 0.5 !important;
+    #section-to-print .table {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        font-weight: normal;
+        font-size: 14px !important;
+        padding: 0.1 !important;
     }
-
-    #section-to-print .table-responsive{
-      visibility: hidden;
-
-    }
-    #section-to-print .action{
-      visibility: hidden;
-
-    }
-    #section-to-print .table{
-      border-color: black;
-       color: black;
+    #section-to-print .table-sm {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        font-weight: normal;
+        font-size: 12px !important;
+        padding: 0.1 !important;
     }
 
-  }
+    #section-to-print .table-responsive {
+        visibility: hidden;
+    }
+    #section-to-print .action {
+        visibility: hidden;
+    }
+}
 @page {
     margin: 0;
 }
 
-
-
 .feature-box {
-//background-color: white;
-  border-radius: 3px;
-  font-size: 1rem;
-  text-align: center;
-  padding: 1.5rem;
-  box-shadow: 0 1.5rem 4rem rgba($black, 0.5);
-  transition: all .3s;
-   margin-top: 0.5rem;
-   &.bg-blue{
-           background-image: linear-gradient(
-      to right,
-      $indigo,
-      $blue
-    );
-       }
+    //background-color: white;
+    border-radius: 3px;
+    font-size: 1rem;
+    text-align: center;
+    padding: 1.5rem;
+    box-shadow: 0 1.5rem 2rem rgba($black, 0.4);
+    transition: all 0.3s;
+    margin-top: 0.5rem;
+    &.bg-blue {
+        background-image: linear-gradient(to right, $indigo, $blue);
+    }
 
-       &.bg-green{
-           background-image: linear-gradient(
-      to right,
-      $green-light,
-      $green
-    );
-       }
+    &.bg-green {
+        background-image: linear-gradient(to right, $green-light, $green);
+    }
 
-       &.bg-yellow{
-           background-image: linear-gradient(
-      to right,
-      $yellow,
-      $orange
-    );
-       }
+    &.bg-yellow {
+        background-image: linear-gradient(to right, $yellow, $orange);
+    }
 
-         &.bg-red{
-           background-image: linear-gradient(
-      to right,
-      $red-light,
-      $red
-    );
-       }
+    &.bg-red {
+        background-image: linear-gradient(to right, $red-light, $red);
+    }
 
-&:hover {
-    transform: translateY(-1.5rem) scale(1.2);
-    cursor: pointer;
-}
-  &__icon{
-    font-size: 3rem;
-    color: $blue;
-    display: inline-block;
-    -webkit-background-clip: text;
-    color: transparent;
+    &:hover {
+        transform: translateY(-0.5rem) scale(1.1);
+        cursor: pointer;
+    }
+    &__icon {
+        font-size: 3rem;
+        color: $blue;
+        display: inline-block;
+        -webkit-background-clip: text;
+        color: transparent;
 
-       &.primary{
-           background-image: linear-gradient(
-      to right,
-      $indigo,
-      $blue
-    );
-       }
+        &.primary {
+            background-image: linear-gradient(to right, $indigo, $blue);
+        }
 
-       &.success{
-           background-image: linear-gradient(
-      to right,
-      $green-light,
-      $green
-    );
-       }
+        &.success {
+            background-image: linear-gradient(to right, $green-light, $green);
+        }
 
-       &.warning{
-           background-image: linear-gradient(
-      to right,
-      $yellow,
-      $orange
-    );
-       }
+        &.warning {
+            background-image: linear-gradient(to right, $yellow, $orange);
+        }
 
-         &.danger{
-           background-image: linear-gradient(
-      to right,
-      $red-light,
-      $red
-    );
-       }
-  }
-
-
-
+        &.danger {
+            background-image: linear-gradient(to right, $red-light, $red);
+        }
+    }
 }
 
-.extra--list{
-  text-transform: uppercase;
-  font-size: 1.3rem;
-  color: $black;
-  font-weight: 400;
-  list-style: none;
-  & li{
-    padding-bottom: 1rem;
-  }
+.extra--list {
+    text-transform: uppercase;
+    font-size: 1.3rem;
+    color: $black;
+    font-weight: 400;
+    list-style: none;
+    & li {
+        padding-bottom: 1rem;
+    }
 }
-
 
 .student-dashboard {
-
-  background-image: linear-gradient(180deg
-      ,
-      rgba(white, 1) ,
-      rgba($white, 1)
-    ),
-//     url(students.jpg);
-//   background-size: cover;
-//   background-position: top;
-
-
-
-
+    background-image: linear-gradient(180deg, rgba(white, 1), rgba($white, 1));
+    //     url(students.jpg);
+    //   background-size: cover;
+    //   background-position: top;
 }
 
-
-
-
+#zmmtg-root {
+    display: none;
+}

@@ -5,13 +5,13 @@
 
 @section('content')
 
-<div  class="bg-color:navy">
+         <div  class="card">
 
-                <div class=" row">
+                <div class=" card-body">
 
-                <center style="bg:white">
+                <center style="background:white">
                    <img src="{{ asset('/img/schools/'.$data['school']->logo) }}" class="img-thumbnail pr-2 " alt="logo" width="30" height="30">
-                    <h5 class="text-danger">                {{$data['school']->name }}      </h5>
+                    <h5 class="text-primary">                {{$data['school']->name }}      </h5>
 
                     <h5>                {{ $data['school']->contact_address}},&nbsp; {{$data['school']->state}}        </h5>
 

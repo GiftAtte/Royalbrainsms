@@ -12,6 +12,7 @@
             search="true"
             title="Product list"
             updateTitle="Update Category"
+            cart="true"
         >
             <template #modal-fields>
                 <input-field
