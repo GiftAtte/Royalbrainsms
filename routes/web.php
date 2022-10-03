@@ -5,6 +5,7 @@ use App\Mail\SendResults;
 use App\Models\Livestream\ZoomOauth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Http;
 
 
 /*
@@ -47,6 +48,49 @@ Route::get('/email', function () {
 
 
 //Auth::routes();
+Route::get('/getExternalToken',function(){
+
+
+          $response= ZoomOauth::where('provider','zoom')->first();
+     return $response->provider_value;
+
+});
+
+Route::get('/getRefreshToken', function(){
+
+try {
+        $body['grant_type'] = "refresh_token";
+      $body['refresh_token'] = strVal(ZoomOauth::where('provider','zoom')
+                                           ->first()->refresh_token);
+
+
+    $response = Http::asForm()->withHeaders([
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            "Authorization" => "Basic". base64_encode(env('CLIENT_ID').':'.env('CLIENT_SECRETE'))
+        ])
+          ->post("https://zoom.us/oauth/token", $body)
+           ->json();
+
+     // return [ 'REFRESHED'=>$response->json()];
+     // $this->update_access_token($response['access_token'],$response['refresh_token']);
+
+
+
+       ZoomOauth::where('provider','zoom')->update([
+                 'provider_value'=>$response['access_token'],
+                  'refresh_token'=>$response['refresh_token'],
+             ]);
+
+      return  $response['access_token'];
+
+   // $this->update_access_token(json_encode($token));
+    echo "Access token inserted successfully.";
+} catch(Exception $e) {
+    echo $e->getMessage();
+}
+     }
+
+);
 
 Route::post('zoomcallback', function($data){
   return $data;

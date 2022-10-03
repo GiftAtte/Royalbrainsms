@@ -26,6 +26,9 @@ trait ZoomApiTrait{
           $data=   ZoomOauth::where('provider','zoom')->first();
              return  $data->provider_value;
         }
+
+
+
     }
 
     public function get_refersh_token() {
@@ -69,7 +72,12 @@ trait ZoomApiTrait{
 
 function create_meeting(Request $request) {
     //$accessToken=$this->get_access_token();
-    $accessToken = $this->getRefershToken();
+    //$accessToken = $this->getRefershToken();
+
+
+    $accessToken=Http::withHeaders( ["Content-Type"=>'application/json'])
+            ->get('https://portal.royalbrainsms.com/getRefreshToken');
+
     $meetingData= $this->validateMeeting($request);
 
      $meetingData['school_id']=AppUtils::getSchoolId();
@@ -293,10 +301,15 @@ else{
      }
 
  public function getExternalToken(){
-          $response= ZoomOauth::where('provider','zoom')->first();
-     return $response->provider_value;
- }
+    //       $response= ZoomOauth::where('provider','zoom')->first();
+    //  return $response->provider_value;
 
 
-}
 
+
+
+
+ return Http::withHeaders( ["Content-Type"=>'application/json'])
+            ->get('https://portal.royalbrainsms.com/getExternalToken');
+
+}}
