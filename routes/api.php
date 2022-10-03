@@ -199,8 +199,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('question/{id}', 'API\ExamController@Question');
     Route::delete('question/{id}', 'API\ExamController@deleteQuestion');
     Route::get('cbt/{id}', 'API\CbtController@takeExam');
-    Route::put('publishCBT/{id}', 'API\ExamController@publishExam');
-     Route::get('publishedExams', 'API\ExamController@publishedExam');
     Route::get('cbt_scores/{id}', 'API\CbtController@cbtScores');
     Route::post('save_answers', 'API\CbtController@saveAnswers');
     Route::post('use_cbt', 'API\CbtController@useCBT');
