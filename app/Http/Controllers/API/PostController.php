@@ -71,7 +71,7 @@ class PostController extends Controller
               'isPublished'=>0
           ])->id;
 
-       if($request->has('post_img')){
+       if($request->hasFile('post_img')){
        $file=$request->file('post_img');
           $img_name=$postId.'.png';
          $file->move(public_path('img/post'),$img_name);

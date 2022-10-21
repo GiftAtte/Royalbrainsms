@@ -102,7 +102,7 @@ public function getZoomToken(Request $request){
         $role=intval($request->role) ;
         $meeting_number=intval($request->meetingNumber) ;
          return $this->signature($request);
-  return  Http::post('http://signature.enoatte.com.ng/meeting/'.$meeting_number.'/'.$role);
+  //return  Http::post('http://signature.enoatte.com.ng/meeting/'.$meeting_number.'/'.$role);
 }
 
 
