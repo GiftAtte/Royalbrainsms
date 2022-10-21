@@ -161,16 +161,6 @@
             </div>
           </div>
           <div>
-            <general-score
-              v-if="
-                report.type === 'default-result' ||
-                report.type === 'navy-template'
-              "
-              :scores="scores"
-              :report="report"
-              :noneAcademic="noneAcademic"
-              :getPastTotal="getPastTotal"
-            />
             <blueridge
               v-if="report.type === 'blue_ridge'"
               :grades="grades"
@@ -184,6 +174,13 @@
               :staff_comment="staff_comment"
               :school="school"
               :report="report"
+            />
+            <general-score
+              v-else
+              :scores="scores"
+              :report="report"
+              :noneAcademic="noneAcademic"
+              :getPastTotal="getPastTotal"
             />
           </div>
 
