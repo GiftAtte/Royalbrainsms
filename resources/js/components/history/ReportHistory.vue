@@ -757,323 +757,345 @@ import SelectedItems from "vue-gridmultiselect/src/components/SelectedItems.vue"
 import Loading from "vue-loading-overlay";
 import SelectInput from "../utils/SelectInput.vue";
 export default {
-  components: { Loading, SelectedItems, SelectInput },
-  data() {
-    return {
-      isLoading: false,
-      fullPage: true,
-      editmode: false,
-      levels: {},
-      sessions: {},
-      terms: {},
-      gradinggroup: [],
-      arms: {},
-      reportFormat: [
-        { id: 1, label: "Use Cummulative" },
-        { id: 0, label: "Use Terminal" },
-      ],
-      isNotActivated: true,
-      isActivationKey: false,
-      isStudent: window.user.student_id,
-      reports: [],
-      arm_id: "",
-      report_id: "",
-      isMaster: false,
-      schoolTemplates: [],
-      form: new Form({
-        id: "",
-        title: "",
-        level_id: "",
-        term_id: "",
-        session_id: "",
-        type: "",
-        school_days: "",
-        arm_id: "",
-        next_term: "",
-        term_start: "",
-        term_end: "",
-        header: "",
-        gradinggroup_id: "",
-        isCummulative: 0,
-        school_id: window.user.school_id,
-        isCa2: false,
-        isCa3: false,
-        isWeeklyCa: false,
-        isAttendance: false,
-        isPrincipalComment: false,
-        isTeacherComment: false,
-        isProgressStatus: false,
-        isMaxScore: true,
-        isMinScore: true,
-        isSubjectPosition: true,
-        isArmPosition: false,
-        isClassPosition: false,
-        ca1Percent: "",
-        ca2Percent: "",
-        ca3Percent: "",
-        examPercent: "",
-        isManualPrincipalComment: "",
-        isLearningDomain: true,
-        isDob: true,
-        isGender: true,
-      }),
+    components: { Loading, SelectedItems, SelectInput },
+    data() {
+        return {
+            isLoading: false,
+            fullPage: true,
+            editmode: false,
+            levels: {},
+            sessions: {},
+            terms: {},
+            gradinggroup: [],
+            arms: {},
+            reportFormat: [
+                { id: 1, label: "Use Cummulative" },
+                { id: 0, label: "Use Terminal" },
+            ],
+            isNotActivated: true,
+            isActivationKey: false,
+            isStudent: window.user.student_id,
+            reports: [],
+            arm_id: "",
+            report_id: "",
+            isMaster: false,
+            schoolTemplates: [],
+            form: new Form({
+                id: "",
+                title: "",
+                level_id: "",
+                term_id: "",
+                session_id: "",
+                type: "",
+                school_days: "",
+                arm_id: "",
+                next_term: "",
+                term_start: "",
+                term_end: "",
+                header: "",
+                gradinggroup_id: "",
+                isCummulative: 0,
+                school_id: window.user.school_id,
+                isCa2: false,
+                isCa3: false,
+                isWeeklyCa: false,
+                isAttendance: false,
+                isPrincipalComment: false,
+                isTeacherComment: false,
+                isProgressStatus: false,
+                isMaxScore: true,
+                isMinScore: true,
+                isSubjectPosition: true,
+                isArmPosition: false,
+                isClassPosition: false,
+                ca1Percent: "",
+                ca2Percent: "",
+                ca3Percent: "",
+                examPercent: "",
+                isManualPrincipalComment: "",
+                isLearningDomain: true,
+                isDob: true,
+                isGender: true,
+            }),
 
-      computeForm: new Form({
-        arm_id: "",
-        report_id: "",
-      }),
-      activationForm: new Form({
-        activation_key: "",
-        report_id: "",
-      }),
-    };
-  },
-  mounted() {
-    axios.get("api/get_levels").then((res) => {
-      this.levels = res.data;
-    });
-
-    axios.get("api/term").then((res) => {
-      this.terms = res.data;
-    });
-
-    axios.get("api/load_session").then((res) => {
-      this.sessions = res.data;
-    });
-  },
-
-  methods: {
-    getResults(page = 1) {
-      axios.get("api/report?page=" + page).then((response) => {
-        this.reports = response.data;
-      });
+            computeForm: new Form({
+                arm_id: "",
+                report_id: "",
+            }),
+            activationForm: new Form({
+                activation_key: "",
+                report_id: "",
+            }),
+        };
     },
-    updateReport(id) {
-      this.$Progress.start();
-
-      this.form
-        .put("/api/report")
-        .then(() => {
-          // success
-          $("#reportModal").modal("hide");
-          swal.fire("Updated!", "Information has been updated.", "success");
-          this.$Progress.finish();
-          Fire.$emit("AfterCreate");
-        })
-        .catch(() => {
-          this.$Progress.fail();
+    mounted() {
+        axios.get("api/get_levels").then((res) => {
+            this.levels = res.data;
         });
-    },
-    editModal(level) {
-      this.editmode = true;
-      this.form.reset();
-      $("#reportModal").modal("show");
-      this.form.fill(level);
-      console.log([this.form.isCa2, this.form.isCa3]);
-    },
-    newModal() {
-      this.editmode = false;
-      this.form.reset();
-      $("#reportModal").modal("show");
-    },
 
-    activateReport(id) {
-      axios
-        .post("/api/activate_report/" + id)
-        .then(() => {
-          toast.fire({
-            type: "success",
-            title: "Report activated successfully",
-          });
-          Fire.$emit("AfterCreate");
-        })
-        .catch(() => {});
-    },
-    download(id) {
-      location.replace(`/download_page/${id}`);
-    },
-    CreateReport() {
-      this.$Progress.start();
-
-      this.form
-        .post("api/report")
-        .then(() => {
-          Fire.$emit("AfterCreate");
-          $("#reportModal").modal("hide");
-
-          toast.fire({
-            type: "success",
-            title: "Student Created in successfully",
-          });
-          this.$Progress.finish();
-          $("#reportModal").modal("hide");
-          Fire.$emit("AfterCreate");
-        })
-        .catch(() => {});
-    },
-    deleteReport(id) {
-      swal
-        .fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, delete it!",
-        })
-        .then((result) => {
-          // Send request to the server
-          if (result.value) {
-            this.form
-              .delete("api/report/" + id)
-              .then(() => {
-                swal.fire("Deleted!", "level has been deleted.", "success");
-                Fire.$emit("AfterCreate");
-              })
-              .catch(() => {
-                swal.fire("Failed!", "There was something wronge.", "warning");
-              });
-          }
+        axios.get("api/term").then((res) => {
+            this.terms = res.data;
         });
-    },
-    loadReports() {
-      if (this.$gate.isAdminOrTutorOrStudentOrParent()) {
-        axios.get("api/report").then((response) => {
-          this.reports = response.data;
-        });
-      }
-    },
-    showActivationModal(id) {
-      $("#activationModal").modal("show");
-      this.activationForm.reset();
-      this.activationForm.report_id = id;
-    },
-    getActivated() {
-      this.activationForm
-        .post("api/get_activated")
-        .then((res) => {
-          if (res.data.already_used) {
-            swal.fire("fail!", "This key has alreay been used.", "error");
-          } else if (res.data.invalid_key) {
-            swal.fire("Invalid!", "Invalid Key.", "warning");
-          } else if (res.data.success) {
-            swal.fire("success", "Result activated Successfully.", "success");
-            $("#activationModal").modal("hide");
-            Fire.$emit("AfterCreate");
-          }
-        })
-        .catch((err) => {
-          swal.fire("fail!", err, "failure");
+
+        axios.get("api/load_session").then((res) => {
+            this.sessions = res.data;
         });
     },
 
-    loadArms(id) {
-      axios.get("/api/getArms/" + id).then((res) => {
-        this.arms = res.data;
-        this.computeForm.report_id = id;
-
-        $("#summaryModal").modal("show");
-        console.log(res.data);
-      });
-    },
-
-    getGradinggroup() {
-      axios
-        .get("api/gradinggroup")
-        .then((res) => (this.gradinggroup = res.data));
-    },
-    computeSummary() {
-      this.setLoading();
-      axios
-        .post(
-          "api/computeSummary/" +
-            this.computeForm.report_id +
-            "/" +
-            this.computeForm.arm_id
-        )
-        .then((res) => {
-          if (res.data.message === "success") {
-            $("#summaryModal").modal("hide");
-            swal.fire("success", "Summary computed successfully", "success");
-
-            this.resetLoading();
-          } else if (res.data.message === "no record") {
-            swal.fire("error", "No results found", "error");
-            $("#activationModal").modal("hide");
-            Fire.$emit("AfterCreate");
-            this.resetLoading();
-          }
-        })
-        .catch((err) => {
-          swal.fire("fail!", "server errors", "failure");
-
-          this.resetLoading();
-        });
-
-      //  this.resetLoading()
-    },
-
-    setLoading() {
-      this.isLoading = true;
-    },
-    resetLoading() {
-      this.isLoading = false;
-    },
-    loadMasterArms(id) {
-      // const  report=   this.reports.data.find(element=>element.id===id);
-      this.loadArms(id);
-      this.report_id = id;
-      this.isMaster = true;
-    },
-    loadSchoolTemplate() {
-      let defaultTemplate = [
-        {
-          id: 1,
-          name: "default-result",
+    methods: {
+        getResults(page = 1) {
+            axios.get("api/reportHistory?page=" + page).then((response) => {
+                this.reports = response.data;
+            });
         },
-      ];
-      axios
-        .get(`/api/schoolTemplates`)
-        .then((res) => {
-          if (res.data.length) {
-            this.schoolTemplates = res.data;
-          } else {
-            this.schoolTemplates = defaultTemplate;
-          }
-        })
-        .catch((err) => console.log(err));
-    },
+        updateReport(id) {
+            this.$Progress.start();
 
-    viewMaster() {
-      $("#summaryModal").modal("hide");
-      this.$router.push(
-        `/master/${this.report_id}/${
-          this.computeForm.arm_id ? this.computeForm.arm_id : ""
-        }`
-      );
-      this.isMaster = false;
-    },
-  },
-  created() {
-    this.getGradinggroup();
-    this.loadSchoolTemplate();
-    // console.log(window.user)
-    Fire.$on("searching", () => {
-      let query = this.$parent.search;
-      axios
-        .get("api/findStudent?q=" + query)
-        .then((data) => {
-          this.levels = data.data;
-        })
-        .catch(() => {});
-    });
+            this.form
+                .put("/api/report")
+                .then(() => {
+                    // success
+                    $("#reportModal").modal("hide");
+                    swal.fire(
+                        "Updated!",
+                        "Information has been updated.",
+                        "success"
+                    );
+                    this.$Progress.finish();
+                    Fire.$emit("AfterCreate");
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
+        },
+        editModal(level) {
+            this.editmode = true;
+            this.form.reset();
+            $("#reportModal").modal("show");
+            this.form.fill(level);
+            console.log([this.form.isCa2, this.form.isCa3]);
+        },
+        newModal() {
+            this.editmode = false;
+            this.form.reset();
+            $("#reportModal").modal("show");
+        },
 
-    this.loadReports();
-    Fire.$on("AfterCreate", () => {
-      this.loadReports();
-    });
-    //    setInterval(() => this.loadUsers(), 3000);
-  },
+        activateReport(id) {
+            axios
+                .post("/api/activate_report/" + id)
+                .then(() => {
+                    toast.fire({
+                        type: "success",
+                        title: "Report activated successfully",
+                    });
+                    Fire.$emit("AfterCreate");
+                })
+                .catch(() => {});
+        },
+        download(id) {
+            location.replace(`/download_page/${id}`);
+        },
+        CreateReport() {
+            this.$Progress.start();
+
+            this.form
+                .post("api/report")
+                .then(() => {
+                    Fire.$emit("AfterCreate");
+                    $("#reportModal").modal("hide");
+
+                    toast.fire({
+                        type: "success",
+                        title: "Student Created in successfully",
+                    });
+                    this.$Progress.finish();
+                    $("#reportModal").modal("hide");
+                    Fire.$emit("AfterCreate");
+                })
+                .catch(() => {});
+        },
+        deleteReport(id) {
+            swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+                // Send request to the server
+                if (result.value) {
+                    this.form
+                        .delete("api/report/" + id)
+                        .then(() => {
+                            swal.fire(
+                                "Deleted!",
+                                "level has been deleted.",
+                                "success"
+                            );
+                            Fire.$emit("AfterCreate");
+                        })
+                        .catch(() => {
+                            swal.fire(
+                                "Failed!",
+                                "There was something wronge.",
+                                "warning"
+                            );
+                        });
+                }
+            });
+        },
+        loadReports() {
+            if (this.$gate.isAdminOrTutorOrStudentOrParent()) {
+                axios.get("api/reportHistory").then((response) => {
+                    this.reports = response.data;
+                });
+            }
+        },
+        showActivationModal(id) {
+            $("#activationModal").modal("show");
+            this.activationForm.reset();
+            this.activationForm.report_id = id;
+        },
+        getActivated() {
+            this.activationForm
+                .post("api/get_activated")
+                .then((res) => {
+                    if (res.data.already_used) {
+                        swal.fire(
+                            "fail!",
+                            "This key has alreay been used.",
+                            "error"
+                        );
+                    } else if (res.data.invalid_key) {
+                        swal.fire("Invalid!", "Invalid Key.", "warning");
+                    } else if (res.data.success) {
+                        swal.fire(
+                            "success",
+                            "Result activated Successfully.",
+                            "success"
+                        );
+                        $("#activationModal").modal("hide");
+                        Fire.$emit("AfterCreate");
+                    }
+                })
+                .catch((err) => {
+                    swal.fire("fail!", err, "failure");
+                });
+        },
+
+        loadArms(id) {
+            axios.get("/api/getArms/" + id).then((res) => {
+                this.arms = res.data;
+                this.computeForm.report_id = id;
+
+                $("#summaryModal").modal("show");
+                console.log(res.data);
+            });
+        },
+
+        getGradinggroup() {
+            axios
+                .get("api/gradinggroup")
+                .then((res) => (this.gradinggroup = res.data));
+        },
+        computeSummary() {
+            this.setLoading();
+            axios
+                .post(
+                    "api/computeSummary/" +
+                        this.computeForm.report_id +
+                        "/" +
+                        this.computeForm.arm_id
+                )
+                .then((res) => {
+                    if (res.data.message === "success") {
+                        $("#summaryModal").modal("hide");
+                        swal.fire(
+                            "success",
+                            "Summary computed successfully",
+                            "success"
+                        );
+
+                        this.resetLoading();
+                    } else if (res.data.message === "no record") {
+                        swal.fire("error", "No results found", "error");
+                        $("#activationModal").modal("hide");
+                        Fire.$emit("AfterCreate");
+                        this.resetLoading();
+                    }
+                })
+                .catch((err) => {
+                    swal.fire("fail!", "server errors", "failure");
+
+                    this.resetLoading();
+                });
+
+            //  this.resetLoading()
+        },
+
+        setLoading() {
+            this.isLoading = true;
+        },
+        resetLoading() {
+            this.isLoading = false;
+        },
+        loadMasterArms(id) {
+            // const  report=   this.reports.data.find(element=>element.id===id);
+            this.loadArms(id);
+            this.report_id = id;
+            this.isMaster = true;
+        },
+        loadSchoolTemplate() {
+            let defaultTemplate = [
+                {
+                    id: 1,
+                    name: "default-result",
+                },
+            ];
+            axios
+                .get(`/api/schoolTemplates`)
+                .then((res) => {
+                    if (res.data.length) {
+                        this.schoolTemplates = res.data;
+                    } else {
+                        this.schoolTemplates = defaultTemplate;
+                    }
+                })
+                .catch((err) => console.log(err));
+        },
+
+        viewMaster() {
+            $("#summaryModal").modal("hide");
+            this.$router.push(
+                `/master/${this.report_id}/${
+                    this.computeForm.arm_id ? this.computeForm.arm_id : ""
+                }`
+            );
+            this.isMaster = false;
+        },
+    },
+    created() {
+        this.getGradinggroup();
+        this.loadSchoolTemplate();
+        // console.log(window.user)
+        Fire.$on("searching", () => {
+            let query = this.$parent.search;
+            axios
+                .get("api/findStudent?q=" + query)
+                .then((data) => {
+                    this.levels = data.data;
+                })
+                .catch(() => {});
+        });
+
+        this.loadReports();
+        Fire.$on("AfterCreate", () => {
+            this.loadReports();
+        });
+        //    setInterval(() => this.loadUsers(), 3000);
+    },
 };
 </script>
