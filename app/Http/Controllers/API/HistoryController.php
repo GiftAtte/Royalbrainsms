@@ -168,26 +168,26 @@ class HistoryController extends Controller
         $students=$request->csv;
 
         $is_promotion=intval($request->csv[0]['is_promotion']);
-        $level_id=intval($request->csv[0]['level_id']);
-        $current_levelId=intval($request->csv[0]['current_levelId']);
+        $new_level=intval($request->csv[0]['new_level']);
+        $previous_level=intval($request->csv[0]['previous_level']);
         $school_id=auth('api')->user()->school_id;
        // for promotion
-         Level_history::where('level_id',$level_id)->delete();
+         Level_history::where('level_id',$new_level)->delete();
         if($is_promotion===1){
             foreach($students as $student){
-                Level_history::whereIn('student_id',[$student['student_id']])->where('level_id',$student['level_id'])->delete();
+                Level_history::whereIn('student_id',[$student['student_id']])->where('level_id',$student['previous_level'])->delete();
                 Level_history::create([
                     'student_id'=>$student['student_id'],
                     'name' => $student['student_name'],
-                    'level_id' => $student['current_levelId'],
+                    'level_id' => $student['previous_level'],
                     'arm_id'=>$student['arm_id'],
                     'level_name' => 'level',
                     'school_id'=>$school_id,
                 ]);
 
-                Student::updateOrCreate(['id'=>$student['student_id']],[
-
-                    'class_id' => $student['level_id'],
+                Student::updateOrCreate(
+                    ['id'=>$student['student_id']],
+                    ['class_id' => $student['new_level'],
                     'arm_id'=>$student['arm_id'],
 
                 ]);
@@ -195,7 +195,7 @@ class HistoryController extends Controller
 
         }
 
-        $level=Level::findOrFail($current_levelId);
+        $level=Level::findOrFail($previous_level);
         $level->is_history=1;
         $level->save();
     }
@@ -203,16 +203,16 @@ class HistoryController extends Controller
         else{
         foreach($students as $student){
              //$user =new User();
-            Level_history::whereIn('student_id',[$student['student_id']])->where('level_id',$student['level_id'])->delete();
-            Level_history::updateOrCreate(['student_id'=>$student['student_id'],'level_id' => $student['level_id']],[
+            Level_history::whereIn('student_id',[$student['student_id']])->where('level_id',$student['new_level'])->delete();
+            Level_history::updateOrCreate(['student_id'=>$student['student_id'],'level_id' => $student['new_level']],[
                     'student_id'=>$student['student_id'],
                     'name' => $student['student_name'],
-                    'level_id' => $student['level_id'],
+                    'level_id' => $student['new_level'],
                     'arm_id'=>$student['arm_id'],
                     'level_name' => 'level',
                     'school_id'=>$school_id,
                 ]);
-                $level_id=$student['level_id'];
+                $level_id=$student['new_level'];
 
     }
     $level=Level::findOrFail($level_id);
