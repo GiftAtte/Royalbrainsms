@@ -39,7 +39,7 @@
 <vue-csv-import
     v-model="csv"
     url="/api/import_students_history"
-    :map-fields="['student_name','student_id','level_id','arm_id','is_promotion','current_levelId']"
+    :map-fields="['student_name','student_id','new_level','arm_id','is_promotion','previous_level']"
       :callback="afterImport"
       :catch="errImport"
 
