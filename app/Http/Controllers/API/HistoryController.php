@@ -164,17 +164,24 @@ class HistoryController extends Controller
     {
 
 
+         //  return $request->file;
+       // $students=$request->csv;
+          if($request->has('file')){
+           // return $request->file;
+         $data=array_map('str_getcsv',file($request->file));
+         $header=$data[0];
+         unset($data[0]);
 
-        $students=$request->csv;
+        $is_promotion=intval(array_combine($header,$data[1])['is_promotion']);
+        $new_level=intval(array_combine($header,$data[1])['new_level']);
+        $previous_level=intval(array_combine($header,$data[1])['previous_level']);
 
-        $is_promotion=intval($request->csv[0]['is_promotion']);
-        $new_level=intval($request->csv[0]['new_level']);
-        $previous_level=intval($request->csv[0]['previous_level']);
         $school_id=auth('api')->user()->school_id;
        // for promotion
          Level_history::where('level_id',$new_level)->delete();
         if($is_promotion===1){
-            foreach($students as $student){
+            foreach($data as $student){
+              $student =array_combine($header,$student);
                 Level_history::whereIn('student_id',[$student['student_id']])->where('level_id',$student['previous_level'])->delete();
                 Level_history::create([
                     'student_id'=>$student['student_id'],
@@ -201,8 +208,10 @@ class HistoryController extends Controller
     }
 // for history
         else{
-        foreach($students as $student){
-             //$user =new User();
+        foreach($data as $student){
+
+             $student=array_combine($header,$student);
+
             Level_history::whereIn('student_id',[$student['student_id']])->where('level_id',$student['new_level'])->delete();
             Level_history::updateOrCreate(['student_id'=>$student['student_id'],'level_id' => $student['new_level']],[
                     'student_id'=>$student['student_id'],
@@ -219,7 +228,7 @@ class HistoryController extends Controller
     $level->is_history=1;
     $level->save();
 }
-    }
+           return 'success'; }  }
 
 
 

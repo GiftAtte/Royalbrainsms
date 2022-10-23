@@ -2,9 +2,17 @@
     <div>
         <div class="card">
             <div class="card-header">
-                <router-link to="/import_history" class="p-5">
-                    Import Class History (cvs)</router-link
-                >
+                <div class="row">
+                    <div class="col">
+                       <h5> Import History/Promotion</h5>
+                    </div>
+                    <div class="col ">
+                         <input class="form-control" type="file" ref="file" @change="handleUpload">
+                    </div>
+
+
+                </div>
+
             </div>
             <div class="card-body">
                 <Loading v-show="isLoading"></Loading>
@@ -233,6 +241,7 @@
 import DualListBox from "dual-listbox-vue";
 import "dual-listbox-vue/dist/dual-listbox.css";
 import Loading from "vue-loading-overlay";
+
 export default {
     name: "App",
     components: {
@@ -310,6 +319,32 @@ export default {
                 this.destination = res.data.data;
             });
         },
+
+
+              handleUpload() {
+                 const file = this.$refs.file.files[0];
+                 const formData = new FormData();
+                  formData.append('file', file);
+                  this.isLoading=true;
+                 axios.post('/api/import_students_history', formData)
+                       .then(res => {
+                           console.log(res.data)
+                            this.isLoading=false;
+                            swal.fire(
+                                        'Updated!',
+                                        'Uploaded Success',
+                                        'success'
+                                        )
+                       }).catch(err => {
+                          toast.fire({
+                        type: 'error',
+                        title: 'There was a problem importing your file'
+                        })
+                           this.isLoading=false;
+                       })
+                      ;
+              }
+
     },
     created() {
         this.loadLevel();

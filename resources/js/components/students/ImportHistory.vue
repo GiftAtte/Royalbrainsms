@@ -36,47 +36,8 @@
         :is-full-page="fullPage">
         </loading>
 
-<vue-csv-import
-    v-model="csv"
-    url="/api/import_students_history"
-    :map-fields="['student_name','student_id','new_level','arm_id','is_promotion','previous_level']"
-      :callback="afterImport"
-      :catch="errImport"
-
-     >
-
-    <template slot="hasHeaders" slot-scope="{headers, toggle}">
-
-        <template slot="hasHeaders" slot-scope="{headers, toggle}">
-        <label>
-            <input type="checkbox" checked id="hasHeaders" :value="headers" @change="toggle">
-            Headers?
-        </label>
-    </template>
-
-
-    </template>
-
-    <template slot="error">
-     <span>   File type is invalid</span>
-    </template>
-
-    <template slot="thead">
-        <tr>
-            <th>Text Fields</th>
-            <th>Select Columns To Match</th>
-        </tr>
-    </template>
-
-    <template slot="next" slot-scope="{load}">
-        <button class="btn btn-primary" @click.prevent="load">load student!</button>
-    </template>
-
-    <template slot="submit" slot-scope="{submit}">
-        <button class="btn btn-success" @click.prevent="submit"><i class="fa fa-user-plus" @click="setLoading"> Submit</i></button>
-    </template>
-</vue-csv-import>
-    </div>    </div>
+    </div>
+ </div>
 
     </div>
 
@@ -125,9 +86,23 @@ import {RotateSquare2} from 'vue-loading-spinner'
            },
            resetLoading(){
              this.isLoading=false
-           }
+           },
+
+
+             handleUpload() {
+                 const file = this.$refs.file;
+                 const formData = new FormData();
+                 formData.append('file', file);
+                 axios.post('/api/import_students_history', formData)
+                       .then(res => {
+                        console.log(res.data)
+                       });}
 
         },
+
+
+
+
         created(){
             this.resetLoading();
 
