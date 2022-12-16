@@ -8,7 +8,7 @@
 
  <th colspan="8" >
      <div class=" pt-2" style="width:100%;  height:10px; border-radius:25px; background-color:rgb(61, 19, 57)">
-<h6 class="text-white text-center">RESULTS SAMMARY</h6>
+<h6 class="text-white text-center">RESULTS SUMMARY</h6>
     </div>
     </th>
  </tr>
