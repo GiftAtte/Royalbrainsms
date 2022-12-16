@@ -35,7 +35,7 @@
                     <tr>
                         <th colspan="5">
                             <h5 class="text-bold">
-                                TOTAL SCORE (+ PROJECT 8.5)
+                                TOTAL SCORE
                             </h5>
                         </th>
                         <td>

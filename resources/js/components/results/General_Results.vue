@@ -181,6 +181,7 @@
               :report="report"
               :noneAcademic="noneAcademic"
               :getPastTotal="getPastTotal"
+              :summary="summary"
             />
           </div>
 

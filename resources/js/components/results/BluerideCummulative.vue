@@ -55,10 +55,10 @@
                             {{ attendance ? attendance.school_days : "_____" }}
                         </td>
                         <td>
-                            {{ attendance ? attendance.days_absent : "_____" }}
+                            {{ attendance ? attendance.days_present : "_____" }}
                         </td>
                         <td>
-                            {{ attendance ? attendance.days_present : "_____" }}
+                            {{ attendance ? attendance.days_absent: "_____" }}
                         </td>
                     </tr>
                     <tr>

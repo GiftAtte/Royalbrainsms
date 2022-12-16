@@ -95,7 +95,7 @@
                    @change="loadSubdomain"
 
                   >
-                    <option value selected>Select subject to Add to list</option>
+                    <option value selected>Select Domain</option>
                     <option
                       v-for="domain in domains"
                       :key="domain.id"

@@ -125,7 +125,7 @@
                                         <tr>
                                             <th>S/N</th>
                                             <th>Students Name</th>
-                                            <th>Add Comments</th>
+                                            <th>Days Present</th>
                                         </tr>
                                     </thead>
                                     <tbody>

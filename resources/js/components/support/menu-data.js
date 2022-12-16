@@ -19,34 +19,35 @@ export default {
             txt: "Manage",
             icon: "fas fas fa-tachometer-alt context-menu__title-icon",
         },
-
-        {
-            type: "link",
-            txt: "Students",
-            link: "/students",
-        },
-
-        {
-            type: "link",
-            txt: "Users",
-            link: "/users",
-        },
-
-        {
+       {
             type: "link",
             txt: "Employees",
             link: "/staff",
         },
         {
             type: "link",
-            txt: "Levels",
-            link: "/levels",
+            txt: "Students",
+            link: "/students",
         },
-        {
+
+         {
             type: "link",
             txt: "Parents",
             link: "/parents",
         },
+        // {
+        //     type: "link",
+        //     txt: "Users",
+        //     link: "/users",
+        // },
+
+
+        {
+            type: "link",
+            txt: "Levels",
+            link: "/levels",
+        },
+
         {
             type: "link",
             txt: "Level Arms",
@@ -498,11 +499,7 @@ export default {
             icon: "fa fa-pencil context-menu__title-icon",
         },
 
-        {
-            type: "link",
-            txt: "Students",
-            link: "/students",
-        },
+
         {
             type: "link",
             txt: "Report Card",
@@ -514,16 +511,8 @@ export default {
             txt: "Score Card",
             link: "/scores",
         },
-        {
-            type: "link",
-            txt: "Backup Scores",
-            link: "/backup",
-        },
-        {
-            type: "link",
-            txt: "Comment Bank",
-            link: "/teachers_comment",
-        },
+
+
         {
             type: "link",
             txt: "Teacher" + "'s Comments",
@@ -540,43 +529,77 @@ export default {
             txt: "Learning Domain",
             link: "/learning_domain_grading",
         },
-        {
-            type: "link",
-            txt: "Videos",
-            link: "/video_list",
-        },
+
+
 
         {
             type: "link",
-            txt: "Subject Performance",
-            link: "/subject_tracker",
-        },
-        {
-            type: "link",
-            txt: "Attendance",
+            txt: "School Days",
             link: "/attendance",
         },
-        {
-            type: "link",
-            txt: "Assignment-Notes",
-            link: "/assignments",
-        },
+
+
         {
             type: "link",
             txt: "Daily Attendance",
             link: "/daily/attendance",
+        },
+         {
+            type: "link",
+            txt: "Weekly Activity",
+            link: "/weekly/marks",
+        },
+
+    ],
+
+
+
+    tutorGenerals: [
+      {
+            type: "link",
+            txt: "Students",
+            link: "/students",
+        },
+        {
+
+            type: "link",
+            txt: "Daily Attendance",
+            link: "/daily/attendance",
+        },
+         {
+            type: "link",
+            txt: "Assignment-Notes",
+            link: "/assignments",
+        },
+              {
+            type: "link",
+            txt: "Videos",
+            link: "/video_list",
         },
         {
             type: "link",
             txt: "Live Classes",
             link: "/liveClasses",
         },
-        {
+          {
             type: "link",
-            txt: "Weekly Activity",
-            link: "/weekly/marks",
+            txt: "Subject Performance",
+            link: "/subject_tracker",
         },
-    ],
+          {
+            type: "link",
+            txt: "Comment Bank",
+            link: "/teachers_comment",
+        },
+           {
+            type: "link",
+            txt: "Backup Scores",
+            link: "/backup",
+        },
+
+],
+
+
     fees: [
         {
             type: "title",
