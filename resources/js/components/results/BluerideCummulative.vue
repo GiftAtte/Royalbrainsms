@@ -95,8 +95,8 @@
 
         <tr>
             <th colspan="2">
-                Academic Supervisor:
-                {{ principal_comment ? principal_comment : "________________" }}
+                Academic Supervisor:&nbsp;
+              <span>  {{ principal_comment ? principal_comment : "________________" }}</span>
             </th>
             <th colspan="1">
                 <span

@@ -3,7 +3,7 @@
 
 <table class="table bordered table-striped " style=" width:100%; font-size:xx-small">
 
-    <tr style=" background-color: #0c018b; color:white">
+    <tr style=" background-color: rgb(5, 5, 163); color:white">
          <th style="width:100%"><b class="float-left">OTHER SKILLS &nbsp;</b>/ &nbsp;<b style="right: 0; left-5px">RATINGS</b></th>
     </tr>
 <tr><td>
@@ -32,3 +32,9 @@
 </table>
 </td></tr>
 </table>
+@if($report->type==="diamond")
+<div class="container">
+     @include('attendance')
+</div>
+
+@endif

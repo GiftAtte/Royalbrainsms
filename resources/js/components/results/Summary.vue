@@ -1,12 +1,12 @@
 <template>
     <div>
-        <h3 class="text-center">RESULTS SUMMARY</h3>
+        <h4 class="text-center">RESULT SUMMARY</h4>
         <table
             class="table table-bordered table-sm font-weight-bold table-striped text-center"
         >
             <tbody>
                 <tr>
-                    <td v-if="report.isArmPosition">Student Position</td>
+                    <td v-if="report.isArmPosition">Student's Position</td>
                     <td>Total score</td>
                     <td>Average score</td>
                     <td v-if="report.isCummulative">Cummulative Avg score</td>

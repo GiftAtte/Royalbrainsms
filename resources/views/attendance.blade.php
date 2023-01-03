@@ -1,7 +1,7 @@
 <table class="table  pt-2 pb-2 table-bordered" >
             <thead>
           <tr>
-              <th colspan="4" class="text-center" style="vertical-align: center;background-color:rgb(15, 15, 112); color:white">
+              <th colspan="4" class="text-center" style="vertical-align: center;background-color:rgb(5, 5, 163); color:white">
 ATTENDANCE
               </th>
 

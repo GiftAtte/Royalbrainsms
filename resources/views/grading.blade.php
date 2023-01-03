@@ -1,6 +1,6 @@
               <table class="table table-bordered myTable" style=" font-size:xx-small">
                 <tr>
-                <th colspan="3" style="vertical-align: center;background-color:rgb(15, 15, 112); color:white">GRADING KEYS</th>
+                <th colspan="3" style="vertical-align: center;background-color:rgb(5, 5, 163); color:white">GRADING KEYS</th>
 
                 </tr>
                 <tr><th>SCORES</th><th>GRADE</th><th>DEGREE</th></tr>

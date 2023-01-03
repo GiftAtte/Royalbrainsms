@@ -34,6 +34,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 html {
   font-family: sans-serif;
   line-height: 1.15;
+  padding: 15px;
+  margin: 10px;
 
 }
 
@@ -1003,11 +1005,11 @@ h6, .h6 {
 }
 
 .text-primary {
-  color: #0f3f74 !important;
+  color: rgb(10, 10, 201) !important;
 }
 
 a.text-primary:hover, a.text-primary:focus {
-  color: #0062cc !important;
+  color: navy !important;
 }
 
 .text-secondary {
@@ -1148,7 +1150,7 @@ a.text-dark:hover, a.text-dark:focus {
 
 
 
-                <div >
+                <div style="padding:0; margin:0" >
                     <div>
                     <table class="table ">
                         <tr>
@@ -1158,26 +1160,28 @@ a.text-dark:hover, a.text-dark:focus {
 
 
                                 @if ($report->type==='navy-template')
-                <h5 class="text-success text-uppercase pl-3">{{$school->name}},</h5>
-                <h6 class="pl-3 text-danger">{{$school->contact_address}},&nbsp; {{$school->state}}</h6>
+                <h5 class="text-success text-uppercase pl-3">{{$school->name}}</h5>
+                <h6 class="pl-3 text-danger">{{$school->contact_address}},</h6>
+                <h6 class="pl-3">&nbsp;{{$school->state}}.</h6>
                 <h6 class="pl-3">P:&nbsp; {{$school->phone}}. &nbsp; E: {{$school->email}}</h6>
                 <h6 class="pl-3">URL:&nbsp; {{$school->website}}.</h6>
                                 @else
-                  <h5 class="text-primary text-uppercase pl-3">{{$school->name}},</h5>
-                <h6 class="pl-3">{{$school->contact_address}},&nbsp; {{$school->state}}</h6>
+                  <h5 class="text-primary text-uppercase pl-3 text-bold">{{$school->name}}</h5>
+                <h6 class="pl-3">{{$school->contact_address}},</h6>
+                <h6 class="pl-3">&nbsp;{{$school->state}}.</h6>
                 <h6 class="pl-3">P:&nbsp; {{$school->phone}}. &nbsp; E: {{$school->email}}</h6>
                 <h6 class="text-danger pl-3">URL:&nbsp; {{$school->website}}.</h6>
                        @endif
                            </td>
                               <td style="width: 20%">
-                                   <h6 class="pl-2 text-danger">Results Sheet</h6>
+                                   <h6 class="pl-2 text-danger">Result Sheet</h6>
                               </td>
                         </tr>
                     </table>
 
 </div>
 
-<div class="py-2">
+<div class="pt-2">
 <table class="table">
     <tr>
 <td style="width: 53%">
@@ -1185,10 +1189,10 @@ a.text-dark:hover, a.text-dark:focus {
                 <h6><b>Class:&nbsp;</b> {{$report->levels->level_name}}&nbsp;{{$arm->name}}</h6>
               <h6><b>House:&nbsp;</b>-----------</h6>
                    @if($report->isGender)
-                 <h6><b>Gender:&nbsp;</b> {{$summary->student->gender?$summary->student->gender:'-----------'}} </h6>
+                 <h6 class="text-capitalize"><b >Gender:&nbsp;</b> {{$summary->student->gender?$summary->student->gender:'-----------'}} </h6>
                   @endif
                   @if ($report->isDob)
-                <h6><b>Dob:&nbsp;</b> {{$summary->student->dob?$summary->student->dob:'-----------'}} </h6>
+                <h6 ><b>Dob:&nbsp;</b> {{$summary->student->dob?$summary->student->dob:'-----------'}} </h6>
                   @endif
 
 
@@ -1206,7 +1210,7 @@ a.text-dark:hover, a.text-dark:focus {
                 <h6 class="text-primary text-uppercase  "><b>&nbsp;</b> {{$report->header?$report->header:''}}</h6>
                 <hr class="text-primary" style="line-height:0.5px">
 </center>
-                <h6 ><b>Term:&nbsp;</b> {{$report->terms->name}}</h6>
+                <h6 class="text-capitalize"><b>Term:&nbsp;</b> {{$report->terms->name}}</h6>
 
                 <h6><b>Session:&nbsp;</b> {{$report->sessions->name}} </h6>
 
@@ -1229,7 +1233,7 @@ a.text-dark:hover, a.text-dark:focus {
         <td rowspan="2">
     @if ($report->isArmPosition)
         <h6>
-         Class Position:  {{$summary->arm_position}} &nbsp; out of&nbsp;{{$summary->total_students}}
+  Position:  {{$summary->arm_position}} &nbsp; out of&nbsp;{{$summary->total_students}}
         </h6>
     @endif
         </td>
@@ -1270,7 +1274,7 @@ a.text-dark:hover, a.text-dark:focus {
                            </td>
                           @endif
 
-                    @if($report->isLearningDomain>0)
+                    @if($report->isLearningDomain &&$report->type!=="diamond")
                     <td  colspan="6">
                      @include('learniningDomain')
 
@@ -1306,13 +1310,17 @@ a.text-dark:hover, a.text-dark:focus {
 
 </div>
                 </div>
-                <center>
-                <div class=" text-center"><span><b>Authorized Signature:&nbsp;</b ><img src="{{public_path('img/signatures/'.$signature->photo)}}"
-                    alt="sign" class="ml-2 img-result " width="30px" height="30px" onerror="this.style.display='none'"></span></div>
-                </center>
+                   <table style="padding: 0;margin:0">
+                    <tr>
+                    <th style="text-align:right;">Authorized Signature:</th>
+                    <th style="text-align:left; padding:0;"><img src="{{public_path('img/signatures/'.$signature->photo)}}"
+                    alt="sign" class="ml-2 img-result " width="30px" height="30px" onerror="this.style.display='none'"></th>
+                </tr></table>
 
 
-</div>
+
+
+
         <!-- /.row -->
     <!-- /.container-fluid -->
 

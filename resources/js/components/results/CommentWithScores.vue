@@ -33,7 +33,7 @@
               />
             </div>
             <div class="col-md-8 col-sm-12">
-              <h3 class="text-primary text-uppercase">{{ school.name }},</h3>
+              <h3 class="text-primary text-uppercase">{{ school.name }}</h3>
               <h5>
                 {{ school.contact_address }},&nbsp;
                 {{ school.state }}
@@ -85,7 +85,7 @@
                       : "-----------"
                   }}
                 </h5>
-                <h5>
+                <h5 v-if="report.isDob" class="text-uppercase">
                   <b>Dob:</b>&nbsp;
                   {{ summary.student.dob ? dob : "-------------" }}
                 </h5>
@@ -190,6 +190,7 @@
                     :report="report"
                     :attendance="attendance"
                   />
+
                 </div>
               </div>
             </div>

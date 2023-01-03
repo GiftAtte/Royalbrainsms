@@ -28,7 +28,7 @@ ATTENDANCE
   </div> -->
 
     <div class="text-bold">
-        <h3>ATTENDANCE</h3>
+        <h4>ATTENDANCE</h4>
         <hr />
         <p>
             |SCHOOL DAYS :&nbsp;{{

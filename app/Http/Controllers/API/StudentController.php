@@ -227,12 +227,18 @@ else{
     public function destroy(Request $request)
     {
 
-        $this->authorize('isAdmin');
+        //$this->authorize('isAdmin');
+        $role=auth('api')->user()->type;
+        if($role==="admin"||$role==="superadmin"){
+
+        }
         $studentIDs=$request->studentIds;
 
         DB::table('users')->whereIn('student_id', $studentIDs)->delete();
         DB::table('students')->whereIn('id', $studentIDs)->delete();
         DB::table('login_details')->whereIn('student_id', $studentIDs)->delete();
+        DB::table('results')->whereIn('student_id', $studentIDs)->delete();
+        DB::table('marks')->whereIn('student_id', $studentIDs)->delete();
 
 
         return ['message' => 'Students Deleted'];

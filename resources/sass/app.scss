@@ -86,27 +86,31 @@ th.rotate > div > span {
         border-collapse: collapse;
         width: 100%;
         font-size: 14px;
-        color: black;
+        color: black !important;
     }
     .table,
     .table-sm {
         border-collapse: collapse;
         width: 100%;
         font-size: 14px !important;
-        color: black;
+        color: rgb(31, 27, 27) !important;
+        font-weight: 400;
+
     }
     .table-bordered th {
         text-transform: uppercase;
         font-weight: bold;
-        border: 0.25px solid black !important;
-        padding: 2.5px;
+        border: 0.15px solid rgb(124, 122, 122) !important;
+        padding-left: 10px !important;
     }
     .table-bordered td {
-        border: 0.25px solid black !important;
+        border: 0.15px solid rgb(124, 122, 122) !important;
         padding: 1.5px;
         text-transform: capitalize;
-        font-weight: bold;
         font-size: 14px !important;
+        font-weight: bold;
+        padding-left: 10px !important;
+
     }
     #profile {
         display: none;
@@ -135,7 +139,6 @@ th.rotate > div > span {
         width: 100%;
         overflow: hidden;
         position: relative;
-        font-weight: normal;
         font-size: 13px;
     }
     #section-to-print .table th,
@@ -144,6 +147,7 @@ th.rotate > div > span {
         padding: 0.1px;
         margin: 0.1px;
         border: 0.5 solid black;
+        color: black !important;
     }
 
     #section-to-print .table-responsive {
