@@ -22,6 +22,7 @@
                         <th>A S</th>
                         <!-- <th>A P</th> -->
                         <th>C P</th>
+                        <th >P S</th>
                     </tr>
                 </th>
             </tr>
@@ -35,8 +36,8 @@
                         v-for="report in marks"
                         :key="report.id"
                         v-if="
-                            report.student_id === student.id &&
-                            report.subject_id === subject.subjects.id
+                            report.student_id == student.id &&
+                            report.subject_id == subject.subjects.id
                         "
                     >
                         {{ report.annual_average ? report.annual_average : "" }}
@@ -45,7 +46,7 @@
                 <td
                     v-for="result in results"
                     :key="result.id"
-                    v-if="result.student_id === student.id"
+                    v-if="result.student_id == student.id"
                 >
                     <tr>
                         <td>
@@ -65,6 +66,9 @@
                                     ? result.annual_position
                                     : ""
                             }}
+                        </td>
+                        <td>
+                            {{ result.progress_status ? result.progress_status : "-" }}
                         </td>
                     </tr>
                 </td>

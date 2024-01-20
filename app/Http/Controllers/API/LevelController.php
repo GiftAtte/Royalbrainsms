@@ -8,6 +8,7 @@ use App\Level;
 use App\Arm;
 use App\Has_arm;
 use App\Http\Controllers\API\Utils\AppUtils;
+use App\Student;
 
 class LevelController extends Controller
 {
@@ -49,10 +50,11 @@ class LevelController extends Controller
     {
         $has_arm=false;
         $level=Level::findOrFail($id);
+        $sudentCount=Student::where('Class_id',$id)->count();
         if($level->has_arm>0){
             $has_arm=true;
         }
-         return $has_arm;
+         return ["hasArm"=>$has_arm,"studentCount"=>$sudentCount];
     }
 
     /**

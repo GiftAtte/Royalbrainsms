@@ -1,7 +1,10 @@
 <template>
-    <div>
-        <h4 class="text-center">RESULT SUMMARY</h4>
-        <table
+    <div class="col-md-12 col-sm-12 text-center">
+        <div class="container">
+            <h4 class="text-center">RESULT SUMMARY</h4>
+        </div>
+        <div class="container">
+            <table
             class="table table-bordered table-sm font-weight-bold table-striped text-center"
         >
             <tbody>
@@ -45,6 +48,7 @@
                 </tr>
             </tbody>
         </table>
+        </div>
     </div>
 </template>
 

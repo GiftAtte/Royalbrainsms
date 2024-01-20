@@ -4,6 +4,7 @@ import { InventoryRoutes } from "./appRoutes/InventoryRoutes";
 import { AdmissionRoutes } from "./appRoutes/admissionRoutes";
 import { LivestreamRoutes } from "./appRoutes/livestreamRoutes";
 import { WeeklyRoutes } from "./appRoutes/weeklyRoutes";
+import { FeeRoutes } from "./appRoutes/feeRoutes";
 Vue.use(Router);
 
 export default new Router({
@@ -15,6 +16,7 @@ export default new Router({
         ...AdmissionRoutes,
         ...InventoryRoutes,
         ...LivestreamRoutes,
+        ...FeeRoutes,
         { path: "/", component: require("./components/Dashboard.vue").default },
         {
             path: " /home",

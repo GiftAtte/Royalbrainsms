@@ -252,7 +252,7 @@
                             <hr class="text-bold" />
                         </div>
 
-                        <div class="col-md-12 row py-2" v-show="isLDomain">
+                        <div class="col-md-12 row py-2" >
                             <div class="col-md-3">
                                 <table
                                     class="table table-bordered table-sm table-striped"
@@ -335,7 +335,7 @@
                                 </table>
                             </div>
 
-                            <div class="col-md-3" v-show="isGFormula">
+                            <div class="col-md-3" >
                                 <table
                                     class="table table-bordered table-sm text-uppercase myTable table-striped"
                                     width="100%"
@@ -364,7 +364,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-md-3" v-show="isGFormula">
+                            <div class="col-md-3" >
                                 <table
                                     class="table table-bordered table-sm text-uppercase myTable table-striped"
                                     width="100%"
@@ -408,7 +408,7 @@
                         </div>
 
                         <div class="card-body row">
-                            <div v-show="isPComment" class="row col-6">
+                            <div  class="row col-6">
                                 <span
                                     ><b>Principal's Comment:&nbsp;</b
                                     >{{
@@ -418,7 +418,7 @@
                                     }}</span
                                 >
                             </div>
-                            <div v-show="isTComment" class="row col-6">
+                            <div  class="row col-6">
                                 <span
                                     ><b>Form Tutor's Comment:&nbsp;</b
                                     >{{

@@ -163,6 +163,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Milon\Barcode\BarcodeServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -234,6 +235,8 @@ return [
         'Zip' => ZanySoft\Zip\ZipFacade::class,
         'Pusher' => Pusher\Pusher::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
 
 
     ],

@@ -117,7 +117,7 @@ foreach($scoreArr as $score){
     $score['grade']=$grade['grade'];
     $score['narration']=$grade['narration'];
    // return $report->type;
-     if($report->isCummulative){
+     if($report->isCummulative>0){
       $score['progress_status']=$this->grade($score['annual_average'],$report->gradinggroup_id,auth('api')->user()->school_id)['progress_status'];
       $score['annual_grade']=$this->grade($score['annual_average'],$report->gradinggroup_id,auth('api')->user()->school_id)['grade'];
       $score['annual_position']=$this->getRanking($ScoreCollects,$score['annual_average']);
@@ -137,7 +137,7 @@ if($report->term_id===3){
    ->select('annual_average as total','id','annual_position','total_students')
    ->get();
 
-   $sortedScore=collect($score)->sortByDesc('total')->values();
+   $sortedScore=collect($scores)->sortByDesc('total')->values();
      foreach($scores as $score){
            $score->annual_position=$this->getRanking($sortedScore,$score->total);
            $score->totalstudents_overall=collect($scores)->count();

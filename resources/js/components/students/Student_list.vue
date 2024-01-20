@@ -27,24 +27,13 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-2">
-                            <select
-                                name="class_id"
-                                id="level"
-                                :class="{
-                                    'is-invalid': form.errors.has('class_id'),
-                                }"
-                                class="form-control"
-                                v-model="level_id"
-                                @change="checkArm"
-                            >
+                            <select name="class_id" id="level" :class="{
+                                'is-invalid': form.errors.has('class_id'),
+                            }" class="form-control" v-model="level_id" @change="checkArm">
                                 <option value selected>
                                     Select Class/Level
                                 </option>
-                                <option
-                                    v-for="level in levels"
-                                    :key="level.id"
-                                    :value="level.id"
-                                >
+                                <option v-for="level in levels" :key="level.id" :value="level.id">
                                     {{ level.level_name }}
                                 </option>
                             </select>
@@ -52,54 +41,34 @@
                         </div>
 
                         <div v-show="hasArm" class="col-md-2">
-                            <select
-                                name="arm_id"
-                                id="arm_id"
-                                :class="{
-                                    'is-invalid': form.errors.has('arm_id'),
-                                }"
-                                class="form-control"
-                                v-model="arm_id"
-                                @change="loadStudents"
-                            >
+                            <select name="arm_id" id="arm_id" :class="{
+                                'is-invalid': form.errors.has('arm_id'),
+                            }" class="form-control" v-model="arm_id" @change="loadStudents">
                                 <option value selected>Select Class Arm</option>
-                                <option
-                                    v-for="arm in arms"
-                                    :key="arm.id"
-                                    :value="arm.id"
-                                >
+                                <option v-for="arm in arms" :key="arm.id" :value="arm.id">
                                     {{ arm.name }}
                                 </option>
                             </select>
                             <has-error :form="form" field="arm_id"></has-error>
                         </div>
                         <div v-show="hasArm">
-                            <export-excel
-                                class="btn btn-primary"
-                                :data="student_login"
-                            >
+                            <export-excel class="btn btn-primary" :data="student_login">
                                 <i class="fa fa-download"></i>
                                 student Logins
                             </export-excel>
                         </div>
                     </div>
                     <div class="row float-right">
-                        <div class="card-tools">
+                        <div class="col" v-if="studentCount">
+                            <span>Student Count:{{ studentCount }}</span>
+                        </div>
+                        <div class="card-tools ">
                             <button class="btn btn-primary" @click="newModal">
                                 <i class="fas fa-plus-circle"></i> Add New
                             </button>
-                            <input
-                                class="btn btn-primary btn-sm"
-                                type="file"
-                                ref="file"
-                                @change="setFile"
-                            />
+                            <input class="btn btn-primary btn-sm" type="file" ref="file" @change="setFile" />
 
-                            <button
-                                v-show="$gate.isAdmin()"
-                                class="btn btn-danger"
-                                @click="updatePassword"
-                            >
+                            <button v-show="$gate.isAdmin()" class="btn btn-danger" @click="updatePassword">
                                 Update Password
                                 <i class="fa fa-pencil fa-fw"></i>
                             </button>
@@ -113,12 +82,8 @@
                             <tbody>
                                 <tr>
                                     <th>
-                                        Select All&nbsp;<input
-                                            type="checkbox"
-                                            @click="selectAll"
-                                            v-model="allSelected"
-                                            :checked="isSelectAll"
-                                        />
+                                        Select All&nbsp;<input type="checkbox" @click="selectAll" v-model="allSelected"
+                                            :checked="isSelectAll" />
                                     </th>
                                     <th>S/ID</th>
                                     <th colspan="2">Student Names</th>
@@ -131,41 +96,30 @@
                                     <th>Status</th>
                                 </tr>
 
-                                <tr
-                                    v-for="student in students.data"
-                                    :key="student.id"
-                                >
+                                <tr v-for="student in students.data" :key="student.id">
                                     <td width="20">
-                                        <input
-                                            :id="`student${student.id}`"
-                                            type="checkbox"
-                                            @click="select(student.id)"
-                                            :checked="isChecked"
-                                        />
+                                        <input :id="`student${student.id}`" type="checkbox" @click="select(student.id)"
+                                            :checked="isChecked" />
                                     </td>
                                     <td>{{ student.id }}</td>
 
                                     <td colspan="2">
-                                        <router-link
-                                            :to="`student_profile/${student.id}/student`"
-                                            tag="a"
-                                            exact
-                                        >
+                                        <router-link :to="`student_profile/${student.id}/student`" tag="a" exact>
                                             {{ student.surname }}, &nbsp;{{
                                                 student.first_name
                                             }}
                                             &nbsp;{{
                                                 student.middle_name
-                                                    ? student.middle_name
-                                                    : ""
+                                                ? student.middle_name
+                                                : ""
                                             }}
                                         </router-link>
                                     </td>
                                     <td>
                                         {{
                                             student.levels
-                                                ? student.levels.level_name
-                                                : ""
+                                            ? student.levels.level_name
+                                            : ""
                                         }}
                                     </td>
                                     <td>
@@ -179,48 +133,32 @@
                                         }}
                                     </td>
                                     <td>
-                                        <img
-                                            :src="
-                                                '/img/profile/stud' +
-                                                student.id +
-                                                '.png'
-                                            "
-                                            alt="no pics"
-                                            width="35"
-                                            height="35"
-                                            class="img-circle"
-                                        />
+                                        <img :src="'/img/profile/stud' +
+                                            student.id +
+                                            '.png'
+                                            " alt="no pics" width="35" height="35" class="img-circle" />
                                     </td>
 
-                                    <td>
-                                        <a href="#" @click="editModal(student)">
-                                            <i class="fa fa-edit blue"></i>
+                                    <td class="table-action">
+                                        <a href="#"  @click="downloadBarcode(student.id)">
+                                            <i class="fa fa-download "></i>
                                         </a>
-                                        /
-                                        <a
-                                            href="#"
-                                            @click="deleteStudent(student.id)"
-                                        >
-                                            <i class="fa fa-trash red"></i>
+                                        <a href="#" @click="editModal(student)">
+                                            <i class="fa fa-edit "></i>
+                                        </a>
+                                        
+                                        <a href="#" @click="deleteStudent(student.id)">
+                                            <i class="fa fa-trash"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <toggle-button
-                                            @change="
-                                                setActivation(student.userId)
-                                            "
-                                            :label="true"
-                                            :labels="{
-                                                checked: 'ON',
-                                                unchecked: 'OFF',
-                                            }"
-                                            :height="20"
-                                            :font-size="14"
-                                            :value="student.isActive"
-                                            :color="'navy'"
-                                            :name="'activated'"
-                                            class="pl-2"
-                                        />
+                                        <toggle-button @change="
+                                            setActivation(student.userId)
+                                            " :label="true" :labels="{
+        checked: 'ON',
+        unchecked: 'OFF',
+    }" :height="20" :font-size="14" :value="student.isActive" :color="'navy'"
+                                            :name="'activated'" class="pl-2" />
                                     </td>
                                 </tr>
                             </tbody>
@@ -229,19 +167,12 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                    <pagination
-                        :data="students"
-                        @pagination-change-page="getResults"
-                    ></pagination>
+                    <pagination :data="students" @pagination-change-page="getResults"></pagination>
                 </div>
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
-                <button
-                    v-show="isStudentId"
-                    class="btn btn-md btn-danger"
-                    @click="deleteStudent"
-                >
+                <button v-show="isStudentId" class="btn btn-md btn-danger" @click="deleteStudent">
                     <i class="fa fa-trash"></i> Delete
                 </button>
             </div>
@@ -253,188 +184,96 @@
         </div>
 
         <!-- Modal -->
-        <div
-            class="modal fade"
-            id="addNew"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="addNewLabel"
-            aria-hidden="true"
-        >
+        <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5
-                            class="modal-title"
-                            v-show="!editmode"
-                            id="addNewLabel"
-                        >
+                        <h5 class="modal-title" v-show="!editmode" id="addNewLabel">
                             Add New
                         </h5>
-                        <h5
-                            class="modal-title"
-                            v-show="editmode"
-                            id="addNewLabel"
-                        >
+                        <h5 class="modal-title" v-show="editmode" id="addNewLabel">
                             Update student's Info
                         </h5>
-                        <button
-                            type="button"
-                            class="close"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                        >
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form
-                        @submit.prevent="
-                            editmode ? updateStudent() : createStudent()
-                        "
-                    >
+                    <form @submit.prevent="
+                        editmode ? updateStudent() : createStudent()
+                        ">
                         <div class="modal-body">
                             <div class="form-group">
-                                <input
-                                    v-model="form.surname"
-                                    type="text"
-                                    name="surname"
-                                    placeholder="Surname"
-                                    class="form-control"
-                                    :class="{
+                                <input v-model="form.surname" type="text" name="surname" placeholder="Surname"
+                                    class="form-control" :class="{
                                         'is-invalid':
                                             form.errors.has('surname'),
-                                    }"
-                                />
-                                <has-error
-                                    :form="form"
-                                    field="surname"
-                                ></has-error>
+                                    }" />
+                                <has-error :form="form" field="surname"></has-error>
                             </div>
                             <div class="form-group">
-                                <input
-                                    v-model="form.first_name"
-                                    type="text"
-                                    name="first_name"
-                                    placeholder=" First Name"
-                                    class="form-control"
-                                    :class="{
+                                <input v-model="form.first_name" type="text" name="first_name" placeholder=" First Name"
+                                    class="form-control" :class="{
                                         'is-invalid':
                                             form.errors.has('first_name'),
-                                    }"
-                                />
-                                <has-error
-                                    :form="form"
-                                    field="first_name"
-                                ></has-error>
+                                    }" />
+                                <has-error :form="form" field="first_name"></has-error>
                             </div>
 
                             <div class="form-group">
-                                <input
-                                    v-model="form.middle_name"
-                                    type="text"
-                                    name="middle_name"
-                                    placeholder="Middle Name (optional)"
-                                    class="form-control"
-                                />
+                                <input v-model="form.middle_name" type="text" name="middle_name"
+                                    placeholder="Middle Name (optional)" class="form-control" />
                             </div>
                             <div class="form-group">
-                                <input
-                                    v-model="form.phone"
-                                    type="text"
-                                    name="phone"
-                                    placeholder="Phone Number (optional)"
-                                    class="form-control"
-                                />
+                                <input v-model="form.phone" type="text" name="phone" placeholder="Phone Number (optional)"
+                                    class="form-control" />
                             </div>
 
                             <div class="form-group">
-                                <input
-                                    v-model="form.dob"
-                                    type="date"
-                                    name="dob"
-                                    placeholder="Dob"
-                                    class="form-control"
+                                <input v-model="form.dob" type="date" name="dob" placeholder="Dob" class="form-control"
                                     :class="{
                                         'is-invalid': form.errors.has('dob'),
-                                    }"
-                                />
+                                    }" />
                                 <has-error :form="form" field="dob"></has-error>
                             </div>
 
                             <div class="form-group">
-                                <select
-                                    name="type"
-                                    v-model="form.gender"
-                                    id="class_id"
-                                    class="form-control"
-                                    :class="{
-                                        'is-invalid': form.errors.has('gender'),
-                                    }"
-                                >
+                                <select name="type" v-model="form.gender" id="class_id" class="form-control" :class="{
+                                    'is-invalid': form.errors.has('gender'),
+                                }">
                                     <option value="">Select sex</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
                                 </select>
-                                <has-error
-                                    :form="form"
-                                    field="gender"
-                                ></has-error>
+                                <has-error :form="form" field="gender"></has-error>
                             </div>
 
                             <div class="form-group">
-                                <select
-                                    name="class_id"
-                                    id="level"
-                                    :class="{
-                                        'is-invalid':
-                                            form.errors.has('class_id'),
-                                    }"
-                                    class="form-control"
-                                    v-model="form.class_id"
-                                    @change="checkArm"
-                                >
+                                <select name="class_id" id="level" :class="{
+                                    'is-invalid':
+                                        form.errors.has('class_id'),
+                                }" class="form-control" v-model="form.class_id" @change="checkArm">
                                     <option value selected>
                                         Select Class/Level
                                     </option>
-                                    <option
-                                        v-for="level in levels"
-                                        :key="level.id"
-                                        :value="level.id"
-                                    >
+                                    <option v-for="level in levels" :key="level.id" :value="level.id">
                                         {{ level.level_name }}
                                     </option>
                                 </select>
-                                <has-error
-                                    :form="form"
-                                    field="class_id"
-                                ></has-error>
+                                <has-error :form="form" field="class_id"></has-error>
                             </div>
 
                             <div v-show="hasArm" class="form-group">
-                                <select
-                                    name="arm_id"
-                                    id="arm_id"
-                                    :class="{
-                                        'is-invalid': form.errors.has('arm_id'),
-                                    }"
-                                    class="form-control"
-                                    v-model="form.arm_id"
-                                >
+                                <select name="arm_id" id="arm_id" :class="{
+                                    'is-invalid': form.errors.has('arm_id'),
+                                }" class="form-control" v-model="form.arm_id">
                                     <option value selected>
                                         Select Class Arm
                                     </option>
-                                    <option
-                                        v-for="arm in arms"
-                                        :key="arm.id"
-                                        :value="arm.id"
-                                    >
+                                    <option v-for="arm in arms" :key="arm.id" :value="arm.id">
                                         {{ arm.name }}
                                     </option>
                                 </select>
-                                <has-error
-                                    :form="form"
-                                    field="arm_id"
-                                ></has-error>
+                                <has-error :form="form" field="arm_id"></has-error>
                             </div>
                             <div class="form-group">
                                 <label>New Student</label>
@@ -442,25 +281,13 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button
-                                type="button"
-                                class="btn btn-danger"
-                                data-dismiss="modal"
-                            >
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">
                                 Close
                             </button>
-                            <button
-                                v-show="editmode"
-                                type="submit"
-                                class="btn btn-success"
-                            >
+                            <button v-show="editmode" type="submit" class="btn btn-success">
                                 Update
                             </button>
-                            <button
-                                v-show="!editmode"
-                                type="submit"
-                                class="btn btn-primary"
-                            >
+                            <button v-show="!editmode" type="submit" class="btn btn-primary">
                                 Create
                             </button>
                         </div>
@@ -497,6 +324,7 @@ export default {
             isStudentId: false,
             student_login: "",
             importFile: "api/importUser",
+            studentCount: "",
             form: new Form({
                 id: "",
                 arm_id: "",
@@ -574,11 +402,15 @@ export default {
         });
     },
     methods: {
+        downloadProfile(){
+
+        },
         getResults(page = 1) {
             axios.get("api/student?page=" + page).then((response) => {
                 this.students = response.data;
             });
         },
+
         updateStudent() {
             this.$Progress.start();
             // console.log('Editing data');
@@ -723,7 +555,8 @@ export default {
             axios
                 .get(`api/check_arm/${id}`)
                 .then((res) => {
-                    if (res.data > 0) {
+                    this.studentCount = res.data.studentCount
+                    if (res.data.hasArm) {
                         this.hasArm = true;
                         //  this.downloadLogin();
                     } else {
@@ -827,7 +660,7 @@ export default {
         },
 
         setActivation(id) {
-            axios.put("/api/activateUser/" + id).then((res) => {});
+            axios.put("/api/activateUser/" + id).then((res) => { });
         },
         downloadLogin() {
             axios
@@ -836,6 +669,9 @@ export default {
                     this.student_login = res.data.student_login;
                 });
         },
+        downloadBarcode(id) {
+      location.replace(`/barcode/${id}`);
+    },
     },
     created() {
         Fire.$on("searching", () => {
@@ -846,7 +682,7 @@ export default {
                     this.students = data.data;
                     //  console.log(this.students)
                 })
-                .catch(() => {});
+                .catch(() => { });
         });
         this.loadStudents();
         this.loadLevels();
@@ -858,3 +694,16 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.table-action{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: black;
+}
+.table-action a{
+    color: rgb(46, 45, 45);
+}
+</style>

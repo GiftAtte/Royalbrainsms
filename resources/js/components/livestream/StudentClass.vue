@@ -117,7 +117,7 @@ export default {
             let meetingSDKElement =
                 document.getElementById("meetingSDKElement");
 
-            this.client.init({
+            this.client.init({ 
                 debug: true,
                 zoomAppRoot: meetingSDKElement,
                 language: "en-US",

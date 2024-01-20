@@ -10,12 +10,11 @@
     "require": {
         "php": "^7.3",
         "almasaeed2010/adminlte": "~3.0",
+        "bacon/bacon-qr-code": "^2.0",
         "barryvdh/laravel-dompdf": "^0.9.0",
+        "calcinai/php-imagick": "^0.1.2",
         "fideloper/proxy": "^4.2",
-        "firebase/php-jwt": "6.0.0",
         "fruitcake/laravel-cors": "^1.0",
-        "gamegos/jws": "0.1.1",
-        "gamegos/jwt": "0.1.1",
         "guzzlehttp/guzzle": "^6.5",
         "intervention/image": "^2.5",
         "laravel/framework": "^7.0",
@@ -24,6 +23,8 @@
         "laravel/ui": "^2.0",
         "maatwebsite/excel": "^3.1",
         "pusher/pusher-php-server": "~4.0",
+        "simplesoftwareio/simple-qrcode": "~4",
+        "milon/barcode": "^7.0",
         "zanysoft/laravel-zip": "^1.0"
     },
     "require-dev": {
@@ -45,7 +46,8 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "BaconQrCode\\": "vendor/bacon/bacon-qr-code/src/"
         },
         "classmap": [
             "database/seeds",

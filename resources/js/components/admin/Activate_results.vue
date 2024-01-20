@@ -142,7 +142,7 @@
  <td>{{activation.average_score?activation.average_score:''}}</td>
 <td><input type="text" :value="activation.comment?activation.comment:''" :id="`comment${index}`" placeholder="progress status" class="form-control"></td>
 <td>
-<p :class="activation.activation_status?'text-success':'text-danger'">
+<p :class="activation.activation_status>0?'text-success':'text-danger'">
 {{activation.activation_status?'Activated':'Deactivated'}}
 </p>
 </td>

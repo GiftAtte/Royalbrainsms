@@ -61,7 +61,9 @@ class SchoolController extends Controller
             'logo' => $name,
             'phone' => $request['phone'],
              'email'=>$request['email'],
-             'gateway_key'=>$request['gateway_pk']
+             'gateway_key'=>$request['gateway_pk'],
+             'bank_identifier'=>$request['bank_identifier'],
+
         ]);
 
         }

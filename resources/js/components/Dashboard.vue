@@ -320,8 +320,8 @@ export default {
         const { id, title, start, end } = arg;
         this.form.id = id;
         this.form.event_name = title;
-        this.form.start_date = moment(start).format("DD/MM/YYYY");
-        this.form.end_date = moment(end).format("DD/MM/YYYY");
+        this.form.start_date = moment(start).format("DD-MM-YYYY");
+        this.form.end_date = moment(end).format("DD-MM-YYYY");
       }
       // console.log(this.form.start_date);
     },
@@ -346,6 +346,8 @@ export default {
       if (this.$gate.isAdmin()) {
         this.$Progress.start();
         // console.log('Editing data');
+        this.form.start_date=new Date(this.form.start_date)
+        this.form.end__date=new Date(this.form.end_date_)
         this.form
           .put("api/event/" + this.form.id)
           .then(() => {

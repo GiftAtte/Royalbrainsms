@@ -68,7 +68,22 @@
                   {{ arm.arms.name }}
                 </option>
               </select>
-              <has-error :form="form" field="subject"></has-error>
+     <div class="container ">
+      <!-- <button class="btn btn-primary float-right mt-4">Download</button> -->
+
+
+                   <export-excel 
+                            v-if="isResults"
+                            class="btn btn-primary float-right my-4"
+                            name="Progress status"
+                            :data="Activation_status"
+                        >
+                            Download Excel
+                            <i class="fa fa-download"></i>
+                        </export-excel>
+     </div>
+
+
             </div>
 
             <div v-show="isResults" class="card-body">

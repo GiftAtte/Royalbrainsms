@@ -35,11 +35,18 @@
                     >
                         <i class="fa fa-eye"></i>
                     </router-link>
-
-                    <a
+                                    <button
+                                        @click="downloadVideo(row.id)"
+                                        v-if="row.type === 'private_video'"
+                                        target="blank"
+                                        class="btn btn-flat float-right"
+                                    >
+                                        <i class="fa fa-download"></i>
+                                    </button>
+                    <a v-else
                         :href="`https://www.ssyoutube.com/watch?v=${row.video_path}`"
                         target="blank"
-                        @click="downloadVideo(video.id)"
+                        @click="downloadVideo(row.id)"
                         class="btn btn-flat"
                     >
                         <i class="fa fa-download"></i>

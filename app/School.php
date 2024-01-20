@@ -8,7 +8,7 @@ class School extends Model
 {
     //
     protected $fillable=[
-        'name','website','email','contact_address','state','country'
+        'name','website','email','contact_address','state','country','bank_identifier'
         ,'email','phone','logo','short_name','gateway_pk','result_templates'
     ];
 }

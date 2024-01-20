@@ -134,7 +134,7 @@
                                     <label for="inputName" class="col-md-2 control-label">Exam Duration</label>
 
                                     <div class="col-md-10">
-                                    <input class="form-control" type="text"
+                                    <input class="form-control" type="number"
                                     placeholder="Exam duration (optional)"
                                     v-model="form.duration"
                                     :class="{ 'is-invalid': form.errors.has('duration') }">

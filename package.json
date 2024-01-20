@@ -25,6 +25,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "@braid/vue-formulate": "^2.5.3",
         "@chenfengyuan/vue-countdown": "^1.1.5",
         "@ckeditor/ckeditor5-build-classic": "^20.0.0",
         "@ckeditor/ckeditor5-build-decoupled-document": "^20.0.0",
@@ -58,6 +59,7 @@
         "es6-promise": "^4.2.8",
         "file-saver": "^2.0.2",
         "html2canvas": "^1.0.0-rc.5",
+        "html2pdf": "0.0.11",
         "icheck-bootstrap": "^3.0.1",
         "jspdf": "^1.5.3",
         "laravel-echo": "^1.8.0",
@@ -72,9 +74,10 @@
         "tiptap": "^1.27.1",
         "tiptap-extensions": "^1.29.1",
         "vform": "^1.0.1",
+        "vue-barcode-reader": "0.0.3",
         "vue-bootstrap4-table": "^1.1.11",
         "vue-chartjs": "^3.5.1",
-        "vue-chartkick": "^0.6.0",
+        "vue-chartkick": "^0.6.1",
         "vue-chat-scroll": "^1.4.0",
         "vue-ckeditor5": "^0.5.0",
         "vue-cookies": "^1.7.0",

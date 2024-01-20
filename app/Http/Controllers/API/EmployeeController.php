@@ -9,7 +9,7 @@ use App\LoginDetail;
 use App\Imports\UsersImport;
 use Illuminate\Support\Facades\Hash;
 use Excel;
-
+use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
@@ -274,7 +274,7 @@ public function updateEmployee(Request $request, $id=null)
 
 public function getEmployee()
 {
-    return \DB::table('staff')->where('school_id',auth('api')->user()->school_id)->select(\DB::raw('CONCAT(surname," ", first_name)as name,id as id'))->get();
+    return DB::table('staff')->where('school_id',auth('api')->user()->school_id)->select(DB::raw('CONCAT(surname," ", first_name)as name,id as id'))->get();
     # code...
 }
 

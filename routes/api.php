@@ -20,6 +20,13 @@ Route::get('getRegLink/{id}', 'API\SchoolController@generateRegLink');
 Route::get('auth/login', 'API\AuthController@login');
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/posts/{post}/comments', 'CommentController@index');
+Route::get('certifications/verify/{certificate_number}','API\CertificateController@verifyCertificate');
+
+// IBTC BANK ROUTES
+Route::post('ibtc/name-enquiry','API\IBTCController@accountEnquiry');
+Route::post('ibtc/transaction/notification',"API\IBTCController@onFeePaymentSuccess");
+Route::get('account-by-student/{id}','API\IBTCController@createAnAccount');
+Route::get('ibtc-new-acount','API\IBTCController@generateAccountNumber');
 Route::middleware('auth:api')->group(function () {
 
 
@@ -48,6 +55,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('login_export', 'API\StudentController@exportLogin');
     Route::get('login_export/{level_id}/{arm_id}/{accountNumber?}', 'API\StudentController@exportLogins');
     Route::post('update_password', 'API\StudentController@updatePassword');
+    Route::get('/barcode/{id}', 'API\StudentController@generateBarcode');
+   
     // Levels routs
     Route::apiResources(['level' => 'API\LevelController']);
     Route::get('get_levels', 'API\LevelController@getLevels');
@@ -144,6 +153,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('get_students_assignment/{id}', 'API\AssignmentController@getStudentAssignment');
     Route::put('update_students_assignment', 'API\AssignmentController@updateStudentAssignment');
     Route::post('use_assignment', 'API\CbtController@useAssignment');
+    Route::post('cbt/reset/{exam_id}/{student_id}', 'API\CbtController@resetStudentCBT');
     // get_students_assignment
     // Assignment Routes
     Route::apiResources(['lesson' => 'API\LessonController']);
@@ -203,6 +213,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('save_answers', 'API\CbtController@saveAnswers');
     Route::post('use_cbt', 'API\CbtController@useCBT');
     Route::get('review_answers/{exam_id}/{student_id?}', 'API\CbtController@CBT_Review');
+    Route::put('publishCBT/{id}','API\ExamController@publishExam');
+     Route::get('publishedExams','API\ExamController@publishedExam');
 
     // History classes
     Route::get('transferlevels', 'API\HistoryController@index');
@@ -234,7 +246,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('fee_description/{id}/{student_id?}', 'API\FeesController@feeDescriptions');
     Route::put('fee_description/{id}', 'API\FeesController@updateDescriptions');
     Route::delete('fee_description/{id}', 'API\FeesController@deleteDescription');
-
+ 
     // MESSAGES
     Route::post('messageApi', 'API\SmsController@createMessageApi');
     Route::get('messageApi', 'API\SmsController@MessageApi');
@@ -277,7 +289,9 @@ Route::middleware('auth:api')->group(function () {
     Route::get('accountNumbers', 'API\EcopayController@index');
     Route::post('createAccountNumber', 'API\EcopayController@store');
     Route::post('generateBulkAccountNumbers', 'API\EcopayController@generateBulkAccount');
-    Route::post('getAccount', 'API\EcopayController@getAccount');
+    // Route::post('getAccount', 'API\EcopayController@getAccount');
+    Route::get('fee-payment-list', 'API\IBTCController@getPayments');
+    Route::post('getAccount', 'API\IBTCController@generateAccountNumber');
     Route::get('getAccountBalance/{id?}', 'API\EcopayController@getAccountBalance');
     Route::get('getTransactions/{accountNumber}', 'API\EcopayController@getTransactions');
     Route::get('getBillAmount/{feegroup_id}', 'API\EcopayController@getBillAmount');
@@ -315,12 +329,21 @@ Route::get('attendance/{report_id}/{arm_id}','API\AttendanceController@loadAtten
 Route::post('attendance','API\AttendanceController@createAttendance');
 Route::post('attendance/importExcel','API\AttendanceController@importAttendance');
 
+
+// CERTIFICATE
+Route::apiResources(['certificates' => 'API\CertificateController']);
+Route::post('certificates/update','API\CertificateController@update');
+Route::post('certificates/assign','API\CertificateController@assignCertificates');
+Route::put('certificates/assign','API\CertificateController@updateCertification');
+Route::delete('certificates/assign/{id}','API\CertificateController@deleteCertification');
+Route::get('certificatification/students','API\CertificateController@loadStudents');
+Route::get('certifications','API\CertificateController@loadCertifications');
+
 // INVENTORY ROUTES
 
 include('inventoryRoutes.php');
 include('admissionRoutes.php');
 include('liveStreamingRoutes.php');
 include('weeklyRoutes.php');
-
 
 });

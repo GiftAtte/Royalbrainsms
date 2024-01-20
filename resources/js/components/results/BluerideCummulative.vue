@@ -102,7 +102,7 @@
                 <span
                     ><b>Authorized Signature:&nbsp;</b
                     ><img
-                        :src="`/img/signatures/${signature.photo}`"
+                        :src="`/img/signatures/${signature.photo?signature.photo:''}`"
                         class="ml-2 img-result"
                         width="100"
                         height="50"
@@ -180,7 +180,8 @@ export default {
                 (report) => report.term_id == termId
             );
             if (result.length) {
-                return result[0].classCummulativeMax;
+                console.log("result",result)
+                return result[0].maxCummulative;
             } else {
                 return "";
             }

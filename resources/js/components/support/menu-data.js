@@ -86,8 +86,13 @@ export default {
         },
         {
             type: "link",
-            txt: "Attendance",
+            txt: "Manual Attendance",
             link: "/daily/attendance",
+        },
+        {
+            type: "link",
+            txt: "Biometric Attendance",
+            link: "/attendance/biometric",
         },
     ],
 
@@ -156,6 +161,16 @@ export default {
             txt: "Weekly Activity",
             link: "/weekly/marks",
         },
+        {
+            type: "link",
+            txt: "Certificates",
+            link: "/certificates",
+        },
+        {
+            type: "link",
+            txt: "Certifications",
+            link: "/certifications",
+        },
     ],
     // student accademics
     accademics: [
@@ -219,6 +234,7 @@ export default {
             txt: "Live Classes",
             link: "/liveClasses",
         },
+       
     ],
 
     // PARENTS DOMAIN
@@ -633,6 +649,11 @@ export default {
             txt: "Fee Query",
             link: "/feeQuery",
         },
+        {
+            type: "link",
+            txt: "Payment List",
+            link: "/payment-list",
+        },
     ],
 
     Inventory: [
@@ -719,11 +740,13 @@ export default {
             txt: "Admission",
             icon: "fa fa-book context-menu__title-icon",
         },
+
         {
             type: "link",
-            txt: "Liveclasses",
-            link: "/liveclasses",
+            txt: "Candidate List",
+            link: "/admission/candidates",
         },
+
         {
             type: "link",
             txt: "Personal Info",

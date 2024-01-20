@@ -74,6 +74,7 @@
                                     <th>Name</th>
                                     <th>Location</th>
                                     <th>State</th>
+                                    <th>BI Code</th>
                                     <th>Admission Link</th>
                                     <th>Templates</th>
                                     <th>Modify</th>
@@ -87,6 +88,7 @@
                                     <td>{{ school.name | upText }}</td>
                                     <td>{{ school.contact_address }}</td>
                                     <td>{{ school.state }}</td>
+                                    <td>{{ school.bank_identifier?school.bank_identifier:'' }}</td>
                                     <td>
                                         <button
                                             title="Admission Link"
@@ -354,6 +356,15 @@
                                         class="form-input"
                                     />
                                 </div>
+                                <div class="form-group">
+                                    <label> BANK IDENTIFIER DODE</label>
+                                    <input
+                                        type="number"
+                                        class="form-control"
+                                        v-model="form.bank_identifier"
+                                        placeholder="Bank identifier"
+                                    />
+                                </div>
 
                                 <div class="form-group">
                                     <label> PAYMENT GATE WAY</label>
@@ -427,6 +438,7 @@ export default {
                 country: "",
                 short_name: "",
                 email: "",
+                bank_identifier:'',
                 gateway_pk: "",
                 result_templates: [
                     { id: 1, label: "default", value: "default" },

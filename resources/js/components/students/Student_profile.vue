@@ -343,6 +343,8 @@
                                             </div>
 
                                             <div class="col-md-6">
+
+                                               
                                                 <ul
                                                     class="list-group list-group-unbordered mb-3 text-uppercase ml-2"
                                                 >
@@ -674,7 +676,9 @@
                                                             >{{ form.genotype }}
                                                         </a>
                                                     </li>
+
                                                 </ul>
+                                                
                                             </div>
 
                                             <div class="col-md-6">
@@ -699,7 +703,17 @@
                                                 </ul>
                                             </div>
                                         </div>
+                                        
                                     </div>
+                                    <div class="row">
+                                                    <div class="col-md-6">Student Barcode</div>
+                                                    <div class="col-md-6">
+                                                        <div class="float-right"  v-html="barcode.twelve"> 
+                                                        </div>
+                                                        <div class="float-right"  v-html="barcode.any"></div>
+                                                    </div>
+
+                                        </div>
                                 </div>
                                 <!-- /.card-body -->
                             </div>
@@ -1968,6 +1982,7 @@ export default {
             id: this.$route.params.id,
             accountDetails: "",
             user: "",
+            barcode:'',
             form: new Form({
                 id: "",
                 surname: "",
@@ -2029,13 +2044,12 @@ export default {
     mounted() {
         if (this.$route.params.id) {
             axios.get("/api/profile/" + this.id).then(({ data }) => {
-                console.log(data);
                 this.form.fill(data);
             });
         } else {
             axios.get("/api/profile").then(({ data }) => {
-                console.log(data);
                 this.form.fill(data);
+                this.getBarcode(data.id);
             });
         }
         this.getAccountBalance();
@@ -2084,9 +2098,18 @@ export default {
                     this.accountDetails = res.data;
                 });
         },
+
+
+        getBarcode(id){
+            axios.get(`/api/barcode/${id}`)
+            .then(res=>{
+                this.barcode=res.data
+            })
+        }
     },
 
     created() {
+        this.getBarcode(this.$route.params.id);
         if (this.$route.params.id) {
             axios.get("/api/fee/" + this.id).then((response) => {
                 this.reports = response.data;

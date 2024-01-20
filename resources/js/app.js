@@ -68,6 +68,11 @@ Fullcalendar.plugins = {
 import VueYouTubeEmbed from "vue-youtube-embed";
 Vue.use(VueYouTubeEmbed);
 Vue.component(Fullcalendar);
+
+import Vue from "vue";
+import VueFormulate from "@braid/vue-formulate";
+
+Vue.use(VueFormulate);
 // Gate
 import Gate from "./Gate";
 Vue.prototype.$gate = new Gate(window.user);

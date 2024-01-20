@@ -9,7 +9,7 @@
             />
         </div>
 
-        <div class="col-md-8 col-sm-12">
+        <div class="col-md-8 col-sm-9">
             <h3 class="text-primary text-uppercase">{{ school.name }},</h3>
             <h5>
                 <i class="fa fa-home"></i>:&nbsp;

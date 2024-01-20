@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\API\Traits;
 use App\Mark;
+use App\Report;
 use RankingTrait;
 
 trait CummulativeTrait{
@@ -25,8 +26,8 @@ public function cummulativePerformance($report_id,$subject_id,$reportType){
 
 
                     }else{
-       //$report=Report::findOrFail($report_id);
-        $level_marks=Mark::whereIn('report_id',[$report_id])
+       $report=Report::findOrFail($report_id);
+        $level_marks=Mark::whereIn('level_id',[$report->level_id])
                      ->whereNotIn('grand_total',[0])
                      ->where('subject_id',$subject_id)
                      ->select('id','student_id','average as total','annual_position')

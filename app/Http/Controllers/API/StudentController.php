@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\API;
-
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -16,10 +16,12 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Http\Controllers\API\Traits\AttendanceTrait;
 use App\Http\Controllers\API\Traits\BirthdayTrait;
+use App\Http\Controllers\API\Utils\AppUtils;
 use App\Level_sub;
 use App\Mark;
 use App\Report;
-
+use Illuminate\Support\Facades\Auth;
+use Milon\Barcode\Facades\DNS1DFacade;
 
 ini_set('max_execution_time', '300');
 
@@ -76,13 +78,14 @@ class StudentController extends Controller
             return Student::with(['levels','arm'])->where('students.school_id',auth('api')->user()->school_id)
             ->join('users','students.id','=','users.student_id')
             ->select('students.*', 'users.id as userId', 'users.isActive as isActive','users.email as email')
-            //->latest()->paginate(50)
-            ->orderby('surname')->paginate(50);
+            ->latest()
+            ->orderby('surname')->paginate(100);
         }
 else{
     return[];
 }
     }
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -400,6 +403,7 @@ public function exportLogin(){
                     'students.class_id',
                     'levels.level_name',
                     'users.portal_id',
+                    'students.accountNumber',
                     'users.photo',
                     'login_details.created_at',
                     'arms.name as arm',
@@ -529,6 +533,36 @@ public function importBio(Request $request){
     }
 }
 
+
+
+
+ 
+    public function generateBarcode($id)
+    {
+      $student=Student::with('users','levels')->where([['id',$id],['school_id',AppUtils::getSchoolId()]])->first();
+        $twelve=str_pad($student->id,12,0,STR_PAD_LEFT);
+      
+      return [
+      'twelve'=>DNS1DFacade::getBarcodeSVG($twelve, 'C39'),
+       'any' =>DNS1DFacade::getBarcodeSVG($student->id, 'C39')
+    ];
+      
+      $data=[
+            'id'=>$student->id,
+            'name'=>"{$student->surname} {$student->first_name}",
+            'level'=>$student->levels->level_name,
+            'level_id'=>$student->class_id,
+            'arm_id'=>$student->arm_id,
+            'school_id'=>$student->school_id,
+            "gender"=>$student->gender,
+            'img'=>$student->users->photo
+          ];
+     return QrCode::generate(collect($data)->__toString());
+        
+        
+    }
+    
+ 
 }
 
 

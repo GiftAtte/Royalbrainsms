@@ -53,8 +53,8 @@ class FeeactivationController extends Controller
          $walletDetails=[];
          if(count($accountNumbers) > 0 && $report->paystack_key){
        for($i=0;$i<count($accountNumbers);++$i){
-           $account=$Ecopay->getAccountBalance($accountNumbers[$i]);
-            array_push($walletDetails, ['studentId'=> $accountNumbers[$i],'balance'=>$account['balance']]);
+        //    $account=$Ecopay->getAccountBalance($accountNumbers[$i]);
+            array_push($walletDetails, ['studentId'=> $accountNumbers[$i],'balance'=>0]);
         }
     }
 //xpectedIncome=Fee_description::whereIn('feegroup_id',[$feegroup_id])->sum('amount');
@@ -241,8 +241,8 @@ class FeeactivationController extends Controller
     }
      if($report->fee_type==='NEW-BASED'){
       return \DB::table('students')->where('school_id',$report->school_id)->where('is_new',1);
-
     }
+    
     }
 
     public function updatePayment(Request $request){

@@ -31,6 +31,10 @@ use GradingTrait;
               }
             for($i=0;$i<$Nstudents; ++$i){
                 $total=$this->default_sum($request->test1[$i],$request->test2[$i],$request->test3[$i],$request->exams[$i]);
+                    if($report->isMidterm>0){
+                        $total=$this->Midterm($total,$report->scoreBase);
+                     }
+
                 $gradding= $this->grade($total,$report->gradinggroup_id,auth('api')->user()->school_id);
 
                 $mark=[];
@@ -132,6 +136,13 @@ public function default_sum($t1,$t2,$t3,$exams,$midterm=0){
 
     return round($sum,2);
 }
+
+
+
+public function Midterm($total, $scoreBase){
+    return round((($total/$scoreBase)*100),2);
+}
+
 
 
 

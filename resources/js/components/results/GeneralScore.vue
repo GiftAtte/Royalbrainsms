@@ -272,10 +272,10 @@
             </table>
         </div>
 
-        <div class="row col-md-12 py-1">
+        <div class="row col-md-12 col-sm-12 py-1">
             <summary-table :summary="summary" :report="report" />
         </div>
-        <div class="col-md-12 row container" v-if="report.isLearningDomain">
+        <div class="col-md-12 container" v-if="report.isLearningDomain">
             <learning-domains :LDomain="LDomain" />
         </div>
     </div>

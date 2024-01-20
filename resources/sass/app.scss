@@ -75,6 +75,12 @@ th.rotate > div > span {
     body * {
         visibility: hidden;
     }
+    #section-print button{
+        display: none !important;
+    }
+    .section-print input{
+        display: none !important;
+    }
     #section-to-print,
     #section-to-print * {
         visibility: visible;
@@ -155,6 +161,9 @@ th.rotate > div > span {
     }
     #section-to-print .action {
         visibility: hidden;
+    }
+    #section-to-print.btn{
+        display: none;
     }
 }
 
@@ -280,7 +289,8 @@ th.rotate > div > span {
     }
 }
 
-.student-dashboard {
+
+#student-dashboard {
     background-image: linear-gradient(180deg, rgba(white, 1), rgba($white, 1));
     //     url(students.jpg);
     //   background-size: cover;

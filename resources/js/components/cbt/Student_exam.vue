@@ -81,6 +81,7 @@
                                         >
                                             Use
                                         </a>
+                                        
                                     </td>
                                 </tr>
                             </tbody>
@@ -337,6 +338,7 @@ export default {
                     .then((res) => (this.exams = res.data));
             }
         },
+       
         loadReport() {
             if (this.$gate.isAdminOrTutor()) {
                 axios

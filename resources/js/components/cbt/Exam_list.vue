@@ -320,7 +320,7 @@
                                 <div class="form-group col-md-6">
                                     <input
                                         class="form-control"
-                                        type="text"
+                                        type="number"
                                         placeholder="Exam duration "
                                         v-model="form.duration"
                                         :class="{

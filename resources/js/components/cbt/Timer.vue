@@ -1,7 +1,9 @@
 <template>
+   <div class="timer-containter" >
     <button class="btn btn-lg btn-primary timer">
         {{ `${formatTime(min)}:${formatTime(sec)}` }}
     </button>
+   </div>
 
     <!-- <vue-countdown-timer
         @start_callback="startCallBack('event started')"
@@ -83,12 +85,12 @@ export default {
     props: ["autoSubmit", "duration"],
     data() {
         return {
-            min: "",
-            sec: "",
-            remTime: "",
-            timeDiff: "",
-            startTime: "",
-            endTime: "",
+            min: 0,
+            sec: 0,
+            remTime: 0,
+            timeDiff: 0,
+            startTime: 0,
+            endTime: 0,
             userId: window.user.id,
             examId: this.$route.params.id,
             allocatedTimeInMillSec: "",
@@ -171,7 +173,7 @@ export default {
 
         startCountDown() {
             setInterval(() => {
-                if (this.remTime === 0) {
+                if (this.remTime <= 0) {
                     clearInterval();
                     this.autoSubmit();
                     window.location.href = "/exam_list";
@@ -192,10 +194,21 @@ export default {
 </script>
 
 <style scoped>
+.timer-container{
+    display: flex;
+    justify-content: end;
+    justify-items: end;
+    
+}
 .timer {
     border-radius: 10px;
     min-width: 100px;
     min-height: 70px;
     font-size: 40px;
+    right: 0;
+    position: fixed;
+    z-index: 9999;
+    top:100px;
+   
 }
 </style>

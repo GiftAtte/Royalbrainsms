@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3 col-sm-12" @click="navigate('/exams')">
+            <div class="col-md-3 col-sm-12" @click="navigate('/exam_list')">
                 <div class="feature-box container">
                     <i class="feature-box__icon primary fa fa-book-open"></i>
                     <h3 class="text-primary u-margin-bottom-small">CBT</h3>

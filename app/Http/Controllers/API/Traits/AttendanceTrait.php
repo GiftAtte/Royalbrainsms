@@ -201,4 +201,67 @@ trait AttendanceTrait{
       }
 
 
+      public function checkIn(Request $request){
+
+         $date=Carbon::now()->toDateString();
+        $report=Report::where('level_id',$request->level_id)->pluck('id');
+        $report_id=$report->max();
+        $todayAttenance= LevelAttendance::where([['report_id',$report_id],
+                               ['attendance_date',$date],['student_id',$request->student_id]])
+                               ->where('arm_id',$request->arm_id)
+                               ->count();
+
+
+if($todayAttenance===0){
+
+  $data=[
+    'student_id'=>$request->student_id,
+    'isPresent'=>1,
+    'attendance_date'=>$date,
+    'checkin_time'=>Carbon::now(),
+    'report_id'=>$report_id,
+     'school_id'=>AppUtils::getSchoolId(),
+     'level_id'=>$request->level_id,
+     'arm_id'=>$request->arm_id
+
+];
+
+   LevelAttendance::create($data);
+   return ['message'=>'success'];
+}
+
+return ['message'=>'attendance already entered']; 
+        
+}
+        
+      
+      
+      public function checkOut(Request $request){
+        $date=Carbon::now()->toDateString();
+
+        $attendance=LevelAttendance::where([['student_id',$request->student_id],['attendance_date',$date]])
+                    ->first();
+                    if(!empty($attendance)){
+                      $attendance->update(['checkout_time'=>Carbon::now()]);
+                      return['message'=>"Checked out successfully"];
+                       }else{
+                        return['message'=>"Attendance Not Found"];
+                       }
+                       }
+
+
+
+      public function getCheckInOut()  {
+        $today=Carbon::now()->toDateString();
+        return LevelAttendance::with('students','level')
+        ->where([['attendance_date',$today],['school_id',AppUtils::getSchoolId()]])
+        ->get();
+      }
+   
+      public function getCheckInOutByDate($attendanceDate)  {
+          $date=Carbon::create($attendanceDate)->toDateString();
+        return LevelAttendance::with('students','level')
+        ->where([['attendance_date',$date],['school_id',AppUtils::getSchoolId()]])
+        ->get();
+      }
 }

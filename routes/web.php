@@ -157,7 +157,7 @@ Route::get('download_page/{id?}', 'HomeController@download');
 Route::get('pdfdownload/{id?}/{report_id}/{email?}', 'HomeController@pdfdownload')->name('pdfdownload');
 Route::get('masterCsv/{report_id}', 'HomeController@export_master')->name('export_master');
 Route::get('masterAndCa/{report_id}', 'HomeController@masterAndCa')->name('export_master_term');
-
+Route::get('/barcode/{id}', 'BiometricController@downloadBarcode');
 Route::get('/messages','ChatsController@fetchMessages');
 Route::post('/messages','ChatsController@sendMessages');
 

@@ -8,7 +8,8 @@ class Exam extends Model
 {
     protected $fillable=[
 'id','title','level_id','arm_id','subject_id','isPublished','comment',
-'staff_id','start_date','start_time','end_date','end_time','school_id','venue','duration'
+'staff_id','start_date','start_time','end_date','end_time','school_id','venue','duration',
+'isPublished'
     ];
 
     public function examiner()

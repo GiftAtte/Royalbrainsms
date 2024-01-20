@@ -6,15 +6,18 @@
 </style>
 <tr >
 
- <th colspan="8" >
-     <div class=" pt-2" style="width:100%;  height:10px; border-radius:25px; background-color:rgb(61, 19, 57)">
-<h6 class="text-white text-center">RESULTS SUMMARY</h6>
-    </div>
-    </th>
- </tr>
+
 <table class="table table-bordered table-sm font-weight-bold  myTable" >
+    <thead>
+        <th colspan="7" >
+            <div class=" pt-2" style="width:100%;  height:10px;  background-color:rgb(68, 11, 16)">
+       <h6 class="text-white text-center">RESULTS SUMMARY</h6>
+           </div>
+           </th>
+        </tr>
+    </thead>
  <tbody>
-     <tr class="text-center" style="background-color:rgb(61, 19, 57); color:white">
+     <tr class="text-center" style="background-color:rgb(68, 11, 16); color:white">
 
          <th>Total score</th>
          <th>Average <br/>score</th>

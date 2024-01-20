@@ -23,15 +23,22 @@ class ExamController extends Controller
     public function index()
     {
          $user=auth('api')->user();
+
+         if($user->type==='admin'||$user->type==='superadmin'){
+            return Exam::with(['examiner','level','subject'])->where('school_id',$user->school_id)->latest()->paginate(20);
+         }
          if($user->type==='student'){
              $student=Student::findOrFail($user->student_id);
-        return Exam::with(['examiner','level','subject'])->where([['level_id',$student->class_id],['arm_id',$student->arm_id]])->latest()->paginate(20);
-        }
-        if($user->type==='tutor'){
-            $level=Has_arm::where('staff_id',$user->staff_id)->first();
-            return Exam::with(['examiner','level','subject'])->where([['level_id',$level->level_id],['arm_id',$level->arms_id]])->latest()->paginate(20);
-        }
-        return Exam::with(['examiner','level','subject'])->where('school_id',$user->school_id)->latest()->paginate(20);
+        return Exam::with(['examiner','level','subject'])
+        ->where([['level_id',$student->class_id],['arm_id',$student->arm_id]])
+        ->orWhere([['level_id',$student->class_id],['arm_id',null]])
+        ->latest()->paginate(20);
+        }else{
+            return Exam::with(['examiner','level','subject'])
+            ->where('staff_id',$user->staff_id)
+            ->latest()->paginate(20);
+        }   
+        
     }
 
     /**
@@ -68,7 +75,7 @@ class ExamController extends Controller
             'title' => 'required|string|max:191',
             'subject_id' => 'required|integer',
             'level_id' => 'required|integer',
-            'arm_id' => 'required|integer',
+            // 'arm_id' => 'required|integer',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
             'venue' => 'required|string|max:191',
@@ -129,7 +136,7 @@ class ExamController extends Controller
             'title' => 'required|string|max:191',
             'subject_id' => 'required|integer',
             'level_id' => 'required|integer',
-            'arm_id' => 'required|integer',
+            // 'arm_id' => 'required|integer',
             'start_date' => 'required',
            // 'end_date' => 'required',
 
@@ -221,12 +228,18 @@ public function questionOptions(Request $request){
          $user=auth('api')->user();
          if($user->type==='student'){
              $student=Student::findOrFail($user->student_id);
-        return Exam::with(['examiner','level','subject'])->where([['level_id',$student->class_id],['arm_id',$student->arm_id],['isPublished',1]])->latest()->paginate(20);
+        return Exam::with(['examiner','level','subject'])
+        ->where([['level_id',$student->class_id],['arm_id',$student->arm_id],['isPublished',1]])
+        ->orWhere([['level_id',$student->class_id],['arm_id',null],['isPublished',1]])
+        ->latest()->paginate(50);
         }
         if($user->type==='tutor'){
             $level=Has_arm::where('staff_id',$user->staff_id)->first();
-            return Exam::with(['examiner','level','subject'])->where([['level_id',$level->level_id],['arm_id',$level->arms_id],['isPublished',1]])->latest()->paginate(20);
+            return Exam::with(['examiner','level','subject'])
+            ->where([['level_id',$level->level_id],['arm_id',$level->arms_id],['isPublished',1]])
+            ->orWhere([['level_id',$level->level_id],['arm_id',null],['isPublished',1]])
+            ->latest()->paginate(50);
         }
-        return Exam::with(['examiner','level','subject'])->where([['school_id',$user->school_id],['isPublished',1]])->latest()->paginate(20);
+        return Exam::with(['examiner','level','subject'])->where([['school_id',$user->school_id],['isPublished',1]])->latest()->paginate(50);
     }
 }

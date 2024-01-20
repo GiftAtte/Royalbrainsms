@@ -1,5 +1,5 @@
 <template>
-<div class="col-md-12 row">
+<div class="col-md-12 row container">
     
   <div class="col-md-6">
     <table class="table table-bordered table-sm font-weight-bold  table-striped" >

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Level extends Model
 {
@@ -18,6 +19,11 @@ class Level extends Model
 
       public function staff(){
         return $this->belongsTo('App\Staff','staff_id','id');
+      }
+
+   public function students(){
+        return DB::table('students')->where('Class_id',$this->id)->get();
+
 
 }
 }

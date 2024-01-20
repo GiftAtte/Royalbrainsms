@@ -19,7 +19,7 @@
                 <th>Created On</th>
             </template>
             <template v-slot:extra-action-body="{ row }">
-                <td>{{ row.created | myDate }}</td>
+                <td>{{ row.created_at | myDate }}</td>
             </template>
 
             <template #modal-fields>

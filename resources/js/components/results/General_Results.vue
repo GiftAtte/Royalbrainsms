@@ -29,7 +29,7 @@
             v-if="report.type === 'blue_ridge'"
           />
           <div class="card-body row col-md-12 pt-1 mt-0" v-else>
-            <div class="col-md-2 col-sm-3">
+            <div class="col-md-2 col-sm-2">
               <img
                 :src="`/img/schools/${school.logo}`"
                 class="img-thumbnail result-logo"
@@ -39,7 +39,7 @@
             </div>
 
             <div
-              class="col-md-8 col-sm-12"
+              class="col-md-8 col-sm-8"
               v-if="report.type === 'navy-template'"
             >
               <h3 class="text-success">{{ school.name }},</h3>
@@ -54,7 +54,7 @@
               <h5>URL:&nbsp; {{ school.website }}.</h5>
             </div>
 
-            <div class="col-md-8 col-sm-12" v-else>
+            <div class="col-md-8 col-sm-8" v-else>
               <h3 class="text-primary text-uppercase">{{ school.name }},</h3>
               <h5>
                 <i class="fa fa-home"></i>:&nbsp;
@@ -182,6 +182,7 @@
               :noneAcademic="noneAcademic"
               :getPastTotal="getPastTotal"
               :summary="summary"
+              :LDomain="LDomain"
             />
           </div>
 
@@ -195,7 +196,7 @@
             </div>
             <div class="container">
               <attendance
-                v-if="report.isAttendance && attendance"
+                v-if="report.isAttendance>0 && attendance"
                 :attendance="attendance"
               />
             </div>

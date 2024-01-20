@@ -112,12 +112,14 @@
                                         <th>AS</th>
                                         <th>AP</th>
                                         <th>CP</th>
+                                        <th>PS</th>
                                     </tr>
                                     <tr>
                                         <td>Total Scores</td>
                                         <td>Average Scores</td>
                                         <td>Arm Position</td>
                                         <td>Class Position</td>
+                                        <td>Progress Status</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -241,3 +243,19 @@ export default {
     },
 };
 </script>
+<style scoped>
+@media print{
+    @page{
+        /* size:landscape; */
+    }
+    /* body{
+        width: auto;
+        margin: 0;
+        padding:0;
+    } */
+    /* table{
+        min-width: 100%;
+        table-layout: fixed;
+    } */
+}
+</style>

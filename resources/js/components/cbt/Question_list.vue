@@ -231,7 +231,7 @@ export default {
             let now = moment(new Date()).format("YYYY-MM-DD h:mm:ss a");
             let time_diff = moment(now).diff(moment(this.exam.end_date));
             if (!this.isSuccess && time_diff >= 0) {
-                window.location.href = `/exam_list`;
+                window.location.href = `/logout`;
             }
         },
 

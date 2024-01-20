@@ -224,9 +224,9 @@ else{
         try {
         $body['grant_type'] = 'authorization_code';
         $body['code'] = $request->code;
-       $body['redirect_uri']='https://portal.royalbrainsms.com/zoomoauthredirect';
+         $body['redirect_uri']='https://portal.royalbrainsms.com/zoomoauthredirect';
 
-   $response = Http::asForm()->withHeaders([
+         $response = Http::asForm()->withHeaders([
             'Content-Type' => 'application/x-www-form-urlencoded',
             "Authorization" => "Basic". base64_encode(env('CLIENT_ID').':'.env('CLIENT_SECRETE'))
         ])
@@ -254,7 +254,7 @@ else{
         $body['code'] = $request->code;
        $body['redirect_uri']='https://portal.royalbrainsms.com/zoomoauthredirect';
 
-   $response = Http::asForm()->withHeaders([
+         $response = Http::asForm()->withHeaders([
             'Content-Type' => 'application/x-www-form-urlencoded',
             "Authorization" => "Basic". base64_encode(env('CLIENT_ID').':'.env('CLIENT_SECRETE'))
         ])

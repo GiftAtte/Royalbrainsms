@@ -1,5 +1,5 @@
 <template>
-    <div class="card card-outline card-navy">
+    <div  class="card card-outline card-navy" >
         <div class="card-header">
             <div class="row">
                 <div class="col-md-6">
@@ -21,6 +21,7 @@
             </div>
             <div class="pt-3 row">
                 <div class="col-md-6">
+                    <slot name="cart">
                     <button
                         v-if="cart"
                         title="cart. click to show content"
@@ -35,6 +36,7 @@
                             >{{ getProducts().length }}</span
                         >
                     </button>
+                    </slot>
                     <h3 v-show="!tbData && !appData">loading....</h3>
                 </div>
                 <div class="col-md-6 search-container">
@@ -51,12 +53,12 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="payment-list">
             <div class="table-responsive">
                 <table :class="`table ${tb_classes ? tb_classes : ''}`">
                     <thead>
                         <tr>
-                            <th>S/N</th>
+                            <th>#</th>
                             <th v-for="header in headers" :key="header.key">
                                 {{ header.header }}
                             </th>

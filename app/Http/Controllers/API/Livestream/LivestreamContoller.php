@@ -29,12 +29,15 @@ class LivestreamContoller extends Controller
 
 
               return LiveClass::where('level_id',$student->class_id)
-                 ->latest()->paginate(10);
+                 ->latest()->paginate(20);
               }
-                return LiveClass::where('live_classes.school_id',AppUtils::getSchoolId())
+                if(CurrentUser::isAdmin()){
+                  return LiveClass::where('live_classes.school_id',AppUtils::getSchoolId())
                                  ->join('staff','live_classes.created_by','=','staff.id')
                                  ->selectRaw('concat(staff.surname, " ",staff.first_name) as creator,live_classes.*')
                                  ->latest()->paginate(10);
+                }
+                return;
     }
 
 

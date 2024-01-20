@@ -55,13 +55,47 @@
         </button>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <StreamBarcodeReader @decode="onDecode" @loaded="onLoaded"></StreamBarcodeReader>
+      </div>
+      <div class="col-md-6">
+          <h1>Student Details</h1>
+    <ul v-show="barcodeCaptured">
+  <li>Name:{{ studentDetails.name }}   <span class="float-right"><img
+                                                class="profile-user-img img-fluid img-rounded"
+                                                width="50"
+                                                height="50"
+                                                :src="`/img/profile/${studentDetails.img}`"
+                                                alt="User profile picture"
+                                                 onerror="this.src='/img/profile.png'"
+                                            />
+                                        </span></li>
+  <li>Gender:{{ studentDetails.gender }}</li>
+  <li>Level:{{ studentDetails.level }}</li>
+  <li>Student ID:Stud-{{ studentDetails.id }}</li>
+  <i><h3>Attendance</h3>
+    <hr>
+  </i>
+ 
+  <li>Status:
+    <p>Date:{{ new Date()|myDateTime }} <span class="float-right"><i class="fa fa-check text-success"></i></span></p>
+  <h3 class="text-center text-danger">Please take off your card</h3>
+  </li>
+    </ul>
+    <h3 v-show="!barcodeCaptured" class=" my-5 text-center text-success">Scanner ready !</h3>
+      </div>
+    </div>
+    <!-- <ImageBarcodeReader @decode="onDecode" @error="onError"></ImageBarcodeReader> -->
   </div>
 </template>
 
 <script>
 import Piechart from "./Piechart.vue";
 export default {
-  components: { Piechart },
+  components: { Piechart  },
+  
   props: ["form", "attendance"],
   data() {
     return {
@@ -71,6 +105,7 @@ export default {
       studentIds: [],
       isChecked: false,
       isStudentId: false,
+
     };
   },
   methods: {
@@ -117,6 +152,9 @@ export default {
       this.checkStudentId();
       console.log(this.studentIds);
     },
+
+
+
     checkStudentId() {
       let studentLength = this.studentIds.length;
       if (this.studentIds.length > 0) {

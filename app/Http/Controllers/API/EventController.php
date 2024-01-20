@@ -8,6 +8,7 @@ use App\User;
 use App\Student;
 use App\Event;
 use App\Http\Resources\EventResource;
+use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Response;
 
 class EventController extends Controller
@@ -80,7 +81,10 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        $event->update($request->all());
+        $data=$request->all();
+        $data['start_date']=Carbon::create($request->start_date);
+        $data['end_date']=Carbon::create($request->end_date);
+        $event->update($data);
         return response()->json([
             'data' => new EventResource($event),
             'message' => 'Successfully updated event!',

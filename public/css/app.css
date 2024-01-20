@@ -27311,15 +27311,15 @@ body.text-sm .input-group-text {
 }
 
 .card-navy.card-outline {
-  border-top: 3px solid navy;
+  border-top: 3px solid #001f3f;
 }
 
 .card-navy.card-outline-tabs > .card-header a:hover {
-  border-top: 3px solid navy;
+  border-top: 3px solid #dee2e6;
 }
 
 .card-navy.card-outline-tabs > .card-header a.active {
-  border-top: 3px solid navy;
+  border-top: 3px solid #001f3f;
 }
 
 .bg-navy > .card-header .btn-tool,
@@ -51868,8 +51868,7 @@ a.text-muted:hover {
 
 .dark-mode .dark-mode.accent-gray-dark .page-item .page-link:hover, .dark-mode .dark-mode.accent-gray-dark .page-item .page-link:focus {
   color: #3f474e;
-}
-@charset "UTF-8";
+}@charset "UTF-8";
 .fc {
   direction: ltr;
   text-align: left;
@@ -81918,6 +81917,14 @@ th.rotate > div > span {
     visibility: hidden;
   }
 
+  #section-print button {
+    display: none !important;
+  }
+
+  .section-print input {
+    display: none !important;
+  }
+
   #section-to-print,
   #section-to-print * {
     visibility: visible;
@@ -82001,6 +82008,10 @@ th.rotate > div > span {
 
   #section-to-print .action {
     visibility: hidden;
+  }
+
+  #section-to-print.btn {
+    display: none;
   }
 }
 
@@ -82131,7 +82142,7 @@ th.rotate > div > span {
   padding-bottom: 1rem;
 }
 
-.student-dashboard {
+#student-dashboard {
   background-image: linear-gradient(180deg, white, white);
 }
 

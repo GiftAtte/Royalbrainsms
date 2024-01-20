@@ -312,4 +312,16 @@ public function sum($t1,$t2,$t3,$exams){
 
 
 
+
+  public function resetStudentCBT($exam_id,$student_id){
+
+
+      Answer::where([['exam_id',$exam_id],['student_id',$student_id]])->delete();
+      Cbtresult::where([['exam_id',$exam_id],['student_id',$student_id]])->delete();
+      return ['message'=>"CBT reset successfully"];
+
+
+  }
+
+
 }

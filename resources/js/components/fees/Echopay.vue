@@ -80,6 +80,12 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body table-responsive">
+          <div class="mb-2"> <button v-show="$gate.isAdmin()"
+          class="btn btn-md btn-success float-right"
+          @click="enrollForAccountNumber"
+        >
+          <i class="fas fa-user-plus fa-fw"></i> Generate New Account Number
+        </button></div>
           <table class="table table-hover">
             <tbody>
               <tr>
@@ -137,8 +143,8 @@
                 <td>
                   <button
                     class="btn btn-success btn-sm"
-                    @click="enrollForAccountNumber(student)"
-                    :disabled="student.accountNumber"
+                    @click="student.accountNumber?'': generatetAccountById(student.id)"
+                     :disabled="student.accountNumber"
                   >
                     Generate Account
                   </button>
@@ -157,13 +163,7 @@
       </div>
       <!-- /.card-body -->
       <div class="card-footer">
-        <button
-          v-show="isStudentId"
-          class="btn btn-md btn-success"
-          @click="generateBulkAccount"
-        >
-          <i class="fas fa-user-plus fa-fw"></i> Add Wallet
-        </button>
+       
       </div>
     </div>
     <!-- /.card -->
@@ -197,6 +197,7 @@ export default {
       hasArm: false,
       selected: [],
       generatedAccounts: [],
+      noAccountNumber:false,
       allSelected: false,
       level_id: "",
       arm_id: "",
@@ -233,6 +234,7 @@ export default {
     getResults(page = 1) {
       axios.get("api/student?page=" + page).then((response) => {
         this.students = response.data;
+       
       });
     },
     updateStudent() {
@@ -389,27 +391,25 @@ export default {
         });
     },
 
-    enrollForAccountNumber(student) {
-      //   console.log(this.studentIds);
-      const formData = new FormData();
-      formData.append("merchant_id", "10003");
-      formData.append("full_name", `${student.surname}, ${student.first_name}`);
-      formData.append("address", this.school.name);
-      formData.append("phone", "08063611790");
-      formData.append(
-        "email",
-        student.femail ? student.femail : "attegift@gmail.com"
-      );
-      formData.append("city", this.school.state);
-      formData.append("apikey", "test123");
-      formData.append("clientId", "neovast");
-      formData.append("studentId", student.id);
+    enrollForAccountNumber() {
 
-      axios.post("api/getAccount", formData).then((res) => {
+
+      axios.get("/api/ibtc-new-acount").then((res) => {
         Fire.$emit("AfterCreate");
-        console.log(res.data);
+        swal.fire("Updated!", "account numbers updated successfully.", "success");
       });
     },
+
+
+generatetAccountById(id){
+
+  axios.get(`/api/account-by-student/${id}`)
+  .then((res) => {
+    Fire.$emit("AfterCreate");
+      });
+},
+
+
     generateBulkAccount() {
       const formData = new FormData();
       formData.append("accountDetails", this.studentIds);
@@ -440,7 +440,8 @@ export default {
         .get("api/findStudent?q=" + query)
         .then((data) => {
           this.students = data.data;
-          //  console.log(this.students)
+          this.noAccountNumber=this.students.filter(s=>s.accountNumber!==null).length>0
+          console.log('no account',  this.noAccountNumber)
         })
         .catch(() => {});
     });

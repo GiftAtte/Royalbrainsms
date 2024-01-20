@@ -58,15 +58,21 @@
                     <td>{{score.id}}</td>
                     <td>{{score.name}} </td>
                     <td>{{score.score}} </td>
-                    <td class="row">
+                    <td class="row text-center">
 
 
 
-                        <router-link :to="`/cbt_review/${score.exam_id}/${score.id}`" tag="a" class="pl-2">
+                        <router-link class="btn btn-primary btn-sm" :to="`/cbt_review/${score.exam_id}/${score.id}`"  >
                        Answers sheet
                         </router-link>
 
-
+                        <a v-if="$gate.isAdminOrSubjectTutor()"
+                              @click="resetExam(score.exam_id,score.id)"
+                                            href="#"
+                                            class=" btn btn-sm btn-danger ml-2"
+                                        >
+                                            Reset Exam
+                              </a>
                     </td>
                   </tr>
                 </tbody></table>
@@ -165,6 +171,46 @@ import Loading from 'vue-loading-overlay';
                           }
                       );
                 }
+        },
+        resetExam(exam,student) {
+            if (this.$gate.isAdminOrSubjectTutor()) {
+
+
+              swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able access the questions once submitted !",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, submit !",
+            }).then((result) => {
+                // Send request to the server
+                if (result.value) {
+                  axios
+                    .post(`/api/cbt/reset/${exam}/${student}`)
+                    .then((res) => {
+                      this.loadScores();
+                      swal.fire(
+                                "Success",
+                                "exam has been reset.",
+                                "success"
+                            );
+                    });
+
+                }
+            })
+            .catch((err)=>{
+              swal.fire(
+                                "Error!",
+                                "Something went wrong",
+                                "error"
+                            );
+            })
+        
+
+               
+            }
         },
         isActive(id){
             if(id===window.user.school_id)

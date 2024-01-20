@@ -11,7 +11,11 @@ use Illuminate\Http\Request;
 class AdmissionController extends Controller
 {
 
-
+public function candidateList() {
+   
+   return Candidate::with('user')
+   ->where('school_id',AppUtils::getSchoolId())->get();
+}
 
 
 public function profile(){

@@ -16,4 +16,21 @@ export const AdmissionRoutes = [
         path: "/daily/attendance",
         component: require("../components/students/Attendance.vue").default,
     },
+    {
+        path: "/admission/candidates",
+        component: require("../components/admission/biodata/CandidateList.vue").default,
+    },
+    {
+        path: "/attendance/biometric",
+        component: require("../components/students/BiometricAttendance.vue").default,
+    },
+
+    {
+        path: "/certificates",
+        component: require("../components/students/Certificates.vue").default,
+    },
+    {
+        path: "/certifications",
+        component: require("../components/students/CertificationList.vue").default,
+    },
 ];

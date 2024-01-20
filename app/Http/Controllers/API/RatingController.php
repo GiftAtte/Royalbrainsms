@@ -64,5 +64,9 @@ public function createRating(Request $request){
        'subdomain_id'=>$request->subdomain_id,
        'domain_id'=>$request->domain_id
        ]);}
-}}
+       
+}
+return 'success';
+}
+
 }

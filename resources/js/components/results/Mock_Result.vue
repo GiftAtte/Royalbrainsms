@@ -117,7 +117,7 @@
   <hr  class="text-bold">
 </div>
 
-<div class="col-md-12 row py-2" v-show="isLDomain">
+<div class="col-md-12 row py-2" >
 <div class="col-md-3">
     <table class="table table-bordered table-sm  table-striped" >
 <tr >
