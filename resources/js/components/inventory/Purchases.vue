@@ -1,77 +1,63 @@
 <template>
-    <app-body pageTitle="Purchases" pageSubTitle="Purchase list">
+    <app-body pageTitle="Stocks" pageSubTitle="Stock list">
         <app-table
             :headers="tbHeaders"
             :data="tbData"
-            :deleteAction="deletePurchase"
-            :updateAction="createPurchase"
-            :createAction="createPurchase"
+            :deleteAction="deleteStock"
+            :updateAction="createStock"
+            :createAction="createStock"
             createButton="true"
             :form="form"
-            action="false"
             search="true"
-            title="Purchase list"
-            updateTitle="Update Purchases"
-            cart="true"
+            title="Stock list"
+            updateTitle="Update Stocks"
         >
             <template #modal-fields>
-                <select-box
-                    label="Products List"
+         <div class="form-group mt-3 mb-2">
+            <label for="">Product</label>
+            <multiselect 
+         v-model="product" 
+         :options="products"
+         :searchable="true" 
+         :close-on-select="true"
+         :show-labels="true" 
+         @select="addUnitPrice"
+         label="name"
+         track-by="id"
+         placeholder="Pick a value"/>
+        </div>
+               <input-field
+                    label="Supplier OR Manufacturer"
+                    v-model="form.manufacturer"
+                    id="manufacturer"
                     :form="form"
-                    v-model="form.product_id"
-                    placeholder="Select product Type"
-                    field="product_id"
-                    :options="options"
-                    id="product_id"
-                    name="product_id"
-                    optionLabel="name"
-                    optionValue="id"
-                    feild="product_id"
+                    field="manufacturer"
+                    placeholder="Enter manufacturer"
                 />
-                <input-field
-                    label="Quantity"
-                    v-model="form.quantity"
-                    id="quantity"
-                    :form="form"
-                    field="quantity"
-                    type="number"
-                    placeholder="Eg 5"
-                    min="1"
-                    step="any"
-                />
-                <input-field
-                    label="Total Cost(NGN)"
-                    v-model="form.total_cost"
-                    id="total_cost"
-                    :form="form"
-                    field="total_cost"
-                    placeholder="100.00"
-                    min="1.00"
-                    step="any"
-                    type="number"
-                    name="total_cost"
-                />
-                <input-field
-                    label="Date Purchased"
-                    v-model="form.purchased_date"
-                    id="purchased_date"
-                    :form="form"
-                    type="date"
-                    name="Date Purchased"
-                    field="purchased_date"
-                />
-                <select-box
-                    label="Products List"
-                    :form="form"
-                    v-model="form.supplier_id"
-                    placeholder="Select Supplier"
-                    field="supplier_id"
-                    :options="supplier"
-                    id="supplier_id"
-                    name="supplier_id"
-                    optionLabel="name"
-                    optionValue="id"
-                />
+                   
+                    <div class="row" v-for="(item,index) in form.unit_price" :key="item.unit">
+                 
+                   <div class="col">
+                    <div class="form-group">
+                    <label for="quantity">{{ item.unit }}Qty </label>
+                    <input class="form-control" type="number"
+                    @input="updateQty($event,index)"
+                    :placeholder="'Qty of '+item.unit"
+                   />
+                    </div>
+                   </div>
+                   <div class="col">
+                    <div class="form-group">
+                    <label for="quantity">Price (&#8358;)</label>
+                    <input class="form-control" type="number"
+                    @input="updatePrice($event,index)"
+                    :placeholder="'Price Per '+item.unit"
+                    :value="item.price"
+                   />
+                    </div>
+                   </div>
+                    </div>
+            
             </template>
         </app-table>
     </app-body>
@@ -90,59 +76,79 @@ export default {
                 { header: "Quantity", key: "quantity" },
                 { header: "Cost P/Unit(NGN)", key: "unit_cost" },
                 { header: "Total Cost(NGN)", key: "total_cost" },
-                { header: "Purchased Date", key: "purchased_date" },
+                { header: "Stockd Date", key: "Stockd_date" },
             ],
             tbData: [],
             options: [],
             supplier: [],
+            product:[],
+            products:[],
             form: new Form({
                 id: "",
                 product_id: "",
                 quantity: 1.0,
-                supplier_id: "",
-                total_cost: 0.0,
+                manufacturer: '',
+                unit_price:[],
+                quantity: 0,
+                barcode: null,
             }),
         };
     },
     methods: {
-        loadSuppliers() {
-            axios
-                .get("/api/inventory/suppliers")
-                .then((res) => {
-                    this.supplier = res.data;
-                    // setTimeout(() => {
-                    //      this.componentKey += 1;
-                    // },200)
-                })
-                .catch((err) => console.log(err));
-        },
-
         loadProducts() {
             axios
-                .get("/api/inventory/products")
+                .get("/api/products")
                 .then((res) => {
-                    this.options = res.data;
-                    // setTimeout(() => {
-                    //      this.componentKey += 1;
-                    // },200)
+                    this.products = res.data.data.products
                 })
                 .catch((err) => console.log(err));
-        },
+               },
 
-        loadPurchase() {
+
+        addUnitPrice(){
+            
+     let unitPrice=this.product.unit_price
+     this.form.product_id=this.product.id
+      console.log('unit price',unitPrice)
+      this.form.unit_price=[]
+       unitPrice.forEach(up=>{
+      this.form.unit_price.push({
+        id:up.id,
+        price:up.price,
+        skuQtyPerUnit:up.skuQtyPerUnit,
+        quantity:0,
+        unit:up.unit
+      })
+    })
+},
+
+
+         updatePrice(event,index){
+        this.form.unit_price.at(index).price=event.target.value
+        },
+        updateQty(event,index){
+      this.form.unit_price.at(index).quantity=event.target.value
+
+        }  ,   
+ 
+        loadStock() {
             axios
-                .get("/api/inventory/products/purchases")
+                .get("/api/stocks")
                 .then((res) => {
                     this.tbData = res.data;
-                    // setTimeout(() => {
-                    //      this.componentKey += 1;
-                    // },200)
                 })
                 .catch((err) => console.log(err));
         },
 
-        createPurchase() {
-            this.form.post("/api/inventory/products/purchases").then((res) => {
+        createStock() {
+            this.form.quantity=this.form.unit_price.map(up=>{
+                return{
+                    unit:up.unit,
+                    value:up.quantity,
+                    skuQtyPerUnit:up.skuQtyPerUnit
+                }
+             })
+            this.form.post("/api/stocks").then((res) => {
                 $("#appModal").modal("hide");
                 swal.fire(
                     "success!",
@@ -154,34 +160,20 @@ export default {
             });
         },
 
-        deletePurchase(id) {
+        deleteStock(id) {
             axios
-                .delete("/api/inventory/products/purchases/" + id)
+                .delete("/api/Stocks/" + id)
                 .then((res) => Fire.$emit("afterCreated"));
         },
-        updatePurchase() {
-            this.form.put("/api/inventory/products").then((res) => {
-                $("#appModal").modal("hide");
-                swal.fire(
-                    "success!",
-                    "Products created successfully.",
-                    "success"
-                );
 
-                Fire.$emit("afterCreated");
-            });
-        },
-
-        handleChange() {},
     },
     mounted() {
-        this.loadPurchase();
+        this.loadStock();
         this.loadProducts();
-        this.loadSuppliers();
     },
     created() {
         Fire.$on("afterCreated", () => {
-            this.loadPurchase();
+            this.loadStock();
         });
     },
 };

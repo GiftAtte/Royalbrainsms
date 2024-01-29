@@ -26,7 +26,8 @@ $fa-font-path: "../webfonts";
 
 @import "~vue-pdf-reader/dist/vue-pdf-reader.min.css";
 @import "~material-design-icons-iconfont/dist/material-design-icons";
-
+@import '~@braid/vue-formulate/themes/snow/snow.scss';
+@import '~vue-multiselect/dist/vue-multiselect.min.css';
 .vertical-header {
     vertical-align: bottom;
 }

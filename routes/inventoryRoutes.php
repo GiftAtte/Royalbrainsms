@@ -74,3 +74,4 @@ Route::get('inventory/pettycash/groups/all','API\Inventory\PettyGroupController@
 Route::post('inventory/pettycash/groups','API\Inventory\PettyGroupController@store');
 Route::put('inventory/pettycash/groups','API\Inventory\PettyGroupController@update');
 Route::delete('inventory/pettycash/groups/{id}','API\Inventory\PettyGroupController@destroy');
+

@@ -56,18 +56,19 @@ export default {
     methods: {
         loadCategory() {
             axios
-                .get("/api/inventory/category")
+                .get("/api/categories")
                 .then((res) => {
-                    this.tbData = res.data;
+                    this.tbData = res.data.data.categories;
                     // setTimeout(() => {
                     //      this.componentKey += 1;
                     // },200)
+                    console.log(res.data)
                 })
                 .catch((err) => console.log(err));
         },
         editCategory() {},
         createCategory() {
-            this.form.post("/api/inventory/category").then((res) => {
+            this.form.post("/api/categories").then((res) => {
                 $("#appModal").modal("hide");
                 swal.fire(
                     "success!",
@@ -80,11 +81,11 @@ export default {
         },
         deletCategory(id) {
             axios
-                .delete("/api/inventory/category/" + id)
+                .delete("/api/categories/" + id)
                 .then((res) => Fire.$emit("afterCreated"));
         },
         updateCategory() {
-            this.form.put("/api/inventory/category").then((res) => {
+            this.form.put("/api/categories/    "+this.form.id).then((res) => {
                 $("#appModal").modal("hide");
                 swal.fire(
                     "success!",

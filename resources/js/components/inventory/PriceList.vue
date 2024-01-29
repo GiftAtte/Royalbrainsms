@@ -13,6 +13,7 @@
             title="Price list"
             updateTitle="Update Price"
             cart="true"
+            modalSize="modal-lg"
         >
             <template #extra-action>
                 <th class="text-danger">Status</th>

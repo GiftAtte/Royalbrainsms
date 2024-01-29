@@ -60,4 +60,9 @@ export const InventoryRoutes = [
         path: "/inventory/items/addItems",
         component: require("../components/inventory/AddItems.vue").default,
     },
+    {
+        path: "/inventory/product-units",
+        component: require("../components/inventory/ProductUnit.vue").default,
+    },
+    
 ];

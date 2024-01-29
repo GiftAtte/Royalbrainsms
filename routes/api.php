@@ -341,9 +341,45 @@ Route::get('certifications','API\CertificateController@loadCertifications');
 
 // INVENTORY ROUTES
 
+
+
+Route::apiResources(['products'=>'API\Pos\ProductController']);
+Route::get('/products/category/{category_id}','API\Pos\ProductController@getProductByCategory');
+Route::get('/products/stores/{store_id}','API\Pos\ProductController@getProductByLocation');
+Route::post('import/products','API\Pos\ProductController@importFromExcel');
+Route::get('/products/barcode/{barcode}','API\Pos\ProductController@getProductByBarcode');
+Route::apiResources(['categories'=>'API\Pos\CategoryController']);
+Route::apiResources(['stocks'=>'API\Pos\StockController']);
+Route::get('/stocks/check/expired','API\Pos\StockController@getExpiredStock');
+Route::get('/stocks/availables/all-stocks','API\Pos\StockController@getAllStocks');
+
+
+// POS
+Route::apiResources(['sales' => 'API\Pos\SalesController']);
+Route::post('sales/suspend/suspend-sale','API\Pos\SalesController@suspendSale');
+Route::get('sales/suspend/suspend-sale','API\Pos\SalesController@getSuspendedSales');
+Route::delete('sales/suspend/{id}','API\Pos\SalesController@deleteSuspendedSale');
+//Route::post('sales/reports','API\Pos\SalesAccountController@getSalesReport');
+Route::apiResources(['inventory-settings'=>'API\Pos\InventorySettingController']);
+Route::apiResources(['unit-prices'=>'API\Pos\UnitPriceController']);
+Route::apiResources(['product-units'=>'API\Pos\ProductUnitController']);
+// ACCOUNT ROUTES
+Route::apiResources(['expenses' => 'API\Pos\ExpenseController']);
+Route::apiResources(['incomes' => 'API\Pos\IncomeController']);
+
+
+
+
+
+
+
 include('inventoryRoutes.php');
 include('admissionRoutes.php');
 include('liveStreamingRoutes.php');
 include('weeklyRoutes.php');
+
+
+
+
 
 });

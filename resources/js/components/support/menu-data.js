@@ -655,18 +655,23 @@ export default {
             link: "/payment-list",
         },
     ],
-
+// Inventory
     Inventory: [
         {
             type: "title",
             txt: "Inventory",
             icon: "fa fa-book context-menu__title-icon",
         },
-
+        
         {
             type: "link",
             txt: "Category",
             link: "/inventory/category",
+        },
+        {
+            type: "link",
+            txt: "Product Units",
+            link: "/inventory/product-units",
         },
         {
             type: "link",
